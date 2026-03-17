@@ -111,7 +111,7 @@ export default function Home() {
               className="w-1.5 h-1.5 rounded-full"
               style={{ background: "#4ade80", boxShadow: "0 0 6px #4ade80" }}
             />
-            Available for new projects — Accra, Ghana · Remote
+            Available for new projects — Global · Remote (based in Accra)
           </div>
 
           {/* Roles */}
@@ -530,7 +530,7 @@ export default function Home() {
               Open to analyst and engineering roles, freelance projects, contracts, and investment opportunities.
             </p>
             <p className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
-              Based in Accra, Ghana · Available Remotely
+              Based in Accra · Open to global roles (remote or on‑site)
             </p>
           </div>
           <div className="flex flex-col gap-3">
@@ -570,7 +570,7 @@ export default function Home() {
               </a>
             </div>
             <p className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
-              +233 559 602 056 · Accra, Ghana
+              +233 559 602 056 · UTC+0 (flexible hours)
             </p>
           </div>
         </div>
