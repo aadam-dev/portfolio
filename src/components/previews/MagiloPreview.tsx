@@ -30,12 +30,12 @@ function Landing() {
       {/* Nav */}
       <nav style={{ padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #e5e7eb", background: "#fff" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 10, background: "#ed8936", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ color: "#fff", fontWeight: 900, fontSize: 16 }}>M</span>
+          <div style={{ width: 36, height: 36, borderRadius: 8, background: "linear-gradient(180deg, #38BDF8 0%, #0EA5E9 50%, #0369A1 100%)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 2px rgba(6,105,161,0.3)" }}>
+            <span style={{ color: "#fff", fontWeight: 900, fontSize: 16, textShadow: "0 1px 0 #075985" }}>M</span>
           </div>
           <div>
-            <span style={{ color: "#111827", fontWeight: 800, fontSize: 15, display: "block", lineHeight: 1.2, letterSpacing: "-0.01em" }}>Magilo Art College</span>
-            <span style={{ color: "#9ca3af", fontSize: 10 }}>Adenta, Accra</span>
+            <span style={{ color: "#0C4A6E", fontWeight: 800, fontSize: 15, display: "block", lineHeight: 1.2, letterSpacing: "0.02em" }}>MAGILO</span>
+            <span style={{ color: "#9ca3af", fontSize: 10, letterSpacing: "0.05em" }}>ART COLLEGE · Adenta, Accra</span>
           </div>
         </div>
         <div style={{ display: "flex", gap: 24, alignItems: "center" }}>

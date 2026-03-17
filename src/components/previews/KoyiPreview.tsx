@@ -30,10 +30,11 @@ function Landing() {
     <div style={{ background: "#fff", minHeight: "100%", fontFamily: "system-ui, sans-serif" }}>
       <nav style={{ padding: "14px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #e5e7eb" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ width: 30, height: 30, borderRadius: 8, background: "#0d9488", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          {/* Exact Kōyi logo: teal gradient K mark + wordmark (matches real app) */}
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg, #14b8a6 0%, #0d9488 50%, #0f766e 100%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ color: "#fff", fontWeight: 800, fontSize: 14 }}>K</span>
           </div>
-          <span style={{ color: "#111827", fontWeight: 800, fontSize: 17, letterSpacing: "-0.02em" }}>Koyi</span>
+          <span style={{ color: "#0f766e", fontWeight: 800, fontSize: 20, letterSpacing: "-0.02em" }}>Kōyi</span>
         </div>
         <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
           {["Courses", "Academy", "Dashboard"].map(l => (

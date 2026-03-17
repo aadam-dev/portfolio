@@ -28,10 +28,8 @@ function Landing() {
     <div style={{ background: "#fff", minHeight: "100%", fontFamily: "system-ui, sans-serif" }}>
       {/* Nav */}
       <nav style={{ padding: "14px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #e5e7eb", background: "#fff" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ width: 30, height: 30, borderRadius: 8, background: "linear-gradient(135deg, #0d9488, #059669)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ fontSize: 14 }}>💊</span>
-          </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <img src="/previews/lenus/logo.png" alt="Lenus Pharmacy" style={{ height: 36, width: "auto", objectFit: "contain" }} />
           <span style={{ color: "#111827", fontWeight: 800, fontSize: 17 }}>Lenus<span style={{ color: "#0d9488" }}>.</span></span>
         </div>
         <div style={{ display: "flex", gap: 20, alignItems: "center" }}>

@@ -28,21 +28,23 @@ function Landing() {
         borderBottom: "1px solid #E7E5E4",
         background: "#FAFAF9",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            width: 32,
-            height: 32,
-            borderRadius: 8,
-            background: "#EA580C",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}>
-            <span style={{ color: "#fff", fontWeight: 800, fontSize: 14, fontFamily: "system-ui, sans-serif" }}>E</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          {/* Exact Ethika logo mark from real app (hexagon + orange accent) */}
+          <div style={{ width: 32, height: 32, flexShrink: 0 }}>
+            <svg viewBox="0 0 32 32" fill="none" style={{ width: "100%", height: "100%" }}>
+              <polygon points="16,2 30,9 30,23 16,30 2,23 2,9" fill="#0F172A" stroke="#0F172A" strokeWidth="0" />
+              <polygon points="16,8 24,12 24,20 16,24 8,20 8,12" fill="none" stroke="#EA580C" strokeWidth="1.4" />
+              <circle cx="16" cy="16" r="2.5" fill="#EA580C" />
+            </svg>
           </div>
-          <span style={{ color: "#0F172A", fontWeight: 700, fontSize: 14, fontFamily: "system-ui, sans-serif" }}>
-            Ethika Finance
-          </span>
+          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
+            <span style={{ color: "#0F172A", fontWeight: 700, fontSize: 14, fontFamily: "system-ui, sans-serif", letterSpacing: "-0.01em" }}>
+              Ethika
+            </span>
+            <span style={{ color: "#B45309", fontSize: 9, fontWeight: 700, letterSpacing: "0.15em", fontFamily: "system-ui, sans-serif", marginTop: 2 }}>
+              Finance
+            </span>
+          </div>
         </div>
         <div style={{ display: "flex", gap: 22, alignItems: "center" }}>
           {["About NIB", "Knowledge Vault", "Regulations", "Directory"].map(l => (

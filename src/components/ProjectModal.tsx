@@ -1,23 +1,33 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink, ChevronRight } from "lucide-react";
 import { Project } from "@/lib/projects";
 import BrowserMockup from "./BrowserMockup";
 import PreviewRouter from "./previews/PreviewRouter";
 
+type ViewMode = "simulated" | "live";
+
 interface Props {
   project: Project | null;
   onClose: () => void;
 }
 
+function getLiveUrl(project: Project, screenId: string): string {
+  const base = project.liveBaseUrl?.replace(/\/$/, "") ?? "";
+  const path = project.liveScreenPaths?.[screenId] ?? "/";
+  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
 export default function ProjectModal({ project, onClose }: Props) {
   const [activeScreen, setActiveScreen] = useState<string>("");
+  const [viewMode, setViewMode] = useState<ViewMode>("simulated");
 
   useEffect(() => {
     if (project) {
       setActiveScreen(project.screens[0].id);
+      setViewMode("simulated");
     }
   }, [project]);
 
@@ -123,6 +133,46 @@ export default function ProjectModal({ project, onClose }: Props) {
                 {project.description}
               </p>
 
+              {/* Role & impact */}
+              {(project.role || project.impact) && (
+                <div className="mb-6">
+                  {project.role && (
+                    <p
+                      className="text-xs font-semibold mb-2 tracking-widest"
+                      style={{ color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em" }}
+                    >
+                      ROLE
+                    </p>
+                  )}
+                  {project.role && (
+                    <p className="text-sm mb-3" style={{ color: "rgba(255,255,255,0.7)" }}>
+                      {project.role}
+                    </p>
+                  )}
+                  {project.impact && project.impact.length > 0 && (
+                    <>
+                      <p
+                        className="text-xs font-semibold mb-2 tracking-widest"
+                        style={{ color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em" }}
+                      >
+                        WHAT THIS PROJECT PROVES
+                      </p>
+                      <ul className="space-y-1.5">
+                        {project.impact.map((point) => (
+                          <li
+                            key={point}
+                            className="text-xs"
+                            style={{ color: "rgba(255,255,255,0.6)" }}
+                          >
+                            • {point}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </div>
+              )}
+
               {/* Stack */}
               <p
                 className="text-xs font-semibold mb-3 tracking-widest"
@@ -190,30 +240,88 @@ export default function ProjectModal({ project, onClose }: Props) {
                 className="mt-6 pt-4 text-xs"
                 style={{ borderTop: "1px solid rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.2)" }}
               >
-                Interactive preview — not a live deployment
+                Use the tabs to switch screens; toggle &quot;Live site&quot; to open the real project.
               </div>
             </div>
 
-            {/* Right panel — browser mockup */}
-            <div className="flex-1 p-4 min-w-0">
-              <BrowserMockup
-                project={project}
-                activeScreen={activeScreen}
-                onScreenChange={setActiveScreen}
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeScreen}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.18 }}
-                    className="min-h-full"
+            {/* Right panel — live site iframe or simulated preview */}
+            <div className="flex-1 flex flex-col p-4 min-w-0 min-h-0">
+              {project.liveBaseUrl && (
+                <div
+                  className="flex-shrink-0 flex gap-1 mb-3"
+                  style={{ background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: 4, width: "fit-content" }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("simulated")}
+                    className="px-3 py-1.5 rounded-md text-xs font-medium transition-all"
+                    style={{
+                      background: viewMode === "simulated" ? "rgba(255,255,255,0.08)" : "transparent",
+                      color: viewMode === "simulated" ? "#fff" : "rgba(255,255,255,0.45)",
+                    }}
                   >
-                    <PreviewRouter projectId={project.id} screen={activeScreen} />
-                  </motion.div>
-                </AnimatePresence>
-              </BrowserMockup>
+                    Simulated preview
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("live")}
+                    className="px-3 py-1.5 rounded-md text-xs font-medium transition-all"
+                    style={{
+                      background: viewMode === "live" ? project.accentColor : "transparent",
+                      color: viewMode === "live" ? "#fff" : "rgba(255,255,255,0.45)",
+                    }}
+                  >
+                    Live site
+                  </button>
+                </div>
+              )}
+
+              {viewMode === "live" && project.liveBaseUrl ? (
+                <div className="flex-1 flex flex-col min-h-0 rounded-xl overflow-hidden border border-white/10">
+                  <iframe
+                    key={getLiveUrl(project, activeScreen)}
+                    src={getLiveUrl(project, activeScreen)}
+                    title={`${project.name} — live`}
+                    className="flex-1 w-full min-h-[400px] bg-white"
+                    sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div
+                    className="flex-shrink-0 flex items-center justify-between gap-2 px-3 py-2 text-xs"
+                    style={{ background: "#0A0A14", borderTop: "1px solid rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.4)" }}
+                  >
+                    <span>Exact project — real homepages, logos &amp; media.</span>
+                    <a
+                      href={getLiveUrl(project, activeScreen)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 font-medium transition-colors hover:text-white"
+                      style={{ color: project.accentColor }}
+                    >
+                      Open in new tab <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <BrowserMockup
+                  project={project}
+                  activeScreen={activeScreen}
+                  onScreenChange={setActiveScreen}
+                >
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeScreen}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.18 }}
+                      className="min-h-full"
+                    >
+                      <PreviewRouter projectId={project.id} screen={activeScreen} />
+                    </motion.div>
+                  </AnimatePresence>
+                </BrowserMockup>
+              )}
             </div>
           </motion.div>
         </>

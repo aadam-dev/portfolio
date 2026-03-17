@@ -19,9 +19,7 @@ function Landing() {
     <div style={{ background: "#004e89", minHeight: "100%", fontFamily: "system-ui, sans-serif" }}>
       <nav style={{ padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 10, background: "#ff6b35", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ fontSize: 18 }}>🏀</span>
-          </div>
+          <img src="/previews/madinabasketball/logo.png" alt="Madina Basketball" style={{ height: 40, width: "auto", objectFit: "contain" }} />
           <div>
             <span style={{ color: "#fff", fontWeight: 900, fontSize: 14, display: "block", lineHeight: 1.2, letterSpacing: "0.04em" }}>MADINA BASKETBALL</span>
             <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 10 }}>Libya Quarters, Accra</span>

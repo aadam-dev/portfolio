@@ -119,7 +119,7 @@ export default function Home() {
             className="flex items-center gap-3 mb-5 text-xs font-medium flex-wrap"
             style={{ color: "rgba(255,255,255,0.35)" }}
           >
-            {["Investment Analyst", "Full-Stack Developer", "Systems Builder"].map((role, i) => (
+            {["Analyst", "Full-Stack Developer", "Systems Builder"].map((role, i) => (
               <span key={role} className="flex items-center gap-3">
                 {i > 0 && (
                   <span style={{ color: "rgba(255,255,255,0.12)", fontSize: 16 }}>·</span>
@@ -154,9 +154,9 @@ export default function Home() {
             className="text-lg mb-10 max-w-xl leading-relaxed"
             style={{ color: "rgba(255,255,255,0.45)", lineHeight: 1.75 }}
           >
-            Multi-disciplinary professional operating at the intersection of investment analysis,
-            software engineering, and operations — with deep roots in Ghana&apos;s emerging market.
-            Click any project to see it live.
+            Multi-disciplinary professional at the intersection of investment and business analysis,
+            data analysis, business development, and software engineering — with deep roots in Africa&apos;s emerging market.
+            Click any project to explore interactive previews or open the live site.
           </p>
 
           {/* Quick stats */}
@@ -215,11 +215,10 @@ export default function Home() {
                 letterSpacing: "-0.02em",
               }}
             >
-              Selected Work
+              Interactive Case Studies
             </h2>
             <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>
-              {filteredSelected.length} highlighted project
-              {filteredSelected.length !== 1 ? "s" : ""} · Click to preview
+              {filteredSelected.length} projects — click to explore interactive previews or view the live site.
             </p>
           </div>
 
@@ -306,6 +305,210 @@ export default function Home() {
         )}
       </section>
 
+      {/* Impact & leadership */}
+      <section className="px-6 pb-20 max-w-6xl mx-auto">
+        <div className="mb-6">
+          <h2
+            className="text-2xl font-bold"
+            style={{
+              color: "#fff",
+              fontFamily: "var(--font-space-grotesk)",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Impact &amp; Leadership
+          </h2>
+          <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.35)" }}>
+            Selected fellowships and community projects where I led analysis, operations, and communication.
+          </p>
+        </div>
+
+        {/* Fellowships */}
+        <div className="grid gap-3 md:grid-cols-2 mb-8">
+          <div
+            className="glass-card rounded-2xl p-4 flex flex-col gap-2"
+            style={{
+              background: "rgba(15,15,26,0.9)",
+              borderColor: "rgba(148,163,184,0.5)",
+            }}
+          >
+            <div className="text-xs font-medium uppercase tracking-[0.16em]" style={{ color: "rgba(148,163,184,0.9)" }}>
+              Fellowship
+            </div>
+            <div
+              className="text-sm font-semibold"
+              style={{ color: "#fff", fontFamily: "var(--font-space-grotesk)", letterSpacing: "-0.02em" }}
+            >
+              Aspire Leaders Program — Cohort 4, 2025
+            </div>
+            <p className="text-xs" style={{ color: "rgba(226,232,240,0.8)" }}>
+              Harvard‑affiliated global leadership fellowship for first‑generation and limited‑income students.
+              Selected for faculty‑led modules in ethical leadership, problem‑solving, and international collaboration.
+            </p>
+          </div>
+
+          <div
+            className="glass-card rounded-2xl p-4 flex flex-col gap-2"
+            style={{
+              background: "rgba(15,15,26,0.9)",
+              borderColor: "rgba(124,106,250,0.6)",
+            }}
+          >
+            <div className="text-xs font-medium uppercase tracking-[0.16em]" style={{ color: "rgba(148,163,184,0.9)" }}>
+              Fellowship
+            </div>
+            <div
+              className="text-sm font-semibold"
+              style={{ color: "#fff", fontFamily: "var(--font-space-grotesk)", letterSpacing: "-0.02em" }}
+            >
+              AI‑Integrated Leadership Program (AILP), 2026
+            </div>
+            <p className="text-xs" style={{ color: "rgba(226,232,240,0.8)" }}>
+              Continuing fellow at Aspire Institute&apos;s AI‑Integrated Leadership Program, focused on applying AI tools
+              to real‑world community and business challenges in emerging markets.
+            </p>
+          </div>
+        </div>
+
+        {/* Case studies */}
+        <div
+          className="grid gap-4"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}
+        >
+          {/* Madina Basketball */}
+          <div
+            className="glass-card rounded-2xl p-4 flex flex-col gap-3"
+            style={{ borderColor: "rgba(234,179,8,0.5)" }}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: "#fff", fontFamily: "var(--font-space-grotesk)", letterSpacing: "-0.01em" }}
+                >
+                  Madina Basketball — Community Hub, Donors &amp; Data
+                </p>
+                <p className="text-[11px] mt-1 font-medium uppercase tracking-[0.16em]" style={{ color: "rgba(234,179,8,0.8)" }}>
+                  Project management · Data analysis · Design · Engineering
+                </p>
+              </div>
+            </div>
+            <p className="text-xs" style={{ color: "rgba(226,232,240,0.8)" }}>
+              Co‑led the transformation of an inactive, run‑down court in Libya Quarters into a solar‑powered
+              basketball hub — sourcing engineers, planning the works, and staying on site through to completion and launch.
+            </p>
+            <ul className="space-y-1.5 text-xs" style={{ color: "rgba(148,163,184,0.95)" }}>
+              <li>• Worked with community leaders and youth to scope the renovation, get estimates and budgets, and supervise site visits and construction.</li>
+              <li>• Built Google Sheets dashboards to track donations, expenses and court activity; produced anonymised summaries for sponsors and the community.</li>
+              <li>• Planned launch events and youth training sessions; designed posters and social assets; shipped the Madina Basketball site to document it all (madinabball.vercel.app).</li>
+            </ul>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <button
+                type="button"
+                onClick={() => {
+                  const project = projects.find((p) => p.id === "madinabasketball");
+                  if (project) setSelectedProject(project);
+                }}
+                className="px-3 py-1.5 rounded-lg text-[11px] font-semibold"
+                style={{
+                  background: "rgba(234,179,8,0.12)",
+                  border: "1px solid rgba(234,179,8,0.5)",
+                  color: "#facc15",
+                }}
+              >
+                Open Madina project
+              </button>
+            </div>
+          </div>
+
+          {/* NexaYouth */}
+          <div
+            className="glass-card rounded-2xl p-4 flex flex-col gap-3"
+            style={{ borderColor: "rgba(59,130,246,0.5)" }}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: "#fff", fontFamily: "var(--font-space-grotesk)", letterSpacing: "-0.01em" }}
+                >
+                  NexaYouth — Climate &amp; Social Justice Advocacy (Remote)
+                </p>
+                <p className="text-[11px] mt-1 font-medium uppercase tracking-[0.16em]" style={{ color: "rgba(129,140,248,0.9)" }}>
+                  Design · Writing · Global collaboration
+                </p>
+              </div>
+            </div>
+            <p className="text-xs" style={{ color: "rgba(226,232,240,0.8)" }}>
+              Remote internship with NexaYouth (Washington DC), a youth organisation focused on climate and social justice advocacy.
+            </p>
+            <ul className="space-y-1.5 text-xs" style={{ color: "rgba(148,163,184,0.95)" }}>
+              <li>• Met weekly with an international team to discuss social and climate issues, including emerging and trending topics.</li>
+              <li>• Led grassroots activities such as campaign assets (PFAs, deforestation flyers, social tiles) and weekly article drafts on global climate and justice themes.</li>
+              <li>• Had one article selected and published on NexaYouth&apos;s site; iterated on messaging and visuals across time zones.</li>
+            </ul>
+          </div>
+
+          {/* IOU Accra Student Committee */}
+          <div
+            className="glass-card rounded-2xl p-4 flex flex-col gap-3"
+            style={{ borderColor: "rgba(96,165,250,0.5)" }}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: "#fff", fontFamily: "var(--font-space-grotesk)", letterSpacing: "-0.01em" }}
+                >
+                  IOU Accra Student Committee — Training &amp; Outreach
+                </p>
+                <p className="text-[11px] mt-1 font-medium uppercase tracking-[0.16em]" style={{ color: "rgba(191,219,254,0.9)" }}>
+                  Mentoring · Training · Systems
+                </p>
+              </div>
+            </div>
+            <p className="text-xs" style={{ color: "rgba(226,232,240,0.8)" }}>
+              Part of the Accra Student Committee for a global online university, supporting students and leading
+              outreach to less‑resourced schools.
+            </p>
+            <ul className="space-y-1.5 text-xs" style={{ color: "rgba(148,163,184,0.95)" }}>
+              <li>• Delivered sessions for high‑school students on education pathways and career planning through outreach programs to less‑resourced schools.</li>
+              <li>• Ran Google Workspace trainings (Docs, Sheets, Drive, Meet) for the Accra student base.</li>
+              <li>• Built project‑tracking sheets and contributed to reports summarising local chapter initiatives.</li>
+            </ul>
+          </div>
+
+          {/* Ramadan Kitchen */}
+          <div
+            className="glass-card rounded-2xl p-4 flex flex-col gap-3"
+            style={{ borderColor: "rgba(248,113,113,0.6)" }}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: "#fff", fontFamily: "var(--font-space-grotesk)", letterSpacing: "-0.01em" }}
+                >
+                  Ramadan Kitchen — Food Security &amp; Field Operations
+                </p>
+                <p className="text-[11px] mt-1 font-medium uppercase tracking-[0.16em]" style={{ color: "rgba(248,250,252,0.9)" }}>
+                  Operations · Data · Storytelling
+                </p>
+              </div>
+            </div>
+            <p className="text-xs" style={{ color: "rgba(226,232,240,0.8)" }}>
+              Field‑kitchen initiative (Feb–Mar 2026) built for Ramadan, focused on transparent, tech‑forward food
+              distribution from kitchen to campuses.
+            </p>
+            <ul className="space-y-1.5 text-xs" style={{ color: "rgba(148,163,184,0.95)" }}>
+              <li>• Helped design the model for sourcing, prepping and delivering meals to campuses, with clear routes and responsibilities.</li>
+              <li>• Built Google Sheets dashboards to track meals, campuses reached and nightly runs, keeping donors and volunteers informed at a high level.</li>
+              <li>• Kept a movement journal and visual records that connected numbers (meals, routes, funds) to real people and decisions on the ground.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer
         className="px-6 py-12 max-w-6xl mx-auto"
@@ -324,7 +527,7 @@ export default function Home() {
               Let&apos;s build something together.
             </p>
             <p className="text-sm mb-1" style={{ color: "rgba(255,255,255,0.4)" }}>
-              Open to freelance projects, contracts, full-time roles, and investment opportunities.
+              Open to analyst and engineering roles, freelance projects, contracts, and investment opportunities.
             </p>
             <p className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
               Based in Accra, Ghana · Available Remotely

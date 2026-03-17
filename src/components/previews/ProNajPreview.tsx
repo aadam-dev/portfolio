@@ -75,15 +75,17 @@ function NavBar() {
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <div style={{
-          width: 32, height: 32,
-          border: `1px solid ${ORANGE}`,
+          width: 40, height: 40,
+          border: `2px solid ${OBSIDIAN}`,
+          background: OBSIDIAN,
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
-          <span style={{ color: ORANGE, fontWeight: 900, fontSize: 14, fontFamily: "monospace" }}>P</span>
+          <span style={{ color: CONCRETE, fontWeight: 700, fontSize: 14, fontFamily: "system-ui, sans-serif" }}>PN</span>
         </div>
-        <span style={{ color: CONCRETE, fontWeight: 700, fontSize: 14, letterSpacing: "0.05em", fontFamily: "'Space Grotesk', system-ui, sans-serif" }}>
-          ProNaj<span style={{ color: STEEL, fontWeight: 400, marginLeft: 4 }}>International</span>
-        </span>
+        <div>
+          <span style={{ color: CONCRETE, fontWeight: 700, fontSize: 16, letterSpacing: "-0.02em", fontFamily: "system-ui, sans-serif", display: "block", lineHeight: 1.2 }}>ProNaj</span>
+          <span style={{ color: STEEL, fontSize: 10, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "monospace" }}>International</span>
+        </div>
       </div>
       <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
         {["Digital", "Living", "Global", "About", "Contact"].map(l => (

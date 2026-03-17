@@ -38,13 +38,17 @@ function Landing() {
       <div style={{ position: "absolute", top: 0, left: "20%", width: 320, height: 320, background: "rgba(245,158,11,0.08)", borderRadius: "50%", filter: "blur(100px)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: 0, right: "20%", width: 260, height: 260, background: "rgba(245,158,11,0.05)", borderRadius: "50%", filter: "blur(80px)", pointerEvents: "none" }} />
 
-      {/* Nav */}
+      {/* Nav — real PrimeHub logo when available (same as live site) */}
       <nav style={{ padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(255,255,255,0.05)", position: "relative", zIndex: 10 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ width: 30, height: 30, borderRadius: 8, background: "linear-gradient(135deg, #F59E0B, #D97706)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ color: "#000", fontWeight: 800, fontSize: 14 }}>P</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          {/* Real PrimeHub logo: use /previews/primehub/logo.png (copy from PrimeHub/public/logo.png) or fallback P mark */}
+          <div style={{ width: 32, height: 32, borderRadius: 10, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.05)" }}>
+            <img src="/previews/primehub/logo.png" alt="" role="presentation" width={32} height={32} style={{ objectFit: "contain", width: 32, height: 32 }} />
           </div>
-          <span style={{ color: "#fff", fontWeight: 700, fontSize: 16 }}>PrimeHub</span>
+          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
+            <span style={{ color: "#fff", fontWeight: 700, fontSize: 14, letterSpacing: "-0.02em" }}>PrimeHub</span>
+            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", marginTop: 2 }}>MATERIALS</span>
+          </div>
         </div>
         <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
           {["Products", "Categories", "How It Works"].map(l => (

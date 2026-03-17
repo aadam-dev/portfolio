@@ -15,13 +15,13 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Aadam — Investment Analyst & Full-Stack Developer",
+  title: "Aadam — Analyst & Full-Stack Developer",
   description:
-    "Portfolio of a multi-disciplinary builder operating at the intersection of investment analysis, software engineering, and business operations. 20+ production apps shipped across Ghana and West Africa.",
-  keywords: ["developer", "full-stack", "investment analyst", "portfolio", "Next.js", "TypeScript", "Ghana", "West Africa", "fintech", "edtech"],
+    "Portfolio of a multi-disciplinary builder: investment and business analysis, data analysis, business development, and software engineering. 20+ production apps shipped across Africa and West Africa.",
+  keywords: ["analyst", "developer", "full-stack", "investment analysis", "business analysis", "data analysis", "portfolio", "Next.js", "TypeScript", "Africa", "West Africa", "fintech", "edtech"],
   openGraph: {
-    title: "Aadam — Investment Analyst & Full-Stack Developer",
-    description: "20+ production apps. 50+ SMEs evaluated. Real products, real code.",
+    title: "Aadam — Analyst & Full-Stack Developer",
+    description: "Investment & business analysis, data analysis, business development, software engineering. 20+ production apps. 50+ SMEs evaluated.",
     type: "website",
   },
 };

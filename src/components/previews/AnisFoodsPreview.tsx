@@ -31,10 +31,11 @@ function LandingScreen() {
   return (
     <div style={{ background: "#fff", minHeight: "100%", fontFamily: "system-ui, sans-serif" }}>
       {/* Dark nav */}
+      {/* Exact Anis Food & Drink branding — real logo from project (matches live site) */}
       <nav style={{ padding: "16px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(0,0,0,0.6)", position: "relative", zIndex: 10 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ color: "#fff", fontWeight: 900, fontSize: 22, letterSpacing: "-0.03em" }}>Anis<span style={{ color: "#D21F3C" }}>.</span></span>
-          <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, fontWeight: 400 }}>Food & Drink</span>
+          <img src="/previews/anisfoods/logo-brand.png" alt="Anis Food and Drink" style={{ height: 48, width: "auto", objectFit: "contain" }} />
+          <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase" }}>Food & Drink</span>
         </div>
         <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
           {["Menu", "Reservations", "About", "Contact"].map(l => (

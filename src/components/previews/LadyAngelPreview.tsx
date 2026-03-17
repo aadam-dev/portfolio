@@ -22,10 +22,10 @@ function Landing() {
       {/* Nav */}
       <nav style={{ padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #e5e7eb", background: "#fafaf9" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#f97316", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ color: "#fff", fontSize: 15, lineHeight: 1 }}>✦</span>
+          <div style={{ width: 32, height: 32, minWidth: 32, borderRadius: 4, background: "#FB7C06", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ color: "#fff", fontWeight: 800, fontSize: 11, fontFamily: "Georgia, serif", letterSpacing: "0.02em" }}>LA</span>
           </div>
-          <span style={{ color: "#111827", fontWeight: 600, fontSize: 15 }}>Lady Angel Network</span>
+          <span style={{ color: "#111827", fontWeight: 600, fontSize: 15, fontFamily: "Georgia, serif" }}>Lady Angel Network</span>
         </div>
         <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
           {["About", "Membership", "Portfolio", "Deal Flow"].map(l => (
