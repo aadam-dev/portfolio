@@ -139,7 +139,7 @@ export const projects: Project[] = [
       { id: "dashboard", label: "Dashboard" },
       { id: "reports", label: "Reports" },
     ],
-    liveBaseUrl: "https://anisfoods.com",
+    liveBaseUrl: "https://aniseatery.netlify.app",
     liveScreenPaths: { landing: "/", pos: "/pos/cashier", dashboard: "/dashboard", reports: "/reports/monthly" },
   },
   {
@@ -212,7 +212,7 @@ export const projects: Project[] = [
       { id: "membership", label: "Membership" },
       { id: "portfolio", label: "Portfolio" },
     ],
-    liveBaseUrl: "https://ladyangelnetwork.com",
+    liveBaseUrl: "https://ladyangel.vercel.app",
     liveScreenPaths: { landing: "/", membership: "/membership", portfolio: "/portfolio" },
   },
   {

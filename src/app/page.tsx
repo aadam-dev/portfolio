@@ -403,6 +403,19 @@ export default function Home() {
               <li>• Planned launch events and youth training sessions; designed posters and social assets; shipped the Madina Basketball site to document it all (madinabball.vercel.app).</li>
             </ul>
             <div className="flex flex-wrap gap-2 mt-3">
+              <a
+                href="https://madinabball.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1.5 rounded-lg text-[11px] font-semibold inline-flex items-center justify-center"
+                style={{
+                  background: "rgba(234,179,8,0.12)",
+                  border: "1px solid rgba(234,179,8,0.5)",
+                  color: "#facc15",
+                }}
+              >
+                View live site
+              </a>
               <button
                 type="button"
                 onClick={() => {
@@ -411,12 +424,12 @@ export default function Home() {
                 }}
                 className="px-3 py-1.5 rounded-lg text-[11px] font-semibold"
                 style={{
-                  background: "rgba(234,179,8,0.12)",
-                  border: "1px solid rgba(234,179,8,0.5)",
-                  color: "#facc15",
+                  background: "rgba(15,15,26,0.9)",
+                  border: "1px solid rgba(148,163,184,0.5)",
+                  color: "rgba(226,232,240,0.9)",
                 }}
               >
-                Open Madina project
+                Open preview
               </button>
             </div>
           </div>
