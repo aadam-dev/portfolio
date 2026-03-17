@@ -183,6 +183,7 @@ export const projects: Project[] = [
     stack: ["Next.js 14", "Fastify", "Prisma", "PostgreSQL", "Turborepo"],
     accentColor: "#0d9488",
     accentGlow: "rgba(13, 148, 136, 0.15)",
+    featured: true,
     screens: [
       { id: "landing", label: "Home" },
       { id: "shop", label: "Products" },
@@ -207,6 +208,7 @@ export const projects: Project[] = [
     stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Playfair Display"],
     accentColor: "#FB7C06",
     accentGlow: "rgba(251, 124, 6, 0.15)",
+    featured: true,
     screens: [
       { id: "landing", label: "Home" },
       { id: "membership", label: "Membership" },
@@ -232,6 +234,7 @@ export const projects: Project[] = [
     stack: ["Next.js 14", "TypeScript", "Supabase", "react-youtube", "html2canvas", "jspdf"],
     accentColor: "#EAB308",
     accentGlow: "rgba(234, 179, 8, 0.15)",
+    featured: true,
     screens: [
       { id: "landing", label: "Home" },
       { id: "court", label: "The Court" },
@@ -256,6 +259,7 @@ export const projects: Project[] = [
     stack: ["Next.js 14", "Framer Motion", "Tailwind v4", "shadcn/ui", "Satoshi"],
     accentColor: "#2563EB",
     accentGlow: "rgba(37, 99, 235, 0.15)",
+    featured: true,
     screens: [
       { id: "landing", label: "Home" },
       { id: "sectors", label: "Sectors" },
@@ -280,6 +284,7 @@ export const projects: Project[] = [
     stack: ["Electron", "React", "TypeScript", "better-sqlite3", "Tailwind CSS", "Vite"],
     accentColor: "#7C3AED",
     accentGlow: "rgba(124, 58, 237, 0.15)",
+    featured: true,
     screens: [
       { id: "pos", label: "POS" },
       { id: "inventory", label: "Inventory" },
@@ -352,6 +357,7 @@ export const projects: Project[] = [
     stack: ["Next.js 14", "React", "Tailwind CSS", "Framer Motion", "Inter/Montserrat"],
     accentColor: "#EA580C",
     accentGlow: "rgba(234, 88, 12, 0.15)",
+    featured: true,
     screens: [
       { id: "landing", label: "Home" },
       { id: "services", label: "Services" },
