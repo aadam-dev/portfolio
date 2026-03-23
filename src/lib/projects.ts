@@ -6,6 +6,7 @@ export type ProjectCategory =
   | "restaurant"
   | "sports"
   | "corporate"
+  | "automotive"
   | "desktop"
   | "healthcare"
   | "hospitality"
@@ -33,9 +34,9 @@ export interface Project {
   accentGlow: string;
   featured?: boolean;
   isLead?: boolean;
-  /** When set, modal can show the real site in an iframe (exact homepage/logos/media). */
+  /** When set, modal shows a Simulated ↔ Live toggle and can iframe the real site. */
   liveBaseUrl?: string;
-  /** Map screen id → path (e.g. landing → "/", courses → "/courses"). Used with liveBaseUrl for iframe. */
+  /** Map screen id → path (e.g. landing → "/", courses → "/courses"). Used with liveBaseUrl. */
   liveScreenPaths?: Record<string, string>;
 }
 
@@ -63,8 +64,6 @@ export const projects: Project[] = [
       { id: "lesson", label: "Lesson" },
       { id: "dashboard", label: "Dashboard" },
     ],
-    liveBaseUrl: "https://koyiacademy.com",
-    liveScreenPaths: { landing: "/", courses: "/courses", lesson: "/learn/wassce-maths/lesson-3", dashboard: "/dashboard" },
   },
   {
     id: "primehub",
@@ -88,8 +87,6 @@ export const projects: Project[] = [
       { id: "products", label: "Products" },
       { id: "quote", label: "Quote" },
     ],
-    liveBaseUrl: "https://primehub.com.gh",
-    liveScreenPaths: { landing: "/", products: "/products", quote: "/quote/new" },
   },
   {
     id: "ethika",
@@ -99,7 +96,7 @@ export const projects: Project[] = [
       "West Africa's definitive resource for non-interest banking (NIB). Bank of Ghana regulatory guidance, NIB vs conventional banking comparisons, and bilingual (EN/FR) education.",
     role: "Researcher, information architect & engineer",
     impact: [
-      "Translated BoG’s NIB framework into simple, side‑by‑side explanations.",
+      "Translated BoG's NIB framework into simple, side‑by‑side explanations.",
       "Designed the Knowledge Vault to onboard both retail users and practitioners.",
     ],
     category: "fintech",
@@ -113,8 +110,6 @@ export const projects: Project[] = [
       { id: "comparison", label: "NIB vs Conv." },
       { id: "vault", label: "Knowledge" },
     ],
-    liveBaseUrl: "https://ethikawestafrica.com",
-    liveScreenPaths: { landing: "/", comparison: "/compare", vault: "/knowledge" },
   },
   {
     id: "anisfoods",
@@ -124,7 +119,7 @@ export const projects: Project[] = [
       "Public website, cashier POS, and full back-office suite for an Accra restaurant. Real-time orders, financial reports (P&L, cash flow, payroll), multi-role access.",
     role: "Systems designer & full‑stack implementer",
     impact: [
-      "Designed POS, reporting and kitchen flows directly from the owner’s daily operations.",
+      "Designed POS, reporting and kitchen flows directly from the owner's daily operations.",
       "Modelled P&L, category sales and staff metrics to answer real finance questions.",
     ],
     category: "restaurant",
@@ -140,7 +135,7 @@ export const projects: Project[] = [
       { id: "reports", label: "Reports" },
     ],
     liveBaseUrl: "https://aniseatery.netlify.app",
-    liveScreenPaths: { landing: "/", pos: "/pos/cashier", dashboard: "/dashboard", reports: "/reports/monthly" },
+    liveScreenPaths: { landing: "/", pos: "/", dashboard: "/", reports: "/" },
   },
   {
     id: "rentcheck",
@@ -164,8 +159,6 @@ export const projects: Project[] = [
       { id: "listings", label: "Listings" },
       { id: "detail", label: "Property" },
     ],
-    liveBaseUrl: "https://rentcheck.com.gh",
-    liveScreenPaths: { landing: "/", listings: "/listings", detail: "/property/akr-2024-007" },
   },
   {
     id: "lenus",
@@ -189,8 +182,6 @@ export const projects: Project[] = [
       { id: "shop", label: "Products" },
       { id: "checkout", label: "Checkout" },
     ],
-    liveBaseUrl: "https://lenuspharmacy.com.gh",
-    liveScreenPaths: { landing: "/", shop: "/shop", checkout: "/checkout" },
   },
   {
     id: "ladyangel",
@@ -214,7 +205,7 @@ export const projects: Project[] = [
       { id: "membership", label: "Membership" },
       { id: "portfolio", label: "Portfolio" },
     ],
-    liveBaseUrl: "https://ladyangel.vercel.app",
+    liveBaseUrl: "https://lady-angle.vercel.app",
     liveScreenPaths: { landing: "/", membership: "/membership", portfolio: "/portfolio" },
   },
   {
@@ -265,7 +256,7 @@ export const projects: Project[] = [
       { id: "sectors", label: "Sectors" },
       { id: "contact", label: "Contact" },
     ],
-    liveBaseUrl: "https://pronajinternational.com",
+    liveBaseUrl: "https://pronaj.vercel.app",
     liveScreenPaths: { landing: "/", sectors: "/sectors", contact: "/contact" },
   },
   {
@@ -292,6 +283,30 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: "rockmotion",
+    name: "Rockmotion Auto Group",
+    tagline: "US Automotive Export Platform",
+    description:
+      "Licensed US car dealer & broker — sources, verifies, and ships any American vehicle to 40+ countries. VIN history, crash analysis, port loading with marine insurance, and real-time tracking.",
+    role: "Brand identity, UX & full‑stack build",
+    impact: [
+      "Designed a global-first car-buying flow for customers who can't visit the US in person.",
+      "Built shipping calculator and inventory system for an Atlanta-based export operation.",
+    ],
+    category: "automotive",
+    categoryLabel: "Automotive · Export",
+    stack: ["Next.js 16", "TypeScript", "Tailwind v4", "Framer Motion", "Outfit/JetBrains Mono"],
+    accentColor: "#2563EB",
+    accentGlow: "rgba(37, 99, 235, 0.15)",
+    isLead: true,
+    featured: true,
+    screens: [
+      { id: "landing", label: "Home" },
+      { id: "inventory", label: "Inventory" },
+      { id: "process", label: "Process" },
+    ],
+  },
+  {
     id: "gaskiya",
     name: "Gaskiya",
     tagline: "Luxury West African Fashion",
@@ -313,8 +328,6 @@ export const projects: Project[] = [
       { id: "collections", label: "Collections" },
       { id: "product", label: "Product" },
     ],
-    liveBaseUrl: "https://gaskiya.com",
-    liveScreenPaths: { landing: "/", collections: "/collections", product: "/products/eid-collection-001" },
   },
   {
     id: "thepalms",
@@ -338,8 +351,6 @@ export const projects: Project[] = [
       { id: "rooms", label: "Rooms" },
       { id: "amenities", label: "Amenities" },
     ],
-    liveBaseUrl: "https://thepalmsbyeagles.com",
-    liveScreenPaths: { landing: "/", rooms: "/rooms", amenities: "/amenities" },
   },
   {
     id: "magilo",
@@ -363,7 +374,7 @@ export const projects: Project[] = [
       { id: "services", label: "Services" },
       { id: "college", label: "College" },
     ],
-    liveBaseUrl: "https://magilo.com.gh",
+    liveBaseUrl: "https://magiloartcollege.com",
     liveScreenPaths: { landing: "/", services: "/services", college: "/college" },
   },
 ];
@@ -376,6 +387,7 @@ export const categoryColors: Record<ProjectCategory, string> = {
   restaurant: "#D21F3C",
   sports: "#EAB308",
   corporate: "#2563EB",
+  automotive: "#2563EB",
   desktop: "#7C3AED",
   healthcare: "#0d9488",
   hospitality: "#0D9488",

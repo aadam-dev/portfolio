@@ -79,6 +79,11 @@ const urlMap: Record<string, Record<string, string>> = {
     services: "magilo.com.gh/services",
     college: "magilo.com.gh/college",
   },
+  rockmotion: {
+    landing: "rockmotionautogroup.com",
+    inventory: "rockmotionautogroup.com/inventory",
+    process: "rockmotionautogroup.com/process",
+  },
 };
 
 export default function BrowserMockup({

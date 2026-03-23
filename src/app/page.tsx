@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useScroll, useInView, AnimatePresence } from "framer-motion";
 import { projects, type Project, type ProjectCategory } from "@/lib/projects";
 import ProjectCard from "@/components/ProjectCard";
 import ProjectModal from "@/components/ProjectModal";
@@ -19,13 +19,79 @@ const CATEGORIES: { label: string; value: ProjectCategory | "all" }[] = [
   { label: "Fashion", value: "fashion" },
   { label: "Hospitality", value: "hospitality" },
   { label: "Corporate", value: "corporate" },
+  { label: "Automotive", value: "automotive" },
   { label: "Desktop", value: "desktop" },
   { label: "Creative", value: "creative" },
 ];
 
+/* ── Animated count-up stat ─────────────────────────────────────────── */
+function AnimatedStat({ value, label }: { value: string; label: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-50px" });
+  const [display, setDisplay] = useState(value);
+  const started = useRef(false);
+
+  useEffect(() => {
+    if (!inView || started.current) return;
+    started.current = true;
+
+    // Parse: "GHS 40K+" → prefix="GHS ", num=40, suffix="K+"
+    const match = value.match(/^([A-Za-z\s]*)(\d+)(.*)$/);
+    if (!match) return;
+    const [, prefix, numStr, suffix] = match;
+    const target = parseInt(numStr, 10);
+    const steps = 48;
+    const stepMs = 1400 / steps;
+    let current = 0;
+
+    setDisplay(`${prefix}0${suffix}`);
+
+    const timer = setInterval(() => {
+      current += target / steps;
+      if (current >= target) {
+        setDisplay(value);
+        clearInterval(timer);
+      } else {
+        setDisplay(`${prefix}${Math.floor(current)}${suffix}`);
+      }
+    }, stepMs);
+    return () => clearInterval(timer);
+  }, [inView, value]);
+
+  return (
+    <div ref={ref}>
+      <div
+        className="text-2xl font-bold tabular-nums"
+        style={{ color: "#fff", fontFamily: "var(--font-space-grotesk)" }}
+      >
+        {display}
+      </div>
+      <div className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.3)" }}>
+        {label}
+      </div>
+    </div>
+  );
+}
+
+/* ── Main page ──────────────────────────────────────────────────────── */
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState<ProjectCategory | "all">("all");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [cursor, setCursor] = useState({ x: -1000, y: -1000 });
+
+  const { scrollYProgress } = useScroll();
+
+  const projectsRef = useRef(null);
+  const impactRef = useRef(null);
+  const projectsInView = useInView(projectsRef, { once: true, margin: "-80px" });
+  const impactInView = useInView(impactRef, { once: true, margin: "-80px" });
+
+  /* Track mouse for spotlight */
+  useEffect(() => {
+    const move = (e: MouseEvent) => setCursor({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, []);
 
   const filteredAll =
     activeCategory === "all"
@@ -36,7 +102,36 @@ export default function Home() {
 
   return (
     <main className="min-h-screen grid-bg">
-      {/* Header / Nav */}
+
+      {/* ── Scroll progress bar ──────────────────────────────────── */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 z-50 h-px origin-left"
+        style={{
+          scaleX: scrollYProgress,
+          background: "linear-gradient(90deg, #7C6AFA 0%, #A89FFF 100%)",
+        }}
+      />
+
+      {/* ── Cursor spotlight ─────────────────────────────────────── */}
+      <div
+        className="pointer-events-none fixed inset-0 z-10"
+        style={{
+          background: `radial-gradient(600px circle at ${cursor.x}px ${cursor.y}px, rgba(124,106,250,0.055), transparent 40%)`,
+        }}
+      />
+
+      {/* ── Grain texture ────────────────────────────────────────── */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0"
+        style={{
+          opacity: 0.022,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "200px 200px",
+        }}
+      />
+
+      {/* ── Header / Nav ─────────────────────────────────────────── */}
       <header
         className="sticky top-0 z-30 px-6"
         style={{
@@ -62,7 +157,7 @@ export default function Home() {
               href="https://github.com/aadam-dev"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-medium transition-colors"
+              className="text-xs font-medium transition-colors hover:text-white"
               style={{ color: "rgba(255,255,255,0.4)" }}
             >
               GitHub
@@ -71,14 +166,14 @@ export default function Home() {
               href="https://linkedin.com/in/aadamsays"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-medium transition-colors"
+              className="text-xs font-medium transition-colors hover:text-white"
               style={{ color: "rgba(255,255,255,0.4)" }}
             >
               LinkedIn
             </a>
             <a
-              href="mailto:aadamsays@gmail.com"
-              className="px-4 py-1.5 rounded-lg text-xs font-semibold transition-all"
+              href="mailto:aadamsays@gmail.com?subject=Hi%20Aadam%20%E2%80%94%20Let%E2%80%99s%20Work%20Together&body=Hi%20Aadam%2C%0A%0A"
+              className="px-4 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-80"
               style={{
                 background: "rgba(124,106,250,0.12)",
                 border: "1px solid rgba(124,106,250,0.25)",
@@ -91,14 +186,14 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero */}
+      {/* ── Hero ─────────────────────────────────────────────────── */}
       <section className="relative pt-16 pb-16 px-6 max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* Status */}
+          {/* Status pill — pulsing dot */}
           <div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-8"
             style={{
@@ -107,10 +202,16 @@ export default function Home() {
               color: "rgba(255,255,255,0.6)",
             }}
           >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: "#4ade80", boxShadow: "0 0 6px #4ade80" }}
-            />
+            <span className="relative flex h-1.5 w-1.5">
+              <span
+                className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                style={{ background: "#4ade80" }}
+              />
+              <span
+                className="relative inline-flex rounded-full h-1.5 w-1.5"
+                style={{ background: "#4ade80", boxShadow: "0 0 6px #4ade80" }}
+              />
+            </span>
             Available for new projects — Global · Remote (based in Accra)
           </div>
 
@@ -159,7 +260,7 @@ export default function Home() {
             Click any project to explore interactive previews or open the live site.
           </p>
 
-          {/* Quick stats */}
+          {/* Quick stats — count-up */}
           <div className="flex gap-10 flex-wrap">
             {[
               ["50+", "SMEs Evaluated"],
@@ -167,20 +268,7 @@ export default function Home() {
               ["4+", "Years Experience"],
               ["GHS 40K+", "Community Funds Raised"],
             ].map(([val, label]) => (
-              <div key={label}>
-                <div
-                  className="text-2xl font-bold"
-                  style={{
-                    color: "#fff",
-                    fontFamily: "var(--font-space-grotesk)",
-                  }}
-                >
-                  {val}
-                </div>
-                <div className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.3)" }}>
-                  {label}
-                </div>
-              </div>
+              <AnimatedStat key={label} value={val} label={label} />
             ))}
           </div>
         </motion.div>
@@ -202,8 +290,14 @@ export default function Home() {
         <div style={{ height: 1, background: "rgba(255,255,255,0.05)" }} />
       </div>
 
-      {/* Projects section */}
-      <section className="px-6 pt-10 pb-20 max-w-6xl mx-auto">
+      {/* ── Projects section ─────────────────────────────────────── */}
+      <motion.section
+        ref={projectsRef}
+        initial={{ opacity: 0, y: 28 }}
+        animate={projectsInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        className="px-6 pt-10 pb-20 max-w-6xl mx-auto"
+      >
         {/* Header + filters */}
         <div className="flex items-start justify-between gap-6 mb-8 flex-wrap">
           <div>
@@ -252,27 +346,38 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Grid */}
-        <motion.div
-          className="grid gap-4"
-          style={{
-            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-          }}
-          layout
-        >
-          {filteredSelected.map((project, i) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              index={i}
-              onClick={() => setSelectedProject(project)}
-            />
-          ))}
-        </motion.div>
+        {/* Grid with AnimatePresence for smooth category transitions */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeCategory}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: "easeInOut" }}
+            className="grid gap-4"
+            style={{
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            }}
+          >
+            {filteredSelected.map((project, i) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={i}
+                onClick={() => setSelectedProject(project)}
+              />
+            ))}
+          </motion.div>
+        </AnimatePresence>
 
-        {/* Secondary list of additional work */}
+        {/* Secondary list — more work */}
         {filteredAll.length > filteredSelected.length && (
-          <div className="mt-10">
+          <motion.div
+            className="mt-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.4 }}
+          >
             <p
               className="text-xs font-semibold mb-3 tracking-widest"
               style={{ color: "rgba(255,255,255,0.3)", letterSpacing: "0.16em" }}
@@ -286,7 +391,7 @@ export default function Home() {
                   <button
                     key={project.id}
                     onClick={() => setSelectedProject(project)}
-                    className="inline-flex items-center gap-1 px-2 py-1 rounded-full transition-colors"
+                    className="inline-flex items-center gap-1 px-2 py-1 rounded-full transition-all duration-200 hover:opacity-80"
                     style={{
                       background: "rgba(255,255,255,0.02)",
                       border: "1px solid rgba(255,255,255,0.06)",
@@ -301,12 +406,18 @@ export default function Home() {
                   </button>
                 ))}
             </div>
-          </div>
+          </motion.div>
         )}
-      </section>
+      </motion.section>
 
-      {/* Impact & leadership */}
-      <section className="px-6 pb-20 max-w-6xl mx-auto">
+      {/* ── Impact & Leadership ───────────────────────────────────── */}
+      <motion.section
+        ref={impactRef}
+        initial={{ opacity: 0, y: 28 }}
+        animate={impactInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        className="px-6 pb-20 max-w-6xl mx-auto"
+      >
         <div className="mb-6">
           <h2
             className="text-2xl font-bold"
@@ -407,7 +518,7 @@ export default function Home() {
                 href="https://madinabball.vercel.app"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-1.5 rounded-lg text-[11px] font-semibold inline-flex items-center justify-center"
+                className="px-3 py-1.5 rounded-lg text-[11px] font-semibold inline-flex items-center justify-center transition-opacity hover:opacity-80"
                 style={{
                   background: "rgba(234,179,8,0.12)",
                   border: "1px solid rgba(234,179,8,0.5)",
@@ -422,7 +533,7 @@ export default function Home() {
                   const project = projects.find((p) => p.id === "madinabasketball");
                   if (project) setSelectedProject(project);
                 }}
-                className="px-3 py-1.5 rounded-lg text-[11px] font-semibold"
+                className="px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-opacity hover:opacity-80"
                 style={{
                   background: "rgba(15,15,26,0.9)",
                   border: "1px solid rgba(148,163,184,0.5)",
@@ -520,9 +631,9 @@ export default function Home() {
             </ul>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Footer */}
+      {/* ── Footer ───────────────────────────────────────────────── */}
       <footer
         className="px-6 py-12 max-w-6xl mx-auto"
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
@@ -549,8 +660,8 @@ export default function Home() {
           <div className="flex flex-col gap-3">
             <div className="flex gap-3">
               <a
-                href="mailto:aadamsays@gmail.com"
-                className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all"
+                href="mailto:aadamsays@gmail.com?subject=Hi%20Aadam%20%E2%80%94%20Let%E2%80%99s%20Work%20Together&body=Hi%20Aadam%2C%0A%0A"
+                className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:opacity-90 hover:scale-[1.02]"
                 style={{ background: "#7C6AFA", color: "#fff" }}
               >
                 aadamsays@gmail.com
@@ -559,7 +670,7 @@ export default function Home() {
                 href="https://github.com/aadam-dev"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-lg text-sm font-medium transition-all"
+                className="px-5 py-2.5 rounded-lg text-sm font-medium transition-all hover:opacity-80"
                 style={{
                   background: "rgba(255,255,255,0.05)",
                   color: "rgba(255,255,255,0.6)",
@@ -572,7 +683,7 @@ export default function Home() {
                 href="https://linkedin.com/in/aadamsays"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-lg text-sm font-medium transition-all"
+                className="px-5 py-2.5 rounded-lg text-sm font-medium transition-all hover:opacity-80"
                 style={{
                   background: "rgba(255,255,255,0.02)",
                   color: "rgba(255,255,255,0.7)",
@@ -589,7 +700,7 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Project preview modal */}
+      {/* ── Project preview modal ─────────────────────────────────── */}
       <ProjectModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
