@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+set -eu
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "gitleaks not found. Install it to enable secret scanning:"
+  echo "  brew install gitleaks"
+  exit 1
+fi
+
+echo "Running gitleaks pre-commit scan..."
+
+# Prefer staged scan when available; otherwise fall back to repository scan.
+if gitleaks help protect >/dev/null 2>&1; then
+  gitleaks protect --staged --redact --verbose
+else
+  gitleaks detect --source . --redact --verbose
+fi

@@ -24,6 +24,14 @@ const CATEGORIES: { label: string; value: ProjectCategory | "all" }[] = [
   { label: "Creative", value: "creative" },
 ];
 
+const CONTACT_EMAIL = "aadamsays@gmail.com";
+const contactParams = new URLSearchParams({
+  subject: "al nasser site — project inquiry",
+  body:
+    "Hi Aadam,\n\nI came across your work on the al nasser site and would love to discuss a potential project.\n\nProject type:\nTimeline:\nBudget range:\n\n",
+});
+const contactMailto = `mailto:${CONTACT_EMAIL}?${contactParams.toString()}`;
+
 /* ── Animated count-up stat ─────────────────────────────────────────── */
 function AnimatedStat({ value, label }: { value: string; label: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -172,7 +180,7 @@ export default function Home() {
               LinkedIn
             </a>
             <a
-              href="mailto:aadamsays@gmail.com?subject=Hi%20Aadam%20%E2%80%94%20Let%E2%80%99s%20Work%20Together&body=Hi%20Aadam%2C%0A%0A"
+              href={contactMailto}
               className="px-4 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-80"
               style={{
                 background: "rgba(124,106,250,0.12)",
@@ -660,7 +668,7 @@ export default function Home() {
           <div className="flex flex-col gap-3">
             <div className="flex gap-3">
               <a
-                href="mailto:aadamsays@gmail.com?subject=Hi%20Aadam%20%E2%80%94%20Let%E2%80%99s%20Work%20Together&body=Hi%20Aadam%2C%0A%0A"
+                href={contactMailto}
                 className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:opacity-90 hover:scale-[1.02]"
                 style={{ background: "#7C6AFA", color: "#fff" }}
               >
@@ -696,6 +704,14 @@ export default function Home() {
             <p className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
               +233 559 602 056 · UTC+0 (flexible hours)
             </p>
+            <a
+              href={contactMailto}
+              aria-label="powered by aadam, email aadamsays@gmail.com"
+              className="text-xs w-fit transition-colors hover:text-white"
+              style={{ color: "rgba(255,255,255,0.28)" }}
+            >
+              powered by aadam
+            </a>
           </div>
         </div>
       </footer>
