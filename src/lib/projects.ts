@@ -231,7 +231,7 @@ export const projects: Project[] = [
       { id: "contact", label: "Contact" },
     ],
     liveBaseUrl: "https://jirehnaturalfoods.vercel.app",
-    liveScreenPaths: { landing: "/", menu: "/", contact: "/" },
+    liveScreenPaths: { landing: "/", menu: "/#menu", contact: "/#contact" },
   },
   {
     id: "madinabasketball",
