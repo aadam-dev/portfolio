@@ -68,33 +68,32 @@ export default function ProjectModal({ project, onClose }: Props) {
           {/* Modal */}
           <motion.div
             key="modal"
-            initial={{ opacity: 0, scale: 0.92, y: 24 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.92, y: 24 }}
-            transition={{ type: "spring", stiffness: 380, damping: 36 }}
-            className="fixed inset-4 z-50 flex gap-5 rounded-2xl overflow-hidden"
+            initial={{ opacity: 0, scale: 0.95, y: 30, filter: "blur(10px)" }}
+            animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, scale: 0.95, y: -20, filter: "blur(10px)" }}
+            transition={{ type: "spring", stiffness: 400, damping: 30, mass: 0.8 }}
+            className="fixed inset-4 md:inset-8 z-50 flex flex-col md:flex-row gap-0 rounded-2xl overflow-hidden"
             style={{
-              background: "#0F0F1A",
+              background: "#08080C",
               border: "1px solid rgba(255,255,255,0.08)",
-              boxShadow: `0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.05)`,
+              boxShadow: `0 32px 120px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05)`,
             }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Left panel — project info */}
             <div
-              className="flex flex-col flex-shrink-0"
+              className="flex flex-col flex-shrink-0 w-full md:w-[320px] 2xl:w-[380px] h-full overflow-y-auto"
               style={{
-                width: 280,
-                padding: "28px 24px",
+                padding: "32px",
                 borderRight: "1px solid rgba(255,255,255,0.06)",
-                background: "#0A0A14",
+                background: "linear-gradient(180deg, #0A0A14 0%, #05050A 100%)",
               }}
             >
               {/* Close */}
               <button
                 onClick={onClose}
-                className="self-end mb-6 p-1.5 rounded-lg transition-colors"
-                style={{ background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.06)" }}
+                className="self-end mb-8 p-2 rounded-full transition-all hover:scale-110 hover:bg-white/10"
+                style={{ background: "rgba(255,255,255,0.03)", color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.08)" }}
               >
                 <X className="w-4 h-4" />
               </button>

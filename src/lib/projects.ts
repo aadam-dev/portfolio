@@ -34,6 +34,7 @@ export interface Project {
   accentGlow: string;
   featured?: boolean;
   isLead?: boolean;
+  imagePath?: string;
   /** When set, modal shows a Simulated ↔ Live toggle and can iframe the real site. */
   liveBaseUrl?: string;
   /** Map screen id → path (e.g. landing → "/", courses → "/courses"). Used with liveBaseUrl. */
@@ -69,6 +70,7 @@ export const projects: Project[] = [
     id: "primehub",
     name: "PrimeHub",
     tagline: "B2B Building Materials Platform",
+    imagePath: "/images/projects/primehub.png",
     description:
       "Procurement command center for Ghanaian contractors. Source building materials, generate proformas, manage approvals, and track deliveries — all in one platform.",
     role: "Product, architecture & procurement workflows",
@@ -87,11 +89,14 @@ export const projects: Project[] = [
       { id: "products", label: "Products" },
       { id: "quote", label: "Quote" },
     ],
+    liveBaseUrl: "https://primehubgh.vercel.app",
+    liveScreenPaths: { landing: "/", products: "/products", quote: "/quote" },
   },
   {
     id: "ethika",
     name: "Ethika Finance",
     tagline: "Non-Interest Banking Hub",
+    imagePath: "/images/projects/ethika.png",
     description:
       "West Africa's definitive resource for non-interest banking (NIB). Bank of Ghana regulatory guidance, NIB vs conventional banking comparisons, and bilingual (EN/FR) education.",
     role: "Researcher, information architect & engineer",
@@ -110,11 +115,14 @@ export const projects: Project[] = [
       { id: "comparison", label: "NIB vs Conv." },
       { id: "vault", label: "Knowledge" },
     ],
+    liveBaseUrl: "https://ethika.vercel.app",
+    liveScreenPaths: { landing: "/", comparison: "/comparison", vault: "/vault" },
   },
   {
     id: "anisfoods",
     name: "Anis Food & Drink",
     tagline: "Ghanaian Restaurant — POS & Back Office",
+    imagePath: "/images/projects/anisfoods.jpg",
     description:
       "Public website, cashier POS, and full back-office suite for an Accra restaurant. Real-time orders, financial reports (P&L, cash flow, payroll), multi-role access.",
     role: "Systems designer & full‑stack implementer",
@@ -187,6 +195,7 @@ export const projects: Project[] = [
     id: "ladyangel",
     name: "Lady Angel Network",
     tagline: "Private Investment Network for Women",
+    imagePath: "/images/projects/ladyangel.png",
     description:
       "Invitation-only platform for women deploying capital into women-led ventures. Structured deal flow pipeline, 5 investment models, mentorship bootcamps, and a Pan-African portfolio.",
     role: "Investment workflow designer & front‑end",
@@ -212,6 +221,7 @@ export const projects: Project[] = [
     id: "jireh",
     name: "Jireh Natural Foods",
     tagline: "Restaurant Website & Ordering Experience",
+    imagePath: "/images/projects/jireh.jpg",
     description:
       "Modern restaurant web experience for Jireh Natural Foods in Accra, blending menu discovery, direct ordering channels, and strong social proof for daily customers.",
     role: "Product design, front-end build & conversion UX",
@@ -237,6 +247,7 @@ export const projects: Project[] = [
     id: "madinabasketball",
     name: "Madina Basketball",
     tagline: "Community Court Platform",
+    imagePath: "/images/projects/madinabasketball.png",
     description:
       "Libya Quarters' solar-powered basketball court hub — event management, player registration, court booking, transparency reports, and team highlights for Zurak Basketball & Madina Old Gees.",
     role: "Community organiser, co‑lead & builder",
@@ -263,6 +274,7 @@ export const projects: Project[] = [
     id: "pronaj",
     name: "ProNaj International",
     tagline: "Multi-Sector Conglomerate",
+    imagePath: "/images/projects/pronaj.png",
     description:
       "Delaware–Ghana conglomerate spanning Digital (IT services), Living (modular housing), and Global (agri-trade & export). 3 sectors, 2 continents, 25+ markets.",
     role: "Brand system & web experience",
@@ -311,6 +323,7 @@ export const projects: Project[] = [
     id: "rockmotion",
     name: "Rockmotion Auto Group",
     tagline: "US Automotive Export Platform",
+    imagePath: "/images/projects/rockmotion.png",
     description:
       "Licensed US car dealer & broker — sources, verifies, and ships any American vehicle to 40+ countries. VIN history, crash analysis, port loading with marine insurance, and real-time tracking.",
     role: "Brand identity, UX & full‑stack build",
@@ -383,6 +396,7 @@ export const projects: Project[] = [
     id: "magilo",
     name: "Magilo Art College",
     tagline: "Art School, Design & Printing Hub",
+    imagePath: "/images/projects/magilo.png",
     description:
       "25+ years of creative excellence in Adenta, Accra. SHS Visual Arts support, graphic design training, industrial printing, business consulting. 1000+ projects, 500+ clients.",
     role: "Storytelling & information design",

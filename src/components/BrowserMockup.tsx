@@ -115,81 +115,84 @@ export default function BrowserMockup({
   };
 
   return (
-    <div className="flex flex-col h-full rounded-xl overflow-hidden shadow-2xl"
-      style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
+    <div className="flex flex-col h-full rounded-2xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] relative"
+      style={{ border: "1px solid rgba(255,255,255,0.06)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 20px 60px -15px rgba(0,0,0,0.8)" }}>
       {/* Title bar */}
-      <div className="flex-shrink-0 flex items-center gap-3 px-4 py-3"
-        style={{ background: "#1A1A2E", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        {/* Traffic lights */}
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-[#FF5F57] hover:opacity-80 cursor-pointer transition-opacity flex items-center justify-center group">
-            <X className="w-1.5 h-1.5 text-[#8B1F1A] opacity-0 group-hover:opacity-100" />
+      <div className="flex-shrink-0 flex items-center justify-between gap-3 px-4 py-3"
+        style={{ background: "linear-gradient(180deg, #1A1A2E 0%, #131322 100%)", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+        
+        <div className="flex items-center gap-4 w-1/4">
+          {/* Traffic lights */}
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-[#FF5F57] hover:opacity-80 cursor-pointer transition-opacity flex items-center justify-center group shadow-inner">
+              <X className="w-2 h-2 text-[#8B1F1A] opacity-0 group-hover:opacity-100" />
+            </div>
+            <div className="w-3 h-3 rounded-full bg-[#FEBC2E] hover:opacity-80 cursor-pointer transition-opacity flex items-center justify-center group shadow-inner">
+              <Minus className="w-2 h-2 text-[#8B6B00] opacity-0 group-hover:opacity-100" />
+            </div>
+            <div className="w-3 h-3 rounded-full bg-[#28C840] hover:opacity-80 cursor-pointer transition-opacity flex items-center justify-center group shadow-inner">
+              <Maximize2 className="w-2 h-2 text-[#115A1B] opacity-0 group-hover:opacity-100" />
+            </div>
           </div>
-          <div className="w-3 h-3 rounded-full bg-[#FEBC2E] hover:opacity-80 cursor-pointer transition-opacity flex items-center justify-center group">
-            <Minus className="w-1.5 h-1.5 text-[#8B6B00] opacity-0 group-hover:opacity-100" />
-          </div>
-          <div className="w-3 h-3 rounded-full bg-[#28C840] hover:opacity-80 cursor-pointer transition-opacity flex items-center justify-center group">
-            <Maximize2 className="w-1.5 h-1.5 text-[#115A1B] opacity-0 group-hover:opacity-100" />
-          </div>
-        </div>
 
-        {/* Nav buttons */}
-        <div className="flex items-center gap-1 ml-1">
-          <button
-            onClick={handleBack}
-            disabled={currentIndex === 0}
-            className="p-1 rounded transition-colors disabled:opacity-30"
-            style={{ color: "#8585A8" }}
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <button
-            onClick={handleForward}
-            disabled={currentIndex === screens.length - 1}
-            className="p-1 rounded transition-colors disabled:opacity-30"
-            style={{ color: "#8585A8" }}
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-          <button className="p-1 rounded transition-colors opacity-30" style={{ color: "#8585A8" }}>
-            <RotateCcw className="w-3.5 h-3.5" />
-          </button>
+          {/* Nav buttons */}
+          <div className="hidden md:flex items-center gap-1">
+            <button
+              onClick={handleBack}
+              disabled={currentIndex === 0}
+              className="p-1 rounded-md transition-all hover:bg-white/5 disabled:opacity-30 disabled:hover:bg-transparent"
+              style={{ color: "#8585A8" }}
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleForward}
+              disabled={currentIndex === screens.length - 1}
+              className="p-1 rounded-md transition-all hover:bg-white/5 disabled:opacity-30 disabled:hover:bg-transparent"
+              style={{ color: "#8585A8" }}
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+            <button className="p-1 rounded-md transition-all hover:bg-white/5 opacity-50" style={{ color: "#8585A8" }}>
+              <RotateCcw className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
 
         {/* URL bar */}
-        <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs"
-          style={{ background: "#0F0F1A", border: "1px solid rgba(255,255,255,0.06)", color: "#8585A8" }}>
+        <div className="flex-1 max-w-lg flex items-center justify-center gap-2 px-4 py-1.5 rounded-lg text-[11px] shadow-inner transition-colors hover:bg-[#0b0b14]"
+          style={{ background: "#08080C", border: "1px solid rgba(255,255,255,0.03)", color: "rgba(255,255,255,0.4)" }}>
           <Lock className="w-3 h-3 flex-shrink-0" style={{ color: "#10B981" }} />
-          <span className="truncate font-mono text-xs">{url}</span>
+          <span className="truncate font-mono tracking-wide">{url}</span>
         </div>
 
-        {/* Tabs */}
-        <div className="flex items-center gap-1 ml-2 overflow-x-auto max-w-[280px]">
-          {screens.map((screen) => (
-            <button
-              key={screen.id}
-              onClick={() => onScreenChange(screen.id)}
-              className="flex-shrink-0 px-3 py-1 rounded-md text-xs font-medium transition-all duration-200"
-              style={{
-                background: activeScreen === screen.id
-                  ? `${project.accentColor}20`
-                  : "transparent",
-                color: activeScreen === screen.id
-                  ? project.accentColor
-                  : "#8585A8",
-                border: activeScreen === screen.id
-                  ? `1px solid ${project.accentColor}40`
-                  : "1px solid transparent",
-              }}
-            >
-              {screen.label}
-            </button>
-          ))}
+        {/* Tabs - Aligned Right */}
+        <div className="flex items-center justify-end gap-1.5 w-1/4">
+          <div className="flex bg-[#0A0A0F] rounded-lg p-0.5 border border-white/5 shadow-inner">
+            {screens.map((screen) => (
+              <button
+                key={screen.id}
+                onClick={() => onScreenChange(screen.id)}
+                className="flex-shrink-0 px-3 py-1 rounded-md text-[10px] uppercase font-bold tracking-wider transition-all duration-300"
+                style={{
+                  background: activeScreen === screen.id
+                    ? `${project.accentColor}1A`
+                    : "transparent",
+                  color: activeScreen === screen.id
+                    ? project.accentColor
+                    : "rgba(255,255,255,0.3)",
+                  boxShadow: activeScreen === screen.id ? "0 1px 3px rgba(0,0,0,0.5)" : "none"
+                }}
+              >
+                {screen.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Content area */}
-      <div className="flex-1 overflow-y-auto preview-scroll" style={{ background: "#0A0A0F" }}>
+      <div className="flex-1 overflow-y-auto preview-scroll relative bg-[#050505]">
         {children}
       </div>
     </div>

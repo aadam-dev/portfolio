@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 interface Props { screen: string }
 
 export default function EthikaPreview({ screen }: Props) {
@@ -230,17 +232,17 @@ function Comparison() {
         </div>
 
         {rows.map(([feat, nib, conv], i) => (
-          <>
-            <div key={`f${i}`} style={{ padding: "11px 16px", borderBottom: i < rows.length - 1 ? "1px solid #F1F5F9" : "none", background: "#fff" }}>
+          <React.Fragment key={`row-${i}`}>
+            <div style={{ padding: "11px 16px", borderBottom: i < rows.length - 1 ? "1px solid #F1F5F9" : "none", background: "#fff" }}>
               <span style={{ color: "#1E293B", fontSize: 12, fontWeight: 600 }}>{feat}</span>
             </div>
-            <div key={`n${i}`} style={{ padding: "11px 16px", borderBottom: i < rows.length - 1 ? "1px solid #F1F5F9" : "none", borderLeft: "1px solid #FED7AA", background: "#FFFBF7" }}>
+            <div style={{ padding: "11px 16px", borderBottom: i < rows.length - 1 ? "1px solid #F1F5F9" : "none", borderLeft: "1px solid #FED7AA", background: "#FFFBF7" }}>
               <span style={{ color: "#1E293B", fontSize: 12 }}>{nib}</span>
             </div>
-            <div key={`c${i}`} style={{ padding: "11px 16px", borderBottom: i < rows.length - 1 ? "1px solid #F1F5F9" : "none", borderLeft: "1px solid #E2E8F0", background: "#fff" }}>
+            <div style={{ padding: "11px 16px", borderBottom: i < rows.length - 1 ? "1px solid #F1F5F9" : "none", borderLeft: "1px solid #E2E8F0", background: "#fff" }}>
               <span style={{ color: "#64748B", fontSize: 12 }}>{conv}</span>
             </div>
-          </>
+          </React.Fragment>
         ))}
       </div>
 
