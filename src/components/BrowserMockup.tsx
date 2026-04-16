@@ -84,6 +84,11 @@ const urlMap: Record<string, Record<string, string>> = {
     inventory: "rockmotionautogroup.com/inventory",
     process: "rockmotionautogroup.com/process",
   },
+  jireh: {
+    landing: "jirehnaturalfoods.vercel.app",
+    menu: "jirehnaturalfoods.vercel.app/#menu",
+    contact: "jirehnaturalfoods.vercel.app/#contact",
+  },
 };
 
 export default function BrowserMockup({
