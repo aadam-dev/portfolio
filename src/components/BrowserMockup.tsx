@@ -118,12 +118,12 @@ export default function BrowserMockup({
     <div className="flex flex-col h-full rounded-2xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] relative"
       style={{ border: "1px solid rgba(255,255,255,0.06)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 20px 60px -15px rgba(0,0,0,0.8)" }}>
       {/* Title bar */}
-      <div className="flex-shrink-0 flex items-center justify-between gap-3 px-4 py-3"
+      <div className="flex-shrink-0 flex items-center justify-between gap-2 px-3 py-2 md:px-4 md:py-3"
         style={{ background: "linear-gradient(180deg, #1A1A2E 0%, #131322 100%)", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
         
-        <div className="flex items-center gap-4 w-1/4">
-          {/* Traffic lights */}
-          <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4 w-auto md:w-1/4">
+          {/* Traffic lights - hidden on mobile */}
+          <div className="hidden md:flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-[#FF5F57] hover:opacity-80 cursor-pointer transition-opacity flex items-center justify-center group shadow-inner">
               <X className="w-2 h-2 text-[#8B1F1A] opacity-0 group-hover:opacity-100" />
             </div>
@@ -159,16 +159,15 @@ export default function BrowserMockup({
           </div>
         </div>
 
-        {/* URL bar */}
-        <div className="flex-1 max-w-lg flex items-center justify-center gap-2 px-4 py-1.5 rounded-lg text-[11px] shadow-inner transition-colors hover:bg-[#0b0b14]"
+        <div className="flex-1 max-w-lg flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 rounded-lg text-[10px] md:text-[11px] shadow-inner transition-colors hover:bg-[#0b0b14]"
           style={{ background: "#08080C", border: "1px solid rgba(255,255,255,0.03)", color: "rgba(255,255,255,0.4)" }}>
-          <Lock className="w-3 h-3 flex-shrink-0" style={{ color: "#10B981" }} />
+          <Lock className="w-2.5 h-2.5 md:w-3 md:h-3 flex-shrink-0" style={{ color: "#10B981" }} />
           <span className="truncate font-mono tracking-wide">{url}</span>
         </div>
 
         {/* Tabs - Aligned Right */}
-        <div className="flex items-center justify-end gap-1.5 w-1/4">
-          <div className="flex bg-[#0A0A0F] rounded-lg p-0.5 border border-white/5 shadow-inner">
+        <div className="hidden lg:flex items-center justify-end gap-1.5 w-auto md:w-1/4">
+          <div className="bg-[#0A0A0F] rounded-lg p-0.5 border border-white/5 shadow-inner">
             {screens.map((screen) => (
               <button
                 key={screen.id}

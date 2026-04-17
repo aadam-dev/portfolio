@@ -14,11 +14,7 @@ const menuItems = [
 const orders = [
   { id: "ORD-001", table: "T3", items: 3, total: 220, status: "In Progress" },
   { id: "ORD-002", table: "T7", items: 2, total: 160, status: "Ready" },
-  { id: "ORD-003", table: "T1", items: 4, total: 340, status: "In Progress" },
-  { id: "ORD-004", table: "Takeaway", items: 1, total: 100, status: "Paid" },
 ];
-
-const VAT = 0.125;
 
 export default function AnisFoodsPreview({ screen }: Props) {
   if (screen === "pos") return <POSScreen />;
@@ -29,72 +25,58 @@ export default function AnisFoodsPreview({ screen }: Props) {
 
 function LandingScreen() {
   return (
-    <div style={{ background: "#fff", minHeight: "100%", fontFamily: "system-ui, sans-serif" }}>
-      {/* Dark nav */}
-      {/* Exact Anis Food & Drink branding — real logo from project (matches live site) */}
-      <nav style={{ padding: "16px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(0,0,0,0.6)", position: "relative", zIndex: 10 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <img src="/previews/anisfoods/logo-brand.png" alt="Anis Food and Drink" style={{ height: 48, width: "auto", objectFit: "contain" }} />
-          <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase" }}>Food & Drink</span>
+    <div className="bg-white min-h-full font-sans">
+      <nav className="px-6 py-4 md:px-10 md:py-5 flex items-center justify-between bg-black/60 sticky top-0 z-50 backdrop-blur-md">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center font-black text-white text-xl">A</div>
+          <span className="text-white/50 text-[10px] font-bold tracking-[0.2em] uppercase hidden sm:block">Food & Drink</span>
         </div>
-        <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
-          {["Menu", "Reservations", "About", "Contact"].map(l => (
-            <span key={l} style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, cursor: "pointer" }}>{l}</span>
-          ))}
-          <button style={{ background: "#D21F3C", color: "#fff", padding: "8px 18px", borderRadius: 8, fontSize: 13, fontWeight: 600, border: "none", cursor: "pointer" }}>
-            Book a Table
-          </button>
+        <div className="hidden md:flex gap-8 items-center text-white/60 text-sm font-medium">
+          <span>Menu</span>
+          <span>Reservations</span>
+          <button className="bg-[#D21F3C] text-white px-5 py-2 rounded-lg font-bold">Book Table</button>
         </div>
+        <div className="md:hidden text-white/60 text-2xl">☰</div>
       </nav>
 
-      {/* Dark Hero */}
-      <div style={{ background: "#1A1A1A", position: "relative", padding: "60px 28px 52px", textAlign: "center", overflow: "hidden" }}>
-        {/* Gradient overlay */}
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 50%, transparent 100%)", pointerEvents: "none" }} />
-        <div style={{ position: "relative", zIndex: 1 }}>
-          {/* Badge */}
-          <div style={{ display: "inline-flex", alignItems: "center", background: "rgba(210,31,60,0.2)", border: "1px solid rgba(210,31,60,0.4)", borderRadius: 100, padding: "5px 14px", marginBottom: 20 }}>
-            <span style={{ color: "#D21F3C", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}>AUTHENTIC GHANAIAN CUISINE</span>
+      <div className="bg-[#1A1A1A] relative px-6 py-16 md:px-12 md:py-24 text-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-transparent pointer-events-none" />
+        <div className="relative z-10">
+          <div className="inline-block bg-[#D21F3C]/20 border border-[#D21F3C]/40 px-4 py-1.5 rounded-full mb-8">
+            <span className="text-[#D21F3C] text-[10px] font-bold tracking-widest">AUTHENTIC GHANAIAN CUISINE</span>
           </div>
-          <h1 style={{ fontSize: 50, fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05, margin: "0 0 20px" }}>
-            <span style={{ color: "#fff" }}>Taste the </span>
-            <span style={{ background: "linear-gradient(90deg, #D21F3C, #FF8C42)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Soul</span>
-            <span style={{ color: "#fff" }}> of Ghana.</span>
+          <h1 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tighter leading-[1] max-w-2xl mx-auto">
+            Taste the <span className="bg-gradient-to-r from-[#D21F3C] to-[#FF8C42] bg-clip-text text-transparent italic">Soul</span> of Ghana.
           </h1>
-          <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 15, lineHeight: 1.7, maxWidth: 500, margin: "0 auto 32px" }}>
-            Experience the rich, spicy, and savory flavors of West Africa. From our legendary Jollof to crispy fried yam, every bite is a celebration.
+          <p className="text-white/60 text-sm md:text-lg leading-relaxed max-w-xl mx-auto mb-12">
+            Experience rich, spicy, and savory flavors of West Africa. From legendary Jollof to crispy fried yam.
           </p>
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", marginBottom: 28 }}>
-            <button style={{ background: "#D21F3C", color: "#fff", padding: "13px 28px", borderRadius: 10, fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer" }}>Order Now</button>
-            <button style={{ background: "transparent", color: "#fff", padding: "13px 28px", borderRadius: 10, fontSize: 14, fontWeight: 500, border: "1px solid rgba(255,255,255,0.3)", cursor: "pointer" }}>Book a Table</button>
-            <button style={{ background: "transparent", color: "#fff", padding: "13px 28px", borderRadius: 10, fontSize: 14, fontWeight: 500, border: "1px solid rgba(255,255,255,0.3)", cursor: "pointer" }}>View Menu</button>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+            <button className="bg-[#D21F3C] text-white px-8 py-4 rounded-xl font-bold">Order Now</button>
+            <button className="bg-white/10 border border-white/20 text-white px-8 py-4 rounded-xl font-bold">View Menu</button>
           </div>
-          {/* Bottom row */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#22c55e" }} />
-              <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 12 }}>Open Now</span>
+          <div className="flex items-center justify-center gap-6 text-white/40 text-xs font-bold uppercase tracking-widest">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-emerald-500 rounded-full" /> Open Now
             </div>
-            <span style={{ color: "rgba(255,255,255,0.2)", fontSize: 12 }}>·</span>
-            <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 12 }}>⭐ 4.8/5 Customer Rating</span>
+            <span>⭐ 4.8/5 Rating</span>
           </div>
         </div>
       </div>
 
-      {/* Popular Dishes — light section */}
-      <div style={{ padding: "40px 28px", background: "#fff" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
-          <h2 style={{ color: "#111827", fontSize: 18, fontWeight: 700, margin: 0 }}>Popular Dishes</h2>
-          <span style={{ color: "#D21F3C", fontSize: 13, cursor: "pointer" }}>Full menu →</span>
+      <div className="p-8 md:p-12 bg-white">
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="text-2xl font-black text-slate-900">Popular Dishes</h2>
+          <span className="text-[#D21F3C] text-sm font-bold">Full menu →</span>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {menuItems.slice(0, 3).map(item => (
-            <div key={item.name} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 14, overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-              <div style={{ height: 100, background: "#fef2f4", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 40 }}>🍽️</div>
-              <div style={{ padding: 14 }}>
-                <span style={{ background: "#fef2f4", color: "#D21F3C", padding: "2px 7px", borderRadius: 100, fontSize: 9, fontWeight: 600 }}>{item.cat}</span>
-                <p style={{ color: "#111827", fontSize: 13, fontWeight: 600, margin: "8px 0 4px", lineHeight: 1.4 }}>{item.name}</p>
-                <p style={{ color: "#D21F3C", fontWeight: 700, fontSize: 15, margin: 0 }}>GH₵ {item.price}</p>
+            <div key={item.name} className="bg-white border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <div className="h-40 bg-slate-50 flex items-center justify-center text-5xl italic">🍲</div>
+              <div className="p-6">
+                <span className="bg-[#D21F3C]/10 text-[#D21F3C] px-3 py-1 rounded-full text-[10px] font-bold mb-3 inline-block uppercase tracking-wider">{item.cat}</span>
+                <p className="font-bold text-slate-900 text-lg mb-2 leading-tight">{item.name}</p>
+                <p className="text-[#D21F3C] font-black text-xl">GH₵ {item.price}</p>
               </div>
             </div>
           ))}
@@ -105,66 +87,52 @@ function LandingScreen() {
 }
 
 function POSScreen() {
-  const subtotal = 60 + 100 + 70;
-  const vat = subtotal * VAT;
-  const total = subtotal + vat;
   return (
-    <div style={{ background: "#fff", minHeight: "100%", fontFamily: "system-ui, sans-serif", display: "flex", height: "100%" }}>
-      {/* Menu panel */}
-      <div style={{ flex: 1, padding: 16, borderRight: "1px solid #e5e7eb" }}>
-        <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
-          {["All", "Rice Dishes", "Noodles", "Sandwiches", "Sides", "Local", "Drinks"].map((c, i) => (
-            <button key={c} style={{ padding: "6px 12px", borderRadius: 8, fontSize: 11, fontWeight: 500, border: i === 0 ? "none" : "1px solid #e5e7eb", background: i === 0 ? "#D21F3C" : "#fff", color: i === 0 ? "#fff" : "#6b7280", cursor: "pointer" }}>{c}</button>
+    <div className="bg-white min-h-full font-sans flex flex-col lg:flex-row h-full">
+      <div className="flex-1 p-6 border-b lg:border-r border-slate-100">
+        <div className="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+          {["All", "Rice Dishes", "Sides", "Local", "Drinks"].map((c, i) => (
+            <button key={c} className={`whitespace-nowrap px-5 py-2 rounded-xl text-xs font-bold transition-all ${i === 0 ? "bg-[#D21F3C] text-white" : "bg-slate-50 text-slate-400 hover:bg-slate-100"}`}>{c}</button>
           ))}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {menuItems.map(item => (
-            <div key={item.name} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 10, padding: 12, cursor: "pointer", display: "flex", alignItems: "center", gap: 10, boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
-              <div style={{ width: 40, height: 40, borderRadius: 8, background: "#fef2f4", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 20 }}>
-                🍽️
-              </div>
-              <div>
-                <p style={{ color: "#111827", fontSize: 11, fontWeight: 600, margin: "0 0 3px", lineHeight: 1.3 }}>{item.name}</p>
-                <p style={{ color: "#D21F3C", fontWeight: 700, fontSize: 13, margin: 0 }}>GH₵ {item.price}</p>
+            <div key={item.name} className="bg-white border border-slate-100 p-4 rounded-xl flex items-center gap-4 hover:shadow-sm cursor-pointer">
+              <div className="w-10 h-10 bg-[#D21F3C]/5 rounded-lg flex items-center justify-center text-xl shrink-0">🍱</div>
+              <div className="min-w-0">
+                <p className="text-slate-900 font-bold text-[11px] leading-tight truncate">{item.name}</p>
+                <p className="text-[#D21F3C] font-black text-xs mt-1">GH₵ {item.price}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Order panel */}
-      <div style={{ width: 256, padding: 16, display: "flex", flexDirection: "column", background: "#fafafa" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-          <span style={{ color: "#111827", fontWeight: 700, fontSize: 14 }}>Current Order</span>
-          <span style={{ background: "#fef2f4", color: "#D21F3C", padding: "2px 8px", borderRadius: 6, fontSize: 11, fontWeight: 600 }}>Table 3</span>
+      <div className="w-full lg:w-80 bg-slate-50 p-6 flex flex-col">
+        <div className="flex items-center justify-between mb-6">
+          <span className="font-black text-slate-900">Active Order</span>
+          <span className="bg-white px-3 py-1 rounded-lg text-[10px] font-bold text-slate-400 border border-slate-200">TABLE 03</span>
         </div>
-        <div style={{ flex: 1 }}>
+        <div className="flex-1 space-y-3 mb-6">
           {menuItems.slice(0, 3).map((item, i) => (
-            <div key={item.name} style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 0", borderBottom: "1px solid #e5e7eb" }}>
-              <div style={{ flex: 1 }}>
-                <p style={{ color: "#374151", fontSize: 11, margin: "0 0 2px", lineHeight: 1.3 }}>{item.name.split(" ").slice(0, 3).join(" ")}</p>
-                <p style={{ color: "#9ca3af", fontSize: 10, margin: 0 }}>x{[1, 1, 1][i]}</p>
+            <div key={i} className="flex justify-between items-center text-xs">
+              <div className="min-w-0">
+                <p className="text-slate-900 font-bold truncate">{item.name}</p>
+                <p className="text-slate-400">Qty: 1</p>
               </div>
-              <span style={{ color: "#111827", fontSize: 12, fontWeight: 600 }}>GH₵ {item.price}</span>
+              <span className="text-slate-900 font-bold">GH₵ {item.price}</span>
             </div>
           ))}
         </div>
-        <div style={{ borderTop: "1px solid #e5e7eb", paddingTop: 12, marginTop: 8 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-            <span style={{ color: "#9ca3af", fontSize: 12 }}>Subtotal</span>
-            <span style={{ color: "#374151", fontSize: 12 }}>GH₵ {subtotal}</span>
+        <div className="pt-6 border-t border-slate-200 space-y-3">
+          <div className="flex justify-between text-xs text-slate-400">
+            <span>Subtotal</span>
+            <span>GH₵ 230</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
-            <span style={{ color: "#9ca3af", fontSize: 12 }}>VAT (12.5%)</span>
-            <span style={{ color: "#374151", fontSize: 12 }}>GH₵ {vat.toFixed(2)}</span>
+          <div className="flex justify-between font-black text-lg text-slate-900">
+            <span>Total</span>
+            <span className="text-[#D21F3C]">GH₵ 258</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 14 }}>
-            <span style={{ color: "#111827", fontWeight: 700, fontSize: 14 }}>Total</span>
-            <span style={{ color: "#D21F3C", fontWeight: 800, fontSize: 16 }}>GH₵ {total.toFixed(2)}</span>
-          </div>
-          <button style={{ width: "100%", background: "#D21F3C", color: "#fff", padding: "11px", borderRadius: 10, fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer" }}>
-            Charge Customer
-          </button>
+          <button className="w-full bg-[#D21F3C] text-white py-4 rounded-2xl font-black text-sm mt-4">Charge Customer</button>
         </div>
       </div>
     </div>
@@ -173,54 +141,54 @@ function POSScreen() {
 
 function DashboardScreen() {
   return (
-    <div style={{ background: "#f9fafb", minHeight: "100%", fontFamily: "system-ui, sans-serif", padding: 20 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+    <div className="bg-slate-50 min-h-full p-6 md:p-12">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
         <div>
-          <h2 style={{ color: "#111827", fontSize: 18, fontWeight: 800, margin: "0 0 2px" }}>Dashboard</h2>
-          <p style={{ color: "#9ca3af", fontSize: 12, margin: 0 }}>Today — Accra</p>
+          <h2 className="text-2xl font-black text-slate-900 mb-1">Kitchen Dashboard</h2>
+          <p className="text-slate-400 text-xs">Real-time order tracking • Accra Branch</p>
         </div>
-        <button style={{ padding: "7px 14px", borderRadius: 8, background: "#fef2f4", border: "1px solid #fca5a5", color: "#D21F3C", fontSize: 12, cursor: "pointer", fontWeight: 600 }}>
-          + New Order
-        </button>
+        <button className="bg-[#D21F3C] text-white px-6 py-2.5 rounded-xl font-bold text-xs">+ New Order</button>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 20 }}>
-        {[["GH₵ 4,820", "Today's Revenue", "#16a34a"], ["38", "Orders Today", "#2563EB"], ["8", "Active Tables", "#D97706"], ["GH₵ 127", "Avg Order Value", "#7c3aed"]].map(([val, label, color]) => (
-          <div key={label as string} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 12, padding: 14 }}>
-            <p style={{ color: "#9ca3af", fontSize: 11, margin: "0 0 6px" }}>{label}</p>
-            <p style={{ color: color as string, fontWeight: 800, fontSize: 20, margin: 0 }}>{val}</p>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {[["GH₵ 4.8K", "Revenue"], ["38", "Orders"], ["8", "Active"], ["GH₵ 127", "Avg Val"]].map(([v, l]) => (
+          <div key={l} className="bg-white p-6 rounded-2xl border border-slate-100">
+            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2">{l}</p>
+            <p className="text-slate-900 font-black text-xl">{v}</p>
           </div>
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-        <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 12, padding: 16 }}>
-          <p style={{ color: "#9ca3af", fontSize: 11, fontWeight: 600, margin: "0 0 12px", letterSpacing: "0.04em" }}>LIVE ORDERS</p>
-          {orders.map(o => (
-            <div key={o.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid #f3f4f6" }}>
-              <div style={{ flex: 1 }}>
-                <p style={{ color: "#111827", fontSize: 12, fontWeight: 600, margin: "0 0 2px" }}>{o.id} · {o.table}</p>
-                <p style={{ color: "#9ca3af", fontSize: 11, margin: 0 }}>{o.items} items · GH₵ {o.total}</p>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">Live Orders</p>
+          <div className="space-y-4">
+            {orders.map(o => (
+              <div key={o.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                <div>
+                  <p className="text-slate-900 font-bold text-sm mb-1">{o.id} • {o.table}</p>
+                  <p className="text-slate-400 text-xs">{o.items} items • GH₵ {o.total}</p>
+                </div>
+                <span className={`px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${o.status === "Ready" ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600"}`}>{o.status}</span>
               </div>
-              <span style={{ padding: "3px 8px", borderRadius: 100, fontSize: 10, fontWeight: 600, background: o.status === "Ready" ? "#f0fdf4" : o.status === "Paid" ? "#eff6ff" : "#fef3c7", color: o.status === "Ready" ? "#16a34a" : o.status === "Paid" ? "#2563EB" : "#d97706" }}>
-                {o.status}
-              </span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-        <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 12, padding: 16 }}>
-          <p style={{ color: "#9ca3af", fontSize: 11, fontWeight: 600, margin: "0 0 12px", letterSpacing: "0.04em" }}>SALES BY CATEGORY</p>
-          {[["Rice Dishes", 55, "#D21F3C"], ["Local", 22, "#D97706"], ["Drinks", 13, "#2563EB"], ["Sides", 10, "#16a34a"]].map(([cat, pct, color]) => (
-            <div key={cat as string} style={{ marginBottom: 12 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                <span style={{ color: "#6b7280", fontSize: 12 }}>{cat}</span>
-                <span style={{ color: "#111827", fontSize: 12, fontWeight: 600 }}>{pct}%</span>
+        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">Sales by Category</p>
+          <div className="space-y-6">
+            {[["Rice Dishes", 55, "#D21F3C"], ["Local", 22, "#FF8C42"], ["Drinks", 13, "#3B82F6"]].map(([c, p, col]) => (
+              <div key={c as string}>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-slate-900 font-bold text-xs">{c}</span>
+                  <span className="text-slate-400 text-xs font-bold">{p}%</span>
+                </div>
+                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-full" style={{ width: `${p}%`, background: col as string }} />
+                </div>
               </div>
-              <div style={{ height: 6, background: "#f3f4f6", borderRadius: 3 }}>
-                <div style={{ height: 6, width: `${pct}%`, background: color as string, borderRadius: 3 }} />
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -229,49 +197,43 @@ function DashboardScreen() {
 
 function ReportsScreen() {
   return (
-    <div style={{ background: "#f9fafb", minHeight: "100%", fontFamily: "system-ui, sans-serif", padding: 20 }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-        <h2 style={{ color: "#111827", fontSize: 18, fontWeight: 800, margin: 0 }}>Financial Reports</h2>
-        <div style={{ display: "flex", gap: 8 }}>
-          {["Daily", "Weekly", "Monthly"].map((t, i) => (
-            <button key={t} style={{ padding: "6px 12px", borderRadius: 8, fontSize: 11, background: i === 2 ? "#fef2f4" : "#fff", border: i === 2 ? "1px solid #fca5a5" : "1px solid #e5e7eb", color: i === 2 ? "#D21F3C" : "#6b7280", cursor: "pointer", fontWeight: i === 2 ? 600 : 400 }}>{t}</button>
+    <div className="bg-slate-50 min-h-full p-6 md:p-12">
+      <div className="flex justify-between items-center mb-10">
+        <h2 className="text-2xl font-black text-slate-900">Profit & Loss</h2>
+        <div className="bg-white border border-slate-100 p-1.5 rounded-xl flex gap-1">
+          {["Weekly", "Monthly"].map((t, i) => (
+            <button key={t} className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider ${i === 1 ? "bg-[#D21F3C] text-white" : "text-slate-400"}`}>{t}</button>
           ))}
         </div>
       </div>
 
-      <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 14, padding: 18, marginBottom: 16 }}>
-        <p style={{ color: "#9ca3af", fontSize: 11, fontWeight: 600, margin: "0 0 14px", letterSpacing: "0.04em" }}>PROFIT & LOSS — MARCH 2026</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 0 }}>
-          <div style={{ borderRight: "1px solid #e5e7eb", paddingRight: 16 }}>
-            <p style={{ color: "#9ca3af", fontSize: 11, margin: "0 0 8px" }}>Revenue</p>
-            {[["Food Sales", "GH₵ 84,200"], ["Beverage Sales", "GH₵ 18,400"], ["Events", "GH₵ 6,800"]].map(([l, v]) => (
-              <div key={l as string} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid #f3f4f6" }}>
-                <span style={{ color: "#6b7280", fontSize: 12 }}>{l}</span>
-                <span style={{ color: "#16a34a", fontSize: 12, fontWeight: 600 }}>{v}</span>
+      <div className="bg-white p-8 md:p-10 rounded-[40px] border border-slate-100 shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
+          <div className="space-y-6">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-50 pb-4">Revenue Breakdown</p>
+            {[["Food Sales", "84.2K", "emerald"], ["Drinks", "18.4K", "emerald"], ["Events", "6.8K", "emerald"]].map(([l, v, c]) => (
+              <div key={l} className="flex justify-between items-center">
+                <span className="text-slate-900 font-bold text-sm">{l}</span>
+                <span className="text-emerald-600 font-black">GH₵ {v}</span>
               </div>
             ))}
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 0" }}>
-              <span style={{ color: "#111827", fontWeight: 700, fontSize: 13 }}>Total Revenue</span>
-              <span style={{ color: "#16a34a", fontWeight: 800, fontSize: 14 }}>GH₵ 109,400</span>
-            </div>
           </div>
-          <div style={{ paddingLeft: 16 }}>
-            <p style={{ color: "#9ca3af", fontSize: 11, margin: "0 0 8px" }}>Expenses</p>
-            {[["Cost of Goods", "GH₵ 43,760"], ["Staff Payroll", "GH₵ 18,200"], ["Utilities & Rent", "GH₵ 8,400"]].map(([l, v]) => (
-              <div key={l as string} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid #f3f4f6" }}>
-                <span style={{ color: "#6b7280", fontSize: 12 }}>{l}</span>
-                <span style={{ color: "#D21F3C", fontSize: 12, fontWeight: 600 }}>{v}</span>
+          <div className="space-y-6">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-50 pb-4">Expense Categories</p>
+            {[["Cost of Goods", "43.7K", "red"], ["Payroll", "18.2K", "red"], ["Utilities", "8.4K", "red"]].map(([l, v, c]) => (
+              <div key={l} className="flex justify-between items-center">
+                <span className="text-slate-900 font-bold text-sm">{l}</span>
+                <span className="text-[#D21F3C] font-black">GH₵ {v}</span>
               </div>
             ))}
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 0" }}>
-              <span style={{ color: "#111827", fontWeight: 700, fontSize: 13 }}>Total Expenses</span>
-              <span style={{ color: "#D21F3C", fontWeight: 800, fontSize: 14 }}>GH₵ 70,360</span>
-            </div>
           </div>
         </div>
-        <div style={{ marginTop: 14, padding: 14, background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ color: "#111827", fontWeight: 700, fontSize: 14 }}>Net Profit</span>
-          <span style={{ color: "#16a34a", fontWeight: 900, fontSize: 22 }}>GH₵ 39,040</span>
+        <div className="mt-12 p-8 bg-emerald-50 rounded-3xl flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div>
+            <p className="text-emerald-600 font-bold text-[10px] uppercase tracking-widest mb-1">Net Monthly Profit</p>
+            <p className="text-emerald-900 font-black text-4xl tracking-tighter">GH₵ 39,040</p>
+          </div>
+          <div className="px-6 py-2 bg-emerald-500 text-white rounded-full text-[10px] font-bold uppercase tracking-widest">Growth +12%</div>
         </div>
       </div>
     </div>

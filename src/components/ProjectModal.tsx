@@ -72,7 +72,7 @@ export default function ProjectModal({ project, onClose }: Props) {
             animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
             exit={{ opacity: 0, scale: 0.95, y: -20, filter: "blur(10px)" }}
             transition={{ type: "spring", stiffness: 400, damping: 30, mass: 0.8 }}
-            className="fixed inset-4 md:inset-8 z-50 flex flex-col md:flex-row gap-0 rounded-2xl overflow-hidden"
+            className="fixed inset-2 md:inset-8 z-50 flex flex-col md:flex-row gap-0 rounded-2xl md:rounded-3xl overflow-hidden"
             style={{
               background: "#08080C",
               border: "1px solid rgba(255,255,255,0.08)",
@@ -82,9 +82,8 @@ export default function ProjectModal({ project, onClose }: Props) {
           >
             {/* Left panel — project info */}
             <div
-              className="flex flex-col flex-shrink-0 w-full md:w-[320px] 2xl:w-[380px] h-full overflow-y-auto"
+              className="flex flex-col flex-shrink-0 w-full md:w-[320px] 2xl:w-[380px] h-auto md:h-full overflow-y-auto p-6 md:p-8"
               style={{
-                padding: "32px",
                 borderRight: "1px solid rgba(255,255,255,0.06)",
                 background: "linear-gradient(180deg, #0A0A14 0%, #05050A 100%)",
               }}
@@ -244,7 +243,7 @@ export default function ProjectModal({ project, onClose }: Props) {
             </div>
 
             {/* Right panel — live site iframe or simulated preview */}
-            <div className="flex-1 flex flex-col p-4 min-w-0 min-h-0">
+            <div className="flex-1 flex flex-col p-4 min-w-0 min-h-[500px] md:min-h-0">
               {project.liveBaseUrl && (
                 <div
                   className="flex-shrink-0 flex gap-1 mb-3"

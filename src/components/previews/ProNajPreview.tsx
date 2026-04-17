@@ -2,56 +2,27 @@
 
 interface Props { screen: string }
 
-const OBSIDIAN = "#050505";
-const CONCRETE = "#F1F5F9";
-const ORANGE = "#F97316";
-const STEEL = "#64748B";
-const STEEL_LIGHT = "#94A3B8";
-const BORDER = "rgba(100,116,139,0.2)";
-const GRID_BG = `
-  linear-gradient(rgba(249,115,22,0.3) 1px, transparent 1px),
-  linear-gradient(90deg, rgba(249,115,22,0.3) 1px, transparent 1px)
-`;
-
 const sectors = [
   {
     name: "Digital",
     tag: "IT & Tech Services",
-    desc: "Web development, cybersecurity, and software engineering solutions for the modern enterprise.",
-    stats: ["500+ Projects Delivered", "99.9% Uptime SLA"],
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2" />
-        <path d="M8 21h8M12 17v4" />
-      </svg>
-    ),
+    desc: "Web development, cybersecurity, and software engineering solutions.",
+    stats: ["500+ Projects", "99.9% Uptime"],
+    icon: "💻",
   },
   {
     name: "Living",
     tag: "Modular Solutions",
-    desc: "IKEA-inspired furniture and prefabricated container housing for sustainable, modern living.",
-    stats: ["200+ Homes Built", "A+ Sustainability"],
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 11V20h18V11" />
-        <path d="M2 11h20" />
-        <path d="M7 11V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4" />
-        <path d="M7 15h10" />
-      </svg>
-    ),
+    desc: "Sustainable furniture and prefabricated container housing.",
+    stats: ["200+ Homes", "A+ Sustainability"],
+    icon: "🏠",
   },
   {
     name: "Global",
     tag: "Agri-Trade & Export",
-    desc: "Cocopeat export and precision greenhouse farming, bridging Ghana to global markets via Delaware.",
-    stats: ["10K MT Export Volume", "25+ Markets"],
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M2 12h20" />
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-      </svg>
-    ),
+    desc: "Cocopeat export and precision greenhouse farming.",
+    stats: ["10K MT Export", "25+ Markets"],
+    icon: "🌐",
   },
 ];
 
@@ -63,278 +34,107 @@ export default function ProNajPreview({ screen }: Props) {
 
 function NavBar() {
   return (
-    <nav style={{
-      padding: "14px 32px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      borderBottom: `1px solid ${BORDER}`,
-      background: "rgba(5,5,5,0.95)",
-      position: "relative",
-      zIndex: 10,
-    }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <div style={{
-          width: 40, height: 40,
-          border: `2px solid ${OBSIDIAN}`,
-          background: OBSIDIAN,
-          display: "flex", alignItems: "center", justifyContent: "center",
-        }}>
-          <span style={{ color: CONCRETE, fontWeight: 700, fontSize: 14, fontFamily: "system-ui, sans-serif" }}>PN</span>
-        </div>
+    <nav className="px-6 py-4 md:px-12 md:py-5 flex items-center justify-between border-b border-white/5 bg-[#050505]/95 sticky top-0 z-50">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 bg-white flex items-center justify-center font-bold text-[#050505] text-sm">PN</div>
         <div>
-          <span style={{ color: CONCRETE, fontWeight: 700, fontSize: 16, letterSpacing: "-0.02em", fontFamily: "system-ui, sans-serif", display: "block", lineHeight: 1.2 }}>ProNaj</span>
-          <span style={{ color: STEEL, fontSize: 10, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "monospace" }}>International</span>
+          <span className="text-white font-black text-sm block leading-tight">ProNaj</span>
+          <span className="text-white/30 text-[9px] uppercase tracking-widest font-bold font-mono">International</span>
         </div>
       </div>
-      <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
-        {["Digital", "Living", "Global", "About", "Contact"].map(l => (
-          <span key={l} style={{ color: STEEL, fontSize: 12, cursor: "pointer", letterSpacing: "0.05em", fontFamily: "monospace" }}>{l}</span>
-        ))}
-        <button style={{
-          background: "transparent",
-          color: ORANGE,
-          padding: "7px 16px",
-          border: `1px solid ${ORANGE}`,
-          fontSize: 11,
-          fontWeight: 600,
-          cursor: "pointer",
-          fontFamily: "monospace",
-          letterSpacing: "0.1em",
-        }}>
-          GET IN TOUCH
-        </button>
+      <div className="hidden md:flex gap-8 items-center text-white/40 text-[10px] font-bold uppercase tracking-widest font-mono">
+        <span>Digital</span>
+        <span>Living</span>
+        <button className="border border-orange-500 text-orange-500 px-4 py-1.5 hover:bg-orange-500 hover:text-white transition-colors">Get In Touch</button>
       </div>
+      <div className="md:hidden text-white/40">☰</div>
     </nav>
   );
 }
 
 function Landing() {
   return (
-    <div style={{ background: OBSIDIAN, minHeight: "100%", fontFamily: "'Space Grotesk', system-ui, sans-serif", color: CONCRETE }}>
+    <div className="bg-[#050505] min-h-full font-sans text-white overflow-x-hidden">
       <NavBar />
-
-      {/* Hero */}
-      <div style={{
-        position: "relative",
-        padding: "64px 32px 0",
-        textAlign: "center",
-        backgroundImage: GRID_BG,
-        backgroundSize: "60px 60px",
-        overflow: "hidden",
-      }}>
-        {/* Dark overlay so grid is subtle */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "linear-gradient(to bottom, rgba(5,5,5,0.7) 0%, rgba(5,5,5,0.4) 60%, rgba(5,5,5,1) 100%)",
-          pointerEvents: "none",
-        }} />
-
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <p style={{
-            color: ORANGE,
-            fontSize: 10,
-            fontFamily: "monospace",
-            letterSpacing: "0.3em",
-            textTransform: "uppercase",
-            margin: "0 0 24px",
-          }}>
-            ProNaj International
-          </p>
-          <h1 style={{
-            color: CONCRETE,
-            fontSize: 48,
-            fontWeight: 800,
-            letterSpacing: "-0.03em",
-            lineHeight: 1.1,
-            margin: "0 0 16px",
-          }}>
-            Building the Infrastructure<br />
-            <span style={{ color: ORANGE }}>of the Future</span>
+      
+      <div className="relative px-6 py-16 md:px-12 md:py-24 text-center overflow-hidden border-b border-white/5">
+        <div className="absolute inset-0 opacity-10 pointer-events-none" 
+          style={{ backgroundImage: "linear-gradient(#f97316 1px, transparent 1px), linear-gradient(90deg, #f97316 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/80 to-[#050505]" />
+        
+        <div className="relative z-10">
+          <p className="text-orange-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-6 font-mono">ProNaj International</p>
+          <h1 className="text-5xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-[0.9] uppercase max-w-4xl mx-auto">
+            Infrastructure<br />
+            <span className="text-orange-500">of the future</span>
           </h1>
-          <p style={{
-            color: STEEL_LIGHT,
-            fontSize: 14,
-            lineHeight: 1.7,
-            margin: "0 auto 40px",
-            maxWidth: 480,
-          }}>
-            A multi-sector conglomerate spanning Digital, Living, and Global divisions.
-            Delaware-incorporated with operations across 2 continents and 25+ markets.
+          <p className="text-white/40 text-sm md:text-lg leading-relaxed max-w-xl mx-auto mb-16 font-mono">
+            A Delaware-incorporated conglomerate spanning Digital, Living, and Global markets.
           </p>
-        </div>
 
-        {/* 3-column sector panel */}
-        <div style={{
-          position: "relative", zIndex: 1,
-          display: "flex",
-          gap: 0,
-          border: `1px solid ${BORDER}`,
-          borderBottom: "none",
-          maxWidth: 900,
-          margin: "0 auto",
-        }}>
-          {sectors.map((s, i) => (
-            <SectorColumn key={s.name} sector={s} active={i === 0} last={i === sectors.length - 1} />
-          ))}
+          <div className="flex flex-col lg:flex-row border border-white/10 max-w-5xl mx-auto bg-black/40 backdrop-blur-md">
+            {sectors.map((s, i) => (
+              <div key={s.name} className={`flex-1 p-10 text-left transition-all hover:bg-orange-500/5 ${i < sectors.length - 1 ? "border-b lg:border-b-0 lg:border-r border-white/10" : ""}`}>
+                <div className="text-3xl mb-6">{s.icon}</div>
+                <p className="font-black text-xl mb-1">{s.name}</p>
+                <p className="text-orange-500 text-[9px] uppercase tracking-widest font-bold font-mono mb-4">{s.tag}</p>
+                <p className="text-white/40 text-xs leading-relaxed mb-8">{s.desc}</p>
+                <div className="space-y-2 mb-8">
+                  {s.stats.map(stat => (
+                    <div key={stat} className="flex items-center gap-2">
+                      <span className="w-1 h-1 bg-orange-500" />
+                      <span className="text-white/30 text-[10px] uppercase font-bold tracking-widest font-mono">{stat}</span>
+                    </div>
+                  ))}
+                </div>
+                <span className="text-white/50 text-[10px] font-bold uppercase tracking-widest hover:text-orange-500 cursor-pointer">Explore →</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Stats bar */}
-      <div style={{
-        borderTop: `1px solid ${BORDER}`,
-        borderBottom: `1px solid ${BORDER}`,
-        display: "flex",
-        maxWidth: 900,
-        margin: "0 auto",
-      }}>
-        {[["3", "Business Sectors"], ["2", "Continents"], ["25+", "Markets"], ["500+", "Projects"]].map(([val, label], i) => (
-          <div key={label} style={{
-            flex: 1,
-            textAlign: "center",
-            padding: "20px 0",
-            borderRight: i < 3 ? `1px solid ${BORDER}` : "none",
-          }}>
-            <div style={{ color: ORANGE, fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em" }}>{val}</div>
-            <div style={{ color: STEEL, fontSize: 10, marginTop: 4, fontFamily: "monospace", letterSpacing: "0.1em", textTransform: "uppercase" }}>{label}</div>
+      <div className="grid grid-cols-2 md:grid-cols-4 max-w-5xl mx-auto border-x border-white/5">
+        {[["3", "Sectors"], ["2", "Continents"], ["25+", "Markets"], ["500+", "Projects"]].map(([v, l], i) => (
+          <div key={l} className={`p-8 text-center ${i < 3 ? "border-r border-white/5" : ""}`}>
+            <p className="text-orange-500 text-3xl font-black mb-1">{v}</p>
+            <p className="text-white/20 text-[9px] font-bold uppercase tracking-widest font-mono">{l}</p>
           </div>
         ))}
       </div>
-
-      {/* Footer strip */}
-      <div style={{ padding: "20px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ color: STEEL, fontSize: 10, fontFamily: "monospace", letterSpacing: "0.08em" }}>
-          © 2025 PRONAJ INTERNATIONAL LLC · DELAWARE, USA
-        </span>
-        <span style={{ color: STEEL, fontSize: 10, fontFamily: "monospace", letterSpacing: "0.08em" }}>
-          GHANA · DELAWARE · GLOBAL
-        </span>
-      </div>
-    </div>
-  );
-}
-
-function SectorColumn({ sector, active, last }: { sector: typeof sectors[0]; active: boolean; last: boolean }) {
-  return (
-    <div style={{
-      flex: 1,
-      padding: "28px 24px",
-      borderRight: last ? "none" : `1px solid ${BORDER}`,
-      background: active ? "rgba(249,115,22,0.04)" : "rgba(5,5,5,0.8)",
-      cursor: "pointer",
-      display: "flex",
-      flexDirection: "column",
-      gap: 12,
-      backdropFilter: "blur(8px)",
-    }}>
-      {/* Icon box */}
-      <div style={{
-        width: 44, height: 44,
-        border: `1px solid ${active ? ORANGE : BORDER}`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: active ? ORANGE : STEEL,
-        transition: "all 0.2s",
-      }}>
-        {sector.icon}
-      </div>
-
-      {/* Sector name */}
-      <div>
-        <p style={{ color: CONCRETE, fontSize: 15, fontWeight: 700, margin: "0 0 2px", letterSpacing: "-0.01em" }}>
-          {sector.name}
-        </p>
-        <p style={{ color: active ? ORANGE : STEEL, fontSize: 9, fontFamily: "monospace", letterSpacing: "0.2em", textTransform: "uppercase", margin: 0 }}>
-          {sector.tag}
-        </p>
-      </div>
-
-      {/* Description */}
-      <p style={{ color: STEEL_LIGHT, fontSize: 12, lineHeight: 1.6, margin: 0 }}>
-        {sector.desc}
-      </p>
-
-      {/* Stats */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: "auto" }}>
-        {sector.stats.map(stat => (
-          <div key={stat} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <div style={{ width: 4, height: 4, background: active ? ORANGE : STEEL, flexShrink: 0 }} />
-            <span style={{ color: STEEL_LIGHT, fontSize: 10, fontFamily: "monospace", letterSpacing: "0.05em" }}>{stat}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* CTA */}
-      <p style={{ color: active ? ORANGE : STEEL, fontSize: 11, fontFamily: "monospace", letterSpacing: "0.1em", margin: "4px 0 0", cursor: "pointer" }}>
-        Explore {sector.name} →
-      </p>
     </div>
   );
 }
 
 function Sectors() {
   return (
-    <div style={{ background: OBSIDIAN, minHeight: "100%", fontFamily: "'Space Grotesk', system-ui, sans-serif", color: CONCRETE }}>
+    <div className="bg-[#050505] min-h-full font-sans text-white">
       <NavBar />
-
-      <div style={{
-        padding: "48px 40px",
-        backgroundImage: GRID_BG,
-        backgroundSize: "60px 60px",
-        position: "relative",
-      }}>
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "linear-gradient(to bottom, rgba(5,5,5,0.85), rgba(5,5,5,0.92))",
-          pointerEvents: "none",
-        }} />
-
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <p style={{ color: ORANGE, fontSize: 9, fontFamily: "monospace", letterSpacing: "0.3em", textTransform: "uppercase", margin: "0 0 12px" }}>
-            Our Sectors
-          </p>
-          <h2 style={{ color: CONCRETE, fontSize: 34, fontWeight: 800, letterSpacing: "-0.03em", margin: "0 0 4px", lineHeight: 1.1 }}>
-            Three Pillars.<br />
-            <span style={{ color: ORANGE }}>One Vision.</span>
-          </h2>
-          <div style={{ width: 40, height: 2, background: ORANGE, margin: "16px 0 40px" }} />
-
+      <div className="px-8 py-16 md:px-16 md:py-24 max-w-4xl mx-auto">
+        <p className="text-orange-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-4 font-mono">Our Sectors</p>
+        <h2 className="text-4xl md:text-6xl font-black mb-16 tracking-tighter uppercase leading-none">Three Pillars.<br /><span className="text-orange-500">One Vision.</span></h2>
+        
+        <div className="space-y-16">
           {sectors.map((s, i) => (
-            <div key={s.name} style={{
-              display: "flex", gap: 28, alignItems: "flex-start",
-              padding: "28px 0",
-              borderBottom: i < sectors.length - 1 ? `1px solid ${BORDER}` : "none",
-            }}>
-              <div style={{
-                width: 60, height: 60,
-                border: `1px solid ${ORANGE}`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: ORANGE, flexShrink: 0,
-              }}>
+            <div key={s.name} className="flex flex-col md:flex-row gap-12 items-start group">
+              <div className="w-20 h-20 border border-orange-500 flex items-center justify-center text-4xl shrink-0 group-hover:bg-orange-500 group-hover:text-black transition-all">
                 {s.icon}
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
-                  <h3 style={{ color: CONCRETE, fontSize: 20, fontWeight: 700, margin: 0, letterSpacing: "-0.02em" }}>
-                    ProNaj {s.name}
-                  </h3>
-                  <span style={{ border: `1px solid ${BORDER}`, color: ORANGE, padding: "2px 10px", fontSize: 9, fontFamily: "monospace", letterSpacing: "0.15em", textTransform: "uppercase" }}>
-                    {s.tag}
-                  </span>
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center gap-4 mb-4">
+                  <h3 className="text-2xl font-black uppercase">ProNaj {s.name}</h3>
+                  <span className="border border-white/10 px-3 py-1 text-orange-500 text-[9px] font-bold tracking-widest font-mono">{s.tag}</span>
                 </div>
-                <p style={{ color: STEEL_LIGHT, fontSize: 13, lineHeight: 1.7, margin: "0 0 12px", maxWidth: 520 }}>{s.desc}</p>
-                <div style={{ display: "flex", gap: 16, marginBottom: 12 }}>
+                <p className="text-white/40 text-sm leading-relaxed mb-8 max-w-xl">{s.desc}</p>
+                <div className="flex flex-wrap gap-8 mb-8">
                   {s.stats.map(stat => (
-                    <div key={stat} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <div style={{ width: 4, height: 4, background: ORANGE, flexShrink: 0 }} />
-                      <span style={{ color: STEEL_LIGHT, fontSize: 10, fontFamily: "monospace", letterSpacing: "0.05em" }}>{stat}</span>
+                    <div key={stat} className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-orange-500 rounded-full" />
+                      <span className="text-white/30 text-[10px] font-bold uppercase font-mono">{stat}</span>
                     </div>
                   ))}
                 </div>
-                <span style={{ color: ORANGE, fontSize: 11, fontFamily: "monospace", letterSpacing: "0.1em", cursor: "pointer" }}>
-                  Explore {s.name} →
-                </span>
+                <span className="text-orange-500 text-[10px] font-bold uppercase tracking-widest hover:underline cursor-pointer">Explore {s.name} →</span>
               </div>
             </div>
           ))}
@@ -346,118 +146,39 @@ function Sectors() {
 
 function Contact() {
   return (
-    <div style={{ background: OBSIDIAN, minHeight: "100%", fontFamily: "'Space Grotesk', system-ui, sans-serif", color: CONCRETE }}>
+    <div className="bg-[#050505] min-h-full font-sans text-white">
       <NavBar />
-
-      <div style={{
-        padding: "48px 40px",
-        backgroundImage: GRID_BG,
-        backgroundSize: "60px 60px",
-        position: "relative",
-      }}>
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "linear-gradient(to bottom, rgba(5,5,5,0.85), rgba(5,5,5,0.92))",
-          pointerEvents: "none",
-        }} />
-
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <p style={{ color: ORANGE, fontSize: 9, fontFamily: "monospace", letterSpacing: "0.3em", textTransform: "uppercase", margin: "0 0 12px" }}>
-            Contact
-          </p>
-          <h2 style={{ color: CONCRETE, fontSize: 34, fontWeight: 800, letterSpacing: "-0.03em", margin: "0 0 4px" }}>
-            Let's Build Together.
-          </h2>
-          <div style={{ width: 40, height: 2, background: ORANGE, margin: "16px 0 36px" }} />
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }}>
-            <div>
-              {[["Full Name", false], ["Company", false], ["Email Address", false], ["How can we help?", true]].map(([label, isTextarea]) => (
-                <div key={label as string} style={{ marginBottom: 18 }}>
-                  <label style={{
-                    color: STEEL,
-                    fontSize: 9,
-                    fontFamily: "monospace",
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    display: "block",
-                    marginBottom: 6,
-                  }}>
-                    {label as string}
-                  </label>
-                  {isTextarea
-                    ? <textarea readOnly rows={4} style={{
-                        width: "100%",
-                        background: "rgba(100,116,139,0.05)",
-                        border: `1px solid ${BORDER}`,
-                        padding: "10px 12px",
-                        color: CONCRETE,
-                        fontSize: 13,
-                        outline: "none",
-                        resize: "none",
-                        fontFamily: "'Space Grotesk', system-ui, sans-serif",
-                        boxSizing: "border-box",
-                      }} />
-                    : <input readOnly style={{
-                        width: "100%",
-                        background: "rgba(100,116,139,0.05)",
-                        border: `1px solid ${BORDER}`,
-                        padding: "10px 12px",
-                        color: CONCRETE,
-                        fontSize: 13,
-                        outline: "none",
-                        fontFamily: "'Space Grotesk', system-ui, sans-serif",
-                        boxSizing: "border-box",
-                      }} />
-                  }
-                </div>
-              ))}
-              <button style={{
-                background: ORANGE,
-                color: "#fff",
-                padding: "12px 28px",
-                border: "none",
-                fontSize: 11,
-                fontWeight: 700,
-                cursor: "pointer",
-                fontFamily: "monospace",
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-              }}>
-                Send Message
-              </button>
-            </div>
-
-            <div>
-              {[
-                ["Headquarters", "Accra, Greater Accra", "Ghana, West Africa"],
-                ["Incorporated", "State of Delaware, USA", "& Republic of Ghana"],
-                ["General Enquiries", "hello@pronaj.com", ""],
-                ["Response Time", "Within 1–2 business days", ""],
-              ].map(([heading, line1, line2]) => (
-                <div key={heading} style={{ marginBottom: 24 }}>
-                  <p style={{ color: STEEL, fontSize: 9, fontFamily: "monospace", letterSpacing: "0.2em", textTransform: "uppercase", margin: "0 0 6px" }}>
-                    {heading}
-                  </p>
-                  <p style={{ color: heading === "General Enquiries" ? ORANGE : CONCRETE, fontSize: 13, margin: 0, lineHeight: 1.6 }}>
-                    {line1}
-                    {line2 && <><br /><span style={{ color: STEEL_LIGHT }}>{line2}</span></>}
-                  </p>
-                </div>
-              ))}
-
-              <div style={{ marginTop: 32, border: `1px solid ${BORDER}`, padding: "20px" }}>
-                <p style={{ color: STEEL, fontSize: 9, fontFamily: "monospace", letterSpacing: "0.2em", textTransform: "uppercase", margin: "0 0 10px" }}>
-                  Sectors
-                </p>
-                {sectors.map(s => (
-                  <div key={s.name} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                    <div style={{ width: 4, height: 4, background: ORANGE, flexShrink: 0 }} />
-                    <span style={{ color: STEEL_LIGHT, fontSize: 12 }}>ProNaj {s.name} — {s.tag}</span>
-                  </div>
-                ))}
+      <div className="px-8 py-16 md:px-16 md:py-24 max-w-6xl mx-auto">
+        <p className="text-orange-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-4 font-mono">Contact</p>
+        <h2 className="text-4xl md:text-6xl font-black mb-16 tracking-tighter uppercase">Let's build together.</h2>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+          <div className="space-y-8">
+            {[["Full Name", "text"], ["Email", "email"], ["Company", "text"]].map(([l, t]) => (
+              <div key={l}>
+                <label className="text-white/30 text-[9px] font-bold uppercase tracking-widest font-mono mb-3 block">{l}</label>
+                <input readOnly type={t} className="w-full bg-white/5 border border-white/10 p-4 text-sm outline-none focus:border-orange-500 transition-colors" />
               </div>
+            ))}
+            <div>
+              <label className="text-white/30 text-[9px] font-bold uppercase tracking-widest font-mono mb-3 block">Message</label>
+              <textarea readOnly rows={4} className="w-full bg-white/5 border border-white/10 p-4 text-sm outline-none focus:border-orange-500 transition-colors resize-none" />
             </div>
+            <button className="bg-orange-500 text-white px-10 py-4 font-black text-xs uppercase tracking-widest">Send Message</button>
+          </div>
+
+          <div className="space-y-12">
+            {[
+              ["Headquarters", "Accra, Ghana", "West Africa"],
+              ["Corporate", "Delaware, USA", "HQ"],
+              ["General", "hello@pronaj.com", "24/7 Support"]
+            ].map(([h, l1, l2]) => (
+              <div key={h}>
+                <p className="text-white/30 text-[9px] font-bold uppercase tracking-widest font-mono mb-4">{h}</p>
+                <p className="text-xl font-black mb-1">{l1}</p>
+                <p className="text-white/40 text-xs font-mono uppercase tracking-widest">{l2}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

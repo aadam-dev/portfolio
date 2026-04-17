@@ -23,7 +23,6 @@ function Landing() {
     "Y16 Steel Rebar",
     "Aluzinc Roofing Sheets",
     "PVC Pipes 4 inch",
-    "Hollow Blocks 6 inch",
   ];
 
   const materialCards = [
@@ -35,118 +34,83 @@ function Landing() {
   return (
     <div style={{ background: "#020617", minHeight: "100%", fontFamily: "system-ui, sans-serif", position: "relative", overflow: "hidden" }}>
       {/* Ambient amber glow */}
-      <div style={{ position: "absolute", top: 0, left: "20%", width: 320, height: 320, background: "rgba(245,158,11,0.08)", borderRadius: "50%", filter: "blur(100px)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: 0, right: "20%", width: 260, height: 260, background: "rgba(245,158,11,0.05)", borderRadius: "50%", filter: "blur(80px)", pointerEvents: "none" }} />
+      <div className="absolute top-0 left-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
 
-      {/* Nav — real PrimeHub logo when available (same as live site) */}
-      <nav style={{ padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(255,255,255,0.05)", position: "relative", zIndex: 10 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          {/* Real PrimeHub logo: use /previews/primehub/logo.png (copy from PrimeHub/public/logo.png) or fallback P mark */}
-          <div style={{ width: 32, height: 32, borderRadius: 10, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.05)" }}>
-            <img src="/previews/primehub/logo.png" alt="" role="presentation" width={32} height={32} style={{ objectFit: "contain", width: 32, height: 32 }} />
+      {/* Nav */}
+      <nav className="px-6 py-4 md:px-12 md:py-5 border-b border-white/5 flex items-center justify-between relative z-10">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
+            <span className="text-xl">🏗️</span>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
-            <span style={{ color: "#fff", fontWeight: 700, fontSize: 14, letterSpacing: "-0.02em" }}>PrimeHub</span>
-            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", marginTop: 2 }}>MATERIALS</span>
+          <div className="flex flex-col leading-none">
+            <span className="text-white font-bold text-sm tracking-tight">PrimeHub</span>
+            <span className="text-white/40 text-[9px] font-bold tracking-widest mt-1">MATERIALS</span>
           </div>
         </div>
-        <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
-          {["Products", "Categories", "How It Works"].map(l => (
-            <span key={l} style={{ color: "rgba(255,255,255,0.5)", fontSize: 13, cursor: "pointer" }}>{l}</span>
-          ))}
-          <button style={{ background: "#F59E0B", color: "#000", padding: "7px 16px", borderRadius: 8, fontSize: 13, fontWeight: 600, border: "none", cursor: "pointer" }}>
-            Get a Quote
-          </button>
+        <div className="hidden md:flex gap-8 items-center text-white/50 text-[13px] font-medium">
+          <span>Products</span>
+          <span>Categories</span>
+          <button className="bg-amber-500 text-black px-4 py-1.5 rounded-lg font-bold">Quote</button>
         </div>
+        <div className="md:hidden w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60">☰</div>
       </nav>
 
-      {/* Hero — two column */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, padding: "52px 28px 36px", alignItems: "center", position: "relative", zIndex: 1, maxWidth: 960, margin: "0 auto" }}>
-        {/* Left: copy + search */}
-        <div>
-          {/* Badge */}
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.2)", borderRadius: 100, padding: "4px 12px", marginBottom: 20 }}>
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#F59E0B", display: "inline-block", animation: "pulse 2s infinite" }} />
-            <span style={{ color: "#F59E0B", fontSize: 11, fontWeight: 600 }}>Trusted by 500+ contractors in Ghana</span>
+      <div className="px-6 py-12 md:px-12 md:py-20 flex flex-col lg:flex-row items-center gap-16 lg:gap-8 max-w-6xl mx-auto">
+        <div className="flex-1 text-center lg:text-left">
+          <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 px-4 py-1.5 rounded-full mb-8">
+            <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" />
+            <span className="text-amber-500 text-[10px] font-bold tracking-wide">TRUSTED BY 500+ CONTRACTORS</span>
           </div>
-
-          {/* H1 */}
-          <h1 style={{ color: "#fff", fontSize: 38, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 14px" }}>
-            Build with <span style={{ color: "#F59E0B" }}>Precision.</span><br />
-            Source with{" "}
-            <span style={{ position: "relative", display: "inline-block" }}>
-              Prime
-              <span style={{ position: "absolute", bottom: -3, left: 0, right: 0, height: 2, background: "#F59E0B", borderRadius: 2 }} />
-            </span>.
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight leading-[1.1]">
+            Build with <span className="text-amber-500">Precision.</span><br />
+            Source with <span className="underline decoration-amber-500 decoration-4 underline-offset-8">Prime.</span>
           </h1>
-
-          {/* Subtitle */}
-          <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.7, margin: "0 0 24px", maxWidth: 420 }}>
-            The procurement command center for contractors. Generate formal proformas, get stakeholder approval in one click, and track deliveries to your site.
+          <p className="text-slate-400 text-sm md:text-base leading-relaxed mb-10 max-w-lg mx-auto lg:mx-0">
+            The procurement command center for Ghanaian contractors. Generate formal proformas and track deliveries to your site.
           </p>
 
-          {/* Command-line search bar */}
-          <div style={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "10px 14px", display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-            <span style={{ color: "#64748b", fontSize: 14 }}>🔍</span>
-            <span style={{ color: "#F59E0B", fontFamily: "monospace", fontSize: 13, flexShrink: 0 }}>$</span>
-            <input
-              readOnly
-              placeholder="50 bags of Ghacem Cement..."
-              style={{ flex: 1, background: "transparent", border: "none", color: "#94a3b8", fontSize: 13, outline: "none", fontFamily: "monospace" }}
+          <div className="bg-slate-900 border border-white/10 p-2.5 rounded-2xl flex items-center gap-3 mb-12 max-w-md mx-auto lg:mx-0 shadow-2xl">
+            <span className="text-amber-500 font-mono pl-2">$</span>
+            <input 
+              readOnly 
+              placeholder="50 bags of cement..." 
+              className="flex-1 bg-transparent border-none text-slate-400 text-sm outline-none font-mono"
             />
-            <button style={{ background: "#F59E0B", color: "#000", padding: "6px 16px", borderRadius: 8, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer", flexShrink: 0 }}>
-              Search
-            </button>
+            <button className="bg-amber-500 text-black px-6 py-2 rounded-xl font-bold text-xs">Search</button>
           </div>
 
-          {/* Suggestion pills */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 24 }}>
-            {suggestions.slice(0, 4).map(s => (
-              <span key={s} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 100, padding: "3px 10px", fontSize: 10, color: "#64748b", cursor: "pointer" }}>{s}</span>
-            ))}
-          </div>
-
-          {/* Quick stats */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
-            {[["2,500+", "Materials"], ["500+", "Contractors"], ["24h", "Delivery"]].map(([val, label]) => (
-              <div key={label}>
-                <p style={{ color: "#fff", fontSize: 20, fontWeight: 700, margin: "0 0 2px" }}>{val}</p>
-                <p style={{ color: "#64748b", fontSize: 11, margin: 0 }}>{label}</p>
+          <div className="grid grid-cols-3 gap-8 text-left max-w-sm mx-auto lg:mx-0">
+            {[["2.5K+", "Materials"], ["500+", "Contractors"], ["24h", "Delivery"]].map(([v, l]) => (
+              <div key={l}>
+                <div className="text-white text-xl font-bold mb-1">{v}</div>
+                <div className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">{l}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Right: stacked material cards */}
-        <div style={{ position: "relative", height: 280 }}>
+        <div className="flex-1 w-full max-w-md relative h-[320px] lg:h-[400px]">
           {materialCards.map((card, i) => (
-            <div key={card.name} style={{
-              position: "absolute",
-              insetInline: 0,
-              margin: "0 auto",
-              width: `${100 - i * 8}%`,
-              top: `${10 + i * 28}%`,
-              transform: `rotate(${(i - 1) * 4}deg)`,
-              background: card.bg,
-              borderRadius: 16,
-              padding: "16px 20px",
-              border: "1px solid rgba(255,255,255,0.1)",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+            <div key={card.name} className="absolute inset-x-0 mx-auto rounded-3xl p-6 border border-white/10 shadow-2xl transition-all duration-500"
+              style={{
+                width: `${100 - i * 5}%`,
+                top: `${i * 35}px`,
+                background: card.bg,
+                transform: `rotate(${(i - 1) * 3}deg)`,
+                zIndex: 10 - i
+              }}>
+              <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p style={{ color: "#fff", fontSize: 13, fontWeight: 600, margin: "0 0 3px" }}>{card.name}</p>
-                  <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 12, margin: 0 }}>{card.qty}</p>
+                  <p className="text-white font-bold text-sm mb-1">{card.name}</p>
+                  <p className="text-white/40 text-xs">{card.qty}</p>
                 </div>
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: 18 }}>📦</span>
-                </div>
+                <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-xl">📦</div>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ flex: 1, height: 4, background: "rgba(255,255,255,0.15)", borderRadius: 2 }}>
-                  <div style={{ height: 4, width: `${card.progress}%`, background: "#F59E0B", borderRadius: 2 }} />
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-full bg-amber-500" style={{ width: `${card.progress}%` }} />
                 </div>
-                <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 10, flexShrink: 0 }}>In Stock</span>
+                <span className="text-[10px] text-white/30 font-bold uppercase tracking-widest">In Stock</span>
               </div>
             </div>
           ))}
@@ -158,41 +122,30 @@ function Landing() {
 
 function Products() {
   return (
-    <div style={{ background: "#0A0A0F", minHeight: "100%", fontFamily: "system-ui, sans-serif", display: "flex" }}>
-      {/* Filters sidebar */}
-      <div style={{ width: 200, borderRight: "1px solid rgba(255,255,255,0.06)", padding: 20, flexShrink: 0 }}>
-        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 11, fontWeight: 600, margin: "0 0 12px", letterSpacing: "0.05em" }}>CATEGORY</p>
-        {["All Materials", "Cement & Concrete", "Steel & Iron", "Blocks & Bricks", "Roofing", "Plumbing"].map((f, i) => (
-          <div key={f} style={{ padding: "8px 10px", borderRadius: 8, background: i === 0 ? "rgba(249,115,22,0.1)" : "transparent", color: i === 0 ? "#F97316" : "rgba(255,255,255,0.5)", fontSize: 12, cursor: "pointer", marginBottom: 2 }}>{f}</div>
-        ))}
-        <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "16px 0" }} />
-        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 11, fontWeight: 600, margin: "0 0 12px", letterSpacing: "0.05em" }}>SUPPLIER</p>
-        {["All", "Diamond Cement", "Tema Steel", "BlockMasters"].map((f, i) => (
-          <div key={f} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", cursor: "pointer", marginBottom: 2 }}>
-            <div style={{ width: 14, height: 14, borderRadius: 4, border: `2px solid ${i === 0 ? "#F97316" : "rgba(255,255,255,0.2)"}`, background: i === 0 ? "#F97316" : "transparent" }} />
-            <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 12 }}>{f}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Grid */}
-      <div style={{ flex: 1, padding: 20 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-          <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 13 }}>Showing 6 of 2,400+ products</span>
-          <select style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.6)", padding: "6px 10px", borderRadius: 8, fontSize: 12 }}>
-            <option>Sort: Relevance</option>
-          </select>
+    <div className="bg-[#0A0A0F] min-h-full font-sans flex flex-col md:flex-row">
+      <div className="w-full md:w-56 border-b md:border-r border-white/5 p-6 md:p-8 shrink-0">
+        <p className="text-[10px] font-bold text-white/30 mb-6 uppercase tracking-widest">Categories</p>
+        <div className="space-y-1.5">
+          {["All Materials", "Cement", "Steel", "Roofing", "Plumbing"].map((f, i) => (
+            <div key={f} className={`p-3 rounded-xl text-xs font-medium cursor-pointer ${i === 0 ? "bg-amber-500/10 text-amber-500 font-bold" : "text-white/40"}`}>{f}</div>
+          ))}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
+      </div>
+      <div className="flex-1 p-6 md:p-8">
+        <div className="flex items-center justify-between mb-8">
+          <p className="text-[11px] text-white/30 font-bold uppercase tracking-widest">2,400+ Products Found</p>
+          <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/40">▦</div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {products.map(p => (
-            <div key={p.name} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: 14, display: "flex", gap: 12, cursor: "pointer" }}>
-              <div style={{ width: 52, height: 52, borderRadius: 10, background: "rgba(249,115,22,0.08)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 24 }}>{p.img}</div>
-              <div style={{ flex: 1 }}>
-                <p style={{ color: "#fff", fontSize: 12, fontWeight: 600, margin: "0 0 3px", lineHeight: 1.4 }}>{p.name}</p>
-                <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 11, margin: "0 0 6px" }}>{p.brand} · {p.unit}</p>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ color: "#F97316", fontWeight: 700, fontSize: 14 }}>GH₵ {p.price}</span>
-                  <span style={{ color: "#10B981", fontSize: 10 }}>✓ {p.stock} in stock</span>
+            <div key={p.name} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-2xl shrink-0">{p.img}</div>
+              <div className="flex-1 min-w-0">
+                <p className="text-white font-bold text-sm mb-0.5 truncate">{p.name}</p>
+                <p className="text-white/30 text-[10px] mb-3">{p.brand}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-amber-500 font-black text-sm">GH₵ {p.price}</span>
+                  <span className="text-emerald-500 text-[10px] font-bold">✓ {p.stock}</span>
                 </div>
               </div>
             </div>
@@ -205,62 +158,44 @@ function Products() {
 
 function Quote() {
   return (
-    <div style={{ background: "#0A0A0F", minHeight: "100%", fontFamily: "system-ui, sans-serif", padding: 24 }}>
-      <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, margin: "0 0 4px" }}>Proforma Quote Builder</h2>
-      <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13, margin: "0 0 24px" }}>Add items, set quantities, and generate a formal proforma for stakeholder approval.</p>
+    <div className="bg-[#0A0A0F] min-h-full font-sans p-6 md:p-12">
+      <div className="mb-10">
+        <h2 className="text-2xl font-black text-white mb-2 tracking-tight">Proforma Builder</h2>
+        <p className="text-white/40 text-sm">Create and approve material lists in one click.</p>
+      </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 20 }}>
-        {/* Items */}
-        <div>
-          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 12, fontWeight: 600, margin: "0 0 12px", letterSpacing: "0.04em" }}>QUOTE ITEMS</p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-4">
+          <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-4">Current Selection</p>
           {products.slice(0, 3).map((p, i) => (
-            <div key={p.name} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: 12, marginBottom: 10, display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ fontSize: 20 }}>{p.img}</span>
-              <div style={{ flex: 1 }}>
-                <p style={{ color: "#fff", fontSize: 12, fontWeight: 600, margin: "0 0 2px" }}>{p.name}</p>
-                <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 11, margin: 0 }}>{p.brand}</p>
+            <div key={p.name} className="bg-white/5 border border-white/10 rounded-2xl p-5 flex items-center gap-5">
+              <span className="text-3xl">{p.img}</span>
+              <div className="flex-1">
+                <p className="text-white font-bold text-sm mb-0.5">{p.name}</p>
+                <p className="text-white/30 text-xs">{p.brand}</p>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 4, background: "rgba(255,255,255,0.05)", borderRadius: 6, padding: "4px 8px" }}>
-                  <button style={{ color: "rgba(255,255,255,0.4)", background: "none", border: "none", cursor: "pointer", fontSize: 14 }}>−</button>
-                  <span style={{ color: "#fff", fontSize: 12, minWidth: 20, textAlign: "center" }}>{[10, 5, 20][i]}</span>
-                  <button style={{ color: "rgba(255,255,255,0.4)", background: "none", border: "none", cursor: "pointer", fontSize: 14 }}>+</button>
-                </div>
-                <span style={{ color: "#F97316", fontWeight: 600, fontSize: 13, minWidth: 64, textAlign: "right" }}>GH₵ {(p.price * [10, 5, 20][i]).toLocaleString()}</span>
+              <div className="text-right">
+                <p className="text-amber-500 font-black mb-1">GH₵ {(p.price * 10).toLocaleString()}</p>
+                <p className="text-white/20 text-[10px] font-bold">10 {p.unit}</p>
               </div>
             </div>
           ))}
-          <button style={{ display: "flex", alignItems: "center", gap: 6, padding: "10px 14px", borderRadius: 10, background: "rgba(255,255,255,0.03)", border: "1px dashed rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.4)", fontSize: 12, cursor: "pointer", width: "100%" }}>
-            + Add another item
-          </button>
         </div>
-
-        {/* Summary */}
-        <div>
-          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 12, fontWeight: 600, margin: "0 0 12px", letterSpacing: "0.04em" }}>SUMMARY</p>
-          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: 16 }}>
-            {[["Subtotal", "GH₵ 4,390"], ["VAT (15%)", "GH₵ 658.50"], ["Delivery estimate", "GH₵ 200"]].map(([l, v]) => (
-              <div key={l} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 13 }}>{l}</span>
-                <span style={{ color: "#fff", fontSize: 13 }}>{v}</span>
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-8 h-fit shadow-2xl">
+          <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-6">Quote Summary</p>
+          <div className="space-y-4 mb-8">
+            {[["Subtotal", "GH₵ 4,390"], ["VAT (15%)", "GH₵ 658"], ["Delivery", "GH₵ 200"]].map(([l, v]) => (
+              <div key={l} className="flex justify-between items-center text-sm">
+                <span className="text-white/40">{l}</span>
+                <span className="text-white font-medium">{v}</span>
               </div>
             ))}
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 0 4px" }}>
-              <span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>Total</span>
-              <span style={{ color: "#F97316", fontWeight: 800, fontSize: 18 }}>GH₵ 5,248.50</span>
+            <div className="pt-4 border-t border-white/10 flex justify-between items-center">
+              <span className="text-white font-bold">Total</span>
+              <span className="text-amber-500 text-2xl font-black tracking-tighter">GH₵ 5,248</span>
             </div>
           </div>
-          <div style={{ marginTop: 14 }}>
-            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 11, margin: "0 0 8px" }}>APPROVAL WORKFLOW</p>
-            <div style={{ display: "flex", gap: 6 }}>
-              {["Requester ✓", "Manager →", "Finance →"].map((s, i) => (
-                <div key={s} style={{ flex: 1, padding: "8px 6px", borderRadius: 8, textAlign: "center", background: i === 0 ? "rgba(16,185,129,0.1)" : i === 1 ? "rgba(249,115,22,0.1)" : "rgba(255,255,255,0.03)", border: `1px solid ${i === 0 ? "rgba(16,185,129,0.2)" : i === 1 ? "rgba(249,115,22,0.2)" : "rgba(255,255,255,0.06)"}`, color: i === 0 ? "#10B981" : i === 1 ? "#F97316" : "rgba(255,255,255,0.3)", fontSize: 10, fontWeight: 500 }}>
-                  {s}
-                </div>
-              ))}
-            </div>
-          </div>
-          <button style={{ width: "100%", background: "#F97316", color: "#fff", padding: "13px", borderRadius: 10, fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", marginTop: 14 }}>
+          <button className="w-full bg-amber-500 text-black py-4 rounded-2xl font-black text-sm shadow-lg shadow-amber-500/20">
             Generate Proforma PDF
           </button>
         </div>

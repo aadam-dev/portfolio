@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body className="noise">{children}</body>
+      <body className="noise antialiased">{children}</body>
     </html>
   );
 }

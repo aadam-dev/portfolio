@@ -10,49 +10,47 @@ export default function SIIFPreview({ screen }: Props) {
 
 function Landing() {
   return (
-    <div style={{ background: "#0A0A0B", minHeight: "100%", fontFamily: "'Playfair Display', serif" }}>
-      {/* Header */}
-      <nav style={{ padding: "24px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(0,0,0,0.4)", borderBottom: "1px solid rgba(197, 158, 71, 0.1)" }}>
-        <div style={{ color: "#fff", fontWeight: 700, fontSize: 24, letterSpacing: "0.1em" }}>SIIF</div>
-        <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
-          {["VISION", "ACADEMY", "INTELLIGENCE", "ECOSYSTEM", "ARCHIVES"].map(l => (
-            <span key={l} style={{ color: "#C59E47", fontSize: 11, fontWeight: 600, letterSpacing: "0.15em", cursor: "pointer" }}>{l}</span>
-          ))}
-          <button style={{ background: "transparent", color: "#C59E47", border: "1px solid #C59E47", padding: "8px 20px", borderRadius: 4, fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", cursor: "pointer" }}>
-            ENROLL / MEMBER PORTAL
-          </button>
+    <div className="bg-[#0A0A0B] min-h-full font-serif text-white overflow-x-hidden">
+      <nav className="px-6 py-4 md:px-12 md:py-8 flex items-center justify-between border-b border-[#C59E47]/10 bg-black/40 backdrop-blur-md sticky top-0 z-50">
+        <div className="text-2xl font-black tracking-widest text-white">SIIF</div>
+        <div className="hidden md:flex gap-8 items-center text-[#C59E47] text-[10px] font-bold tracking-[0.2em]">
+          <span>VISION</span>
+          <span>ACADEMY</span>
+          <span>INTELLIGENCE</span>
+          <button className="border border-[#C59E47] px-5 py-2 hover:bg-[#C59E47] hover:text-black transition-colors">ENROLL</button>
         </div>
+        <div className="md:hidden text-[#C59E47]">☰</div>
       </nav>
 
-      {/* Hero Section */}
-      <div style={{ padding: "120px 48px", textAlign: "left", position: "relative", overflow: "hidden" }}>
-        {/* Background Overlay Hint */}
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(rgba(10,10,11,0.7), rgba(10,10,11,0.9)), url('/images/projects/siif.png') center/cover", zIndex: 0 }} />
+      <div className="relative px-6 py-20 md:px-20 md:py-32 overflow-hidden border-b border-[#C59E47]/10">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80')] bg-cover bg-center opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0B] via-[#0A0A0B]/80 to-transparent" />
         
-        <div style={{ position: "relative", zIndex: 1, maxWidth: 800 }}>
-          <p style={{ color: "#C59E47", fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", marginBottom: 20 }}>SAVANNAH INSTITUTE FOR INNOVATIVE FINANCE</p>
-          <h1 style={{ color: "#fff", fontSize: 56, fontWeight: 400, letterSpacing: "0.02em", lineHeight: 1.1, margin: "0 0 32px" }}>
-            INSTITUTIONALIZING<br />THE FUTURE OF FINANCE.
+        <div className="relative z-10 max-w-4xl">
+          <p className="text-[#C59E47] text-[10px] md:text-xs font-bold tracking-[0.3em] mb-10 uppercase">Savannah Institute for Innovative Finance</p>
+          <h1 className="text-4xl md:text-8xl font-normal tracking-tight leading-[1] mb-12">
+            Institutionalizing<br />
+            <span className="italic">the future of finance.</span>
           </h1>
-          <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 18, lineHeight: 1.6, maxWidth: 600, marginBottom: 40 }}>
-            SIIF is the <strong style={{ color: "#fff" }}>architect of emerging market capital</strong> — bridging institutional rigor with high-growth innovation.
+          <p className="text-white/50 text-base md:text-xl leading-relaxed max-w-2xl mb-16 font-light">
+            SIIF is the <span className="text-white font-medium">architect of emerging market capital</span> — bridging institutional rigor with high-growth innovation in sub-Saharan Africa.
           </p>
-          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 14, fontStyle: "italic" }}>
-            Innovative finance is the engine of emerging markets. We are the architects.
-          </p>
+          <div className="flex flex-col sm:flex-row gap-6">
+            <button className="bg-[#C59E47] text-black px-10 py-4 font-bold text-xs tracking-widest uppercase">Research Hub</button>
+            <button className="border border-white/20 text-white px-10 py-4 font-bold text-xs tracking-widest uppercase">Our Mandate</button>
+          </div>
         </div>
       </div>
 
-      {/* Vision Blocks */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: "rgba(197, 158, 71, 0.1)", borderTop: "1px solid rgba(197, 158, 71, 0.1)" }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#C59E47]/10">
         {[
-          { title: "Institutional Rigor", desc: "Setting the standard for capital allocation in sub-Saharan Africa." },
-          { title: "Innovative Systems", desc: "Deploying next-generation financial instruments for real-world impact." },
-          { title: "Market Growth", desc: "Scaling sustainable economic ecosystems through intelligence." }
-        ].map((item, i) => (
-          <div key={i} style={{ padding: "48px", background: "#0A0A0B" }}>
-            <h3 style={{ color: "#C59E47", fontSize: 16, fontWeight: 500, letterSpacing: "0.05em", marginBottom: 16 }}>{item.title}</h3>
-            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 13, lineHeight: 1.6 }}>{item.desc}</p>
+          { t: "Institutional Rigor", d: "Setting the standard for capital allocation in sub-Saharan Africa." },
+          { t: "Innovative Systems", d: "Deploying next-generation financial instruments for real-world impact." },
+          { t: "Market Growth", d: "Scaling sustainable economic ecosystems through intelligence." }
+        ].map(item => (
+          <div key={item.t} className="p-12 md:p-16 hover:bg-[#C59E47]/5 transition-colors group">
+            <p className="text-[#C59E47] text-sm font-bold tracking-widest mb-6 group-hover:translate-x-2 transition-transform uppercase">{item.t}</p>
+            <p className="text-white/40 text-sm leading-relaxed font-light">{item.d}</p>
           </div>
         ))}
       </div>
@@ -62,18 +60,25 @@ function Landing() {
 
 function Academy() {
   return (
-    <div style={{ background: "#FDFCF9", minHeight: "100%", padding: 48, fontFamily: "serif" }}>
-      <h1 style={{ color: "#1A1A1A", fontSize: 32, marginBottom: 40, borderBottom: "2px solid #C59E47", paddingBottom: 16 }}>Academy Portal</h1>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
+    <div className="bg-[#FDFCF9] min-h-full font-serif p-8 md:p-16">
+      <div className="border-b border-[#C59E47]/20 pb-12 mb-16">
+        <p className="text-[#C59E47] text-[10px] font-bold tracking-[0.3em] mb-4 uppercase">Education Portal</p>
+        <h2 className="text-4xl md:text-6xl font-normal text-black tracking-tight">SIIF Academy</h2>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {[
-          { title: "Venture Capital Foundations", modules: 12, Level: "Institutional" },
-          { title: "Emerging Market Risk Analysis", modules: 8, Level: "Advanced" },
-          { title: "Institutional Asset Management", modules: 15, Level: "Executive" }
-        ].map((course, i) => (
-          <div key={i} style={{ border: "1px solid #E5E5E5", padding: 24, borderRadius: 2 }}>
-            <span style={{ color: "#C59E47", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em" }}>{course.Level}</span>
-            <h3 style={{ fontSize: 20, margin: "8px 0 16px" }}>{course.title}</h3>
-            <p style={{ color: "#666", fontSize: 14 }}>{course.modules} modules • Self-paced • Certificate awarded</p>
+          { title: "Venture Capital Foundations", modules: 12, level: "Institutional" },
+          { title: "Emerging Market Risk Analysis", modules: 8, level: "Advanced" },
+          { title: "Institutional Asset Management", modules: 15, level: "Executive" }
+        ].map(course => (
+          <div key={course.title} className="border border-black/5 p-10 hover:border-[#C59E47] transition-all group">
+            <span className="text-[#C59E47] text-[9px] font-bold tracking-[0.2em] uppercase block mb-8">{course.level}</span>
+            <h3 className="text-2xl font-normal text-black mb-8 leading-snug group-hover:text-[#C59E47] transition-colors">{course.title}</h3>
+            <div className="flex justify-between items-center pt-8 border-t border-black/5">
+              <span className="text-black/40 text-[10px] font-bold uppercase tracking-widest">{course.modules} Modules</span>
+              <span className="text-[#C59E47] font-black">→</span>
+            </div>
           </div>
         ))}
       </div>
@@ -83,20 +88,24 @@ function Academy() {
 
 function Intelligence() {
   return (
-    <div style={{ background: "#0A0A0B", minHeight: "100%", padding: 48, color: "#fff" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 48 }}>
-        <div>
-          <p style={{ color: "#C59E47", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em" }}>REAL-TIME DATA</p>
-          <h2 style={{ fontSize: 24, margin: "8px 0 0" }}>Market Intelligence Hub</h2>
+    <div className="bg-[#0A0A0B] min-h-full font-serif p-8 md:p-20 text-white">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12 mb-16">
+        <div className="max-w-2xl">
+          <p className="text-[#C59E47] text-[10px] font-bold tracking-[0.3em] mb-6 uppercase">Intelligence Hub</p>
+          <h2 className="text-4xl md:text-6xl font-normal tracking-tight">Market Visualization Terminal</h2>
         </div>
-        <div style={{ display: "flex", gap: 16 }}>
-          {["SSA EQUITY", "FIXED INCOME", "COMMODITIES"].map(t => (
-            <span key={t} style={{ border: "1px solid rgba(255,255,255,0.1)", padding: "4px 12px", borderRadius: 4, fontSize: 10 }}>{t}</span>
+        <div className="flex flex-wrap gap-4">
+          {["SSA EQUITY", "FIXED INCOME", "MACRO"].map(t => (
+            <span key={t} className="border border-white/10 px-4 py-1.5 text-[9px] font-bold tracking-widest uppercase text-white/40">{t}</span>
           ))}
         </div>
       </div>
-      <div style={{ height: 200, background: "rgba(197, 158, 71, 0.05)", border: "1px solid rgba(197, 158, 71, 0.1)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <p style={{ color: "#666", fontSize: 14 }}>Intelligence visualization terminal loading...</p>
+      
+      <div className="aspect-video bg-gradient-to-br from-[#C59E47]/10 to-transparent border border-[#C59E47]/20 flex flex-col items-center justify-center gap-6 p-12 text-center group">
+        <div className="w-16 h-16 border border-[#C59E47] flex items-center justify-center group-hover:scale-110 transition-transform">
+          <div className="w-2 h-2 bg-[#C59E47] animate-ping" />
+        </div>
+        <p className="text-white/30 text-[10px] font-bold tracking-[0.3em] uppercase">Intelligence Terminal Initializing...</p>
       </div>
     </div>
   );

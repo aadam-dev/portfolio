@@ -2,20 +2,16 @@
 
 interface Props { screen: string }
 
-const courses = [
+const coursesLabel = [
   { title: "WASSCE Core Mathematics", cat: "WASSCE", students: 3840, duration: "48h", level: "SHS", color: "#0d9488" },
   { title: "BECE Integrated Science", cat: "BECE", students: 2910, duration: "32h", level: "JHS", color: "#059669" },
   { title: "SHS Elective Chemistry", cat: "WASSCE", students: 1650, duration: "40h", level: "SHS", color: "#0d9488" },
-  { title: "University Bridging — Maths", cat: "University", students: 1120, duration: "24h", level: "Tertiary", color: "#2563EB" },
-  { title: "BECE English Language", cat: "BECE", students: 2240, duration: "28h", level: "JHS", color: "#059669" },
-  { title: "Career Skills: MS Excel", cat: "Career", students: 890, duration: "16h", level: "Professional", color: "#D97706" },
 ];
 
 const pathways = [
-  { label: "WASSCE", desc: "Senior Secondary Certificate", icon: "🏫", color: "#0d9488", bg: "#f0fdfa", count: "120+ courses" },
-  { label: "BECE", desc: "Basic Education Certificate", icon: "📚", color: "#059669", bg: "#f0fdf4", count: "80+ courses" },
-  { label: "University", desc: "Bridging & degree-level", icon: "🎓", color: "#2563EB", bg: "#eff6ff", count: "60+ courses" },
-  { label: "Career", desc: "Professional certifications", icon: "💼", color: "#D97706", bg: "#fffbeb", count: "90+ courses" },
+  { label: "WASSCE", desc: "Secondary Certificate", icon: "🏫", color: "#0d9488", bg: "#f0fdfa", count: "120+ courses" },
+  { label: "BECE", desc: "Basic Education", icon: "📚", color: "#059669", bg: "#f0fdf4", count: "80+ courses" },
+  { label: "University", desc: "Degree-level", icon: "🎓", color: "#2563EB", bg: "#eff6ff", count: "60+ courses" },
 ];
 
 export default function KoyiPreview({ screen }: Props) {
@@ -27,84 +23,75 @@ export default function KoyiPreview({ screen }: Props) {
 
 function Landing() {
   return (
-    <div style={{ background: "#fff", minHeight: "100%", fontFamily: "system-ui, sans-serif" }}>
-      <nav style={{ padding: "14px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #e5e7eb" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          {/* Exact Kōyi logo: teal gradient K mark + wordmark (matches real app) */}
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg, #14b8a6 0%, #0d9488 50%, #0f766e 100%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ color: "#fff", fontWeight: 800, fontSize: 14 }}>K</span>
-          </div>
-          <span style={{ color: "#0f766e", fontWeight: 800, fontSize: 20, letterSpacing: "-0.02em" }}>Kōyi</span>
+    <div className="bg-white min-h-full font-sans overflow-x-hidden">
+      <nav className="px-6 py-4 md:px-8 border-b flex items-center justify-between sticky top-0 z-50 bg-white/90 backdrop-blur-md">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center font-black text-white text-sm">K</div>
+          <span className="text-teal-900 font-extrabold text-xl tracking-tight">Kōyi</span>
         </div>
-        <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
-          {["Courses", "Academy", "Dashboard"].map(l => (
-            <span key={l} style={{ color: "#6b7280", fontSize: 13, cursor: "pointer" }}>{l}</span>
-          ))}
-          <button style={{ background: "#0d9488", color: "#fff", padding: "8px 18px", borderRadius: 8, fontSize: 13, fontWeight: 600, border: "none", cursor: "pointer" }}>
-            Get Started
-          </button>
+        <div className="hidden md:flex gap-6 items-center text-slate-500 text-[11px] font-bold uppercase tracking-widest">
+          <span>Courses</span>
+          <span>Academy</span>
+          <button className="bg-teal-600 text-white px-5 py-2 rounded-lg font-black">Get Started</button>
         </div>
+        <div className="md:hidden text-teal-600">☰</div>
       </nav>
 
-      <div style={{ background: "linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #10b981 100%)", padding: "56px 32px 48px" }}>
-        <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.15)", borderRadius: 100, padding: "5px 14px", marginBottom: 22 }}>
-            <span style={{ color: "#fff", fontSize: 11, fontWeight: 500 }}>🎓 Built for Ghana & Africa</span>
-          </div>
-          <h1 style={{ color: "#fff", fontSize: 44, fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.1, margin: "0 0 16px" }}>
-            Learn Anything,<br />Anywhere
-          </h1>
-          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 15, lineHeight: 1.7, margin: "0 0 28px" }}>
-            Ghana's LMS for WASSCE, BECE, university bridging, and career development. Multilingual (EN/FR/AR), video streaming, and certificate-issuing.
-          </p>
-          <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-            <button style={{ background: "#fff", color: "#0d9488", padding: "12px 24px", borderRadius: 10, fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer" }}>
-              Browse Courses
-            </button>
-            <button style={{ background: "rgba(255,255,255,0.1)", color: "#fff", padding: "12px 24px", borderRadius: 10, fontSize: 13, fontWeight: 500, border: "1px solid rgba(255,255,255,0.3)", cursor: "pointer" }}>
-              Register
-            </button>
-          </div>
+      <div className="bg-teal-700 px-6 py-16 md:px-12 md:py-24 text-center text-white">
+        <div className="inline-block bg-white/20 px-4 py-1.5 rounded-full text-[10px] font-black mb-8 uppercase tracking-widest">🎓 Built for Africa</div>
+        <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.95] uppercase">
+          Learn anything,<br />
+          <span className="italic opacity-80">anywhere.</span>
+        </h1>
+        <p className="text-white/70 text-base md:text-lg leading-relaxed max-w-xl mx-auto mb-12 font-medium">
+          Ghana&apos;s LMS for WASSCE, BECE, and career development. Video streaming, offline access, and certificates.
+        </p>
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <button className="bg-white text-teal-700 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest">Browse Courses</button>
+          <button className="bg-teal-800 text-white border border-white/10 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest">Register</button>
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 0, background: "#f9fafb", borderBottom: "1px solid #e5e7eb" }}>
-        {[["18,400+", "Students"], ["420+", "Courses"], ["EN · FR · AR", "Languages"], ["4", "Pathways"]].map(([val, label], i) => (
-          <div key={label} style={{ textAlign: "center", flex: 1, padding: "20px 0", borderRight: i < 3 ? "1px solid #e5e7eb" : "none" }}>
-            <div style={{ color: "#0d9488", fontSize: 22, fontWeight: 800 }}>{val}</div>
-            <div style={{ color: "#9ca3af", fontSize: 11, marginTop: 3 }}>{label}</div>
+      <div className="grid grid-cols-3 border-b bg-teal-50/50">
+        {[["18K+", "Students"], ["420+", "Courses"], ["4", "Pathways"]].map(([v, l], i) => (
+          <div key={l} className={`p-8 text-center ${i < 2 ? "border-r border-teal-100" : ""}`}>
+            <p className="text-teal-700 text-3xl font-black mb-1">{v}</p>
+            <p className="text-teal-600/40 text-[9px] font-bold uppercase tracking-widest">{l}</p>
           </div>
         ))}
       </div>
 
-      <div style={{ padding: "32px 32px" }}>
-        <h2 style={{ color: "#111827", fontSize: 18, fontWeight: 700, margin: "0 0 6px" }}>Academic Pathways</h2>
-        <p style={{ color: "#9ca3af", fontSize: 13, margin: "0 0 20px" }}>Structured learning for every stage of education in Ghana</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 32 }}>
+      <div className="p-8 md:p-16 max-w-7xl mx-auto">
+        <div className="mb-12">
+          <p className="text-teal-600 text-[10px] font-black tracking-widest mb-4 uppercase">Academic pathways</p>
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter">Your learning journey</h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
           {pathways.map(p => (
-            <div key={p.label} style={{ background: p.bg, border: `1px solid ${p.color}25`, borderRadius: 12, padding: "18px 16px", cursor: "pointer" }}>
-              <div style={{ fontSize: 28, marginBottom: 10 }}>{p.icon}</div>
-              <p style={{ color: "#111827", fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>{p.label}</p>
-              <p style={{ color: "#6b7280", fontSize: 11, lineHeight: 1.5, margin: "0 0 10px" }}>{p.desc}</p>
-              <span style={{ color: p.color, fontSize: 11, fontWeight: 600 }}>{p.count}</span>
+            <div key={p.label} className="p-10 rounded-[40px] border shadow-sm transition-all hover:shadow-xl" style={{ background: p.bg, borderColor: `${p.color}20` }}>
+              <div className="text-4xl mb-8">{p.icon}</div>
+              <p className="font-black text-2xl text-slate-900 mb-2">{p.label}</p>
+              <p className="text-slate-500 text-sm mb-10 font-medium leading-relaxed">{p.desc}</p>
+              <span className="text-xs font-black uppercase tracking-widest" style={{ color: p.color }}>{p.count} →</span>
             </div>
           ))}
         </div>
-
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-          <h2 style={{ color: "#111827", fontSize: 16, fontWeight: 700, margin: 0 }}>Popular Courses</h2>
-          <span style={{ color: "#0d9488", fontSize: 13, cursor: "pointer" }}>See all →</span>
+        
+        <div className="mb-12">
+          <p className="text-teal-600 text-[10px] font-black tracking-widest mb-4 uppercase">Trending</p>
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter">Popular Courses</h2>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
-          {courses.slice(0, 3).map(c => (
-            <div key={c.title} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 12, overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-              <div style={{ height: 72, background: `linear-gradient(135deg, ${c.color}18, ${c.color}06)`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontSize: 28 }}>📖</span>
-              </div>
-              <div style={{ padding: 14 }}>
-                <span style={{ background: `${c.color}15`, color: c.color, padding: "2px 8px", borderRadius: 100, fontSize: 10, fontWeight: 600 }}>{c.cat}</span>
-                <p style={{ color: "#111827", fontSize: 13, fontWeight: 600, margin: "8px 0 4px", lineHeight: 1.4 }}>{c.title}</p>
-                <p style={{ color: "#9ca3af", fontSize: 11, margin: 0 }}>{c.students.toLocaleString()} students · {c.duration}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {coursesLabel.map(c => (
+            <div key={c.title} className="bg-white border border-slate-100 rounded-[32px] overflow-hidden group hover:shadow-xl transition-all">
+              <div className="h-40 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform" style={{ background: `${c.color}05` }}>📖</div>
+              <div className="p-8">
+                <span className="text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest" style={{ background: `${c.color}10`, color: c.color }}>{c.cat}</span>
+                <p className="font-black text-lg mt-4 mb-2 leading-tight uppercase">{c.title}</p>
+                <div className="flex justify-between items-center pt-6 border-t border-slate-50">
+                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{c.students.toLocaleString()} Students</p>
+                   <span className="text-teal-600 font-black text-xs">→</span>
+                </div>
               </div>
             </div>
           ))}
@@ -116,31 +103,18 @@ function Landing() {
 
 function Courses() {
   return (
-    <div style={{ background: "#fff", minHeight: "100%", fontFamily: "system-ui, sans-serif", padding: 24 }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-        <div>
-          <h1 style={{ color: "#111827", fontSize: 20, fontWeight: 800, margin: "0 0 2px" }}>All Courses</h1>
-          <p style={{ color: "#9ca3af", fontSize: 13, margin: 0 }}>420+ courses across 4 pathways</p>
-        </div>
-        <div style={{ display: "flex", gap: 6 }}>
-          {["All", "WASSCE", "BECE", "University", "Career"].map((f, i) => (
-            <button key={f} style={{ padding: "6px 14px", borderRadius: 100, fontSize: 12, fontWeight: 500, border: i === 0 ? "none" : "1px solid #e5e7eb", background: i === 0 ? "#0d9488" : "#fff", color: i === 0 ? "#fff" : "#6b7280", cursor: "pointer" }}>{f}</button>
-          ))}
-        </div>
+    <div className="bg-white min-h-full font-sans p-8 md:p-12">
+      <div className="mb-10">
+        <p className="text-teal-600 text-[10px] font-black tracking-widest mb-4 uppercase">Catalog</p>
+        <h2 className="text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter">All Courses</h2>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14 }}>
-        {courses.map(c => (
-          <div key={c.title} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 12, overflow: "hidden", display: "flex", cursor: "pointer" }}>
-            <div style={{ width: 80, background: `${c.color}10`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <span style={{ fontSize: 24 }}>📖</span>
-            </div>
-            <div style={{ padding: 14, flex: 1 }}>
-              <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
-                <span style={{ background: `${c.color}15`, color: c.color, padding: "2px 7px", borderRadius: 100, fontSize: 10, fontWeight: 600 }}>{c.cat}</span>
-                <span style={{ background: "#f3f4f6", color: "#6b7280", padding: "2px 7px", borderRadius: 100, fontSize: 10 }}>{c.level}</span>
-              </div>
-              <p style={{ color: "#111827", fontSize: 12, fontWeight: 600, margin: "0 0 4px", lineHeight: 1.4 }}>{c.title}</p>
-              <p style={{ color: "#9ca3af", fontSize: 11, margin: 0 }}>{c.students.toLocaleString()} students · {c.duration}</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {coursesLabel.concat(coursesLabel).map((c, i) => (
+          <div key={i} className="flex bg-slate-50 border border-slate-100 rounded-3xl overflow-hidden hover:bg-teal-50/30 transition-colors">
+            <div className="w-24 bg-white border-r border-slate-100 flex items-center justify-center flex-shrink-0 text-3xl">📖</div>
+            <div className="p-6">
+              <p className="font-black text-slate-900 text-sm mb-1 uppercase tracking-tight">{c.title}</p>
+              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">{c.level} • {c.duration}</p>
             </div>
           </div>
         ))}
@@ -150,61 +124,35 @@ function Courses() {
 }
 
 function Lesson() {
-  const lessons = [
-    "Introduction & Course Overview",
-    "Algebraic Expressions",
-    "Quadratic Functions",
-    "Vectors & Transformation",
-    "Statistics & Probability",
-    "Past Questions 2019–2023",
-  ];
   return (
-    <div style={{ background: "#f9fafb", minHeight: "100%", fontFamily: "system-ui, sans-serif", display: "flex", height: "100%" }}>
-      <div style={{ width: 240, borderRight: "1px solid #e5e7eb", padding: 16, flexShrink: 0, background: "#fff" }}>
-        <div style={{ marginBottom: 16 }}>
-          <p style={{ color: "#9ca3af", fontSize: 11, margin: "0 0 4px", fontWeight: 600, letterSpacing: "0.04em" }}>COURSE</p>
-          <p style={{ color: "#111827", fontSize: 13, fontWeight: 600, margin: 0, lineHeight: 1.4 }}>WASSCE Core Mathematics</p>
-        </div>
-        <div style={{ height: 1, background: "#e5e7eb", margin: "0 0 14px" }} />
-        {lessons.map((l, i) => (
-          <div key={l} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: 8, background: i === 2 ? "#f0fdfa" : "transparent", marginBottom: 2, cursor: "pointer" }}>
-            <div style={{ width: 20, height: 20, borderRadius: "50%", background: i < 2 ? "#0d9488" : i === 2 ? "#0d948830" : "#e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              {i < 2 ? <span style={{ color: "#fff", fontSize: 10 }}>✓</span> : <span style={{ color: i === 2 ? "#0d9488" : "#9ca3af", fontSize: 10 }}>{i + 1}</span>}
-            </div>
-            <span style={{ color: i === 2 ? "#0d9488" : i < 2 ? "#6b7280" : "#9ca3af", fontSize: 12 }}>{l}</span>
-          </div>
-        ))}
-        <div style={{ marginTop: 16 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-            <span style={{ color: "#6b7280", fontSize: 11 }}>Progress</span>
-            <span style={{ color: "#0d9488", fontSize: 11, fontWeight: 600 }}>33%</span>
-          </div>
-          <div style={{ height: 6, background: "#e5e7eb", borderRadius: 3 }}>
-            <div style={{ height: 6, width: "33%", background: "#0d9488", borderRadius: 3 }} />
-          </div>
+    <div className="flex flex-col lg:flex-row min-h-full bg-slate-50 font-sans">
+      <div className="w-full lg:w-80 bg-white border-b lg:border-r p-8 shrink-0">
+        <p className="text-[10px] font-black text-slate-400 mb-8 uppercase tracking-widest">WASSCE Core Maths</p>
+        <div className="space-y-3">
+          {["Introduction", "Algebra", "Quadratic Functions"].map((l, i) => (
+            <div key={i} className={`p-4 rounded-2xl text-sm transition-all cursor-pointer ${i === 2 ? "bg-teal-600 text-white font-black shadow-lg shadow-teal-600/20" : "text-slate-500 font-bold hover:bg-slate-50"}`}>{l}</div>
+          ))}
         </div>
       </div>
-      <div style={{ flex: 1, padding: 24 }}>
-        <div style={{ background: "#111827", borderRadius: 12, height: 200, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20, position: "relative" }}>
-          <div style={{ width: 52, height: 52, borderRadius: "50%", background: "#0d9488", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-            <span style={{ fontSize: 20, marginLeft: 4, color: "#fff" }}>▶</span>
-          </div>
-          <div style={{ position: "absolute", bottom: 12, left: 12, right: 12, height: 3, background: "rgba(255,255,255,0.15)", borderRadius: 2 }}>
-            <div style={{ height: 3, width: "35%", background: "#0d9488", borderRadius: 2 }} />
-          </div>
+      <div className="flex-1 p-6 md:p-12 max-w-5xl">
+        <div className="bg-slate-900 aspect-video rounded-[40px] flex items-center justify-center mb-10 shadow-2xl relative overflow-hidden group">
+          <div className="absolute inset-0 bg-teal-600/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="w-20 h-20 bg-teal-600 rounded-full flex items-center justify-center text-white pl-2 text-3xl shadow-2xl transform group-hover:scale-110 transition-transform">▶</div>
         </div>
-        <h2 style={{ color: "#111827", fontSize: 18, fontWeight: 700, margin: "0 0 8px" }}>Quadratic Functions</h2>
-        <p style={{ color: "#6b7280", fontSize: 13, lineHeight: 1.7, margin: "0 0 20px" }}>
-          Master quadratic equations, factorisation, completing the square, and the quadratic formula. Exam-focused examples and past WASSCE questions included.
-        </p>
-        <div style={{ background: "#f0fdfa", border: "1px solid #0d948825", borderRadius: 10, padding: 14 }}>
-          <p style={{ color: "#0d9488", fontSize: 12, fontWeight: 600, margin: "0 0 10px" }}>Lesson Resources</p>
-          {["Lesson Notes (PDF)", "Practice Questions", "Quiz — 15 questions"].map(r => (
-            <div key={r} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-              <span style={{ fontSize: 14 }}>📎</span>
-              <span style={{ color: "#374151", fontSize: 12 }}>{r}</span>
-            </div>
-          ))}
+        <div className="mb-12">
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter mb-4 leading-none">Quadratic Functions</h2>
+          <p className="text-slate-500 text-base md:text-lg leading-relaxed font-medium">Master factorisation and the quadratic formula with real WASSCE exam-style questions.</p>
+        </div>
+        <div className="bg-white border border-slate-100 p-8 rounded-[40px]">
+          <p className="text-slate-900 font-black text-sm mb-8 uppercase tracking-widest">Lesson Resources</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {["PDF Notes", "Practice Quiz", "Formula Sheet"].map(r => (
+              <div key={r} className="bg-slate-50 p-5 rounded-2xl flex items-center gap-4 hover:bg-teal-50 transition-colors cursor-pointer">
+                <span className="text-xl">📎</span>
+                <span className="text-slate-900 font-black text-xs uppercase tracking-widest">{r}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -213,42 +161,29 @@ function Lesson() {
 
 function Dashboard() {
   return (
-    <div style={{ background: "#f9fafb", minHeight: "100%", fontFamily: "system-ui, sans-serif", padding: 24 }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+    <div className="bg-slate-50 min-h-full font-sans p-6 md:p-12">
+      <div className="flex items-center justify-between mb-12">
         <div>
-          <h1 style={{ color: "#111827", fontSize: 20, fontWeight: 800, margin: "0 0 2px" }}>My Dashboard</h1>
-          <p style={{ color: "#9ca3af", fontSize: 13, margin: 0 }}>5-day streak! Keep it up.</p>
+          <h1 className="text-3xl font-black text-slate-900 uppercase tracking-tighter">My Academy</h1>
+          <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">Academic Year 2025/26</p>
         </div>
-        <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#0d9488", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <span style={{ fontWeight: 700, fontSize: 14, color: "#fff" }}>K</span>
-        </div>
+        <div className="w-12 h-12 bg-teal-600 rounded-2xl shadow-xl shadow-teal-600/20" />
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14, marginBottom: 24 }}>
-        {[["3", "Enrolled", "📚"], ["1", "Certificates", "🏆"], ["5", "Day Streak", "🔥"]].map(([val, label, icon]) => (
-          <div key={label} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 12, padding: 16, textAlign: "center" }}>
-            <div style={{ fontSize: 22, marginBottom: 6 }}>{icon}</div>
-            <div style={{ color: "#0d9488", fontSize: 22, fontWeight: 800 }}>{val}</div>
-            <div style={{ color: "#9ca3af", fontSize: 11, marginTop: 2 }}>{label}</div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+        {[["3", "Enrolled", "📚"], ["1", "Certs", "🏆"], ["5", "Streak", "🔥"]].map(([v, l, i]) => (
+          <div key={l} className="bg-white p-10 rounded-[40px] border border-slate-100 text-center shadow-sm">
+            <div className="text-4xl mb-4">{i}</div>
+            <div className="text-4xl font-black text-teal-600 mb-1">{v}</div>
+            <div className="text-[10px] text-slate-400 uppercase font-black tracking-[0.2em]">{l}</div>
           </div>
         ))}
       </div>
-      <h2 style={{ color: "#111827", fontSize: 15, fontWeight: 700, margin: "0 0 14px" }}>Continue Learning</h2>
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        {courses.slice(0, 2).map((c, i) => (
-          <div key={c.title} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 12, padding: 14, display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 48, height: 48, borderRadius: 10, background: `${c.color}10`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <span style={{ fontSize: 22 }}>📖</span>
-            </div>
-            <div style={{ flex: 1 }}>
-              <p style={{ color: "#111827", fontSize: 13, fontWeight: 600, margin: "0 0 4px" }}>{c.title}</p>
-              <div style={{ height: 4, background: "#e5e7eb", borderRadius: 2 }}>
-                <div style={{ height: 4, width: `${[68, 20][i]}%`, background: c.color, borderRadius: 2 }} />
-              </div>
-              <p style={{ color: "#9ca3af", fontSize: 11, margin: "4px 0 0" }}>{[68, 20][i]}% complete</p>
-            </div>
-            <button style={{ background: "#0d9488", color: "#fff", padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600, border: "none", cursor: "pointer" }}>Resume</button>
-          </div>
-        ))}
+      <div className="bg-teal-700 p-10 rounded-[40px] text-white flex flex-col md:flex-row items-center justify-between gap-8">
+        <div>
+          <p className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-2">Continue Learning</p>
+          <p className="text-2xl font-black uppercase tracking-tight">WASSCE Core Mathematics</p>
+        </div>
+        <button className="bg-white text-teal-700 px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-widest">Resume</button>
       </div>
     </div>
   );

@@ -3,19 +3,10 @@
 interface Props { screen: string }
 
 const services = [
-  { title: "Corporate & School", desc: "Exam paper printing, typing & scanning, business stationery, and academic materials.", icon: "🖨️" },
-  { title: "Branding & Apparel", desc: "Custom T-shirts, screen printing, logo design, and branded merchandise.", icon: "👕" },
-  { title: "Large Format", desc: "Billboards, event banners, posters, and large-scale display printing.", icon: "🖼️" },
-  { title: "Business Consulting", desc: "Business plans, pitch decks, web design, and brand strategy.", icon: "📋" },
-];
-
-const portfolio = [
-  { type: "Brand Identity", client: "Accra Tech Hub", year: 2024 },
-  { type: "Event Print", client: "KNUST Graduation 2024", year: 2024 },
-  { type: "Visual Arts", client: "Adenta SHS Programme", year: 2025 },
-  { type: "Signage", client: "Madina Market Association", year: 2025 },
-  { type: "Brochure Design", client: "Greater Accra Health Drive", year: 2023 },
-  { type: "T-Shirt Print", client: "Legon Athletics Club", year: 2024 },
+  { title: "Print & School", desc: "Exam papers, stationery, and academic materials.", icon: "🖨️" },
+  { title: "Branding", desc: "Custom T-shirts, logos, and branded merchandise.", icon: "👕" },
+  { title: "Large Format", desc: "Billboards, banners, and event displays.", icon: "🖼️" },
+  { title: "Consulting", desc: "Business plans, pitch decks, and strategy.", icon: "📋" },
 ];
 
 export default function MagiloPreview({ screen }: Props) {
@@ -26,97 +17,63 @@ export default function MagiloPreview({ screen }: Props) {
 
 function Landing() {
   return (
-    <div style={{ background: "#fefefe", minHeight: "100%", fontFamily: "system-ui, sans-serif" }}>
-      {/* Nav */}
-      <nav style={{ padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #e5e7eb", background: "#fff" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 8, background: "linear-gradient(180deg, #38BDF8 0%, #0EA5E9 50%, #0369A1 100%)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 2px rgba(6,105,161,0.3)" }}>
-            <span style={{ color: "#fff", fontWeight: 900, fontSize: 16, textShadow: "0 1px 0 #075985" }}>M</span>
-          </div>
-          <div>
-            <span style={{ color: "#0C4A6E", fontWeight: 800, fontSize: 15, display: "block", lineHeight: 1.2, letterSpacing: "0.02em" }}>MAGILO</span>
-            <span style={{ color: "#9ca3af", fontSize: 10, letterSpacing: "0.05em" }}>ART COLLEGE · Adenta, Accra</span>
+    <div className="bg-white min-h-full font-sans overflow-x-hidden">
+      <nav className="px-6 py-4 md:px-10 md:py-5 flex items-center justify-between border-b border-slate-100 bg-white/90 sticky top-0 z-50 backdrop-blur-md">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-b from-sky-400 to-sky-700 rounded-lg flex items-center justify-center font-black text-white text-xl shadow-lg">M</div>
+          <div className="hidden sm:block">
+            <span className="text-sky-900 font-black text-sm block leading-tight tracking-tight uppercase">Magilo</span>
+            <span className="text-slate-400 text-[9px] uppercase tracking-widest font-bold">Art College · Accra</span>
           </div>
         </div>
-        <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
-          {["Services", "The College", "Portfolio", "About Us"].map(l => (
-            <span key={l} style={{ color: "#6b7280", fontSize: 13, cursor: "pointer" }}>{l}</span>
-          ))}
-          <button style={{ background: "#ed8936", color: "#fff", padding: "8px 18px", borderRadius: 8, fontSize: 13, fontWeight: 600, border: "none", cursor: "pointer" }}>
-            Enrol Now
-          </button>
+        <div className="hidden md:flex gap-8 items-center text-slate-400 text-[11px] font-bold uppercase tracking-widest">
+          <span>Services</span>
+          <span>College</span>
+          <button className="bg-orange-500 text-white px-5 py-2 rounded-lg font-black">Enrol</button>
         </div>
+        <div className="md:hidden text-slate-400">☰</div>
       </nav>
 
-      {/* Hero */}
-      <div style={{ background: "linear-gradient(135deg, #1a365d 0%, #1e3a5f 60%, #2d4a7a 100%)", padding: "64px 36px 56px" }}>
-        <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(237,137,54,0.2)", border: "1px solid rgba(237,137,54,0.3)", borderRadius: 100, padding: "5px 14px", marginBottom: 24 }}>
-            <span style={{ color: "#f6ad55", fontSize: 11, fontWeight: 500 }}>25+ Years of Creative Excellence</span>
+      <div className="bg-gradient-to-br from-slate-900 to-slate-800 relative px-6 py-16 md:px-12 md:py-24 text-center overflow-hidden">
+        <div className="relative z-10">
+          <div className="inline-block bg-orange-500/10 border border-orange-500/20 px-4 py-1.5 rounded-full mb-8">
+            <span className="text-orange-400 text-[10px] font-black tracking-widest uppercase">25+ Years of Excellence</span>
           </div>
-          <h1 style={{ color: "#fff", fontSize: 44, fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.1, margin: "0 0 12px" }}>
+          <h1 className="text-5xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-[0.95] uppercase max-w-3xl mx-auto">
             Teach. Design.<br />
-            <span style={{ color: "#ed8936" }}>Print. Consult.</span>
+            <span className="text-orange-500 italic">Print. Consult.</span>
           </h1>
-          <h2 style={{ color: "#ed8936", fontSize: 20, fontWeight: 700, margin: "0 0 18px", letterSpacing: "-0.01em" }}>
-            25+ Years of Excellence.
-          </h2>
-          <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 15, lineHeight: 1.7, margin: "0 0 32px" }}>
-            We started as an art school. Today we still teach—but we also design, print, and consult for hundreds of businesses and individuals across Accra. One team. Every creative need.
+          <p className="text-white/60 text-sm md:text-lg leading-relaxed max-w-xl mx-auto mb-12">
+            Adenta's creative hub since 1999. We started as an art school—today we design and print for hundreds of businesses across Accra.
           </p>
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", marginBottom: 28 }}>
-            <button style={{ background: "#ed8936", color: "#fff", padding: "13px 28px", borderRadius: 10, fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer" }}>
-              Order Printing
-            </button>
-            <button style={{ background: "transparent", color: "#fff", padding: "13px 28px", borderRadius: 10, fontSize: 13, fontWeight: 500, border: "1px solid rgba(255,255,255,0.4)", cursor: "pointer" }}>
-              View Courses
-            </button>
-          </div>
-          {/* Trust row */}
-          <div style={{ display: "flex", gap: 20, justifyContent: "center", flexWrap: "wrap" }}>
-            {["25+ Years Experience", "Trusted by Businesses", "Full-Service Solutions"].map(item => (
-              <span key={item} style={{ color: "rgba(255,255,255,0.75)", fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}>
-                <span style={{ color: "#ed8936", fontWeight: 700 }}>✓</span> {item}
-              </span>
-            ))}
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+            <button className="bg-orange-500 text-white px-8 py-4 rounded-2xl font-black text-sm">Order Printing</button>
+            <button className="bg-white/5 border border-white/10 text-white px-8 py-4 rounded-2xl font-black text-sm">View Courses</button>
           </div>
         </div>
       </div>
 
-      {/* Trust bar */}
-      <div style={{ background: "#1a365d", padding: "24px 28px" }}>
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
-          {[["25+", "Years Experience"], ["1000+", "Projects Delivered"], ["500+", "Satisfied Clients"], ["100%", "Commitment"]].map(([val, label], i) => (
-            <div key={label} style={{ flex: 1, textAlign: "center", paddingTop: 4, paddingBottom: 4, borderRight: i < 3 ? "1px solid rgba(255,255,255,0.12)" : "none" }}>
-              <div style={{ color: "#f6ad55", fontSize: 26, fontWeight: 800, lineHeight: 1 }}>{val}</div>
-              <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 11, marginTop: 4 }}>{label}</div>
-            </div>
-          ))}
-        </div>
-        <div style={{ textAlign: "center" }}>
-          <p style={{ color: "rgba(255,255,255,0.45)", fontSize: 11, margin: "0 0 10px", letterSpacing: "0.06em" }}>TRUSTED BY OUR CLIENTS</p>
-          <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
-            {["DIS", "LC", "SME", "ASM", "CC"].map(logo => (
-              <div key={logo} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 6, padding: "6px 12px" }}>
-                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 10, fontWeight: 600 }}>{logo}</span>
-              </div>
-            ))}
+      <div className="bg-slate-900 grid grid-cols-2 md:grid-cols-4 border-y border-white/5">
+        {[["25+", "Years"], ["1K+", "Projects"], ["500+", "Clients"], ["100%", "Reliable"]].map(([v, l], i) => (
+          <div key={l} className={`p-8 text-center ${i < 3 ? "md:border-r border-white/5" : ""} ${i === 1 ? "border-r border-white/5 md:border-r-0" : ""}`}>
+            <p className="text-orange-400 text-3xl font-black mb-1">{v}</p>
+            <p className="text-white/30 text-[9px] font-bold uppercase tracking-widest">{l}</p>
           </div>
-        </div>
+        ))}
       </div>
 
-      {/* Services grid */}
-      <div style={{ padding: "40px 28px", background: "#f9fafb" }}>
-        <p style={{ color: "#ed8936", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", margin: "0 0 8px" }}>WHAT WE DO</p>
-        <h2 style={{ color: "#111827", fontSize: 22, fontWeight: 800, margin: "0 0 6px", letterSpacing: "-0.02em" }}>Our Services</h2>
-        <p style={{ color: "#9ca3af", fontSize: 13, margin: "0 0 24px" }}>Four areas of creative excellence since 1999</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
+      <div className="p-8 md:p-16 bg-slate-50">
+        <div className="mb-12">
+          <p className="text-orange-500 text-[10px] font-black tracking-widest mb-4 uppercase">Capabilities</p>
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter">Our Services</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map(s => (
-            <div key={s.title} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 14, padding: 18, cursor: "pointer" }}>
-              <div style={{ fontSize: 28, marginBottom: 12 }}>{s.icon}</div>
-              <p style={{ color: "#111827", fontSize: 13, fontWeight: 700, margin: "0 0 6px" }}>{s.title}</p>
-              <p style={{ color: "#9ca3af", fontSize: 11, lineHeight: 1.6, margin: 0 }}>{s.desc}</p>
-              <span style={{ color: "#ed8936", fontSize: 11, fontWeight: 600, display: "block", marginTop: 10 }}>Learn more →</span>
+            <div key={s.title} className="bg-white border border-slate-100 p-8 rounded-[32px] hover:shadow-xl transition-shadow">
+              <div className="text-4xl mb-6">{s.icon}</div>
+              <p className="text-slate-900 font-black text-lg mb-3 uppercase leading-tight">{s.title}</p>
+              <p className="text-slate-400 text-xs leading-relaxed font-medium mb-6">{s.desc}</p>
+              <span className="text-orange-500 text-[10px] font-bold uppercase tracking-widest">Learn More →</span>
             </div>
           ))}
         </div>
@@ -127,37 +84,19 @@ function Landing() {
 
 function Services() {
   return (
-    <div style={{ background: "#fff", minHeight: "100%", fontFamily: "system-ui, sans-serif", padding: 28 }}>
-      <p style={{ color: "#ed8936", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", margin: "0 0 8px" }}>WHAT WE DO</p>
-      <h2 style={{ color: "#111827", fontSize: 26, fontWeight: 800, letterSpacing: "-0.02em", margin: "0 0 4px" }}>Our Services</h2>
-      <p style={{ color: "#9ca3af", fontSize: 13, margin: "0 0 28px" }}>Four areas of creative excellence since 1999</p>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: 20, marginBottom: 32 }}>
+    <div className="bg-white min-h-full font-sans p-8 md:p-12">
+      <p className="text-orange-500 text-[10px] font-black tracking-widest mb-4 uppercase">What we do</p>
+      <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-12 uppercase tracking-tighter">Our Services</h2>
+      
+      <div className="space-y-4">
         {services.map(s => (
-          <div key={s.title} style={{ display: "flex", gap: 20, padding: 20, background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 14, alignItems: "flex-start" }}>
-            <div style={{ width: 56, height: 56, borderRadius: 14, background: "rgba(237,137,54,0.1)", border: "1px solid rgba(237,137,54,0.2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 26 }}>{s.icon}</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                <h3 style={{ color: "#111827", fontSize: 16, fontWeight: 700, margin: 0 }}>{s.title}</h3>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#ed8936" }} />
-              </div>
-              <p style={{ color: "#6b7280", fontSize: 13, lineHeight: 1.7, margin: 0 }}>{s.desc}</p>
+          <div key={s.title} className="bg-slate-50 border border-slate-100 p-8 rounded-3xl flex flex-col md:flex-row items-center gap-8 group">
+            <div className="w-16 h-16 bg-orange-500/10 border border-orange-500/20 rounded-2xl flex items-center justify-center text-3xl shrink-0 group-hover:bg-orange-500 group-hover:text-white transition-all">{s.icon}</div>
+            <div className="flex-1 text-center md:text-left">
+              <p className="text-slate-900 font-black text-xl mb-2 leading-tight">{s.title}</p>
+              <p className="text-slate-400 text-sm leading-relaxed">{s.desc}</p>
             </div>
-            <button style={{ color: "#ed8936", background: "none", border: "none", fontSize: 12, fontWeight: 600, cursor: "pointer", padding: 0, flexShrink: 0, marginTop: 4 }}>
-              Enquire →
-            </button>
-          </div>
-        ))}
-      </div>
-
-      {/* Portfolio preview */}
-      <p style={{ color: "#9ca3af", fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", margin: "0 0 14px" }}>RECENT WORK</p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-        {portfolio.slice(0, 6).map(p => (
-          <div key={p.client} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 10, padding: 14 }}>
-            <div style={{ height: 60, background: "rgba(237,137,54,0.06)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 10, fontSize: 24 }}>🎨</div>
-            <p style={{ color: "#111827", fontSize: 11, fontWeight: 700, margin: "0 0 3px" }}>{p.client}</p>
-            <p style={{ color: "#9ca3af", fontSize: 10, margin: 0 }}>{p.type} · {p.year}</p>
+            <button className="text-orange-500 font-black text-xs uppercase tracking-widest shrink-0">Enquire →</button>
           </div>
         ))}
       </div>
@@ -166,78 +105,52 @@ function Services() {
 }
 
 function College() {
-  const advantages = [
-    "SHS Visual Arts support",
-    "Hands-on Graphic Design",
-    "Master Industrial Printing Machines",
-    "Entrepreneurship Coaching",
-    "Real Client Projects",
-  ];
   return (
-    <div style={{ background: "#fff", minHeight: "100%", fontFamily: "system-ui, sans-serif" }}>
-      {/* Hero banner */}
-      <div style={{ background: "linear-gradient(135deg, #1a365d 0%, #1e3a5f 60%, #2d4a7a 100%)", padding: "48px 28px", textAlign: "center" }}>
-        <p style={{ color: "#ed8936", fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", margin: "0 0 14px" }}>MAGILO ART COLLEGE</p>
-        <h2 style={{ color: "#fff", fontSize: 30, fontWeight: 900, letterSpacing: "-0.02em", margin: "0 0 12px", lineHeight: 1.2 }}>Learn Where the Industry Happens</h2>
-        <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 14, margin: 0 }}>Adenta's creative education hub since 1999</p>
+    <div className="bg-white min-h-full font-sans">
+      <div className="bg-slate-900 px-6 py-12 md:px-12 md:py-20 text-center">
+        <p className="text-orange-500 text-[10px] font-black tracking-widest mb-4 uppercase">Creative Education</p>
+        <h2 className="text-3xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter leading-none">Learn where the<br />industry happens</h2>
+        <p className="text-white/40 text-sm md:text-lg max-w-xl mx-auto">Adenta's creative education hub since 1999. Real clients. Real machines.</p>
       </div>
 
-      <div style={{ padding: "32px 28px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, marginBottom: 32, position: "relative" }}>
-          {/* Left: Why Choose */}
-          <div>
-            <p style={{ color: "#374151", fontSize: 14, fontWeight: 700, margin: "0 0 18px" }}>Why Choose Magilo?</p>
-            {advantages.map(a => (
-              <div key={a} style={{ display: "flex", gap: 10, marginBottom: 14, alignItems: "flex-start" }}>
-                <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#ed8936", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
-                  <span style={{ color: "#fff", fontSize: 10 }}>✓</span>
-                </div>
-                <span style={{ color: "#374151", fontSize: 13, lineHeight: 1.5 }}>{a}</span>
+      <div className="p-8 md:p-12 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="space-y-8">
+            <p className="text-slate-900 font-black text-xl uppercase tracking-tighter">Why Choose Magilo?</p>
+            {["SHS Visual Arts support", "Hands-on Graphic Design", "Industrial printing experience", "Entrepreneurship coaching"].map(a => (
+              <div key={a} className="flex gap-4 items-center">
+                <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold">✓</div>
+                <span className="text-slate-600 text-sm font-medium">{a}</span>
               </div>
             ))}
-
-            {/* Highlight card */}
-            <div style={{ marginTop: 24, background: "rgba(237,137,54,0.08)", border: "1px solid rgba(237,137,54,0.25)", borderRadius: 12, padding: "16px 18px", display: "flex", alignItems: "center", gap: 14 }}>
-              <div style={{ width: 44, height: 44, borderRadius: 10, background: "#ed8936", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <span style={{ color: "#fff", fontSize: 20, fontWeight: 900 }}>4</span>
-              </div>
-              <div>
-                <p style={{ color: "#111827", fontSize: 13, fontWeight: 700, margin: "0 0 2px" }}>4 Specialized Courses</p>
-                <p style={{ color: "#9ca3af", fontSize: 11, margin: 0 }}>From SHS support to professional branding</p>
-              </div>
+            <div className="bg-orange-50 p-6 rounded-2xl flex items-center gap-6 border border-orange-100">
+              <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center text-white font-black text-xl">4</div>
+              <p className="text-orange-900 font-black text-sm uppercase leading-tight">Specialized Courses Available</p>
             </div>
           </div>
-
-          {/* Right: Programmes */}
-          <div>
-            <p style={{ color: "#374151", fontSize: 14, fontWeight: 700, margin: "0 0 16px" }}>Programmes Offered</p>
+          <div className="space-y-4">
+            <p className="text-slate-900 font-black text-xl uppercase tracking-tighter">Programmes</p>
             {[
-              { name: "SHS Visual Arts Support", duration: "Academic year", format: "In-person" },
-              { name: "Graphic Design (Professional)", duration: "6 months", format: "In-person" },
-              { name: "Desktop Publishing", duration: "3 months", format: "In-person" },
-              { name: "Business Branding Masterclass", duration: "4 weeks", format: "In-person" },
+              { n: "SHS Visual Arts Support", d: "Academic Year" },
+              { n: "Graphic Design (Pro)", d: "6 Months" },
+              { n: "Desktop Publishing", d: "3 Months" },
+              { n: "Branding Masterclass", d: "4 Weeks" }
             ].map(p => (
-              <div key={p.name} style={{ background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 10, padding: 14, marginBottom: 10 }}>
-                <p style={{ color: "#111827", fontSize: 13, fontWeight: 600, margin: "0 0 4px" }}>{p.name}</p>
-                <p style={{ color: "#9ca3af", fontSize: 11, margin: 0 }}>{p.duration} · {p.format}</p>
+              <div key={p.n} className="bg-slate-50 border border-slate-100 p-6 rounded-2xl">
+                <p className="text-slate-900 font-black text-sm mb-1 uppercase leading-tight">{p.n}</p>
+                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">{p.d}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* CTA section */}
-        <div style={{ background: "#1a365d", borderRadius: 14, padding: "24px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div className="mt-16 bg-slate-900 p-8 md:p-12 rounded-[40px] flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
           <div>
-            <h3 style={{ color: "#fff", fontSize: 18, fontWeight: 700, margin: "0 0 6px" }}>Ready to create something great?</h3>
-            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 13, margin: 0 }}>Find us in Adenta, Accra · Open Mon–Sat</p>
+            <h3 className="text-2xl font-black text-white uppercase mb-2">Ready to create?</h3>
+            <p className="text-white/40 text-xs font-medium uppercase tracking-widest">Adenta, Accra • Open Mon–Sat</p>
           </div>
-          <div style={{ display: "flex", gap: 10 }}>
-            <button style={{ background: "transparent", color: "#ed8936", padding: "11px 22px", border: "1px solid #ed8936", borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
-              Get Directions
-            </button>
-            <button style={{ background: "#ed8936", color: "#fff", padding: "11px 22px", border: "none", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
-              Enrol Today
-            </button>
+          <div className="flex gap-4">
+            <button className="bg-orange-500 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest">Enrol Today</button>
           </div>
         </div>
       </div>

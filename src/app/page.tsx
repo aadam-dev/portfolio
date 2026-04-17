@@ -334,7 +334,7 @@ export default function Home() {
               Selected Work.
             </h2>
             <p className="text-base" style={{ color: "rgba(255,255,255,0.4)" }}>
-              A curated selection of premium digital products spanning EdTech, FinTech, and Enterprise ecosystems. Explore a legacy of high-performance deployments through interactive previews.
+              A curated selection from over 70+ premium digital products spanning EdTech, FinTech, and Enterprise ecosystems. Explore a legacy of high-performance deployments through interactive previews.
             </p>
           </div>
 
