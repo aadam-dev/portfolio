@@ -46,6 +46,7 @@ export const projects: Project[] = [
     id: "koyi",
     name: "Kōyi",
     tagline: "Online Learning Platform",
+    imagePath: "/images/projects/koyi.png",
     description:
       "LMS built for Ghana and West Africa — WASSCE, BECE, university bridging, and career courses. Multilingual (EN/FR/AR), video streaming, certificates, and role-based access.",
     role: "Product strategist & full‑stack developer",
@@ -65,6 +66,51 @@ export const projects: Project[] = [
       { id: "lesson", label: "Lesson" },
       { id: "dashboard", label: "Dashboard" },
     ],
+  },
+  {
+    id: "siif",
+    name: "SIIF",
+    tagline: "Savannah Institute for Innovative Finance",
+    imagePath: "/images/projects/siif.png",
+    description:
+      "Institutional finance platform focused on emerging market capital. Bridging institutional rigor with high-growth innovation in West Africa.",
+    role: "Lead Interface Engineer",
+    impact: [
+      "Designed the institutional narrative and visual identity for SIIF.",
+      "Built a high-fidelity academy and intelligence portal for investors.",
+    ],
+    category: "community",
+    categoryLabel: "Finance · Intelligence",
+    stack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Supabase"],
+    accentColor: "#C59E47",
+    accentGlow: "rgba(197, 158, 71, 0.15)",
+    featured: true,
+    screens: [
+      { id: "landing", label: "Home" },
+      { id: "academy", label: "Academy" },
+      { id: "intelligence", label: "Intelligence" },
+    ],
+  },
+  {
+    id: "chalesocks",
+    name: "Chale Socks",
+    tagline: "Premium Afro-Luxury E-Commerce",
+    imagePath: "/images/projects/chalesocks.png",
+    description:
+      "The global home for Chale Socks — transforming an African gift brand into an international luxury staple through immersive storytelling and high-fidelity UX.",
+    role: "Lead Fullstack & Design",
+    category: "fashion",
+    categoryLabel: "Fashion · Luxury",
+    stack: ["Next.js 15", "Tailwind CSS", "Framer Motion", "Sanity CMS", "Shopify"],
+    accentColor: "#EAB308",
+    accentGlow: "rgba(234, 179, 8, 0.15)",
+    featured: true,
+    screens: [
+      { id: "landing", label: "Home" },
+      { id: "story", label: "The Story" },
+    ],
+    liveBaseUrl: "https://chalesocks.vercel.app",
+    liveScreenPaths: { landing: "/", story: "/#our-story" },
   },
   {
     id: "primehub",
@@ -93,6 +139,26 @@ export const projects: Project[] = [
     liveScreenPaths: { landing: "/", products: "/products", quote: "/quote" },
   },
   {
+    id: "redrow",
+    name: "Redrow Minimart",
+    tagline: "Premium Daily Essentials",
+    imagePath: "/images/projects/redrow.png",
+    description:
+      "A clean, modern digital storefront for a premium community minimart. Focused on fast discovery, 15-25 minute delivery estimations, and a curated selection of daily essentials.",
+    role: "Lead Fullstack & Branding",
+    category: "ecommerce",
+    categoryLabel: "E-Commerce · Retail",
+    stack: ["Next.js 15", "TypeScript", "Tailwind CSS", "Framer Motion", "Supabase"],
+    accentColor: "#059669",
+    accentGlow: "rgba(5, 150, 105, 0.15)",
+    featured: true,
+    screens: [
+      { id: "landing", label: "Home" },
+      { id: "shop", label: "Shop" },
+    ],
+  },
+/*
+  {
     id: "ethika",
     name: "Ethika Finance",
     tagline: "Non-Interest Banking Hub",
@@ -118,6 +184,7 @@ export const projects: Project[] = [
     liveBaseUrl: "https://ethika.vercel.app",
     liveScreenPaths: { landing: "/", comparison: "/comparison", vault: "/vault" },
   },
+*/
   {
     id: "anisfoods",
     name: "Anis Food & Drink",
@@ -145,6 +212,7 @@ export const projects: Project[] = [
     liveBaseUrl: "https://aniseatery.netlify.app",
     liveScreenPaths: { landing: "/", pos: "/", dashboard: "/", reports: "/" },
   },
+/*
   {
     id: "rentcheck",
     name: "Rentcheck Ghana",
@@ -168,6 +236,7 @@ export const projects: Project[] = [
       { id: "detail", label: "Property" },
     ],
   },
+*/
   // {
   //   id: "lenus",
   //   name: "Lenus Pharmacy",
@@ -296,6 +365,7 @@ export const projects: Project[] = [
     liveBaseUrl: "https://pronaj.vercel.app",
     liveScreenPaths: { landing: "/", sectors: "/sectors", contact: "/contact" },
   },
+/*
   {
     id: "makossa",
     name: "Makossa Shop",
@@ -319,6 +389,7 @@ export const projects: Project[] = [
       { id: "reports", label: "Reports" },
     ],
   },
+*/
   {
     id: "rockmotion",
     name: "Rockmotion Auto Group",
@@ -346,6 +417,7 @@ export const projects: Project[] = [
     liveBaseUrl: "https://rockmotion.vercel.app",
     liveScreenPaths: { landing: "/", inventory: "/inventory", process: "/process" },
   },
+/*
   {
     id: "gaskiya",
     name: "Gaskiya",
@@ -369,6 +441,8 @@ export const projects: Project[] = [
       { id: "product", label: "Product" },
     ],
   },
+*/
+/*
   {
     id: "thepalms",
     name: "The Palms by Eagles",
@@ -392,6 +466,7 @@ export const projects: Project[] = [
       { id: "amenities", label: "Amenities" },
     ],
   },
+*/
   {
     id: "magilo",
     name: "Magilo Art College",

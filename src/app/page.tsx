@@ -334,7 +334,7 @@ export default function Home() {
               Selected Work.
             </h2>
             <p className="text-base" style={{ color: "rgba(255,255,255,0.4)" }}>
-              {filteredSelected.length} projects spanning EdTech, Finance, and Enterprise tools. Click to explore interactive previews or view live sites.
+              A curated selection of premium digital products spanning EdTech, FinTech, and Enterprise ecosystems. Explore a legacy of high-performance deployments through interactive previews.
             </p>
           </div>
 
