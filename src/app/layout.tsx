@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,22 +8,70 @@ const inter = Inter({
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-serif",
   display: "swap",
 });
 
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
+
+const SITE_URL = "https://aadam.dev";
+
 export const metadata: Metadata = {
-  title: "Aadam — Analyst & Full-Stack Developer",
-  description:
-    "Portfolio of a multi-disciplinary builder: investment and business analysis, data analysis, business development, and software engineering. 20+ production apps shipped across Africa and West Africa.",
-  keywords: ["analyst", "developer", "full-stack", "investment analysis", "business analysis", "data analysis", "portfolio", "Next.js", "TypeScript", "Africa", "West Africa", "fintech", "edtech"],
-  openGraph: {
-    title: "Aadam — Analyst & Full-Stack Developer",
-    description: "Investment & business analysis, data analysis, business development, software engineering. 20+ production apps. 50+ SMEs evaluated.",
-    type: "website",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Aadam — Studio for product, data & engineering",
+    template: "%s · Aadam",
   },
+  description:
+    "Independent studio designing and shipping premium digital products across EdTech, FinTech, PropTech and e-commerce. 20+ production apps. 50+ SMEs evaluated. Based in Accra, available globally.",
+  keywords: [
+    "product studio",
+    "full-stack developer",
+    "investment analyst",
+    "data strategy",
+    "Next.js",
+    "TypeScript",
+    "Africa",
+    "Ghana",
+    "fintech",
+    "edtech",
+  ],
+  authors: [{ name: "Aadam" }],
+  creator: "Aadam",
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "Aadam",
+    title: "Aadam — Studio for product, data & engineering",
+    description:
+      "20+ production apps. 50+ SMEs evaluated. Independent studio building premium digital products.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Aadam — Studio for product, data & engineering",
+    description:
+      "20+ production apps. 50+ SMEs evaluated. Independent studio building premium digital products.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#08080C",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
@@ -32,8 +80,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body className="noise antialiased">{children}</body>
+    <html
+      lang="en"
+      className={`${inter.variable} ${instrumentSerif.variable} ${jetBrainsMono.variable}`}
+    >
+      <body className="antialiased">
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

@@ -19,13 +19,35 @@ export interface ProjectScreen {
   label: string;
 }
 
+export interface ProjectOutcome {
+  value: string;
+  label: string;
+}
+
+export interface ProjectTestimonial {
+  quote: string;
+  author: string;
+  role: string;
+  org?: string;
+}
+
 export interface Project {
   id: string;
+  /** URL slug for /work/[slug]. Defaults to id. */
+  slug?: string;
   name: string;
   tagline: string;
   description: string;
   role?: string;
+  /** Year / year-range, used for the editorial index line. */
+  year?: string;
+  /** Location / region, used for the editorial index line. */
+  location?: string;
+  /** Short services tag list used in case study. */
+  services?: string[];
   impact?: string[];
+  outcomes?: ProjectOutcome[];
+  testimonial?: ProjectTestimonial;
   category: ProjectCategory;
   categoryLabel: string;
   stack: string[];
@@ -35,10 +57,18 @@ export interface Project {
   featured?: boolean;
   isLead?: boolean;
   imagePath?: string;
-  /** When set, modal shows a Simulated ↔ Live toggle and can iframe the real site. */
+  /** When set, the case study exposes a Live site tab that iframes the real project. */
   liveBaseUrl?: string;
   /** Map screen id → path (e.g. landing → "/", courses → "/courses"). Used with liveBaseUrl. */
   liveScreenPaths?: Record<string, string>;
+}
+
+export function projectSlug(p: Project): string {
+  return p.slug ?? p.id;
+}
+
+export function findProject(slug: string): Project | undefined {
+  return projects.find((p) => projectSlug(p) === slug);
 }
 
 export const projects: Project[] = [
@@ -47,12 +77,20 @@ export const projects: Project[] = [
     name: "Kōyi",
     tagline: "Online Learning Platform",
     imagePath: "/images/projects/koyi.png",
+    year: "2024",
+    location: "Ghana · West Africa",
+    services: ["Product strategy", "Information architecture", "Full-stack engineering"],
     description:
       "LMS built for Ghana and West Africa — WASSCE, BECE, university bridging, and career courses. Multilingual (EN/FR/AR), video streaming, certificates, and role-based access.",
     role: "Product strategist & full‑stack developer",
     impact: [
       "Designed the academic pathways and course structure with Ghanaian teachers.",
       "Prototyped the full LMS flows end‑to‑end (student, tutor, admin).",
+    ],
+    outcomes: [
+      { value: "420+", label: "Courses mapped" },
+      { value: "3", label: "Languages" },
+      { value: "4", label: "Pathways" },
     ],
     category: "edtech",
     categoryLabel: "EdTech · LMS",
@@ -72,12 +110,19 @@ export const projects: Project[] = [
     name: "SIIF",
     tagline: "Savannah Institute for Innovative Finance",
     imagePath: "/images/projects/siif.png",
+    year: "2025",
+    location: "West Africa · Institutional",
+    services: ["Brand identity", "Editorial design", "Front-end engineering"],
     description:
       "Institutional finance platform focused on emerging market capital. Bridging institutional rigor with high-growth innovation in West Africa.",
     role: "Lead Interface Engineer",
     impact: [
       "Designed the institutional narrative and visual identity for SIIF.",
       "Built a high-fidelity academy and intelligence portal for investors.",
+    ],
+    outcomes: [
+      { value: "3", label: "Portals shipped" },
+      { value: "100%", label: "Custom identity" },
     ],
     category: "community",
     categoryLabel: "Finance · Intelligence",
@@ -96,9 +141,16 @@ export const projects: Project[] = [
     name: "Chale Socks",
     tagline: "Premium Afro-Luxury E-Commerce",
     imagePath: "/images/projects/chalesocks.png",
+    year: "2025",
+    location: "Global",
+    services: ["Brand positioning", "Front-end engineering", "Commerce design"],
     description:
       "The global home for Chale Socks — transforming an African gift brand into an international luxury staple through immersive storytelling and high-fidelity UX.",
     role: "Lead Fullstack & Design",
+    outcomes: [
+      { value: "1", label: "Global rollout" },
+      { value: "Luxury", label: "Positioning" },
+    ],
     category: "fashion",
     categoryLabel: "Fashion · Luxury",
     stack: ["Next.js 15", "Tailwind CSS", "Framer Motion", "Sanity CMS", "Shopify"],
@@ -117,12 +169,19 @@ export const projects: Project[] = [
     name: "PrimeHub",
     tagline: "B2B Building Materials Platform",
     imagePath: "/images/projects/primehub.png",
+    year: "2025",
+    location: "Ghana · B2B",
+    services: ["Product architecture", "Workflow design", "Full-stack engineering"],
     description:
       "Procurement command center for Ghanaian contractors. Source building materials, generate proformas, manage approvals, and track deliveries — all in one platform.",
     role: "Product, architecture & procurement workflows",
     impact: [
       "Modelled approval and proforma flows around how contractors actually work on site.",
       "Designed inventory cards and quote builder for fast estimation during client calls.",
+    ],
+    outcomes: [
+      { value: "1", label: "Procurement OS" },
+      { value: "3", label: "Core workflows" },
     ],
     category: "ecommerce",
     categoryLabel: "E-Commerce · B2B",
@@ -143,6 +202,13 @@ export const projects: Project[] = [
     name: "Redrow Minimart",
     tagline: "Premium Daily Essentials",
     imagePath: "/images/projects/redrow.png",
+    year: "2025",
+    location: "Ghana",
+    services: ["Brand direction", "Full-stack engineering"],
+    outcomes: [
+      { value: "15–25min", label: "Delivery promise" },
+      { value: "1", label: "Curated storefront" },
+    ],
     description:
       "A clean, modern digital storefront for a premium community minimart. Focused on fast discovery, 15-25 minute delivery estimations, and a curated selection of daily essentials.",
     role: "Lead Fullstack & Branding",
@@ -190,6 +256,13 @@ export const projects: Project[] = [
     name: "Anis Food & Drink",
     tagline: "Ghanaian Restaurant — POS & Back Office",
     imagePath: "/images/projects/anisfoods.jpg",
+    year: "2024",
+    location: "Accra · Ghana",
+    services: ["Systems design", "POS & back-office", "Financial reporting"],
+    outcomes: [
+      { value: "4", label: "Integrated surfaces" },
+      { value: "P&L", label: "Real-time reporting" },
+    ],
     description:
       "Public website, cashier POS, and full back-office suite for an Accra restaurant. Real-time orders, financial reports (P&L, cash flow, payroll), multi-role access.",
     role: "Systems designer & full‑stack implementer",
@@ -265,6 +338,13 @@ export const projects: Project[] = [
     name: "Lady Angel Network",
     tagline: "Private Investment Network for Women",
     imagePath: "/images/projects/ladyangel.png",
+    year: "2025",
+    location: "Pan-Africa",
+    services: ["Investment workflow", "Deal-flow UX", "Front-end"],
+    outcomes: [
+      { value: "5", label: "Investment models" },
+      { value: "1", label: "Private network" },
+    ],
     description:
       "Invitation-only platform for women deploying capital into women-led ventures. Structured deal flow pipeline, 5 investment models, mentorship bootcamps, and a Pan-African portfolio.",
     role: "Investment workflow designer & front‑end",
@@ -291,6 +371,13 @@ export const projects: Project[] = [
     name: "Jireh Natural Foods",
     tagline: "Restaurant Website & Ordering Experience",
     imagePath: "/images/projects/jireh.jpg",
+    year: "2024",
+    location: "Accra · Ghana",
+    services: ["Conversion UX", "Front-end", "Ordering journeys"],
+    outcomes: [
+      { value: "4", label: "Order channels" },
+      { value: "1", label: "Menu narrative" },
+    ],
     description:
       "Modern restaurant web experience for Jireh Natural Foods in Accra, blending menu discovery, direct ordering channels, and strong social proof for daily customers.",
     role: "Product design, front-end build & conversion UX",
@@ -317,6 +404,13 @@ export const projects: Project[] = [
     name: "Madina Basketball",
     tagline: "Community Court Platform",
     imagePath: "/images/projects/madinabasketball.png",
+    year: "2024",
+    location: "Madina · Ghana",
+    services: ["Community ops", "Transparency dashboards", "Full-stack"],
+    outcomes: [
+      { value: "GHS 40K+", label: "Raised" },
+      { value: "1", label: "Solar-powered court" },
+    ],
     description:
       "Libya Quarters' solar-powered basketball court hub — event management, player registration, court booking, transparency reports, and team highlights for Zurak Basketball & Madina Old Gees.",
     role: "Community organiser, co‑lead & builder",
@@ -344,6 +438,13 @@ export const projects: Project[] = [
     name: "ProNaj International",
     tagline: "Multi-Sector Conglomerate",
     imagePath: "/images/projects/pronaj.png",
+    year: "2024",
+    location: "Delaware · Ghana",
+    services: ["Brand system", "Editorial web", "Narrative design"],
+    outcomes: [
+      { value: "3", label: "Sectors" },
+      { value: "25+", label: "Markets" },
+    ],
     description:
       "Delaware–Ghana conglomerate spanning Digital (IT services), Living (modular housing), and Global (agri-trade & export). 3 sectors, 2 continents, 25+ markets.",
     role: "Brand system & web experience",
@@ -395,6 +496,13 @@ export const projects: Project[] = [
     name: "Rockmotion Auto Group",
     tagline: "US Automotive Export Platform",
     imagePath: "/images/projects/rockmotion.png",
+    year: "2025",
+    location: "Atlanta → 40+ countries",
+    services: ["Brand identity", "UX", "Full-stack engineering"],
+    outcomes: [
+      { value: "40+", label: "Countries served" },
+      { value: "1", label: "Global export flow" },
+    ],
     description:
       "Licensed US car dealer & broker — sources, verifies, and ships any American vehicle to 40+ countries. VIN history, crash analysis, port loading with marine insurance, and real-time tracking.",
     role: "Brand identity, UX & full‑stack build",
@@ -472,6 +580,13 @@ export const projects: Project[] = [
     name: "Magilo Art College",
     tagline: "Art School, Design & Printing Hub",
     imagePath: "/images/projects/magilo.png",
+    year: "2024",
+    location: "Adenta · Accra",
+    services: ["Storytelling", "Information design", "Front-end"],
+    outcomes: [
+      { value: "1000+", label: "Projects surfaced" },
+      { value: "25yr+", label: "Legacy reframed" },
+    ],
     description:
       "25+ years of creative excellence in Adenta, Accra. SHS Visual Arts support, graphic design training, industrial printing, business consulting. 1000+ projects, 500+ clients.",
     role: "Storytelling & information design",

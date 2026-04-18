@@ -1,7 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { X, Minus, Maximize2, ChevronLeft, ChevronRight, RotateCcw, Lock } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Lock,
+  RotateCcw,
+} from "lucide-react";
 import { Project } from "@/lib/projects";
 
 interface BrowserMockupProps {
@@ -9,6 +13,8 @@ interface BrowserMockupProps {
   activeScreen: string;
   onScreenChange: (screen: string) => void;
   children: React.ReactNode;
+  /** Hide the simulated address bar for a tighter live-site framing. */
+  compact?: boolean;
 }
 
 const urlMap: Record<string, Record<string, string>> = {
@@ -96,102 +102,129 @@ export default function BrowserMockup({
   activeScreen,
   onScreenChange,
   children,
+  compact,
 }: BrowserMockupProps) {
-  const [historyIndex, setHistoryIndex] = useState(0);
   const screens = project.screens;
   const currentIndex = screens.findIndex((s) => s.id === activeScreen);
-  const url = urlMap[project.id]?.[activeScreen] ?? project.id + ".com";
+  const url = urlMap[project.id]?.[activeScreen] ?? `${project.id}.com`;
 
-  const handleBack = () => {
-    if (currentIndex > 0) {
-      onScreenChange(screens[currentIndex - 1].id);
-    }
+  const goPrev = () => {
+    if (currentIndex > 0) onScreenChange(screens[currentIndex - 1].id);
   };
-
-  const handleForward = () => {
-    if (currentIndex < screens.length - 1) {
+  const goNext = () => {
+    if (currentIndex < screens.length - 1)
       onScreenChange(screens[currentIndex + 1].id);
-    }
   };
 
   return (
-    <div className="flex flex-col h-full rounded-2xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] relative"
-      style={{ border: "1px solid rgba(255,255,255,0.06)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 20px 60px -15px rgba(0,0,0,0.8)" }}>
-      {/* Title bar */}
-      <div className="flex-shrink-0 flex items-center justify-between gap-2 px-3 py-2 md:px-4 md:py-3"
-        style={{ background: "linear-gradient(180deg, #1A1A2E 0%, #131322 100%)", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-        
-        <div className="flex items-center gap-4 w-auto md:w-1/4">
-          {/* Traffic lights - hidden on mobile */}
-          <div className="hidden md:flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[#FF5F57] hover:opacity-80 cursor-pointer transition-opacity flex items-center justify-center group shadow-inner">
-              <X className="w-2 h-2 text-[#8B1F1A] opacity-0 group-hover:opacity-100" />
-            </div>
-            <div className="w-3 h-3 rounded-full bg-[#FEBC2E] hover:opacity-80 cursor-pointer transition-opacity flex items-center justify-center group shadow-inner">
-              <Minus className="w-2 h-2 text-[#8B6B00] opacity-0 group-hover:opacity-100" />
-            </div>
-            <div className="w-3 h-3 rounded-full bg-[#28C840] hover:opacity-80 cursor-pointer transition-opacity flex items-center justify-center group shadow-inner">
-              <Maximize2 className="w-2 h-2 text-[#115A1B] opacity-0 group-hover:opacity-100" />
-            </div>
-          </div>
-
-          {/* Nav buttons */}
-          <div className="hidden md:flex items-center gap-1">
-            <button
-              onClick={handleBack}
-              disabled={currentIndex === 0}
-              className="p-1 rounded-md transition-all hover:bg-white/5 disabled:opacity-30 disabled:hover:bg-transparent"
-              style={{ color: "#8585A8" }}
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              onClick={handleForward}
-              disabled={currentIndex === screens.length - 1}
-              className="p-1 rounded-md transition-all hover:bg-white/5 disabled:opacity-30 disabled:hover:bg-transparent"
-              style={{ color: "#8585A8" }}
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-            <button className="p-1 rounded-md transition-all hover:bg-white/5 opacity-50" style={{ color: "#8585A8" }}>
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-          </div>
+    <div
+      className="flex flex-col h-full w-full overflow-hidden"
+      style={{ background: "#050507" }}
+    >
+      {/* Chrome bar */}
+      <div
+        className="flex-shrink-0 flex items-center gap-3 px-3 md:px-4 py-2 md:py-2.5"
+        style={{
+          background: "linear-gradient(180deg, #14141c 0%, #0d0d14 100%)",
+          borderBottom: "1px solid rgba(255,255,255,0.05)",
+        }}
+      >
+        {/* Traffic lights */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]" />
         </div>
 
-        <div className="flex-1 max-w-lg flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 rounded-lg text-[10px] md:text-[11px] shadow-inner transition-colors hover:bg-[#0b0b14]"
-          style={{ background: "#08080C", border: "1px solid rgba(255,255,255,0.03)", color: "rgba(255,255,255,0.4)" }}>
-          <Lock className="w-2.5 h-2.5 md:w-3 md:h-3 flex-shrink-0" style={{ color: "#10B981" }} />
-          <span className="truncate font-mono tracking-wide">{url}</span>
+        {/* Nav buttons (desktop only) */}
+        <div className="hidden md:flex items-center gap-0.5 shrink-0">
+          <button
+            type="button"
+            onClick={goPrev}
+            disabled={currentIndex <= 0}
+            aria-label="Previous screen"
+            className="p-1.5 rounded-md text-[var(--ink-3)] transition-all hover:bg-white/5 disabled:opacity-30 disabled:hover:bg-transparent"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={goNext}
+            disabled={currentIndex >= screens.length - 1}
+            aria-label="Next screen"
+            className="p-1.5 rounded-md text-[var(--ink-3)] transition-all hover:bg-white/5 disabled:opacity-30 disabled:hover:bg-transparent"
+          >
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            className="p-1.5 rounded-md text-[var(--ink-4)] opacity-50"
+            aria-hidden="true"
+            tabIndex={-1}
+          >
+            <RotateCcw className="w-3 h-3" />
+          </button>
         </div>
 
-        {/* Tabs - Aligned Right */}
-        <div className="hidden lg:flex items-center justify-end gap-1.5 w-auto md:w-1/4">
-          <div className="bg-[#0A0A0F] rounded-lg p-0.5 border border-white/5 shadow-inner">
-            {screens.map((screen) => (
-              <button
-                key={screen.id}
-                onClick={() => onScreenChange(screen.id)}
-                className="flex-shrink-0 px-3 py-1 rounded-md text-[10px] uppercase font-bold tracking-wider transition-all duration-300"
-                style={{
-                  background: activeScreen === screen.id
-                    ? `${project.accentColor}1A`
-                    : "transparent",
-                  color: activeScreen === screen.id
-                    ? project.accentColor
-                    : "rgba(255,255,255,0.3)",
-                  boxShadow: activeScreen === screen.id ? "0 1px 3px rgba(0,0,0,0.5)" : "none"
-                }}
-              >
-                {screen.label}
-              </button>
-            ))}
-          </div>
+        {/* URL bar */}
+        <div
+          className="flex-1 min-w-0 flex items-center justify-center gap-1.5 md:gap-2 px-3 py-1 rounded-md text-[10px] md:text-[11px]"
+          style={{
+            background: "rgba(0,0,0,0.35)",
+            border: "1px solid rgba(255,255,255,0.04)",
+            color: "rgba(255,255,255,0.45)",
+          }}
+        >
+          <Lock
+            className="w-2.5 h-2.5 md:w-3 md:h-3 shrink-0"
+            style={{ color: "#10B981" }}
+          />
+          <span className="truncate font-mono">{url}</span>
         </div>
+
+        <div className="w-[44px] md:w-[72px] shrink-0" aria-hidden="true" />
       </div>
 
-      {/* Content area */}
-      <div className="flex-1 overflow-y-auto preview-scroll relative bg-[#050505]">
+      {/* Screen tab strip — visible on all sizes, horizontally scrollable on small */}
+      {!compact && screens.length > 1 && (
+        <div
+          className="flex-shrink-0 border-b border-[rgba(255,255,255,0.05)] overflow-x-auto scrollbar-none"
+          role="tablist"
+          aria-label="Screens"
+        >
+          <div className="flex items-center gap-1 px-2 py-1.5 w-max min-w-full">
+            {screens.map((screen) => {
+              const active = activeScreen === screen.id;
+              return (
+                <button
+                  key={screen.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => onScreenChange(screen.id)}
+                  className="px-3 py-1.5 rounded-md text-[10px] md:text-[11px] uppercase font-mono tracking-[0.16em] transition-colors whitespace-nowrap"
+                  style={{
+                    background: active
+                      ? `${project.accentColor}22`
+                      : "transparent",
+                    color: active
+                      ? project.accentColor
+                      : "rgba(255,255,255,0.45)",
+                    border: active
+                      ? `1px solid ${project.accentColor}40`
+                      : "1px solid transparent",
+                  }}
+                >
+                  {screen.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto preview-scroll relative bg-[#050505] min-h-[320px]">
         {children}
       </div>
     </div>
