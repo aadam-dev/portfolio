@@ -63,7 +63,7 @@ function Landing() {
         </div>
       </div>
 
-      {/* Trust features — 3 cards */}
+      {/* Trust features - 3 cards */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, padding: "0 28px 32px" }}>
         {[
           ["🛡️", "Scout Verified", "Every property physically inspected"],
@@ -167,7 +167,7 @@ function Listings() {
       <div style={{ flex: 1, background: "rgba(245,158,11,0.03)", display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid rgba(255,255,255,0.06)", position: "relative", minHeight: 400 }}>
         <div style={{ textAlign: "center" }}>
           <span style={{ fontSize: 40 }}>🗺️</span>
-          <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 8 }}>Map View — Accra</p>
+          <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 8 }}>Map View, Accra</p>
         </div>
         {[{ x: "40%", y: "35%" }, { x: "60%", y: "50%" }, { x: "30%", y: "60%" }].map((pos, i) => (
           <div key={i} style={{ position: "absolute", left: pos.x, top: pos.y, transform: "translate(-50%, -50%)" }}>
@@ -253,7 +253,7 @@ function Detail() {
               <p style={{ color: "#fff", fontSize: 13, fontWeight: 600, margin: 0 }}>6 months</p>
             </div>
             <div style={{ marginBottom: 16, padding: 10, background: "rgba(245,158,11,0.08)", borderRadius: 8, border: "1px solid rgba(245,158,11,0.2)" }}>
-              <p style={{ color: "#F59E0B", fontSize: 11, margin: 0 }}>🔒 Viewing fee (GH₵ 150) held in escrow — refunded if you don't proceed</p>
+              <p style={{ color: "#F59E0B", fontSize: 11, margin: 0 }}>🔒 Viewing fee (GH₵ 150) held in escrow, refunded if you don&apos;t proceed</p>
             </div>
             <button style={{ width: "100%", background: "#F59E0B", color: "#000", padding: "11px", borderRadius: 10, fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer", marginBottom: 8 }}>
               Book Viewing

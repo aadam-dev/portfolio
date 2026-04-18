@@ -18,7 +18,7 @@ export async function generateMetadata(
   const p = findProject(slug);
   if (!p) return {};
 
-  const title = `${p.name} — ${p.tagline}`;
+  const title = `${p.name} · ${p.tagline}`;
   const description = p.description;
 
   return {

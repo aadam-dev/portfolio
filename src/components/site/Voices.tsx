@@ -4,25 +4,25 @@ import { Quote } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 
 /**
- * Placeholder testimonials — swap copy with real client quotes when collected.
+ * Placeholder testimonials - swap copy with real client quotes when collected.
  * Keep a max of 3 for signal density.
  */
 const VOICES = [
   {
     quote:
-      "Aadam doesn't just deliver software — he thinks like an owner. He questioned assumptions early, shipped in weeks not months, and left us with a product that felt 18 months ahead of our market.",
+      "Aadam doesn't just deliver software. He thinks like an owner. He questioned assumptions early, shipped in weeks not months, and left us with a product that felt 18 months ahead of our market.",
     author: "Founder",
     role: "West Africa fintech, seed-stage",
   },
   {
     quote:
-      "Rare combination: the rigor of an investment analyst with the speed of a senior engineer. He operates in the gap most teams can't staff — the one between strategy and shipping.",
+      "Rare combination: the rigor of an investment analyst with the speed of a senior engineer. He operates in the gap most teams can't staff: the one between strategy and shipping.",
     author: "Partner",
     role: "Emerging-markets venture fund",
   },
   {
     quote:
-      "The product he built became the piece of our operations we stopped worrying about. Six months in, it just runs — and when we call, he still picks up.",
+      "The product he built became the piece of our operations we stopped worrying about. Six months in, it just runs, and when we call, he still picks up.",
     author: "CEO",
     role: "Restaurant group · Accra",
   },

@@ -33,7 +33,7 @@ function Landing() {
             <span className="italic">the future of finance.</span>
           </h1>
           <p className="text-white/50 text-base md:text-xl leading-relaxed max-w-2xl mb-16 font-light">
-            SIIF is the <span className="text-white font-medium">architect of emerging market capital</span> — bridging institutional rigor with high-growth innovation in sub-Saharan Africa.
+            SIIF is the <span className="text-white font-medium">architect of emerging market capital</span>, bridging institutional rigor with high-growth innovation in sub-Saharan Africa.
           </p>
           <div className="flex flex-col sm:flex-row gap-6">
             <button className="bg-[#C59E47] text-black px-10 py-4 font-bold text-xs tracking-widest uppercase">Research Hub</button>

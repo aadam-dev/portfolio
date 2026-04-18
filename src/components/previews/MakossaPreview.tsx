@@ -26,7 +26,7 @@ export default function MakossaPreview({ screen }: Props) {
 function POS() {
   return (
     <div style={{ background: "#0D0D16", minHeight: "100%", fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column", height: "100%" }}>
-      {/* Title bar — desktop app style */}
+      {/* Title bar - desktop app style */}
       <div style={{ padding: "8px 16px", background: "#0A0A12", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 12 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ width: 24, height: 24, borderRadius: 6, background: "#A78BFA", display: "flex", alignItems: "center", justifyContent: "center" }}>

@@ -27,7 +27,7 @@ export default function Impact() {
       <div className="max-w-[1280px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-16">
           <div className="md:col-span-7">
-            <p className="eyebrow mb-5">Impact · 2022 — 2026</p>
+            <p className="eyebrow mb-5">Impact · 2022 to 2026</p>
             <h2
               id="impact-heading"
               className="font-display text-white text-balance"
@@ -44,7 +44,7 @@ export default function Impact() {
           <p className="md:col-span-5 text-[15px] md:text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty">
             Portfolio compounded across EdTech, FinTech, e-commerce and
             community operations. Every number below has a real project
-            behind it — no vanity metrics.
+            behind it: no vanity metrics.
           </p>
         </div>
 

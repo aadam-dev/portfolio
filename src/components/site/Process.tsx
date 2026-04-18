@@ -14,7 +14,7 @@ const STEPS = [
     n: "02",
     title: "Design",
     tag: "Week 2 – 4",
-    body: "Product architecture, flows and interface — drawn as if we ship tomorrow. High-fidelity from day one. You see real screens, not mood boards.",
+    body: "Product architecture, flows and interface, drawn as if we ship tomorrow. High-fidelity from day one. You see real screens, not mood boards.",
     bullets: ["Information architecture", "Interface & motion", "Prototype"],
   },
   {
@@ -28,7 +28,7 @@ const STEPS = [
     n: "04",
     title: "Measure & Grow",
     tag: "Week 10+",
-    body: "We don't disappear at launch. Analytics, funnels, SEO, paid acquisition and content — growth is treated as part of the product, not a bolt-on. Your product keeps earning its keep months after we ship.",
+    body: "We don't disappear at launch. Analytics, funnels, SEO, paid acquisition and content: growth is treated as part of the product, not a bolt-on. Your product keeps earning its keep months after we ship.",
     bullets: [
       "Analytics & funnels",
       "SEO & content",

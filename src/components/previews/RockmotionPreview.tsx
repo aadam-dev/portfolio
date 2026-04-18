@@ -50,7 +50,7 @@ function Landing() {
             to the american road.
           </h1>
           <p className="text-white/50 text-sm md:text-lg leading-relaxed max-w-xl mb-12 font-medium">
-            Own any vehicle from the US market — without ever setting foot on American soil. We source, verify, and ship globally.
+            Own any vehicle from the US market without ever setting foot on American soil. We source, verify, and ship globally.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
             <button className="bg-blue-600 text-white px-8 py-4 rounded font-bold text-sm tracking-widest uppercase">Browse Inventory</button>

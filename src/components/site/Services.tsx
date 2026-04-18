@@ -13,7 +13,7 @@ const SERVICES = [
   {
     icon: Compass,
     title: "Product strategy & architecture",
-    body: "From a vague brief to a concrete product plan — business model, information architecture, and the shortest path to something shippable.",
+    body: "From a vague brief to a concrete product plan: business model, information architecture, and the shortest path to something shippable.",
     meta: "Discovery · IA · Technical planning",
   },
   {
@@ -31,13 +31,13 @@ const SERVICES = [
   {
     icon: Megaphone,
     title: "Digital marketing & growth",
-    body: "Positioning, launch campaigns, SEO, paid acquisition, email and content loops. Treated as part of the product — not bolted on after launch.",
+    body: "Positioning, launch campaigns, SEO, paid acquisition, email and content loops. Treated as part of the product, not bolted on after launch.",
     meta: "SEO · Paid · Email · Content",
   },
   {
     icon: Database,
-    title: "ERP & operations — Odoo or custom",
-    body: "Replace disconnected spreadsheets and failing POS systems with one source of truth. Odoo configuration, custom modules, data migration, training — or we build it from scratch.",
+    title: "ERP & operations: Odoo or custom",
+    body: "Replace disconnected spreadsheets and failing POS systems with one source of truth. Odoo configuration, custom modules, data migration, training, or we build it from scratch.",
     meta: "Odoo · Custom ERP · Migration",
   },
 ];

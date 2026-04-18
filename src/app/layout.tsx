@@ -27,7 +27,7 @@ const SITE_URL = "https://aadam.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Aadam — Studio for product, data & engineering",
+    default: "Aadam · Studio for product, data & engineering",
     template: "%s · Aadam",
   },
   description:
@@ -54,13 +54,13 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE_URL,
     siteName: "Aadam",
-    title: "Aadam — Studio for product, data & engineering",
+    title: "Aadam · Studio for product, data & engineering",
     description:
       "20+ production apps. 50+ SMEs evaluated. Independent studio building premium digital products.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Aadam — Studio for product, data & engineering",
+    title: "Aadam · Studio for product, data & engineering",
     description:
       "20+ production apps. 50+ SMEs evaluated. Independent studio building premium digital products.",
   },

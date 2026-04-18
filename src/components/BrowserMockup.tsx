@@ -185,7 +185,7 @@ export default function BrowserMockup({
         <div className="w-[44px] md:w-[72px] shrink-0" aria-hidden="true" />
       </div>
 
-      {/* Screen tab strip — visible on all sizes, horizontally scrollable on small */}
+      {/* Screen tab strip - visible on all sizes, horizontally scrollable on small */}
       {!compact && screens.length > 1 && (
         <div
           className="flex-shrink-0 border-b border-[rgba(255,255,255,0.05)] overflow-x-auto scrollbar-none"

@@ -42,7 +42,7 @@ function Landing() {
         </div>
       </nav>
 
-      {/* Hero — DARK background */}
+      {/* Hero - DARK background */}
       <div style={{ background: "linear-gradient(135deg, #0a1628 0%, #0d2137 100%)", padding: "52px 28px 48px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center", maxWidth: 900, margin: "0 auto" }}>
           {/* Left: text */}
@@ -209,11 +209,11 @@ function Checkout() {
               ))}
             </div>
             <div style={{ padding: 10, background: "#f0fdfa", borderRadius: 8, border: "1px solid #0d948825" }}>
-              <p style={{ color: "#0d9488", fontSize: 11, margin: 0 }}>📍 GPS code detected — Delivery available (Accra, Greater Accra Region)</p>
+              <p style={{ color: "#0d9488", fontSize: 11, margin: 0 }}>📍 GPS code detected. Delivery available (Accra, Greater Accra Region)</p>
             </div>
           </div>
           <div style={{ padding: 12, background: "#f9fafb", borderRadius: 10, border: "1px solid #e5e7eb" }}>
-            <p style={{ color: "#6b7280", fontSize: 12, margin: 0 }}>✓ No account needed — guest checkout enabled. Order updates via SMS.</p>
+            <p style={{ color: "#6b7280", fontSize: 12, margin: 0 }}>✓ No account needed. Guest checkout enabled. Order updates via SMS.</p>
           </div>
         </div>
 

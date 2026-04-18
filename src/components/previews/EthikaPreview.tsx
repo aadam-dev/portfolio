@@ -110,7 +110,7 @@ function Landing() {
             maxWidth: 460,
           }}>
             Your trusted guide to Non-Interest Banking, Shariah-compliant finance, and ethical
-            investment — anchored in the Bank of Ghana&apos;s regulatory framework.
+            investment, anchored in the Bank of Ghana&apos;s regulatory framework.
           </p>
 
           {/* CTA Buttons */}
@@ -162,7 +162,7 @@ function Landing() {
           </div>
         </div>
 
-        {/* Right column — floating stat cards */}
+        {/* Right column - floating stat cards */}
         <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", gap: 14, paddingTop: 16, width: 180 }}>
           <div style={{
             background: "#fff",
@@ -265,8 +265,8 @@ function Comparison() {
 function Vault() {
   const articles = [
     { title: "What is Non-Interest Banking? A Ghanaian Primer", tag: "Explainer", readTime: "6 min", fresh: true },
-    { title: "BoG's NIB Policy Framework — What It Means for You", tag: "Regulation", readTime: "10 min", fresh: false },
-    { title: "Murabaha vs Bank Loan — A Practical Comparison", tag: "Products", readTime: "8 min", fresh: false },
+    { title: "BoG's NIB Policy Framework: What It Means for You", tag: "Regulation", readTime: "10 min", fresh: false },
+    { title: "Murabaha vs Bank Loan: A Practical Comparison", tag: "Products", readTime: "8 min", fresh: false },
     { title: "Profit-Sharing Accounts: How Returns Are Calculated", tag: "Savings", readTime: "7 min", fresh: true },
     { title: "NIB in West Africa: Ghana, Senegal, and Nigeria", tag: "Regional", readTime: "12 min", fresh: false },
     { title: "Common Myths About Non-Interest Banking Debunked", tag: "Explainer", readTime: "5 min", fresh: false },

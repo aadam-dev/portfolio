@@ -178,7 +178,7 @@ export default function CaseStudy({ project, next }: Props) {
                       >
                         <ScaledIframe
                           src={buildLiveUrl(project, screen)}
-                          title={`${project.name} — live preview`}
+                          title={`${project.name} · live preview`}
                         />
                       </BrowserMockup>
                     </motion.div>

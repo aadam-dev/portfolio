@@ -10,9 +10,9 @@ const collections = [
 ];
 
 const products = [
-  { name: "Embroidered Kaftan — Ivory", collection: "Eid Collection", price: 380, colors: ["#F5F0E8", "#C8B99A", "#2C3E50"] },
-  { name: "Ankara Wrap Dress — Ochre", collection: "The Wedding Edit", price: 520, colors: ["#D4A84B", "#8B4513", "#1A1A2E"] },
-  { name: "Fitted Agbada Set — Navy", collection: "Corporate Grace", price: 650, colors: ["#1C2D5A", "#fff", "#D4AF37"] },
+  { name: "Embroidered Kaftan in Ivory", collection: "Eid Collection", price: 380, colors: ["#F5F0E8", "#C8B99A", "#2C3E50"] },
+  { name: "Ankara Wrap Dress in Ochre", collection: "The Wedding Edit", price: 520, colors: ["#D4A84B", "#8B4513", "#1A1A2E"] },
+  { name: "Fitted Agbada Set in Navy", collection: "Corporate Grace", price: 650, colors: ["#1C2D5A", "#fff", "#D4AF37"] },
 ];
 
 export default function GaskiyaPreview({ screen }: Props) {
@@ -41,16 +41,16 @@ function Landing() {
         </div>
       </nav>
 
-      {/* Hero — editorial */}
+      {/* Hero - editorial */}
       <div style={{ padding: "0 32px", display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: 320 }}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "56px 0" }}>
-          <p style={{ color: "#D4AF37", fontSize: 11, letterSpacing: "0.2em", margin: "0 0 20px", fontFamily: "system-ui, sans-serif" }}>EID COLLECTION — SPRING 2026</p>
+          <p style={{ color: "#D4AF37", fontSize: 11, letterSpacing: "0.2em", margin: "0 0 20px", fontFamily: "system-ui, sans-serif" }}>EID COLLECTION · SPRING 2026</p>
           <h1 style={{ color: "#fff", fontSize: 48, fontWeight: 400, lineHeight: 1.1, margin: "0 0 24px", letterSpacing: "-0.01em" }}>
             Wear your<br />truth.
           </h1>
           <div style={{ width: 50, height: 1, background: "#D4AF37", marginBottom: 24 }} />
           <p style={{ color: "rgba(255,255,255,0.45)", fontSize: 14, lineHeight: 1.8, margin: "0 0 32px", maxWidth: 380, fontFamily: "system-ui, sans-serif" }}>
-            Gaskiya — truth in Hausa — shapes every silhouette. Premium African fashion delivered to your door, globally.
+            Gaskiya means truth in Hausa, and it shapes every silhouette. Premium African fashion delivered to your door, globally.
           </p>
           <div style={{ display: "flex", gap: 12 }}>
             <button style={{ background: "#D4AF37", color: "#000", padding: "13px 28px", borderRadius: 0, fontSize: 12, fontWeight: 600, border: "none", cursor: "pointer", letterSpacing: "0.08em", fontFamily: "system-ui, sans-serif" }}>
@@ -62,7 +62,7 @@ function Landing() {
           </div>
         </div>
 
-        {/* Right — fashion visual placeholder */}
+        {/* Right - fashion visual placeholder */}
         <div style={{ background: "linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.03) 100%)", display: "flex", alignItems: "center", justifyContent: "center", borderLeft: "1px solid rgba(212,175,55,0.08)", flexDirection: "column", gap: 12 }}>
           <span style={{ fontSize: 64 }}>👘</span>
           <p style={{ color: "rgba(212,175,55,0.4)", fontSize: 11, letterSpacing: "0.12em", fontFamily: "system-ui" }}>EID COLLECTION</p>
@@ -150,7 +150,7 @@ function Product() {
       {/* Details */}
       <div>
         <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 10, letterSpacing: "0.1em", margin: "0 0 6px" }}>EID COLLECTION · SPRING 2026</p>
-        <h2 style={{ color: "#fff", fontSize: 22, fontWeight: 400, letterSpacing: "-0.01em", margin: "0 0 8px", fontFamily: "Georgia" }}>Embroidered Kaftan — Ivory</h2>
+        <h2 style={{ color: "#fff", fontSize: 22, fontWeight: 400, letterSpacing: "-0.01em", margin: "0 0 8px", fontFamily: "Georgia" }}>Embroidered Kaftan in Ivory</h2>
         <p style={{ color: "#D4AF37", fontWeight: 600, fontSize: 22, margin: "0 0 20px" }}>$ 380</p>
 
         <div style={{ marginBottom: 18 }}>

@@ -41,7 +41,7 @@ function Landing() {
         <blockquote className="border-l-2 border-[#FB7C06]/40 pl-6 py-2 mb-10 text-left max-w-lg mx-auto italic text-stone-400 text-sm leading-relaxed">
           "You never change things by fighting the existing reality. To change something, build a new model that makes the existing model obsolete."
           <br />
-          <span className="not-italic font-bold text-[10px] uppercase tracking-wider text-stone-300 mt-2 block">— Buckminster Fuller</span>
+          <span className="not-italic font-bold text-[10px] uppercase tracking-wider text-stone-300 mt-2 block">· Buckminster Fuller</span>
         </blockquote>
 
         <h1 className="text-4xl md:text-7xl font-normal text-stone-900 mb-8 tracking-tight leading-[1] serif">

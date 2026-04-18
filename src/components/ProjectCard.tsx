@@ -28,7 +28,7 @@ export default function ProjectCard({ project, index, feature, priority }: Props
       <Link
         href={href}
         className="block focus:outline-none"
-        aria-label={`${project.name} — ${project.tagline}`}
+        aria-label={`${project.name} · ${project.tagline}`}
       >
         {/* Image / preview */}
         <div

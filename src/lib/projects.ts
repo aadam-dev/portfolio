@@ -82,7 +82,7 @@ export const projects: Project[] = [
     location: "Ghana · West Africa",
     services: ["Product strategy", "Information architecture", "Full-stack engineering"],
     description:
-      "LMS built for Ghana and West Africa — WASSCE, BECE, university bridging, and career courses. Multilingual (EN/FR/AR), video streaming, certificates, and role-based access.",
+      "LMS built for Ghana and West Africa, covering WASSCE, BECE, university bridging, and career courses. Multilingual (EN/FR/AR), video streaming, certificates, and role-based access.",
     role: "Product strategist & full‑stack developer",
     impact: [
       "Designed the academic pathways and course structure with Ghanaian teachers.",
@@ -146,7 +146,7 @@ export const projects: Project[] = [
     location: "Global",
     services: ["Brand positioning", "Front-end engineering", "Commerce design"],
     description:
-      "The global home for Chale Socks — transforming an African gift brand into an international luxury staple through immersive storytelling and high-fidelity UX.",
+      "The global home for Chale Socks, transforming an African gift brand into an international luxury staple through immersive storytelling and high-fidelity UX.",
     role: "Lead Fullstack & Design",
     outcomes: [
       { value: "1", label: "Global rollout" },
@@ -174,7 +174,7 @@ export const projects: Project[] = [
     location: "Ghana · B2B",
     services: ["Product architecture", "Workflow design", "Full-stack engineering"],
     description:
-      "Procurement command center for Ghanaian contractors. Source building materials, generate proformas, manage approvals, and track deliveries — all in one platform.",
+      "Procurement command center for Ghanaian contractors. Source building materials, generate proformas, manage approvals, and track deliveries in one platform.",
     role: "Product, architecture & procurement workflows",
     impact: [
       "Modelled approval and proforma flows around how contractors actually work on site.",
@@ -212,7 +212,7 @@ export const projects: Project[] = [
       "Team training",
     ],
     description:
-      "Full Odoo ERP rollout for an anonymised enterprise client. Replaced a failing POS and a tangle of manual reconciliations with a unified system — POS, Inventory, Purchase, Accounting and HR — configured around how the business actually operates day-to-day.",
+      "Full Odoo ERP rollout for an anonymised enterprise client. Replaced a failing POS and a tangle of manual reconciliations with a unified system (POS, Inventory, Purchase, Accounting and HR) configured around how the business actually operates day-to-day.",
     role: "ERP architect & implementation lead",
     impact: [
       "Audited every business process and mapped them onto the relevant Odoo modules before a line of config was written.",
@@ -308,7 +308,7 @@ export const projects: Project[] = [
   {
     id: "anisfoods",
     name: "Anis Food & Drink",
-    tagline: "Ghanaian Restaurant — POS & Back Office",
+    tagline: "Ghanaian Restaurant · POS & Back Office",
     imagePath: "/images/projects/anisfoods.jpg",
     year: "2024",
     location: "Accra · Ghana",
@@ -466,7 +466,7 @@ export const projects: Project[] = [
       { value: "1", label: "Solar-powered court" },
     ],
     description:
-      "Libya Quarters' solar-powered basketball court hub — event management, player registration, court booking, transparency reports, and team highlights for Zurak Basketball & Madina Old Gees.",
+      "Libya Quarters' solar-powered basketball court hub: event management, player registration, court booking, transparency reports, and team highlights for Zurak Basketball & Madina Old Gees.",
     role: "Community organiser, co‑lead & builder",
     impact: [
       "Co‑led the renovation of an inactive community court into a solar‑powered hub, from early planning through launch and ongoing operations.",
@@ -526,7 +526,7 @@ export const projects: Project[] = [
     name: "Makossa Shop",
     tagline: "Desktop POS & Inventory",
     description:
-      "Cross-platform Electron desktop app for retail point-of-sale and inventory management. Runs fully offline with a local SQLite database — zero internet dependency.",
+      "Cross-platform Electron desktop app for retail point-of-sale and inventory management. Runs fully offline with a local SQLite database, with zero internet dependency.",
     role: "Desktop architecture & UX",
     impact: [
       "Designed offline‑first flows for power cuts and unstable internet.",
@@ -558,7 +558,7 @@ export const projects: Project[] = [
       { value: "1", label: "Global export flow" },
     ],
     description:
-      "Licensed US car dealer & broker — sources, verifies, and ships any American vehicle to 40+ countries. VIN history, crash analysis, port loading with marine insurance, and real-time tracking.",
+      "Licensed US car dealer and broker that sources, verifies, and ships any American vehicle to 40+ countries. VIN history, crash analysis, port loading with marine insurance, and real-time tracking.",
     role: "Brand identity, UX & full‑stack build",
     impact: [
       "Designed a global-first car-buying flow for customers who can't visit the US in person.",
@@ -585,7 +585,7 @@ export const projects: Project[] = [
     name: "Gaskiya",
     tagline: "Luxury West African Fashion",
     description:
-      "Premium African cultural attire — editorial collections by occasion (Eid, Weddings, Corporate, Holidays). DM Sans + Cormorant Garamond, global shipping, GDPR-compliant checkout.",
+      "Premium African cultural attire with editorial collections by occasion (Eid, Weddings, Corporate, Holidays). DM Sans + Cormorant Garamond, global shipping, GDPR-compliant checkout.",
     role: "Creative direction & UX",
     impact: [
       "Positioned Gaskiya as premium West African fashion through typography and layout.",
@@ -610,7 +610,7 @@ export const projects: Project[] = [
     name: "The Palms by Eagles",
     tagline: "Luxury Hotel Website",
     description:
-      "4-star Accra hotel — room gallery, amenities, 4.3★ Google rating, sticky booking CTA, and Maps integration. Opposite Association School, +233 55 661 6100.",
+      "4-star Accra hotel with room gallery, amenities, 4.3★ Google rating, sticky booking CTA, and Maps integration. Opposite Association School, +233 55 661 6100.",
     role: "Hotel brand & booking UX",
     impact: [
       "Designed a booking flow that keeps CTAs visible without feeling aggressive.",

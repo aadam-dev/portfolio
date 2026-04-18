@@ -52,7 +52,7 @@ export default function WorkIndex() {
         {/* Section header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-12 md:mb-16">
           <div className="max-w-2xl">
-            <p className="eyebrow mb-5">Selected Work · 2022 — 2026</p>
+            <p className="eyebrow mb-5">Selected Work · 2022 to 2026</p>
             <h2
               id="work-heading"
               className="font-display text-white text-balance"
@@ -72,7 +72,7 @@ export default function WorkIndex() {
           </p>
         </div>
 
-        {/* Filters — horizontal scroll on mobile */}
+        {/* Filters - horizontal scroll on mobile */}
         <div
           role="toolbar"
           aria-label="Filter projects by category"
@@ -144,7 +144,7 @@ export default function WorkIndex() {
 }
 
 /* ───────────────────────────────────────────────────────────
-   Editorial numbered index — magazine-masthead style.
+   Editorial numbered index, magazine-masthead style.
    Desktop: hovering a row reveals a floating preview image.
    Mobile: each row shows compact meta.
    ─────────────────────────────────────────────────────────── */

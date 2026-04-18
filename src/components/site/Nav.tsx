@@ -60,7 +60,7 @@ export default function Nav() {
           <Link
             href="/"
             className="group inline-flex items-center gap-2"
-            aria-label="Aadam — home"
+            aria-label="Aadam · home"
           >
             <span className="relative inline-flex w-2 h-2">
               <span className="ping-soft absolute inline-flex w-full h-full rounded-full bg-[var(--success)]" />

@@ -44,7 +44,7 @@ function Landing() {
             <span className="text-orange-500 italic">Print. Consult.</span>
           </h1>
           <p className="text-white/60 text-sm md:text-lg leading-relaxed max-w-xl mx-auto mb-12">
-            Adenta's creative hub since 1999. We started as an art school—today we design and print for hundreds of businesses across Accra.
+            Adenta's creative hub since 1999. We started as an art school; today we design and print for hundreds of businesses across Accra.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
             <button className="bg-orange-500 text-white px-8 py-4 rounded-2xl font-black text-sm">Order Printing</button>
