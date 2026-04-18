@@ -244,6 +244,7 @@ export const projects: Project[] = [
     accentColor: "#8B5CF6",
     accentGlow: "rgba(139, 92, 246, 0.18)",
     featured: true,
+    imagePath: "/images/projects/enterprise-erp.png",
     screens: [
       { id: "overview", label: "Overview" },
       { id: "modules", label: "Modules" },
