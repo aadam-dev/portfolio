@@ -38,6 +38,7 @@ export const metadata: Metadata = {
     "investment analysis",
     "business analysis",
     "data & business analysis",
+    "data strategy",
     "data rooms",
     "documentation",
     "Next.js",

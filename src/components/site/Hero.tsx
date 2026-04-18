@@ -101,7 +101,10 @@ export default function Hero() {
           Multi-disciplinary practice at the intersection of{" "}
           <span className="text-white">investment/business analysis</span>,{" "}
           <span className="text-white">data &amp; business analysis</span>,{" "}
-          <span className="text-white">data rooms &amp; documentation</span>, and{" "}
+          <span className="text-white">
+            data strategy, data rooms &amp; documentation
+          </span>
+          , and{" "}
           <span className="text-white">high-performance engineering</span>.
           Designing and shipping products for founders, funds and operators across Africa and beyond.
         </motion.p>
