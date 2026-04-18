@@ -20,6 +20,7 @@ import ProjectCard from "@/components/ProjectCard";
 
 const FILTERS: { label: string; value: ProjectCategory | "all" }[] = [
   { label: "All", value: "all" },
+  { label: "Enterprise", value: "enterprise" },
   { label: "EdTech", value: "edtech" },
   { label: "Finance", value: "community" },
   { label: "Commerce", value: "ecommerce" },

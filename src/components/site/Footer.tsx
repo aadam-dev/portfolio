@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 const QUICK_LINKS = [
+  { label: "Services", href: "/#services" },
   { label: "Work", href: "/#work" },
   { label: "Process", href: "/#process" },
   { label: "Impact", href: "/#impact" },
@@ -109,7 +110,7 @@ export default function Footer() {
               <span className="relative inline-flex w-2 h-2 rounded-full bg-[var(--success)]" />
             </span>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--ink-3)]">
-              Accra · Available globally · UTC
+              Available globally · Any timezone
             </p>
           </div>
 

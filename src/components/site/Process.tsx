@@ -26,10 +26,15 @@ const STEPS = [
   },
   {
     n: "04",
-    title: "Measure",
+    title: "Measure & Grow",
     tag: "Week 10+",
-    body: "We don't disappear at launch. Metrics, experiments, iteration. Your product keeps earning its keep months after we ship.",
-    bullets: ["Analytics & funnels", "Iteration sprints", "Handover"],
+    body: "We don't disappear at launch. Analytics, funnels, SEO, paid acquisition and content — growth is treated as part of the product, not a bolt-on. Your product keeps earning its keep months after we ship.",
+    bullets: [
+      "Analytics & funnels",
+      "SEO & content",
+      "Paid acquisition & email",
+      "Iteration sprints",
+    ],
   },
 ];
 

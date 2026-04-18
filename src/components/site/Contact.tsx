@@ -48,7 +48,7 @@ export default function Contact() {
       <div className="relative z-10 max-w-[1280px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
           <div className="md:col-span-7">
-            <p className="eyebrow mb-5">Contact · Currently taking Q2 work</p>
+            <p className="eyebrow mb-5">Contact · Ways to reach us</p>
             <h2
               id="contact-heading"
               className="font-display text-white text-balance"

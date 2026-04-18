@@ -90,7 +90,7 @@ export default function OG() {
           }}
         >
           <span>20+ products · 50+ SMEs</span>
-          <span>Accra · Global</span>
+          <span>Working globally</span>
         </div>
       </div>
     ),

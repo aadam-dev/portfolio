@@ -31,12 +31,15 @@ export const metadata: Metadata = {
     template: "%s · Aadam",
   },
   description:
-    "Independent studio designing and shipping premium digital products across EdTech, FinTech, PropTech and e-commerce. 20+ production apps. 50+ SMEs evaluated. Based in Accra, available globally.",
+    "Independent studio designing and shipping premium digital products across EdTech, FinTech, PropTech, e-commerce and enterprise ERP. 20+ production apps. 50+ SMEs evaluated. Available globally.",
   keywords: [
     "product studio",
     "full-stack developer",
-    "investment analyst",
-    "data strategy",
+    "investment analysis",
+    "business analysis",
+    "data & business analysis",
+    "data rooms",
+    "documentation",
     "Next.js",
     "TypeScript",
     "Africa",

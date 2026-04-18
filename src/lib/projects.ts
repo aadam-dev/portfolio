@@ -12,7 +12,8 @@ export type ProjectCategory =
   | "hospitality"
   | "fashion"
   | "community"
-  | "creative";
+  | "creative"
+  | "enterprise";
 
 export interface ProjectScreen {
   id: string;
@@ -196,6 +197,58 @@ export const projects: Project[] = [
     ],
     liveBaseUrl: "https://primehubgh.vercel.app",
     liveScreenPaths: { landing: "/", products: "/products", quote: "/quote" },
+  },
+  {
+    id: "enterprise-erp",
+    slug: "enterprise-erp",
+    name: "Enterprise ERP",
+    tagline: "Odoo Implementation & Data Migration",
+    year: "2025",
+    location: "Confidential · Multi-branch",
+    services: [
+      "Odoo configuration",
+      "Custom module development",
+      "Data migration",
+      "Team training",
+    ],
+    description:
+      "Full Odoo ERP rollout for an anonymised enterprise client. Replaced a failing POS and a tangle of manual reconciliations with a unified system — POS, Inventory, Purchase, Accounting and HR — configured around how the business actually operates day-to-day.",
+    role: "ERP architect & implementation lead",
+    impact: [
+      "Audited every business process and mapped them onto the relevant Odoo modules before a line of config was written.",
+      "Migrated historical data from the legacy POS and spreadsheets into Odoo without downtime or data loss.",
+      "Built custom modules to close the gap where out-of-the-box Odoo didn't match the client's real workflow.",
+      "Trained owners and staff on the new system so the rollout didn't depend on me post-launch.",
+    ],
+    outcomes: [
+      { value: "0", label: "Manual reconciliations" },
+      { value: "6+", label: "Modules configured" },
+      { value: "1", label: "Source of truth" },
+      { value: "Zero", label: "Data loss" },
+    ],
+    testimonial: {
+      quote:
+        "For the first time the numbers actually add up at month-end. We stopped fighting our system and started running the business.",
+      author: "Operations lead",
+      role: "Anonymised client · Hospitality",
+    },
+    category: "enterprise",
+    categoryLabel: "Enterprise · ERP",
+    stack: [
+      "Odoo 17",
+      "Python",
+      "PostgreSQL",
+      "XML-RPC",
+      "Custom modules",
+    ],
+    accentColor: "#8B5CF6",
+    accentGlow: "rgba(139, 92, 246, 0.18)",
+    featured: true,
+    screens: [
+      { id: "overview", label: "Overview" },
+      { id: "modules", label: "Modules" },
+      { id: "reports", label: "Reports" },
+    ],
   },
   {
     id: "redrow",
@@ -625,4 +678,5 @@ export const categoryColors: Record<ProjectCategory, string> = {
   fashion: "#D4AF37",
   community: "#FB7C06",
   creative: "#EA580C",
+  enterprise: "#8B5CF6",
 };

@@ -12,7 +12,7 @@ const TICKER = [
   "GHS 40K+ funds raised",
   "Aspire Fellow · Cohort 4 · 2025",
   "AI-Integrated Leadership Fellow · 2026",
-  "Based in Accra · Working globally",
+  "Working globally · Any timezone",
 ];
 
 export default function Hero() {
@@ -50,7 +50,7 @@ export default function Hero() {
             <span className="relative inline-flex w-2 h-2 rounded-full bg-[var(--success)]" />
           </span>
           <span className="eyebrow">
-            Available for Q2 · Accra · Global
+            Taking select engagements · Working globally
           </span>
         </motion.div>
 
@@ -99,8 +99,9 @@ export default function Hero() {
           className="mt-10 md:mt-14 max-w-xl text-[17px] md:text-[19px] leading-[1.55] text-[var(--ink-2)] text-pretty"
         >
           Multi-disciplinary practice at the intersection of{" "}
-          <span className="text-white">investment analysis</span>,{" "}
-          <span className="text-white">data strategy</span>, and{" "}
+          <span className="text-white">investment/business analysis</span>,{" "}
+          <span className="text-white">data &amp; business analysis</span>,{" "}
+          <span className="text-white">data rooms &amp; documentation</span>, and{" "}
           <span className="text-white">high-performance engineering</span>.
           Designing and shipping products for founders, funds and operators across Africa and beyond.
         </motion.p>
@@ -128,17 +129,21 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.3, duration: 0.8 }}
-        className="relative z-10 mt-20 md:mt-28 border-y border-[var(--line)] py-5"
+        className="relative z-10 mt-20 md:mt-28 border-y border-[var(--line-strong)] py-6"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.015) 0%, rgba(255,255,255,0.035) 50%, rgba(255,255,255,0.015) 100%)",
+        }}
       >
         <Marquee duration={45}>
           {TICKER.map((item, i) => (
-            <span key={`${item}-${i}`} className="flex items-center gap-12">
-              <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--ink-3)] whitespace-nowrap">
+            <span key={`${item}-${i}`} className="flex items-center gap-14">
+              <span className="font-mono text-[12px] md:text-[13px] uppercase tracking-[0.2em] text-white whitespace-nowrap">
                 {item}
               </span>
               <span
                 aria-hidden="true"
-                className="w-1 h-1 rounded-full bg-[var(--ink-4)]"
+                className="inline-block w-[3px] h-[3px] rounded-full bg-white/70"
               />
             </span>
           ))}

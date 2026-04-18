@@ -1,5 +1,6 @@
 import Nav from "@/components/site/Nav";
 import Hero from "@/components/site/Hero";
+import Services from "@/components/site/Services";
 import WorkIndex from "@/components/site/WorkIndex";
 import Process from "@/components/site/Process";
 import Impact from "@/components/site/Impact";
@@ -17,6 +18,7 @@ export default function Home() {
       <Nav />
       <main id="main" className="relative">
         <Hero />
+        <Services />
         <WorkIndex />
         <Process />
         <Impact />

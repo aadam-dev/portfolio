@@ -6,9 +6,9 @@ import { Menu, X, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 const LINKS = [
+  { label: "Services", href: "/#services" },
   { label: "Work", href: "/#work" },
   { label: "Process", href: "/#process" },
-  { label: "Voices", href: "/#voices" },
   { label: "Contact", href: "/#contact" },
 ];
 
