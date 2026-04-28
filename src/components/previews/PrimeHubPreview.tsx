@@ -19,98 +19,123 @@ export default function PrimeHubPreview({ screen }: Props) {
 
 function Landing() {
   const suggestions = [
+    "LEO Water Pump 1.5hp",
     "50 bags of Ghacem Cement",
     "Y16 Steel Rebar",
-    "Aluzinc Roofing Sheets",
-    "PVC Pipes 4 inch",
+    "Aluzinc Roofing Sheets"
   ];
 
   const materialCards = [
-    { name: "Ghacem Cement", qty: "500 bags", bg: "linear-gradient(135deg, #334155, #1e293b)", progress: 60 },
-    { name: "Y16 Rebar", qty: "200 pcs", bg: "linear-gradient(135deg, #475569, #334155)", progress: 75 },
-    { name: "Aluzinc Sheets", qty: "150m", bg: "linear-gradient(135deg, #92400e, #78350f)", progress: 90 },
+    { name: "Ghacem Cement", qty: "500 bags", bg: "linear-gradient(135deg, #1e293b, #020617)", progress: 60 },
+    { name: "LEO Pump", qty: "20 units", bg: "linear-gradient(135deg, #334155, #0f172a)", progress: 75 },
+    { name: "Aluzinc Sheets", qty: "150m", bg: "linear-gradient(135deg, #78350f, #451a03)", progress: 90 },
   ];
 
   return (
     <div style={{ background: "#020617", minHeight: "100%", fontFamily: "system-ui, sans-serif", position: "relative", overflow: "hidden" }}>
-      {/* Ambient amber glow */}
-      <div className="absolute top-0 left-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
+      {/* Ambient glow */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-amber-300/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] pointer-events-none mix-blend-overlay" />
 
       {/* Nav */}
-      <nav className="px-6 py-4 md:px-12 md:py-5 border-b border-white/5 flex items-center justify-between relative z-10">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
-            <span className="text-xl">🏗️</span>
+      <nav className="px-6 py-4 md:px-12 md:py-6 border-b border-white/5 flex items-center justify-between relative z-10 bg-[#020617]/80 backdrop-blur-xl">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-amber-300 flex items-center justify-center shadow-[0_0_20px_rgba(252,211,77,0.3)] text-black font-black text-xl">
+            P
           </div>
           <div className="flex flex-col leading-none">
-            <span className="text-white font-bold text-sm tracking-tight">PrimeHub</span>
-            <span className="text-white/40 text-[9px] font-bold tracking-widest mt-1">MATERIALS</span>
+            <span className="text-white font-bold tracking-tight">PrimeHub</span>
+            <span className="text-white/40 text-[9px] font-bold tracking-[0.2em] mt-1">PROCUREMENT</span>
           </div>
         </div>
         <div className="hidden md:flex gap-8 items-center text-white/50 text-[13px] font-medium">
-          <span>Products</span>
-          <span>Categories</span>
-          <button className="bg-amber-500 text-black px-4 py-1.5 rounded-lg font-bold">Quote</button>
+          <span className="hover:text-white transition-colors">Products</span>
+          <span className="hover:text-white transition-colors">Categories</span>
+          <button className="bg-white/5 text-white border border-white/10 px-5 py-2 rounded-xl font-bold hover:bg-white/10 transition-colors">Sign in</button>
+          <button className="bg-amber-300 text-slate-950 px-5 py-2 rounded-xl font-bold hover:bg-amber-200 transition-colors">Build quote</button>
         </div>
-        <div className="md:hidden w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60">☰</div>
       </nav>
 
-      <div className="px-6 py-12 md:px-12 md:py-20 flex flex-col lg:flex-row items-center gap-16 lg:gap-8 max-w-6xl mx-auto">
-        <div className="flex-1 text-center lg:text-left">
-          <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 px-4 py-1.5 rounded-full mb-8">
-            <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" />
-            <span className="text-amber-500 text-[10px] font-bold tracking-wide">TRUSTED BY 500+ CONTRACTORS</span>
+      <div className="px-6 py-12 md:px-12 md:py-20 flex flex-col lg:flex-row items-center gap-16 lg:gap-12 max-w-7xl mx-auto">
+        <div className="flex-1 text-center lg:text-left z-10">
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-300/25 bg-amber-300/10 px-4 py-2 mb-8 shadow-inner shadow-amber-300/5">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-300 shadow-[0_0_12px_rgba(252,211,77,0.8)] animate-pulse" />
+            <span className="text-amber-200 text-[10px] font-bold uppercase tracking-[0.2em]">Building materials procurement for Ghana</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight leading-[1.1]">
-            Build with <span className="text-amber-500">Precision.</span><br />
-            Source with <span className="underline decoration-amber-500 decoration-4 underline-offset-8">Prime.</span>
+          
+          <h1 className="text-4xl md:text-[5.5rem] font-bold text-white mb-6 tracking-tighter leading-[0.9] uppercase text-balance">
+            The new supply desk for <br className="hidden md:block"/> serious builders.
           </h1>
-          <p className="text-slate-400 text-sm md:text-base leading-relaxed mb-10 max-w-lg mx-auto lg:mx-0">
-            The procurement command center for Ghanaian contractors. Generate formal proformas and track deliveries to your site.
+          
+          <p className="text-slate-300 text-sm md:text-xl leading-relaxed mb-10 max-w-2xl mx-auto lg:mx-0">
+            PrimeHub turns material sourcing into a verified procurement flow: competitive stock, formal proformas, stakeholder approvals, and delivery coordination from one sharp command point.
           </p>
 
-          <div className="bg-slate-900 border border-white/10 p-2.5 rounded-2xl flex items-center gap-3 mb-12 max-w-md mx-auto lg:mx-0 shadow-2xl">
-            <span className="text-amber-500 font-mono pl-2">$</span>
-            <input 
-              readOnly 
-              placeholder="50 bags of cement..." 
-              className="flex-1 bg-transparent border-none text-slate-400 text-sm outline-none font-mono"
-            />
-            <button className="bg-amber-500 text-black px-6 py-2 rounded-xl font-bold text-xs">Search</button>
+          <div className="bg-slate-950/80 border border-white/10 p-2 rounded-3xl flex items-center gap-3 mb-6 max-w-xl mx-auto lg:mx-0 shadow-2xl backdrop-blur-xl">
+            <div className="flex-1 flex items-center gap-3 bg-white/[0.04] rounded-2xl px-4 py-3 min-h-14">
+              <span className="text-amber-300 text-lg">🔍</span>
+              <span className="text-amber-300 font-mono text-sm hidden sm:inline">procure:</span>
+              <input 
+                readOnly 
+                placeholder="Search LEO pumps, cement, rebar..." 
+                className="flex-1 bg-transparent border-none text-white text-base outline-none font-sans placeholder:text-slate-500"
+              />
+            </div>
+            <button className="bg-amber-300 text-slate-950 px-6 py-4 rounded-2xl font-black text-sm h-14 flex items-center gap-2">
+              Build quote <span className="text-lg">→</span>
+            </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-8 text-left max-w-sm mx-auto lg:mx-0">
-            {[["2.5K+", "Materials"], ["500+", "Contractors"], ["24h", "Delivery"]].map(([v, l]) => (
-              <div key={l}>
-                <div className="text-white text-xl font-bold mb-1">{v}</div>
-                <div className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">{l}</div>
+          <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-12 max-w-xl mx-auto lg:mx-0">
+            {suggestions.map((item) => (
+              <span key={item} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] font-medium text-slate-300">
+                {item}
+              </span>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-3 gap-6 text-left max-w-lg mx-auto lg:mx-0 pt-8 border-t border-white/5">
+            {[["1,000+", "Materials Indexed"], ["7 days", "Quote Validity"], ["24h", "Accra Fulfillment Target"]].map(([v, l]) => (
+              <div key={l} className="border-l border-white/10 pl-4">
+                <div className="text-white text-2xl md:text-3xl font-medium mb-1 font-sans">{v}</div>
+                <div className="text-slate-500 text-[9px] uppercase font-bold tracking-[0.15em] leading-tight">{l}</div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="flex-1 w-full max-w-md relative h-[320px] lg:h-[400px]">
+        <div className="flex-1 w-full max-w-md relative h-[380px] lg:h-[480px]">
+          {/* Glassmorphic ETA Card */}
+          <div className="absolute -left-12 top-20 z-20 w-48 rounded-3xl border border-amber-300/30 bg-amber-300 p-5 text-slate-950 shadow-2xl hidden md:block">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-sm">⏱</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em]">ETA locked</span>
+            </div>
+            <p className="text-4xl font-black leading-none mb-1">24h</p>
+            <p className="text-xs font-semibold leading-tight">coordinated fulfillment window</p>
+          </div>
+
           {materialCards.map((card, i) => (
-            <div key={card.name} className="absolute inset-x-0 mx-auto rounded-3xl p-6 border border-white/10 shadow-2xl transition-all duration-500"
+            <div key={card.name} className="absolute inset-x-0 mx-auto rounded-3xl p-6 border border-white/10 shadow-2xl transition-all duration-500 backdrop-blur-md"
               style={{
                 width: `${100 - i * 5}%`,
-                top: `${i * 35}px`,
+                top: `${i * 45 + 40}px`,
                 background: card.bg,
-                transform: `rotate(${(i - 1) * 3}deg)`,
+                transform: `rotate(${(i - 1) * 2}deg)`,
                 zIndex: 10 - i
               }}>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-5">
                 <div>
-                  <p className="text-white font-bold text-sm mb-1">{card.name}</p>
-                  <p className="text-white/40 text-xs">{card.qty}</p>
+                  <p className="text-white font-bold text-base mb-1">{card.name}</p>
+                  <p className="text-slate-400 text-xs font-medium">{card.qty}</p>
                 </div>
-                <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-xl">📦</div>
+                <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-xl shadow-inner shadow-white/5">📦</div>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-amber-500" style={{ width: `${card.progress}%` }} />
+              <div className="flex items-center gap-4">
+                <div className="flex-1 h-2 bg-slate-950/50 rounded-full overflow-hidden border border-white/5">
+                  <div className="h-full bg-amber-300 shadow-[0_0_10px_rgba(252,211,77,0.5)]" style={{ width: `${card.progress}%` }} />
                 </div>
-                <span className="text-[10px] text-white/30 font-bold uppercase tracking-widest">In Stock</span>
+                <span className="text-[10px] text-amber-300/80 font-bold uppercase tracking-[0.15em]">Ready</span>
               </div>
             </div>
           ))}
