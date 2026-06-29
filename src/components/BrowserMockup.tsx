@@ -25,9 +25,9 @@ const urlMap: Record<string, Record<string, string>> = {
     dashboard: "koyiacademy.com/dashboard",
   },
   primehub: {
-    landing: "primehub.com.gh",
-    products: "primehub.com.gh/products",
-    quote: "primehub.com.gh/quote/new",
+    landing: "primetijara.com",
+    products: "primetijara.com/products",
+    categories: "primetijara.com/categories",
   },
   ethika: {
     landing: "ethikawestafrica.com",
@@ -66,9 +66,8 @@ const urlMap: Record<string, Record<string, string>> = {
     contact: "pronajinternational.com/contact",
   },
   makossa: {
-    pos: "app://makossa-shop/pos",
-    inventory: "app://makossa-shop/inventory",
-    reports: "app://makossa-shop/reports",
+    landing: "themakossashop.com",
+    catalog: "themakossashop.com/catalog",
   },
   gaskiya: {
     landing: "gaskiya.com",
@@ -92,8 +91,8 @@ const urlMap: Record<string, Record<string, string>> = {
   },
   jireh: {
     landing: "jirehnaturalfoods.vercel.app",
-    menu: "jirehnaturalfoods.vercel.app/#menu",
-    contact: "jirehnaturalfoods.vercel.app/#contact",
+    dashboard: "backoffice.jireh.app/dashboard",
+    reports: "backoffice.jireh.app/reports",
   },
 };
 

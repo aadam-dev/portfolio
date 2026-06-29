@@ -194,6 +194,18 @@ a:focus-visible {
   border-bottom: 1px solid var(--line);
 }
 
+/* Hero aurora — slow living glow behind the headline */
+@keyframes aurora-a {
+  0%, 100% { transform: translate(-50%, 0) scale(1); opacity: 0.75; }
+  50% { transform: translate(-46%, -4%) scale(1.14); opacity: 1; }
+}
+@keyframes aurora-b {
+  0%, 100% { transform: translate(-54%, 3%) scale(1.06); opacity: 0.4; }
+  50% { transform: translate(-49%, -2%) scale(1.22); opacity: 0.72; }
+}
+.aurora-a { animation: aurora-a 16s var(--ease-in-out) infinite; }
+.aurora-b { animation: aurora-b 22s var(--ease-in-out) infinite; }
+
 /* Marquee */
 @keyframes marquee {
   from {

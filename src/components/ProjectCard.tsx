@@ -24,7 +24,14 @@ export default function ProjectCard({ project, index, feature, priority }: Props
       viewport={{ once: true, margin: "-60px" }}
       transition={{ delay: Math.min(index * 0.05, 0.3), duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       className={`group relative ${feature ? "md:col-span-2" : ""}`}
+      style={{ ["--card-accent" as string]: project.accentColor }}
     >
+      {/* Accent bloom — each project lights its own colour on hover */}
+      <div
+        aria-hidden="true"
+        className="absolute -inset-4 -z-10 rounded-[32px] opacity-0 blur-2xl transition-opacity duration-700 ease-out group-hover:opacity-100"
+        style={{ background: project.accentGlow }}
+      />
       <Link
         href={href}
         className="block focus:outline-none"
@@ -32,7 +39,7 @@ export default function ProjectCard({ project, index, feature, priority }: Props
       >
         {/* Image / preview */}
         <div
-          className="relative overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface)]"
+          className="relative overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface)] transition-colors duration-500 group-hover:[border-color:color-mix(in_srgb,var(--card-accent)_45%,transparent)]"
           style={{
             aspectRatio: feature ? "16 / 9" : "4 / 3",
           }}

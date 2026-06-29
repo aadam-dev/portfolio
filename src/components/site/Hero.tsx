@@ -23,16 +23,28 @@ export default function Hero() {
       className="relative pt-36 md:pt-44 pb-20 md:pb-28 px-4 md:px-6"
       aria-labelledby="hero-heading"
     >
-      {/* Signature glow */}
+      {/* Signature aurora — two slow-drifting layers for depth */}
       <div
-        className="absolute top-20 left-1/2 -translate-x-1/2 pointer-events-none"
+        className="aurora-a absolute top-16 left-1/2 pointer-events-none"
         aria-hidden="true"
         style={{
-          width: "min(900px, 100vw)",
-          height: "600px",
+          width: "min(940px, 110vw)",
+          height: "620px",
           background:
-            "radial-gradient(ellipse at center, rgba(124,106,250,0.22) 0%, transparent 55%)",
-          filter: "blur(40px)",
+            "radial-gradient(ellipse at center, rgba(124,106,250,0.24) 0%, transparent 56%)",
+          filter: "blur(44px)",
+          zIndex: 0,
+        }}
+      />
+      <div
+        className="aurora-b absolute top-28 left-1/2 pointer-events-none"
+        aria-hidden="true"
+        style={{
+          width: "min(720px, 90vw)",
+          height: "520px",
+          background:
+            "radial-gradient(ellipse at center, rgba(74,108,250,0.18) 0%, transparent 60%)",
+          filter: "blur(56px)",
           zIndex: 0,
         }}
       />
