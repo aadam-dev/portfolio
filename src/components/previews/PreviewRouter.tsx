@@ -20,12 +20,41 @@ import ChaleSocksPreview from "./ChaleSocksPreview";
 import RedrowPreview from "./RedrowPreview";
 import EnterpriseErpPreview from "./EnterpriseErpPreview";
 
+import Image from "next/image";
+import { projects } from "@/lib/projects";
+
 interface Props {
   projectId: string;
   screen: string;
 }
 
+/** Real capture of the actual app — always preferred over coded mockups. */
+function RealShot({ src, alt }: { src: string; alt: string }) {
+  return (
+    <div
+      className="relative w-full h-full overflow-y-auto preview-scroll"
+      style={{ background: "#0A0A0F" }}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        width={1440}
+        height={900}
+        className="w-full h-auto block"
+        quality={90}
+        sizes="(max-width: 768px) 100vw, 60vw"
+      />
+    </div>
+  );
+}
+
 export default function PreviewRouter({ projectId, screen }: Props) {
+  const project = projects.find((p) => p.id === projectId);
+  const shot = project?.screenImages?.[screen];
+  if (shot) {
+    return <RealShot src={shot} alt={`${project?.name} — ${screen} (actual product)`} />;
+  }
+
   switch (projectId) {
     case "koyi":
       return <KoyiPreview screen={screen} />;

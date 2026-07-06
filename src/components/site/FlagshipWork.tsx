@@ -61,7 +61,9 @@ function FlagshipCard({
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
-  const [screen, setScreen] = useState(project.screens[0]?.id ?? "landing");
+  const [screen, setScreen] = useState(
+    project.defaultScreen ?? project.screens[0]?.id ?? "landing"
+  );
 
   // As this card's wrapper scrolls out (next card covering it), settle it back.
   const { scrollYProgress } = useScroll({

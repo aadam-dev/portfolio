@@ -58,6 +58,13 @@ export interface Project {
   featured?: boolean;
   isLead?: boolean;
   imagePath?: string;
+  /**
+   * Real screenshots of the actual app, keyed by screen id (paths under /public).
+   * When present for a screen, previews render the real capture instead of the coded mockup.
+   */
+  screenImages?: Record<string, string>;
+  /** Screen to open first in flagship/preview contexts (defaults to the first screen). */
+  defaultScreen?: string;
   /** When set, the case study exposes a Live site tab that iframes the real project. */
   liveBaseUrl?: string;
   /** Map screen id → path (e.g. landing → "/", courses → "/courses"). Used with liveBaseUrl. */
@@ -77,7 +84,7 @@ export const projects: Project[] = [
     id: "koyi",
     name: "Kōyi",
     tagline: "Online Learning Platform",
-    imagePath: "/images/projects/koyi.png",
+    imagePath: "/images/projects/koyi-live.png",
     year: "2024",
     location: "Ghana · West Africa",
     services: ["Product strategy", "Information architecture", "Full-stack engineering"],
@@ -105,6 +112,10 @@ export const projects: Project[] = [
       { id: "lesson", label: "Lesson" },
       { id: "dashboard", label: "Dashboard" },
     ],
+    screenImages: {
+      landing: "/previews/koyi/landing.png",
+      courses: "/previews/koyi/courses.png",
+    },
   },
   {
     id: "siif",
@@ -141,7 +152,7 @@ export const projects: Project[] = [
     id: "chalesocks",
     name: "Chale Socks",
     tagline: "Premium Afro-Luxury E-Commerce",
-    imagePath: "/images/projects/chalesocks.png",
+    imagePath: "/images/projects/chalesocks-live.png",
     year: "2025",
     location: "Global",
     services: ["Brand positioning", "Front-end engineering", "Commerce design"],
@@ -162,6 +173,10 @@ export const projects: Project[] = [
       { id: "landing", label: "Home" },
       { id: "story", label: "The Story" },
     ],
+    screenImages: {
+      landing: "/previews/chalesocks/landing.png",
+      story: "/previews/chalesocks/story.png",
+    },
     liveBaseUrl: "https://chalesocks.vercel.app",
     liveScreenPaths: { landing: "/", story: "/#our-story" },
   },
@@ -193,11 +208,24 @@ export const projects: Project[] = [
     accentColor: "#EAB308",
     accentGlow: "rgba(234, 179, 8, 0.15)",
     featured: true,
+    defaultScreen: "admin",
     screens: [
       { id: "landing", label: "Home" },
       { id: "products", label: "Products" },
-      { id: "categories", label: "Categories" },
+      { id: "admin", label: "Back office" },
+      { id: "orders", label: "Orders" },
+      { id: "inventory", label: "Inventory" },
+      { id: "pos", label: "POS" },
     ],
+    screenImages: {
+      landing: "/previews/primehub/landing.png",
+      products: "/previews/primehub/products.png",
+      categories: "/previews/primehub/categories.png",
+      admin: "/previews/primehub/admin.png",
+      orders: "/previews/primehub/orders.png",
+      inventory: "/previews/primehub/inventory.png",
+      pos: "/previews/primehub/pos.png",
+    },
     liveBaseUrl: "https://primehubgh.vercel.app",
     liveScreenPaths: { landing: "/", products: "/products", categories: "/categories" },
   },
@@ -312,7 +340,7 @@ export const projects: Project[] = [
     id: "anisfoods",
     name: "Anis Food & Drink",
     tagline: "Ghanaian Restaurant · POS & Back Office",
-    imagePath: "/images/projects/anisfoods.jpg",
+    imagePath: "/images/projects/anisfoods-live.png",
     year: "2024",
     location: "Accra · Ghana",
     services: ["Systems design", "POS & back-office", "Financial reporting"],
@@ -339,6 +367,9 @@ export const projects: Project[] = [
       { id: "dashboard", label: "Dashboard" },
       { id: "reports", label: "Reports" },
     ],
+    screenImages: {
+      landing: "/previews/anisfoods/landing.png",
+    },
     liveBaseUrl: "https://aniseatery.netlify.app",
     liveScreenPaths: { landing: "/", pos: "/", dashboard: "/", reports: "/" },
   },
@@ -394,7 +425,7 @@ export const projects: Project[] = [
     id: "ladyangel",
     name: "Lady Angel Network",
     tagline: "Private Investment Network for Women",
-    imagePath: "/images/projects/ladyangel.png",
+    imagePath: "/images/projects/ladyangel-live.png",
     year: "2025",
     location: "Pan-Africa",
     services: ["Investment workflow", "Deal-flow UX", "Front-end"],
@@ -420,6 +451,11 @@ export const projects: Project[] = [
       { id: "membership", label: "Membership" },
       { id: "portfolio", label: "Portfolio" },
     ],
+    screenImages: {
+      landing: "/previews/ladyangel/landing.png",
+      membership: "/previews/ladyangel/membership.png",
+      portfolio: "/previews/ladyangel/portfolio.png",
+    },
     liveBaseUrl: "https://lady-angel.vercel.app",
     liveScreenPaths: { landing: "/", membership: "/membership", portfolio: "/portfolio" },
   },
@@ -427,7 +463,7 @@ export const projects: Project[] = [
     id: "jireh",
     name: "Jireh Natural Foods",
     tagline: "Restaurant Platform · Website, POS & Back Office",
-    imagePath: "/images/projects/jireh-landing.jpg",
+    imagePath: "/images/projects/jireh-live.png",
     year: "2024",
     location: "Adenta · Accra",
     services: ["Conversion UX", "Front-end", "Cashier POS", "Back-office system"],
@@ -455,6 +491,9 @@ export const projects: Project[] = [
       { id: "dashboard", label: "Back Office" },
       { id: "reports", label: "Reports" },
     ],
+    screenImages: {
+      landing: "/previews/jireh/landing.png",
+    },
     liveBaseUrl: "https://jirehnaturalfoods.vercel.app",
     liveScreenPaths: { landing: "/", dashboard: "/", reports: "/" },
   },
@@ -462,7 +501,7 @@ export const projects: Project[] = [
     id: "madinabasketball",
     name: "Madina Basketball",
     tagline: "Community Court Platform",
-    imagePath: "/images/projects/madinabasketball.png",
+    imagePath: "/images/projects/madinabasketball-live.png",
     year: "2024",
     location: "Madina · Ghana",
     services: ["Community ops", "Transparency dashboards", "Full-stack"],
@@ -489,6 +528,11 @@ export const projects: Project[] = [
       { id: "court", label: "The Court" },
       { id: "events", label: "Events" },
     ],
+    screenImages: {
+      landing: "/previews/madinabasketball/landing.png",
+      court: "/previews/madinabasketball/court.png",
+      events: "/previews/madinabasketball/events.png",
+    },
     liveBaseUrl: "https://madinabball.vercel.app",
     liveScreenPaths: { landing: "/", court: "/court", events: "/events" },
   },
@@ -496,7 +540,7 @@ export const projects: Project[] = [
     id: "pronaj",
     name: "ProNaj International",
     tagline: "Multi-Sector Conglomerate",
-    imagePath: "/images/projects/pronaj.png",
+    imagePath: "/images/projects/pronaj-live.png",
     year: "2024",
     location: "Delaware · Ghana",
     services: ["Brand system", "Editorial web", "Narrative design"],
@@ -522,6 +566,11 @@ export const projects: Project[] = [
       { id: "sectors", label: "Sectors" },
       { id: "contact", label: "Contact" },
     ],
+    screenImages: {
+      landing: "/previews/pronaj/landing.png",
+      sectors: "/previews/pronaj/sectors.png",
+      contact: "/previews/pronaj/contact.png",
+    },
     liveBaseUrl: "https://pronaj.vercel.app",
     liveScreenPaths: { landing: "/", sectors: "/sectors", contact: "/contact" },
   },
@@ -561,7 +610,7 @@ export const projects: Project[] = [
     id: "rockmotion",
     name: "Rockmotion Auto Group",
     tagline: "US Automotive Export Platform",
-    imagePath: "/images/projects/rockmotion.png",
+    imagePath: "/images/projects/rockmotion-live.png",
     year: "2025",
     location: "Atlanta → 40+ countries",
     services: ["Brand identity", "UX", "Full-stack engineering"],
@@ -588,6 +637,11 @@ export const projects: Project[] = [
       { id: "inventory", label: "Inventory" },
       { id: "process", label: "Process" },
     ],
+    screenImages: {
+      landing: "/previews/rockmotion/landing.png",
+      inventory: "/previews/rockmotion/inventory.png",
+      process: "/previews/rockmotion/process.png",
+    },
     liveBaseUrl: "https://rockmotion.vercel.app",
     liveScreenPaths: { landing: "/", inventory: "/inventory", process: "/process" },
   },
@@ -645,7 +699,7 @@ export const projects: Project[] = [
     id: "magilo",
     name: "Magilo Art College",
     tagline: "Art School, Design & Printing Hub",
-    imagePath: "/images/projects/magilo.png",
+    imagePath: "/images/projects/magilo-live.png",
     year: "2024",
     location: "Adenta · Accra",
     services: ["Storytelling", "Information design", "Front-end"],
@@ -671,6 +725,11 @@ export const projects: Project[] = [
       { id: "services", label: "Services" },
       { id: "college", label: "College" },
     ],
+    screenImages: {
+      landing: "/previews/magilo/landing.png",
+      services: "/previews/magilo/services.png",
+      college: "/previews/magilo/college.png",
+    },
     liveBaseUrl: "https://magiloartcollege.com",
     liveScreenPaths: { landing: "/", services: "/services", college: "/college" },
   },

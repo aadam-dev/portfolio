@@ -28,6 +28,10 @@ const urlMap: Record<string, Record<string, string>> = {
     landing: "primetijara.com",
     products: "primetijara.com/products",
     categories: "primetijara.com/categories",
+    admin: "primetijara.com/admin",
+    orders: "primetijara.com/admin/orders",
+    inventory: "primetijara.com/admin/inventory",
+    pos: "primetijara.com/pos",
   },
   ethika: {
     landing: "ethikawestafrica.com",
