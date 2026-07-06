@@ -6,30 +6,35 @@
   --font-sans: var(--font-inter);
   --font-serif: var(--font-serif);
   --font-mono: var(--font-mono);
+  --font-display: var(--font-archivo);
 }
 
 :root {
-  /* Surfaces */
-  --background: #08080c;
-  --surface: #0c0c12;
-  --surface-2: #12121a;
-  --surface-3: #181822;
+  /* Surfaces — warm charcoal */
+  --background: #0b0a08;
+  --surface: #12100d;
+  --surface-2: #181511;
+  --surface-3: #201c16;
 
-  /* Ink */
-  --foreground: #f2f2f5;
-  --ink-2: rgba(242, 242, 245, 0.72);
-  --ink-3: rgba(242, 242, 245, 0.48);
-  --ink-4: rgba(242, 242, 245, 0.28);
-  --ink-5: rgba(242, 242, 245, 0.12);
+  /* Ink — warm off-white */
+  --foreground: #f2eee6;
+  --ink-2: rgba(242, 238, 230, 0.72);
+  --ink-3: rgba(242, 238, 230, 0.48);
+  --ink-4: rgba(242, 238, 230, 0.28);
+  --ink-5: rgba(242, 238, 230, 0.12);
 
   /* Lines */
-  --line: rgba(255, 255, 255, 0.06);
-  --line-strong: rgba(255, 255, 255, 0.12);
+  --line: rgba(242, 238, 230, 0.07);
+  --line-strong: rgba(242, 238, 230, 0.14);
 
-  /* Accent - single signature */
-  --accent: #7c6afa;
-  --accent-2: #a89fff;
-  --accent-glow: rgba(124, 106, 250, 0.18);
+  /* Accent — gold, single signature */
+  --accent: #e8b23a;
+  --accent-2: #f2cb6b;
+  --accent-glow: rgba(232, 178, 58, 0.14);
+
+  /* Deep secondaries for large tinted bands */
+  --ember: #b33a2b;
+  --forest: #1e3b2e;
 
   /* Semantic */
   --success: #4ade80;
@@ -44,7 +49,6 @@
 }
 
 html {
-  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
 }
@@ -59,6 +63,18 @@ body {
   overflow-x: hidden;
 }
 
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 /* Film grain + subtle grid backdrop */
 body::before {
   content: "";
@@ -69,7 +85,7 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 220px 220px;
-  opacity: 0.025;
+  opacity: 0.03;
 }
 
 body::after {
@@ -79,8 +95,8 @@ body::after {
   pointer-events: none;
   z-index: 0;
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    linear-gradient(to right, rgba(242, 238, 230, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(242, 238, 230, 0.02) 1px, transparent 1px);
   background-size: 96px 96px;
   mask-image: radial-gradient(ellipse at 50% 20%, black 0%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse at 50% 20%, black 0%, transparent 75%);
@@ -105,7 +121,7 @@ body::after {
 /* Selection */
 ::selection {
   background: var(--accent);
-  color: #000;
+  color: #14100a;
 }
 
 /* Focus */
@@ -128,7 +144,7 @@ a:focus-visible {
   z-index: 100;
   padding: 12px 16px;
   background: var(--accent);
-  color: #000;
+  color: #14100a;
   font-size: 13px;
   font-weight: 600;
   border-radius: 8px;
@@ -141,9 +157,15 @@ a:focus-visible {
 
 /* Typography utilities */
 .font-display {
+  font-family: var(--font-archivo), "Archivo", system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.font-serif-it {
   font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
   font-weight: 400;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 .font-mono {
   font-family: var(--font-mono), ui-monospace, monospace;
@@ -168,9 +190,15 @@ a:focus-visible {
   color: var(--ink-3);
 }
 
-/* Signature text gradient - used sparingly */
+/* Outlined display text (fills via .text-outline-fill) */
+.text-outline {
+  -webkit-text-stroke: 1.5px var(--ink-3);
+  color: transparent;
+}
+
+/* Signature text gradient — gold, used sparingly */
 .text-gradient {
-  background: linear-gradient(135deg, #ffffff 0%, #c7bfff 55%, #7c6afa 100%);
+  background: linear-gradient(135deg, #f2eee6 0%, #f2cb6b 55%, #e8b23a 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -193,18 +221,6 @@ a:focus-visible {
 .hairline-b {
   border-bottom: 1px solid var(--line);
 }
-
-/* Hero aurora — slow living glow behind the headline */
-@keyframes aurora-a {
-  0%, 100% { transform: translate(-50%, 0) scale(1); opacity: 0.75; }
-  50% { transform: translate(-46%, -4%) scale(1.14); opacity: 1; }
-}
-@keyframes aurora-b {
-  0%, 100% { transform: translate(-54%, 3%) scale(1.06); opacity: 0.4; }
-  50% { transform: translate(-49%, -2%) scale(1.22); opacity: 0.72; }
-}
-.aurora-a { animation: aurora-a 16s var(--ease-in-out) infinite; }
-.aurora-b { animation: aurora-b 22s var(--ease-in-out) infinite; }
 
 /* Marquee */
 @keyframes marquee {
@@ -280,7 +296,7 @@ a:focus-visible {
   width: 4px;
 }
 .preview-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(242, 238, 230, 0.1);
   border-radius: 2px;
 }
 

@@ -1,192 +1,215 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useMotionTemplate,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
-import Marquee from "@/components/ui/Marquee";
 import MagneticButton from "@/components/ui/MagneticButton";
+import { EASE_IN_OUT, EASE_OUT } from "@/lib/motion";
 
-const TICKER = [
-  "50+ SMEs evaluated",
-  "20+ products shipped",
-  "4+ years building in-market",
-  "GHS 40K+ funds raised",
-  "Aspire Fellow · Cohort 4 · 2025",
-  "AI-Integrated Leadership Fellow · 2026",
-  "Working globally · Any timezone",
-];
+const CYCLE_WORDS = ["sell", "move", "convert", "impress"];
+const CYCLE_MS = 2600;
 
-export default function Hero() {
-  const reduce = useReducedMotion();
-
+function AccraTime() {
+  const [time, setTime] = useState<string | null>(null);
+  useEffect(() => {
+    const fmt = new Intl.DateTimeFormat("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+      timeZone: "Africa/Accra",
+    });
+    const tick = () => setTime(fmt.format(new Date()));
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
   return (
-    <section
-      className="relative pt-36 md:pt-44 pb-20 md:pb-28 px-4 md:px-6"
-      aria-labelledby="hero-heading"
-    >
-      {/* Signature aurora — two slow-drifting layers for depth */}
-      <div
-        className="aurora-a absolute top-16 left-1/2 pointer-events-none"
-        aria-hidden="true"
-        style={{
-          width: "min(940px, 110vw)",
-          height: "620px",
-          background:
-            "radial-gradient(ellipse at center, rgba(124,106,250,0.24) 0%, transparent 56%)",
-          filter: "blur(44px)",
-          zIndex: 0,
-        }}
-      />
-      <div
-        className="aurora-b absolute top-28 left-1/2 pointer-events-none"
-        aria-hidden="true"
-        style={{
-          width: "min(720px, 90vw)",
-          height: "520px",
-          background:
-            "radial-gradient(ellipse at center, rgba(74,108,250,0.18) 0%, transparent 60%)",
-          filter: "blur(56px)",
-          zIndex: 0,
-        }}
-      />
-
-      <div className="relative z-10 max-w-[1280px] mx-auto">
-        {/* Eyebrow */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="flex items-center gap-3 mb-10 md:mb-14"
-        >
-          <span className="relative inline-flex w-2 h-2">
-            <span className="ping-soft absolute inline-flex w-full h-full rounded-full bg-[var(--success)]" />
-            <span className="relative inline-flex w-2 h-2 rounded-full bg-[var(--success)]" />
-          </span>
-          <span className="eyebrow">
-            Taking select engagements · Working globally
-          </span>
-        </motion.div>
-
-        {/* Headline */}
-        <h1
-          id="hero-heading"
-          className="font-display text-white text-balance"
-          style={{
-            fontSize: "clamp(2.75rem, 10vw, 8.5rem)",
-            lineHeight: 0.95,
-            letterSpacing: "-0.035em",
-          }}
-        >
-          <SplitLine delay={0.05} reduce={!!reduce}>
-            An independent studio
-          </SplitLine>
-          <br />
-          <SplitLine delay={0.25} reduce={!!reduce}>
-            <span className="italic text-[var(--ink-2)]">building the tools</span>
-          </SplitLine>
-          <br />
-          <SplitLine delay={0.45} reduce={!!reduce}>
-            businesses{" "}
-            <span className="relative inline-block">
-              <span className="text-gradient">actually use.</span>
-              <motion.span
-                aria-hidden="true"
-                className="absolute left-0 bottom-[0.08em] h-[0.06em] w-full rounded-full"
-                style={{
-                  background:
-                    "linear-gradient(90deg, #7C6AFA 0%, rgba(168,159,255,0) 100%)",
-                }}
-                initial={{ scaleX: 0, transformOrigin: "left" }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 1.1, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-              />
-            </span>
-          </SplitLine>
-        </h1>
-
-        {/* Sub */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 md:mt-14 max-w-xl text-[17px] md:text-[19px] leading-[1.55] text-[var(--ink-2)] text-pretty"
-        >
-          Multi-disciplinary practice at the intersection of{" "}
-          <span className="text-white">investment/business analysis</span>,{" "}
-          <span className="text-white">data &amp; business analysis</span>,{" "}
-          <span className="text-white">
-            data strategy, data rooms &amp; documentation
-          </span>
-          , and{" "}
-          <span className="text-white">high-performance engineering</span>.
-          Designing and shipping products for founders, funds and operators across Africa and beyond.
-        </motion.p>
-
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.95, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 md:mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-3"
-        >
-          <MagneticButton href="#contact" variant="primary">
-            Start a project
-            <ArrowUpRight className="w-4 h-4" />
-          </MagneticButton>
-          <MagneticButton href="#work" variant="secondary">
-            View selected work
-            <ArrowDown className="w-4 h-4" />
-          </MagneticButton>
-        </motion.div>
-      </div>
-
-      {/* Outcome ticker */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.3, duration: 0.8 }}
-        className="relative z-10 mt-20 md:mt-28 border-y border-[var(--line-strong)] py-6"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(255,255,255,0.015) 0%, rgba(255,255,255,0.035) 50%, rgba(255,255,255,0.015) 100%)",
-        }}
-      >
-        <Marquee duration={45}>
-          {TICKER.map((item, i) => (
-            <span key={`${item}-${i}`} className="flex items-center gap-14">
-              <span className="font-mono text-[12px] md:text-[13px] uppercase tracking-[0.2em] text-white whitespace-nowrap">
-                {item}
-              </span>
-              <span
-                aria-hidden="true"
-                className="inline-block w-[3px] h-[3px] rounded-full bg-white/70"
-              />
-            </span>
-          ))}
-        </Marquee>
-      </motion.div>
-    </section>
+    <span className="tabular-nums" suppressHydrationWarning>
+      ACCRA {time ?? "--:--:--"} GMT
+    </span>
   );
 }
 
-function SplitLine({
+function CyclingWord({ reduce }: { reduce: boolean }) {
+  const [i, setI] = useState(2); // start on "convert"
+  useEffect(() => {
+    if (reduce) return;
+    const id = setInterval(() => setI((v) => (v + 1) % CYCLE_WORDS.length), CYCLE_MS);
+    return () => clearInterval(id);
+  }, [reduce]);
+
+  if (reduce) {
+    return <span className="font-serif-it lowercase text-[var(--accent)]">convert</span>;
+  }
+
+  return (
+    <span className="relative inline-grid overflow-hidden align-baseline">
+      {/* width lock: longest word, invisible */}
+      <span className="font-serif-it invisible col-start-1 row-start-1" aria-hidden="true">
+        impress
+      </span>
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={CYCLE_WORDS[i]}
+          className="font-serif-it lowercase text-[var(--accent)] col-start-1 row-start-1"
+          initial={{ y: "100%" }}
+          animate={{ y: 0 }}
+          exit={{ y: "-100%" }}
+          transition={{ duration: 0.5, ease: EASE_IN_OUT }}
+        >
+          {CYCLE_WORDS[i]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
+
+function HeroLine({
   children,
   delay,
   reduce,
+  className = "",
 }: {
   children: React.ReactNode;
   delay: number;
   reduce: boolean;
+  className?: string;
 }) {
   return (
-    <span className="inline-block overflow-hidden pb-[0.08em]">
+    <span className="block overflow-hidden pb-[0.06em]">
       <motion.span
-        className="inline-block"
-        initial={{ y: reduce ? 0 : "110%", opacity: reduce ? 0 : 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className={`block ${className}`}
+        initial={reduce ? { opacity: 0 } : { y: "110%" }}
+        animate={reduce ? { opacity: 1 } : { y: 0 }}
+        transition={{ delay, duration: 1.0, ease: EASE_OUT }}
       >
         {children}
       </motion.span>
     </span>
+  );
+}
+
+export default function Hero() {
+  const reduce = !!useReducedMotion();
+  const ref = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const headlineY = useTransform(scrollYProgress, [0, 0.6], ["0%", "-8%"]);
+  const headlineOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0.3]);
+  // outlined line fills left→right between 10% and 35% scroll
+  const fillPct = useTransform(scrollYProgress, [0.1, 0.35], [100, 0]);
+  const fillClip = useMotionTemplate`inset(0 ${fillPct}% 0 0)`;
+
+  return (
+    <section
+      ref={ref}
+      className="relative min-h-[100svh] flex flex-col justify-end px-4 md:px-6 pb-14 md:pb-16 pt-32"
+      aria-labelledby="hero-heading"
+    >
+      {/* Single restrained gold glow, bottom-left */}
+      <div
+        aria-hidden="true"
+        className="absolute bottom-0 left-0 pointer-events-none"
+        style={{
+          width: "min(720px, 80vw)",
+          height: "480px",
+          background:
+            "radial-gradient(ellipse at 20% 100%, var(--accent-glow) 0%, transparent 62%)",
+          filter: "blur(40px)",
+        }}
+      />
+
+      <div className="relative z-10 max-w-[1440px] w-full mx-auto">
+        {/* Eyebrow */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, ease: EASE_OUT }}
+          className="flex items-center gap-3 mb-8 md:mb-12"
+        >
+          <span className="relative inline-flex w-2 h-2">
+            <span className="ping-soft absolute inline-flex w-full h-full rounded-full bg-[var(--accent)]" />
+            <span className="relative inline-flex w-2 h-2 rounded-full bg-[var(--accent)]" />
+          </span>
+          <span className="eyebrow">
+            Aadam — Full-stack studio, Accra → worldwide
+          </span>
+        </motion.div>
+
+        {/* Kinetic headline */}
+        <motion.h1
+          id="hero-heading"
+          className="font-display uppercase"
+          style={{
+            fontSize: "clamp(3.2rem, 12vw, 11rem)",
+            lineHeight: 0.92,
+            letterSpacing: "-0.03em",
+            y: reduce ? 0 : headlineY,
+            opacity: reduce ? 1 : headlineOpacity,
+          }}
+        >
+          <HeroLine delay={0.15} reduce={reduce}>
+            Websites
+          </HeroLine>
+          <HeroLine delay={0.27} reduce={reduce}>
+            <span className="flex items-baseline gap-[0.22em] flex-wrap">
+              That <CyclingWord reduce={reduce} />
+            </span>
+          </HeroLine>
+          <HeroLine delay={0.39} reduce={reduce}>
+            <span className="relative inline-grid">
+              <span className="text-outline col-start-1 row-start-1" aria-hidden="true">
+                &amp; ship fast.
+              </span>
+              <motion.span
+                className="col-start-1 row-start-1"
+                style={{ clipPath: reduce ? "none" : fillClip }}
+              >
+                &amp; ship fast.
+              </motion.span>
+            </span>
+          </HeroLine>
+        </motion.h1>
+
+        {/* Meta row + CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.6, ease: EASE_OUT }}
+          className="mt-10 md:mt-14 flex flex-col md:flex-row md:items-end justify-between gap-8"
+        >
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <MagneticButton href="#flagship" variant="primary">
+              See the work
+              <ArrowDown className="w-4 h-4" />
+            </MagneticButton>
+            <MagneticButton href="#contact" variant="secondary">
+              Start a project
+              <ArrowUpRight className="w-4 h-4" />
+            </MagneticButton>
+          </div>
+
+          <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--ink-3)] flex flex-col items-start md:items-end gap-1.5">
+            <AccraTime />
+            <span className="flex items-center gap-2">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--success)]" />
+              Available Q3 2026
+            </span>
+            <span className="text-[var(--ink-4)]">20+ products shipped</span>
+          </div>
+        </motion.div>
+      </div>
+    </section>
   );
 }

@@ -63,7 +63,7 @@ export default function Services() {
               }}
             >
               One practice,{" "}
-              <span className="italic text-[var(--ink-2)]">five disciplines.</span>
+              <span className="font-serif-it lowercase text-[var(--ink-2)]">five disciplines.</span>
             </h2>
           </div>
           <p className="md:col-span-5 md:col-start-8 text-[15px] md:text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty">

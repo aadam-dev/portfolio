@@ -1,130 +1,154 @@
 "use client";
 
-import { ArrowUpRight, Mail, Phone, Calendar } from "lucide-react";
-import Reveal from "@/components/ui/Reveal";
-import MagneticButton from "@/components/ui/MagneticButton";
+import { useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Check, Copy } from "lucide-react";
+import { EASE_IN_OUT, EASE_OUT } from "@/lib/motion";
 
-const CHANNELS = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: "aadamsays@gmail.com",
-    href: "mailto:aadamsays@gmail.com?subject=Hi%20Aadam%20%E2%80%94%20Let%E2%80%99s%20Work%20Together",
-  },
-  {
-    icon: Phone,
-    label: "Phone / WhatsApp",
-    value: "+233 559 602 056",
-    href: "tel:+233559602056",
-  },
-  {
-    icon: Calendar,
-    label: "Book a call",
-    value: "30 min intro · any timezone",
-    href: "mailto:aadamsays@gmail.com?subject=Intro%20call%20%E2%80%94%20Aadam",
-  },
+const EMAIL = "aadamsays@gmail.com";
+const MAILTO = `mailto:${EMAIL}?subject=Hi%20Aadam%20%E2%80%94%20Let%E2%80%99s%20Work%20Together`;
+
+const LINKS = [
+  { label: "WhatsApp", href: "https://wa.me/233559602056" },
+  { label: "LinkedIn", href: "https://linkedin.com/in/aadamsays" },
+  { label: "Phone", href: "tel:+233559602056" },
 ];
 
 export default function Contact() {
+  const [copied, setCopied] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      setCopied(true);
+      if (timer.current) clearTimeout(timer.current);
+      timer.current = setTimeout(() => setCopied(false), 1600);
+    } catch {
+      // clipboard unavailable — mailto link still works
+    }
+  };
+
   return (
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="relative px-4 md:px-6 py-24 md:py-32 border-t border-[var(--line)] overflow-hidden"
+      className="relative px-4 md:px-6 py-32 md:py-44 border-t border-[var(--line)] overflow-hidden min-h-[70vh] flex items-center"
     >
+      {/* Single gold glow */}
       <div
         aria-hidden="true"
-        className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 pointer-events-none"
         style={{
           width: "min(900px, 110vw)",
-          height: "600px",
+          height: "480px",
           background:
-            "radial-gradient(ellipse at center top, rgba(124,106,250,0.18) 0%, transparent 60%)",
+            "radial-gradient(ellipse at center bottom, var(--accent-glow) 0%, transparent 60%)",
           filter: "blur(40px)",
-          zIndex: 0,
         }}
       />
 
-      <div className="relative z-10 max-w-[1280px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
-          <div className="md:col-span-7">
-            <p className="eyebrow mb-5">Contact · Ways to reach us</p>
-            <h2
-              id="contact-heading"
-              className="font-display text-white text-balance"
+      <div className="relative z-10 max-w-[1440px] w-full mx-auto">
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="eyebrow mb-8"
+        >
+          Have a project?
+        </motion.p>
+
+        <h2 id="contact-heading" className="sr-only">
+          Contact
+        </h2>
+
+        {/* Giant mailto */}
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+          <div className="overflow-hidden">
+            <motion.a
+              href={MAILTO}
+              initial={{ y: "110%" }}
+              whileInView={{ y: 0 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 1.0, ease: EASE_OUT }}
+              className="group relative block font-display lowercase break-all"
               style={{
-                fontSize: "clamp(2.5rem, 8vw, 6.5rem)",
-                lineHeight: 0.95,
-                letterSpacing: "-0.035em",
+                fontSize: "clamp(1.8rem, 6.5vw, 6.2rem)",
+                lineHeight: 1.05,
+                letterSpacing: "-0.03em",
               }}
             >
-              Tell me what&rsquo;s{" "}
-              <span className="italic text-[var(--ink-2)]">keeping you up at night.</span>
-            </h2>
-            <p className="mt-6 text-[16px] md:text-[17px] leading-[1.65] text-[var(--ink-2)] max-w-lg text-pretty">
-              Shortest path is email. I read every message personally and reply
-              within one business day. If it&rsquo;s urgent, call or message on
-              WhatsApp.
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <MagneticButton
-                href="mailto:aadamsays@gmail.com?subject=Hi%20Aadam%20%E2%80%94%20Let%E2%80%99s%20Work%20Together"
-                variant="primary"
-              >
-                Start the conversation
-                <ArrowUpRight className="w-4 h-4" />
-              </MagneticButton>
-              <MagneticButton
-                href="https://linkedin.com/in/aadamsays"
-                external
-                variant="secondary"
-              >
-                Connect on LinkedIn
-                <ArrowUpRight className="w-4 h-4" />
-              </MagneticButton>
-            </div>
+              {EMAIL}
+              <span
+                aria-hidden="true"
+                className="absolute left-0 -bottom-1 md:-bottom-2 h-[3px] w-full bg-[var(--accent)] origin-left scale-x-0 transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-x-100"
+              />
+            </motion.a>
           </div>
 
-          <div className="md:col-span-5">
-            <ul className="space-y-3">
-              {CHANNELS.map((c, i) => (
-                <Reveal key={c.label} delay={i * 0.08}>
-                  <li>
-                    <a
-                      href={c.href}
-                      className="group flex items-center justify-between gap-4 p-5 rounded-2xl border border-[var(--line)] transition-colors hover:border-white/20"
-                      style={{ background: "rgba(255,255,255,0.02)" }}
-                    >
-                      <div className="flex items-center gap-4 min-w-0">
-                        <span
-                          className="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-xl"
-                          style={{
-                            background: "rgba(124,106,250,0.12)",
-                            border: "1px solid rgba(124,106,250,0.25)",
-                            color: "var(--accent-2)",
-                          }}
-                          aria-hidden="true"
-                        >
-                          <c.icon className="w-4 h-4" />
-                        </span>
-                        <div className="min-w-0">
-                          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--ink-4)]">
-                            {c.label}
-                          </p>
-                          <p className="mt-0.5 text-[15px] text-white truncate">
-                            {c.value}
-                          </p>
-                        </div>
-                      </div>
-                      <ArrowUpRight className="w-4 h-4 text-[var(--ink-3)] transition-all group-hover:text-white group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                    </a>
-                  </li>
-                </Reveal>
-              ))}
-            </ul>
-          </div>
+          <button
+            type="button"
+            onClick={copyEmail}
+            aria-label={copied ? "Email copied" : "Copy email address"}
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] px-4 py-2 font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--ink-2)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
+          >
+            <span className="relative inline-grid overflow-hidden">
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.span
+                  key={copied ? "copied" : "copy"}
+                  className="col-start-1 row-start-1 inline-flex items-center gap-2"
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "-100%" }}
+                  transition={{ duration: 0.3, ease: EASE_IN_OUT }}
+                >
+                  {copied ? (
+                    <>
+                      Copied <Check className="w-3.5 h-3.5 text-[var(--success)]" />
+                    </>
+                  ) : (
+                    <>
+                      Copy <Copy className="w-3.5 h-3.5" />
+                    </>
+                  )}
+                </motion.span>
+              </AnimatePresence>
+            </span>
+          </button>
         </div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3, duration: 0.6, ease: EASE_OUT }}
+          className="mt-8 max-w-lg text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty"
+        >
+          I read every message personally and reply within one business day.
+          Urgent? WhatsApp works around the clock.
+        </motion.p>
+
+        <motion.nav
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.45, duration: 0.6 }}
+          className="mt-10 flex flex-wrap gap-x-8 gap-y-3"
+          aria-label="Other channels"
+        >
+          {LINKS.map((l) => (
+            <a
+              key={l.label}
+              href={l.href}
+              target={l.href.startsWith("http") ? "_blank" : undefined}
+              rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              className="font-mono text-[12px] tracking-[0.16em] uppercase text-[var(--ink-3)] hover:text-[var(--accent)] transition-colors"
+            >
+              {l.label} ↗
+            </a>
+          ))}
+        </motion.nav>
       </div>
     </section>
   );

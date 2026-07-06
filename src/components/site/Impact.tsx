@@ -38,7 +38,7 @@ export default function Impact() {
               }}
             >
               Numbers that{" "}
-              <span className="italic text-[var(--ink-2)]">earned themselves.</span>
+              <span className="font-serif-it lowercase text-[var(--ink-2)]">earned themselves.</span>
             </h2>
           </div>
           <p className="md:col-span-5 text-[15px] md:text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty">

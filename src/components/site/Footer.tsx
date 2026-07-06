@@ -34,7 +34,7 @@ export default function Footer() {
           width: "min(1000px, 120vw)",
           height: "500px",
           background:
-            "radial-gradient(ellipse at center, rgba(124,106,250,0.18) 0%, transparent 60%)",
+            "radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 60%)",
           filter: "blur(40px)",
         }}
       />
@@ -54,7 +54,7 @@ export default function Footer() {
             >
               Let&rsquo;s build
               <br />
-              <span className="italic text-[var(--ink-2)]">something that pays rent.</span>
+              <span className="font-serif-it lowercase text-[var(--ink-2)]">something that pays rent.</span>
             </h2>
             <a
               href="mailto:aadamsays@gmail.com?subject=Hi%20Aadam%20%E2%80%94%20Let%E2%80%99s%20Work%20Together"
@@ -119,8 +119,24 @@ export default function Footer() {
               +233 559 602 056
             </a>
             <span className="w-1 h-1 rounded-full bg-[var(--ink-4)]" aria-hidden="true" />
+            <span>Built by hand, shipped with AI</span>
+            <span className="w-1 h-1 rounded-full bg-[var(--ink-4)]" aria-hidden="true" />
             <span>&copy; {year} Aadam</span>
           </div>
+        </div>
+
+        {/* Oversized cropped wordmark */}
+        <div aria-hidden="true" className="mt-10 -mb-10 overflow-hidden select-none">
+          <p
+            className="font-display uppercase text-[var(--ink-5)] translate-y-[35%] text-center whitespace-nowrap"
+            style={{
+              fontSize: "clamp(6rem, 20vw, 22rem)",
+              lineHeight: 0.8,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Aadam
+          </p>
         </div>
       </div>
     </footer>

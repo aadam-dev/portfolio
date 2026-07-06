@@ -18,7 +18,7 @@ export default function OG() {
           justifyContent: "space-between",
           padding: "72px",
           background:
-            "radial-gradient(ellipse 120% 80% at 50% -10%, rgba(124,106,250,0.45) 0%, rgba(8,8,12,1) 60%), #08080C",
+            "radial-gradient(ellipse 120% 80% at 50% -10%, rgba(232,178,58,0.35) 0%, rgba(11,10,8,1) 60%), #0B0A08",
           color: "#F2F2F5",
         }}
       >
@@ -68,7 +68,7 @@ export default function OG() {
               style={{
                 color: "transparent",
                 backgroundImage:
-                  "linear-gradient(135deg, #FFFFFF 0%, #C7BFFF 55%, #7C6AFA 100%)",
+                  "linear-gradient(135deg, #F2EEE6 0%, #F2CB6B 55%, #E8B23A 100%)",
                 backgroundClip: "text",
               }}
             >

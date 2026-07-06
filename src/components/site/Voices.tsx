@@ -48,7 +48,7 @@ export default function Voices() {
             }}
           >
             What it&rsquo;s like{" "}
-            <span className="italic text-[var(--ink-2)]">to work together.</span>
+            <span className="font-serif-it lowercase text-[var(--ink-2)]">to work together.</span>
           </h2>
         </div>
 

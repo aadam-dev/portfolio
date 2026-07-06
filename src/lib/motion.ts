@@ -37,6 +37,33 @@ export const scaleIn: Variants = {
   },
 };
 
+/** Headline mask-rise: wrap parent in overflow-hidden, apply to the line */
+export const maskRise: Variants = {
+  hidden: { y: "110%" },
+  visible: {
+    y: 0,
+    transition: { duration: 1.0, ease: EASE_OUT },
+  },
+};
+
+/** Hairline rule draw-in (set transform-origin: left on the element) */
+export const drawLine: Variants = {
+  hidden: { scaleX: 0 },
+  visible: {
+    scaleX: 1,
+    transition: { duration: 0.8, ease: EASE_IN_OUT },
+  },
+};
+
+/** Clip-path inset reveal for images/panels */
+export const clipReveal: Variants = {
+  hidden: { clipPath: "inset(100% 0 0 0)" },
+  visible: {
+    clipPath: "inset(0% 0 0 0)",
+    transition: { duration: 1.2, ease: EASE_OUT },
+  },
+};
+
 /** Letter-by-letter reveal for display headings */
 export const splitLine: Variants = {
   hidden: {},
