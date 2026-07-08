@@ -95,8 +95,12 @@ const urlMap: Record<string, Record<string, string>> = {
   },
   jireh: {
     landing: "jirehnaturalfoods.vercel.app",
-    dashboard: "backoffice.jireh.app/dashboard",
-    reports: "backoffice.jireh.app/reports",
+    menu: "backoffice.jireh.app/admin/menu",
+    pos: "backoffice.jireh.app/pos",
+    orders: "backoffice.jireh.app/admin/orders",
+    inventory: "backoffice.jireh.app/admin/inventory",
+    dashboard: "backoffice.jireh.app/admin",
+    reports: "backoffice.jireh.app/admin/reports",
   },
 };
 
