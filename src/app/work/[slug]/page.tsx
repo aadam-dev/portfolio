@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { findProject, projects, projectSlug } from "@/lib/projects";
+import { getLocale } from "next-intl/server";
+import { findProject, projects, projectSlug, localizedProject } from "@/lib/projects";
 import CaseStudy from "./CaseStudy";
 
 interface Params {
@@ -18,8 +19,10 @@ export async function generateMetadata(
   const p = findProject(slug);
   if (!p) return {};
 
-  const title = `${p.name} · ${p.tagline}`;
-  const description = p.description;
+  const locale = await getLocale();
+  const loc = localizedProject(p, locale);
+  const title = `${p.name} · ${loc.tagline}`;
+  const description = loc.description;
 
   return {
     title,

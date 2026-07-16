@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocale } from "next-intl";
 import { ArrowLeft, ArrowUpRight, ExternalLink } from "lucide-react";
-import { Project, projectSlug } from "@/lib/projects";
+import { Project, projectSlug, localizedProject } from "@/lib/projects";
 import Nav from "@/components/site/Nav";
 import Footer from "@/components/site/Footer";
 import ScrollProgress from "@/components/site/ScrollProgress";
@@ -29,6 +30,8 @@ function buildLiveUrl(project: Project, screenId: string): string {
 
 export default function CaseStudy({ project, next }: Props) {
   const [screen, setScreen] = useState(project.screens[0]?.id ?? "landing");
+  const locale = useLocale();
+  const { tagline, description } = localizedProject(project, locale);
   const [mode, setMode] = useState<Mode>("simulated");
 
   return (
@@ -109,7 +112,7 @@ export default function CaseStudy({ project, next }: Props) {
                 letterSpacing: "-0.015em",
               }}
             >
-              {project.tagline}
+              {tagline}
             </p>
           </div>
         </section>
@@ -233,7 +236,7 @@ export default function CaseStudy({ project, next }: Props) {
                     letterSpacing: "-0.02em",
                   }}
                 >
-                  {project.description}
+                  {description}
                 </p>
               </Reveal>
 
@@ -296,7 +299,8 @@ export default function CaseStudy({ project, next }: Props) {
                 </div>
               </Reveal>
 
-              {project.outcomes && project.outcomes.length > 0 && (
+              {/* When a study is present, the large metrics strip below covers outcomes. */}
+              {!project.study && project.outcomes && project.outcomes.length > 0 && (
                 <Reveal delay={0.15}>
                   <p className="eyebrow mb-3">Outcomes</p>
                   <dl className="grid grid-cols-2 gap-4">
@@ -336,6 +340,70 @@ export default function CaseStudy({ project, next }: Props) {
             </aside>
           </div>
         </section>
+
+        {/* ── Challenge · Approach · Result ───────────────── */}
+        {project.study && (
+          <section className="relative px-4 md:px-6 pt-6 md:pt-10 pb-4">
+            <div className="max-w-[1280px] mx-auto border-t border-[var(--line)] pt-16 md:pt-20">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-14">
+                {(
+                  [
+                    { key: "challenge", label: "The challenge", body: project.study.challenge },
+                    { key: "approach", label: "The approach", body: project.study.approach },
+                    { key: "result", label: "The result", body: project.study.result },
+                  ] as const
+                ).map((block, i) => (
+                  <Reveal key={block.key} delay={i * 0.08}>
+                    <div className="md:border-l md:border-[var(--line)] md:pl-6 first:md:border-l-0 first:md:pl-0">
+                      <p
+                        className="font-mono text-[11px] uppercase tracking-[0.2em] mb-4"
+                        style={{ color: project.accentColor }}
+                      >
+                        {String(i + 1).padStart(2, "0")} — {block.label}
+                      </p>
+                      <p className="text-[15px] md:text-[16px] leading-[1.7] text-[var(--ink-2)] text-pretty">
+                        {block.body}
+                      </p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+
+              {(() => {
+                const metrics = project.study?.metrics ?? project.outcomes;
+                if (!metrics || metrics.length === 0) return null;
+                const cols =
+                  metrics.length === 2
+                    ? "md:grid-cols-2"
+                    : metrics.length === 3
+                      ? "md:grid-cols-3"
+                      : "md:grid-cols-4";
+                return (
+                  <Reveal delay={0.1}>
+                    <dl className={`mt-16 md:mt-20 grid grid-cols-2 ${cols} gap-px rounded-2xl overflow-hidden border border-[var(--line)] bg-[var(--line)]`}>
+                      {metrics.map((m) => (
+                        <div
+                          key={m.label}
+                          className="flex flex-col gap-1 p-6 md:p-8 bg-[var(--background)]"
+                        >
+                          <dd
+                            className="font-display text-white"
+                            style={{ fontSize: "clamp(2rem, 5vw, 3.25rem)", letterSpacing: "-0.03em", lineHeight: 1 }}
+                          >
+                            {m.value}
+                          </dd>
+                          <dt className="font-mono text-[10px] md:text-[11px] tracking-[0.16em] uppercase text-[var(--ink-3)] leading-snug">
+                            {m.label}
+                          </dt>
+                        </div>
+                      ))}
+                    </dl>
+                  </Reveal>
+                );
+              })()}
+            </div>
+          </section>
+        )}
 
         {/* ── Next project ────────────────────────────────── */}
         <section className="relative px-4 md:px-6 pt-20 md:pt-28 pb-16 md:pb-24 border-t border-[var(--line)] mt-10">

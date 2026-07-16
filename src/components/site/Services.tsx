@@ -7,6 +7,7 @@ import {
   Megaphone,
   Database,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Reveal from "@/components/ui/Reveal";
 
 const SERVICES = [
@@ -43,6 +44,7 @@ const SERVICES = [
 ];
 
 export default function Services() {
+  const t = useTranslations("services");
   return (
     <section
       id="services"
@@ -52,7 +54,7 @@ export default function Services() {
       <div className="max-w-[1280px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-16">
           <div className="md:col-span-6">
-            <p className="eyebrow mb-5">Services · End-to-end</p>
+            <p className="eyebrow mb-5">{t("eyebrow")}</p>
             <h2
               id="services-heading"
               className="font-display text-white text-balance"
@@ -62,8 +64,8 @@ export default function Services() {
                 letterSpacing: "-0.03em",
               }}
             >
-              One practice,{" "}
-              <span className="font-serif-it lowercase text-[var(--ink-2)]">five disciplines.</span>
+              {t("heading")}{" "}
+              <span className="font-serif-it lowercase text-[var(--ink-2)]">{t("headingAccent")}</span>
             </h2>
           </div>
           <p className="md:col-span-5 md:col-start-8 text-[15px] md:text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty">

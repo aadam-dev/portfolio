@@ -1,0 +1,113 @@
+{
+  "nav": {
+    "services": "Services",
+    "work": "Work",
+    "process": "Process",
+    "contact": "Contact",
+    "startProject": "Start a project",
+    "email": "Email",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "hero": {
+    "eyebrow": "Aadam — Full-stack studio, Accra → worldwide",
+    "line1": "Websites",
+    "that": "That",
+    "shipFast": "& ship fast.",
+    "words": {
+      "sell": "sell",
+      "move": "move",
+      "convert": "convert",
+      "impress": "impress"
+    },
+    "seeWork": "See the work",
+    "startProject": "Start a project",
+    "available": "Available Q3 2026",
+    "shipped": "20+ products shipped"
+  },
+  "work": {
+    "eyebrow": "The index · 2022 to 2026",
+    "headingCount": "{count} products,",
+    "headingAccent": "zero templates",
+    "filterAll": "All"
+  },
+  "flagship": {
+    "eyebrow": "Selected work — 01/0{count}",
+    "caseStudy": "Case study"
+  },
+  "services": {
+    "eyebrow": "Services · End-to-end",
+    "heading": "One practice,",
+    "headingAccent": "five disciplines."
+  },
+  "process": {
+    "eyebrow": "Process · 10 weeks average",
+    "heading": "How we work",
+    "headingAccent": "together."
+  },
+  "impact": {
+    "eyebrow": "Impact · 2022 to 2026",
+    "heading": "Numbers that",
+    "headingAccent": "earned themselves.",
+    "fellowships": "Fellowships"
+  },
+  "range": {
+    "eyebrow": "Range"
+  },
+  "voices": {
+    "eyebrow": "Voices · Client perspective",
+    "heading": "What it's like",
+    "headingAccent": "to work together."
+  },
+  "contact": {
+    "eyebrow": "Have a project?",
+    "heading": "Contact",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyAria": "Copy email address",
+    "copiedAria": "Email copied",
+    "note": "I read every message personally and reply within one business day. Urgent? WhatsApp works around the clock.",
+    "whatsapp": "WhatsApp",
+    "linkedin": "LinkedIn",
+    "phone": "Phone"
+  },
+  "footer": {
+    "eyebrow": "Studio · Aadam",
+    "heading": "Let's build",
+    "headingAccent": "something that pays rent.",
+    "navigate": "Navigate",
+    "elsewhere": "Elsewhere",
+    "impact": "Impact",
+    "voices": "Voices",
+    "availability": "Available globally · Any timezone",
+    "builtWith": "Built by hand, shipped with AI"
+  },
+  "common": {
+    "skipToContent": "Skip to content",
+    "language": "Language"
+  },
+  "cta": {
+    "whatsapp": "WhatsApp",
+    "startProject": "Start a project"
+  },
+  "form": {
+    "title": "Or send the brief now",
+    "name": "Your name",
+    "contact": "Email or WhatsApp number",
+    "budget": "Budget range",
+    "budgets": {
+      "b1": "Under $1k",
+      "b2": "$1k – $5k",
+      "b3": "$5k – $15k",
+      "b4": "$15k+",
+      "b0": "Not sure yet"
+    },
+    "message": "What are we building?",
+    "send": "Send inquiry",
+    "sending": "Sending…",
+    "sent": "Got it — I'll reply within one business day.",
+    "error": "Couldn't send — opening WhatsApp instead.",
+    "whatsappInstead": "Prefer WhatsApp? Send it there instead",
+    "required": "Please fill in your name, contact and message."
+  }
+}

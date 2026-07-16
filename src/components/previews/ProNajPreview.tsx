@@ -38,7 +38,7 @@ function NavBar() {
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-white flex items-center justify-center font-bold text-[#050505] text-sm">PN</div>
         <div>
-          <span className="text-white font-black text-sm block leading-tight">ProNaj</span>
+          <span className="text-white font-black text-sm block leading-tight">Pronaj</span>
           <span className="text-white/30 text-[9px] uppercase tracking-widest font-bold font-mono">International</span>
         </div>
       </div>
@@ -63,7 +63,7 @@ function Landing() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/80 to-[#050505]" />
         
         <div className="relative z-10">
-          <p className="text-orange-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-6 font-mono">ProNaj International</p>
+          <p className="text-orange-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-6 font-mono">Pronaj International</p>
           <h1 className="text-5xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-[0.9] uppercase max-w-4xl mx-auto">
             Infrastructure<br />
             <span className="text-orange-500">of the future</span>
@@ -122,7 +122,7 @@ function Sectors() {
               </div>
               <div className="flex-1">
                 <div className="flex flex-wrap items-center gap-4 mb-4">
-                  <h3 className="text-2xl font-black uppercase">ProNaj {s.name}</h3>
+                  <h3 className="text-2xl font-black uppercase">Pronaj {s.name}</h3>
                   <span className="border border-white/10 px-3 py-1 text-orange-500 text-[9px] font-bold tracking-widest font-mono">{s.tag}</span>
                 </div>
                 <p className="text-white/40 text-sm leading-relaxed mb-8 max-w-xl">{s.desc}</p>

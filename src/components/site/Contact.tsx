@@ -3,18 +3,21 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Copy } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { EASE_IN_OUT, EASE_OUT } from "@/lib/motion";
+import InquiryForm from "./InquiryForm";
 
 const EMAIL = "aadamsays@gmail.com";
 const MAILTO = `mailto:${EMAIL}?subject=Hi%20Aadam%20%E2%80%94%20Let%E2%80%99s%20Work%20Together`;
 
 const LINKS = [
-  { label: "WhatsApp", href: "https://wa.me/233559602056" },
-  { label: "LinkedIn", href: "https://linkedin.com/in/aadamsays" },
-  { label: "Phone", href: "tel:+233559602056" },
-];
+  { key: "whatsapp", href: "https://wa.me/233559602056" },
+  { key: "linkedin", href: "https://linkedin.com/in/aadamsays" },
+  { key: "phone", href: "tel:+233559602056" },
+] as const;
 
 export default function Contact() {
+  const t = useTranslations("contact");
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -56,11 +59,11 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
           className="eyebrow mb-8"
         >
-          Have a project?
+          {t("eyebrow")}
         </motion.p>
 
         <h2 id="contact-heading" className="sr-only">
-          Contact
+          {t("heading")}
         </h2>
 
         {/* Giant mailto */}
@@ -90,7 +93,7 @@ export default function Contact() {
           <button
             type="button"
             onClick={copyEmail}
-            aria-label={copied ? "Email copied" : "Copy email address"}
+            aria-label={copied ? t("copiedAria") : t("copyAria")}
             className="inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] px-4 py-2 font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--ink-2)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
           >
             <span className="relative inline-grid overflow-hidden">
@@ -105,11 +108,11 @@ export default function Contact() {
                 >
                   {copied ? (
                     <>
-                      Copied <Check className="w-3.5 h-3.5 text-[var(--success)]" />
+                      {t("copied")} <Check className="w-3.5 h-3.5 text-[var(--success)]" />
                     </>
                   ) : (
                     <>
-                      Copy <Copy className="w-3.5 h-3.5" />
+                      {t("copy")} <Copy className="w-3.5 h-3.5" />
                     </>
                   )}
                 </motion.span>
@@ -125,8 +128,7 @@ export default function Contact() {
           transition={{ delay: 0.3, duration: 0.6, ease: EASE_OUT }}
           className="mt-8 max-w-lg text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty"
         >
-          I read every message personally and reply within one business day.
-          Urgent? WhatsApp works around the clock.
+          {t("note")}
         </motion.p>
 
         <motion.nav
@@ -139,16 +141,18 @@ export default function Contact() {
         >
           {LINKS.map((l) => (
             <a
-              key={l.label}
+              key={l.key}
               href={l.href}
               target={l.href.startsWith("http") ? "_blank" : undefined}
               rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}
               className="font-mono text-[12px] tracking-[0.16em] uppercase text-[var(--ink-3)] hover:text-[var(--accent)] transition-colors"
             >
-              {l.label} ↗
+              {t(l.key)} ↗
             </a>
           ))}
         </motion.nav>
+
+        <InquiryForm />
       </div>
     </section>
   );

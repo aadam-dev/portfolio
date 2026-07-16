@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -19,14 +19,19 @@ import {
   type Project,
   type ProjectCategory,
 } from "@/lib/projects";
+import { useTranslations } from "next-intl";
 import { drawLine } from "@/lib/motion";
 
 const FILTERS: { label: string; value: ProjectCategory | "all" }[] = [
   { label: "All", value: "all" },
   { label: "Enterprise", value: "enterprise" },
   { label: "EdTech", value: "edtech" },
+  { label: "Fintech", value: "fintech" },
   { label: "Finance", value: "community" },
   { label: "Commerce", value: "ecommerce" },
+  { label: "PropTech", value: "proptech" },
+  { label: "Healthcare", value: "healthcare" },
+  { label: "Hospitality", value: "hospitality" },
   { label: "Restaurant", value: "restaurant" },
   { label: "Corporate", value: "corporate" },
   { label: "Automotive", value: "automotive" },
@@ -36,18 +41,19 @@ const FILTERS: { label: string; value: ProjectCategory | "all" }[] = [
 ];
 
 function usePointerFine() {
-  const [fine, setFine] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(pointer: fine)");
-    setFine(mq.matches);
-    const cb = (e: MediaQueryListEvent) => setFine(e.matches);
-    mq.addEventListener("change", cb);
-    return () => mq.removeEventListener("change", cb);
-  }, []);
-  return fine;
+  return useSyncExternalStore(
+    (onChange) => {
+      const mq = window.matchMedia("(pointer: fine)");
+      mq.addEventListener("change", onChange);
+      return () => mq.removeEventListener("change", onChange);
+    },
+    () => window.matchMedia("(pointer: fine)").matches,
+    () => false
+  );
 }
 
 export default function WorkIndex() {
+  const t = useTranslations("work");
   const [active, setActive] = useState<ProjectCategory | "all">("all");
   const [hovered, setHovered] = useState<string | null>(null);
   const reduce = !!useReducedMotion();
@@ -55,12 +61,22 @@ export default function WorkIndex() {
   const listRef = useRef<HTMLDivElement>(null);
 
   // Floating preview follows cursor with lag
+  const PANEL_W = 440;
+  const PANEL_H = 300;
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const px = useSpring(mx, { stiffness: 150, damping: 20 });
   const py = useSpring(my, { stiffness: 150, damping: 20 });
   const vx = useVelocity(px);
   const rotate = useTransform(vx, [-1200, 1200], [-3, 3]);
+  // Clamp inside the viewport so the panel never renders clipped/offscreen.
+  const panelX = useTransform(px, (v) => {
+    if (typeof window === "undefined") return v;
+    const half = PANEL_W / 2;
+    return Math.min(Math.max(v, half + 16), window.innerWidth - half - 16);
+  });
+  // Flip below the cursor when hovering rows near the top of the viewport.
+  const panelY = useTransform(py, (v) => (v < PANEL_H + 72 ? v + 28 : v - PANEL_H - 28));
 
   const filtered =
     active === "all" ? projects : projects.filter((p) => p.category === active);
@@ -80,15 +96,15 @@ export default function WorkIndex() {
     >
       <div className="max-w-[1440px] mx-auto">
         <header className="mb-10 md:mb-14">
-          <p className="eyebrow mb-5">The index · 2022 to 2026</p>
+          <p className="eyebrow mb-5">{t("eyebrow")}</p>
           <h2
             id="work-heading"
             className="font-display text-balance"
             style={{ fontSize: "clamp(2.4rem, 5.5vw, 4.5rem)", lineHeight: 1 }}
           >
-            {projects.length} products,{" "}
+            {t("headingCount", { count: projects.length })}{" "}
             <span className="font-serif-it text-[var(--ink-2)] lowercase">
-              zero templates
+              {t("headingAccent")}
             </span>
           </h2>
 
@@ -111,7 +127,7 @@ export default function WorkIndex() {
                     : "text-[var(--ink-4)] hover:text-[var(--ink-2)]"
                 }`}
               >
-                {f.label}
+                {f.value === "all" ? t("filterAll") : f.label}
                 {active === f.value && (
                   <span aria-hidden="true"> ({filtered.length})</span>
                 )}
@@ -151,10 +167,9 @@ export default function WorkIndex() {
             key={hoveredProject.id}
             className="fixed z-40 pointer-events-none hidden md:block"
             style={{
-              left: px,
-              top: py,
+              left: panelX,
+              top: panelY,
               x: "-50%",
-              y: "-110%",
               rotate,
             }}
             initial={{ opacity: 0, scale: 0.92 }}
@@ -162,14 +177,17 @@ export default function WorkIndex() {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="relative w-[320px] h-[220px] rounded-xl overflow-hidden border border-[var(--line-strong)] shadow-2xl bg-[var(--surface-2)]">
+            <div className="relative w-[440px] h-[300px] rounded-xl overflow-hidden border border-[var(--line-strong)] shadow-2xl bg-[var(--surface-2)]">
               <Image
                 src={hoveredProject.imagePath}
                 alt=""
                 fill
-                sizes="320px"
+                sizes="440px"
                 className="object-cover object-top"
               />
+              <span className="absolute bottom-2 left-2 rounded-md bg-black/60 px-2 py-1 font-mono text-[10px] tracking-[0.14em] uppercase text-white/90 backdrop-blur">
+                {hoveredProject.name}
+              </span>
             </div>
           </motion.div>
         )}

@@ -4,13 +4,15 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const LINKS = [
-  { label: "Services", href: "/#services" },
-  { label: "Work", href: "/#work" },
-  { label: "Process", href: "/#process" },
-  { label: "Contact", href: "/#contact" },
-];
+  { key: "services", href: "/#services" },
+  { key: "work", href: "/#work" },
+  { key: "process", href: "/#process" },
+  { key: "contact", href: "/#contact" },
+] as const;
 
 const SOCIALS = [
   { label: "GitHub", href: "https://github.com/aadam-dev" },
@@ -18,6 +20,7 @@ const SOCIALS = [
 ];
 
 export default function Nav() {
+  const t = useTranslations("nav");
   const [open, setOpen] = useState(false);
   const [condensed, setCondensed] = useState(false);
   const { scrollY } = useScroll();
@@ -84,7 +87,7 @@ export default function Nav() {
                 href={l.href}
                 className="px-3 py-2 text-[13px] text-[var(--ink-3)] hover:text-white transition-colors"
               >
-                {l.label}
+                {t(l.key)}
               </a>
             ))}
           </nav>
@@ -101,11 +104,12 @@ export default function Nav() {
                 {s.label}
               </a>
             ))}
+            <LanguageSwitcher />
             <a
               href="#contact"
               className="group inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-medium rounded-full border border-[var(--line-strong)] text-white hover:bg-white hover:text-black transition-colors"
             >
-              Start a project
+              {t("startProject")}
               <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           </div>
@@ -113,7 +117,7 @@ export default function Nav() {
           <button
             type="button"
             onClick={() => setOpen(true)}
-            aria-label="Open menu"
+            aria-label={t("openMenu")}
             className="md:hidden p-2 rounded-full border border-[var(--line-strong)] text-white hover:bg-white/5"
           >
             <Menu className="w-4 h-4" />
@@ -164,7 +168,7 @@ export default function Nav() {
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  aria-label="Close menu"
+                  aria-label={t("closeMenu")}
                   className="p-2 rounded-full border border-[var(--line-strong)] text-white"
                 >
                   <X className="w-4 h-4" />
@@ -186,7 +190,7 @@ export default function Nav() {
                     className="font-display text-[56px] leading-[0.95] text-white"
                     style={{ letterSpacing: "-0.03em" }}
                   >
-                    {l.label}
+                    {t(l.key)}
                     <span className="text-[var(--accent)]">.</span>
                   </motion.a>
                 ))}
@@ -209,15 +213,16 @@ export default function Nav() {
                     href="mailto:aadamsays@gmail.com"
                     className="hover:text-white transition-colors"
                   >
-                    Email
+                    {t("email")}
                   </a>
+                  <LanguageSwitcher />
                 </div>
                 <a
                   href="#contact"
                   onClick={() => setOpen(false)}
                   className="inline-flex items-center justify-between w-full px-5 py-4 rounded-full bg-white text-black text-sm font-medium"
                 >
-                  Start a project
+                  {t("startProject")}
                   <ArrowUpRight className="w-4 h-4" />
                 </a>
               </div>

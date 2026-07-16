@@ -1,6 +1,7 @@
 "use client";
 
 import { Quote } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Reveal from "@/components/ui/Reveal";
 
 /**
@@ -29,6 +30,7 @@ const VOICES = [
 ];
 
 export default function Voices() {
+  const t = useTranslations("voices");
   return (
     <section
       id="voices"
@@ -37,7 +39,7 @@ export default function Voices() {
     >
       <div className="max-w-[1280px] mx-auto">
         <div className="mb-12 md:mb-16 max-w-2xl">
-          <p className="eyebrow mb-5">Voices · Client perspective</p>
+          <p className="eyebrow mb-5">{t("eyebrow")}</p>
           <h2
             id="voices-heading"
             className="font-display text-white text-balance"
@@ -47,8 +49,8 @@ export default function Voices() {
               letterSpacing: "-0.03em",
             }}
           >
-            What it&rsquo;s like{" "}
-            <span className="font-serif-it lowercase text-[var(--ink-2)]">to work together.</span>
+            {t("heading")}{" "}
+            <span className="font-serif-it lowercase text-[var(--ink-2)]">{t("headingAccent")}</span>
           </h2>
         </div>
 

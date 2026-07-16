@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const QUICK_LINKS = [
-  { label: "Services", href: "/#services" },
-  { label: "Work", href: "/#work" },
-  { label: "Process", href: "/#process" },
-  { label: "Impact", href: "/#impact" },
-  { label: "Voices", href: "/#voices" },
-  { label: "Contact", href: "/#contact" },
-];
+  { ns: "nav", key: "services", href: "/#services" },
+  { ns: "nav", key: "work", href: "/#work" },
+  { ns: "nav", key: "process", href: "/#process" },
+  { ns: "footer", key: "impact", href: "/#impact" },
+  { ns: "footer", key: "voices", href: "/#voices" },
+  { ns: "nav", key: "contact", href: "/#contact" },
+] as const;
 
 const SOCIAL = [
   { label: "GitHub", href: "https://github.com/aadam-dev" },
@@ -19,6 +20,8 @@ const SOCIAL = [
 ];
 
 export default function Footer() {
+  const t = useTranslations("footer");
+  const tNav = useTranslations("nav");
   const year = new Date().getFullYear();
 
   return (
@@ -42,7 +45,7 @@ export default function Footer() {
       <div className="relative z-10 max-w-[1280px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12">
           <div className="md:col-span-6">
-            <p className="eyebrow mb-6">Studio · Aadam</p>
+            <p className="eyebrow mb-6">{t("eyebrow")}</p>
             <h2
               id="footer-heading"
               className="font-display text-white text-balance"
@@ -52,9 +55,9 @@ export default function Footer() {
                 letterSpacing: "-0.03em",
               }}
             >
-              Let&rsquo;s build
+              {t("heading")}
               <br />
-              <span className="font-serif-it lowercase text-[var(--ink-2)]">something that pays rent.</span>
+              <span className="font-serif-it lowercase text-[var(--ink-2)]">{t("headingAccent")}</span>
             </h2>
             <a
               href="mailto:aadamsays@gmail.com?subject=Hi%20Aadam%20%E2%80%94%20Let%E2%80%99s%20Work%20Together"
@@ -68,7 +71,7 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-3">
-            <p className="eyebrow mb-5">Navigate</p>
+            <p className="eyebrow mb-5">{t("navigate")}</p>
             <ul className="flex flex-col gap-2.5">
               {QUICK_LINKS.map((l) => (
                 <li key={l.href}>
@@ -76,7 +79,7 @@ export default function Footer() {
                     href={l.href}
                     className="text-[15px] text-[var(--ink-2)] hover:text-white transition-colors"
                   >
-                    {l.label}
+                    {l.ns === "nav" ? tNav(l.key) : t(l.key)}
                   </Link>
                 </li>
               ))}
@@ -84,7 +87,7 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-3">
-            <p className="eyebrow mb-5">Elsewhere</p>
+            <p className="eyebrow mb-5">{t("elsewhere")}</p>
             <ul className="flex flex-col gap-2.5">
               {SOCIAL.map((s) => (
                 <li key={s.href}>
@@ -110,17 +113,17 @@ export default function Footer() {
               <span className="relative inline-flex w-2 h-2 rounded-full bg-[var(--success)]" />
             </span>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--ink-3)]">
-              Available globally · Any timezone
+              {t("availability")}
             </p>
           </div>
 
-          <div className="flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--ink-3)]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--ink-3)]">
             <a href="tel:+233559602056" className="hover:text-white transition-colors">
               +233 559 602 056
             </a>
-            <span className="w-1 h-1 rounded-full bg-[var(--ink-4)]" aria-hidden="true" />
-            <span>Built by hand, shipped with AI</span>
-            <span className="w-1 h-1 rounded-full bg-[var(--ink-4)]" aria-hidden="true" />
+            <span className="hidden md:inline-block w-1 h-1 rounded-full bg-[var(--ink-4)]" aria-hidden="true" />
+            <span>{t("builtWith")}</span>
+            <span className="hidden md:inline-block w-1 h-1 rounded-full bg-[var(--ink-4)]" aria-hidden="true" />
             <span>&copy; {year} Aadam</span>
           </div>
         </div>

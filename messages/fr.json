@@ -1,0 +1,113 @@
+{
+  "nav": {
+    "services": "Services",
+    "work": "Projets",
+    "process": "Méthode",
+    "contact": "Contact",
+    "startProject": "Lancer un projet",
+    "email": "E-mail",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
+  },
+  "hero": {
+    "eyebrow": "Aadam — Studio full-stack, Accra → monde entier",
+    "line1": "Des sites",
+    "that": "Qui",
+    "shipFast": "& livrés vite.",
+    "words": {
+      "sell": "vendent",
+      "move": "émeuvent",
+      "convert": "convertissent",
+      "impress": "impressionnent"
+    },
+    "seeWork": "Voir les projets",
+    "startProject": "Lancer un projet",
+    "available": "Disponible T3 2026",
+    "shipped": "20+ produits livrés"
+  },
+  "work": {
+    "eyebrow": "L'index · 2022 à 2026",
+    "headingCount": "{count} produits,",
+    "headingAccent": "zéro template",
+    "filterAll": "Tous"
+  },
+  "flagship": {
+    "eyebrow": "Projets phares — 01/0{count}",
+    "caseStudy": "Étude de cas"
+  },
+  "services": {
+    "eyebrow": "Services · De bout en bout",
+    "heading": "Une pratique,",
+    "headingAccent": "cinq disciplines."
+  },
+  "process": {
+    "eyebrow": "Méthode · 10 semaines en moyenne",
+    "heading": "Comment nous travaillons",
+    "headingAccent": "ensemble."
+  },
+  "impact": {
+    "eyebrow": "Impact · 2022 à 2026",
+    "heading": "Des chiffres qui",
+    "headingAccent": "parlent d'eux-mêmes.",
+    "fellowships": "Fellowships"
+  },
+  "range": {
+    "eyebrow": "Étendue"
+  },
+  "voices": {
+    "eyebrow": "Témoignages · Côté client",
+    "heading": "Ce que c'est",
+    "headingAccent": "de travailler ensemble."
+  },
+  "contact": {
+    "eyebrow": "Un projet en tête ?",
+    "heading": "Contact",
+    "copy": "Copier",
+    "copied": "Copié",
+    "copyAria": "Copier l'adresse e-mail",
+    "copiedAria": "E-mail copié",
+    "note": "Je lis chaque message personnellement et réponds sous un jour ouvré. Urgent ? WhatsApp fonctionne à toute heure.",
+    "whatsapp": "WhatsApp",
+    "linkedin": "LinkedIn",
+    "phone": "Téléphone"
+  },
+  "footer": {
+    "eyebrow": "Studio · Aadam",
+    "heading": "Construisons",
+    "headingAccent": "quelque chose qui rapporte.",
+    "navigate": "Navigation",
+    "elsewhere": "Ailleurs",
+    "impact": "Impact",
+    "voices": "Témoignages",
+    "availability": "Disponible partout · Tout fuseau horaire",
+    "builtWith": "Fait main, livré avec l'IA"
+  },
+  "common": {
+    "skipToContent": "Aller au contenu",
+    "language": "Langue"
+  },
+  "cta": {
+    "whatsapp": "WhatsApp",
+    "startProject": "Lancer un projet"
+  },
+  "form": {
+    "title": "Ou envoyez le brief maintenant",
+    "name": "Votre nom",
+    "contact": "E-mail ou numéro WhatsApp",
+    "budget": "Budget",
+    "budgets": {
+      "b1": "Moins de 1 k$",
+      "b2": "1 k$ – 5 k$",
+      "b3": "5 k$ – 15 k$",
+      "b4": "15 k$ +",
+      "b0": "Pas encore décidé"
+    },
+    "message": "Que construisons-nous ?",
+    "send": "Envoyer",
+    "sending": "Envoi…",
+    "sent": "Bien reçu — je réponds sous un jour ouvré.",
+    "error": "Échec de l'envoi — ouverture de WhatsApp.",
+    "whatsappInstead": "Vous préférez WhatsApp ? Envoyez-le là-bas",
+    "required": "Merci d'indiquer votre nom, un contact et un message."
+  }
+}

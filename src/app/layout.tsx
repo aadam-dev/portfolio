@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Instrument_Serif, JetBrains_Mono, Archivo } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import "./globals.css";
 import SmoothScroll from "@/components/site/SmoothScroll";
 
@@ -86,21 +88,27 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+  const t = await getTranslations("common");
   return (
     <html
-      lang="en"
+      lang={locale}
+      dir={locale === "ar" ? "rtl" : "ltr"}
       className={`${inter.variable} ${instrumentSerif.variable} ${jetBrainsMono.variable} ${archivo.variable}`}
     >
       <body className="antialiased">
-        <a href="#main" className="skip-link">
-          Skip to content
-        </a>
-        <SmoothScroll>{children}</SmoothScroll>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <a href="#main" className="skip-link">
+            {t("skipToContent")}
+          </a>
+          <SmoothScroll>{children}</SmoothScroll>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

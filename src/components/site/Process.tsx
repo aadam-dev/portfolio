@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Reveal from "@/components/ui/Reveal";
 
 const STEPS = [
@@ -39,6 +40,7 @@ const STEPS = [
 ];
 
 export default function Process() {
+  const t = useTranslations("process");
   return (
     <section
       id="process"
@@ -48,7 +50,7 @@ export default function Process() {
       <div className="max-w-[1280px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-16">
           <div className="md:col-span-5">
-            <p className="eyebrow mb-5">Process · 10 weeks average</p>
+            <p className="eyebrow mb-5">{t("eyebrow")}</p>
             <h2
               id="process-heading"
               className="font-display text-white text-balance"
@@ -58,8 +60,8 @@ export default function Process() {
                 letterSpacing: "-0.03em",
               }}
             >
-              How we work{" "}
-              <span className="font-serif-it lowercase text-[var(--ink-2)]">together.</span>
+              {t("heading")}{" "}
+              <span className="font-serif-it lowercase text-[var(--ink-2)]">{t("headingAccent")}</span>
             </h2>
           </div>
           <p className="md:col-span-5 md:col-start-8 text-[15px] md:text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty">

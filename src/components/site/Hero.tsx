@@ -10,10 +10,11 @@ import {
   useTransform,
 } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { EASE_IN_OUT, EASE_OUT } from "@/lib/motion";
 
-const CYCLE_WORDS = ["sell", "move", "convert", "impress"];
+const CYCLE_WORDS = ["sell", "move", "convert", "impress"] as const;
 const CYCLE_MS = 2600;
 
 function AccraTime() {
@@ -39,6 +40,7 @@ function AccraTime() {
 }
 
 function CyclingWord({ reduce }: { reduce: boolean }) {
+  const t = useTranslations("hero.words");
   const [i, setI] = useState(2); // start on "convert"
   useEffect(() => {
     if (reduce) return;
@@ -47,14 +49,17 @@ function CyclingWord({ reduce }: { reduce: boolean }) {
   }, [reduce]);
 
   if (reduce) {
-    return <span className="font-serif-it lowercase text-[var(--accent)]">convert</span>;
+    return <span className="font-serif-it lowercase text-[var(--accent)]">{t("convert")}</span>;
   }
+
+  const words = CYCLE_WORDS.map((w) => t(w));
+  const longest = words.reduce((a, b) => (b.length > a.length ? b : a), "");
 
   return (
     <span className="relative inline-grid overflow-hidden align-baseline">
       {/* width lock: longest word, invisible */}
       <span className="font-serif-it invisible col-start-1 row-start-1" aria-hidden="true">
-        impress
+        {longest}
       </span>
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
@@ -65,7 +70,7 @@ function CyclingWord({ reduce }: { reduce: boolean }) {
           exit={{ y: "-100%" }}
           transition={{ duration: 0.5, ease: EASE_IN_OUT }}
         >
-          {CYCLE_WORDS[i]}
+          {words[i]}
         </motion.span>
       </AnimatePresence>
     </span>
@@ -98,6 +103,7 @@ function HeroLine({
 }
 
 export default function Hero() {
+  const t = useTranslations("hero");
   const reduce = !!useReducedMotion();
   const ref = useRef<HTMLElement>(null);
 
@@ -142,9 +148,7 @@ export default function Hero() {
             <span className="ping-soft absolute inline-flex w-full h-full rounded-full bg-[var(--accent)]" />
             <span className="relative inline-flex w-2 h-2 rounded-full bg-[var(--accent)]" />
           </span>
-          <span className="eyebrow">
-            Aadam — Full-stack studio, Accra → worldwide
-          </span>
+          <span className="eyebrow">{t("eyebrow")}</span>
         </motion.div>
 
         {/* Kinetic headline */}
@@ -160,23 +164,23 @@ export default function Hero() {
           }}
         >
           <HeroLine delay={0.15} reduce={reduce}>
-            Websites
+            {t("line1")}
           </HeroLine>
           <HeroLine delay={0.27} reduce={reduce}>
             <span className="flex items-baseline gap-[0.22em] flex-wrap">
-              That <CyclingWord reduce={reduce} />
+              {t("that")} <CyclingWord reduce={reduce} />
             </span>
           </HeroLine>
           <HeroLine delay={0.39} reduce={reduce}>
             <span className="relative inline-grid">
               <span className="text-outline col-start-1 row-start-1" aria-hidden="true">
-                &amp; ship fast.
+                {t("shipFast")}
               </span>
               <motion.span
                 className="col-start-1 row-start-1"
                 style={{ clipPath: reduce ? "none" : fillClip }}
               >
-                &amp; ship fast.
+                {t("shipFast")}
               </motion.span>
             </span>
           </HeroLine>
@@ -191,11 +195,11 @@ export default function Hero() {
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <MagneticButton href="#flagship" variant="primary">
-              See the work
+              {t("seeWork")}
               <ArrowDown className="w-4 h-4" />
             </MagneticButton>
             <MagneticButton href="#contact" variant="secondary">
-              Start a project
+              {t("startProject")}
               <ArrowUpRight className="w-4 h-4" />
             </MagneticButton>
           </div>
@@ -204,9 +208,9 @@ export default function Hero() {
             <AccraTime />
             <span className="flex items-center gap-2">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--success)]" />
-              Available Q3 2026
+              {t("available")}
             </span>
-            <span className="text-[var(--ink-4)]">20+ products shipped</span>
+            <span className="text-[var(--ink-4)]">{t("shipped")}</span>
           </div>
         </motion.div>
       </div>

@@ -25,6 +25,23 @@ export interface ProjectOutcome {
   label: string;
 }
 
+export interface CaseStudyGalleryItem {
+  /** Screen id to pull the image from screenImages, or an explicit src. */
+  screen?: string;
+  src?: string;
+  caption: string;
+}
+
+/** Long-form case-study narrative. Optional — the case study degrades gracefully without it. */
+export interface ProjectStudy {
+  challenge: string;
+  approach: string;
+  result: string;
+  /** Headline metrics rendered as a strip; falls back to `outcomes` when omitted. */
+  metrics?: ProjectOutcome[];
+  gallery?: CaseStudyGalleryItem[];
+}
+
 export interface ProjectTestimonial {
   quote: string;
   author: string;
@@ -39,6 +56,13 @@ export interface Project {
   name: string;
   tagline: string;
   description: string;
+  /** Localized overrides (English is the base; fall back to it when absent). */
+  taglineFr?: string;
+  taglineAr?: string;
+  descriptionFr?: string;
+  descriptionAr?: string;
+  /** Optional long-form case-study narrative. */
+  study?: ProjectStudy;
   role?: string;
   /** Year / year-range, used for the editorial index line. */
   year?: string;
@@ -56,6 +80,7 @@ export interface Project {
   accentColor: string;
   accentGlow: string;
   featured?: boolean;
+  flagship?: boolean;
   isLead?: boolean;
   imagePath?: string;
   /**
@@ -75,6 +100,19 @@ export function projectSlug(p: Project): string {
   return p.slug ?? p.id;
 }
 
+/** Pick locale-specific tagline/description, falling back to English. */
+export function localizedProject(
+  p: Project,
+  locale: string
+): { tagline: string; description: string } {
+  const pick = (base: string, fr?: string, ar?: string) =>
+    locale === "fr" ? fr ?? base : locale === "ar" ? ar ?? base : base;
+  return {
+    tagline: pick(p.tagline, p.taglineFr, p.taglineAr),
+    description: pick(p.description, p.descriptionFr, p.descriptionAr),
+  };
+}
+
 export function findProject(slug: string): Project | undefined {
   return projects.find((p) => projectSlug(p) === slug);
 }
@@ -84,12 +122,26 @@ export const projects: Project[] = [
     id: "koyi",
     name: "Kōyi",
     tagline: "Online Learning Platform",
-    imagePath: "/images/projects/koyi-live.png",
+    taglineFr: "Plateforme d'apprentissage en ligne",
+    taglineAr: "منصة التعلّم عبر الإنترنت",
+    imagePath: "/images/projects/koyi.webp",
     year: "2024",
     location: "Ghana · West Africa",
     services: ["Product strategy", "Information architecture", "Full-stack engineering"],
     description:
       "LMS built for Ghana and West Africa, covering WASSCE, BECE, university bridging, and career courses. Multilingual (EN/FR/AR), video streaming, certificates, and role-based access.",
+    descriptionFr:
+      "LMS conçu pour le Ghana et l'Afrique de l'Ouest — WASSCE, BECE, mise à niveau universitaire et cours professionnels. Multilingue (EN/FR/AR), streaming vidéo, certificats et accès selon les rôles.",
+    descriptionAr:
+      "نظام إدارة تعلّم مبني لغانا وغرب أفريقيا، يغطي امتحانات WASSCE وBECE والجسور الجامعية والدورات المهنية. متعدّد اللغات (الإنجليزية/الفرنسية/العربية)، بثّ فيديو، وشهادات، وصلاحيات حسب الدور.",
+    study: {
+      challenge:
+        "Students across Ghana and West Africa prepare for WASSCE and BECE with fragmented materials, in three languages, on low-end phones and unreliable connections. No single platform mapped the actual national curriculum in a way that worked on the devices learners really own.",
+      approach:
+        "We designed the academic pathways with Ghanaian teachers first, then built the LMS around them — WASSCE, BECE, university-bridging and career tracks — with EN/FR/AR from the ground up, adaptive video streaming, certificates, and role-based access for students, tutors and admins.",
+      result:
+        "A production LMS with 420+ courses mapped across four pathways and three languages, structured by the people who actually teach the curriculum — built to scale to schools and independent learners across the region.",
+    },
     role: "Product strategist & full‑stack developer",
     impact: [
       "Designed the academic pathways and course structure with Ghanaian teachers.",
@@ -106,22 +158,19 @@ export const projects: Project[] = [
     accentColor: "#0d9488",
     accentGlow: "rgba(13, 148, 136, 0.15)",
     featured: true,
+    flagship: true,
     screens: [
       { id: "landing", label: "Home" },
       { id: "courses", label: "Courses" },
       { id: "lesson", label: "Lesson" },
       { id: "dashboard", label: "Dashboard" },
     ],
-    screenImages: {
-      landing: "/previews/koyi/landing.png",
-      courses: "/previews/koyi/courses.png",
-    },
   },
   {
     id: "siif",
     name: "SIIF",
     tagline: "Savannah Institute for Innovative Finance",
-    imagePath: "/images/projects/siif.png",
+    imagePath: "/images/projects/siif.webp",
     year: "2025",
     location: "West Africa · Institutional",
     services: ["Brand identity", "Editorial design", "Front-end engineering"],
@@ -152,7 +201,7 @@ export const projects: Project[] = [
     id: "chalesocks",
     name: "Chale Socks",
     tagline: "Premium Afro-Luxury E-Commerce",
-    imagePath: "/images/projects/chalesocks-live.png",
+    imagePath: "/images/projects/chalesocks-live.webp",
     year: "2025",
     location: "Global",
     services: ["Brand positioning", "Front-end engineering", "Commerce design"],
@@ -174,8 +223,8 @@ export const projects: Project[] = [
       { id: "story", label: "The Story" },
     ],
     screenImages: {
-      landing: "/previews/chalesocks/landing.png",
-      story: "/previews/chalesocks/story.png",
+      landing: "/previews/chalesocks/landing.webp",
+      story: "/previews/chalesocks/story.webp",
     },
     liveBaseUrl: "https://chalesocks.vercel.app",
     liveScreenPaths: { landing: "/", story: "/#our-story" },
@@ -185,12 +234,26 @@ export const projects: Project[] = [
     slug: "primetijara",
     name: "PrimeTijara",
     tagline: "B2B Building Materials Supply Desk",
-    imagePath: "/images/projects/primetijara-landing.png",
+    taglineFr: "Comptoir d'approvisionnement B2B en matériaux de construction",
+    taglineAr: "مكتب توريد مواد البناء بين الشركات",
+    imagePath: "/images/projects/primetijara-landing.webp",
     year: "2025",
     location: "Ghana · B2B",
     services: ["Product architecture", "Procurement workflows", "POS & back office", "Full-stack engineering"],
     description:
       "The supply desk for Ghanaian businesses and builders. PrimeTijara unifies competitive stock, formal proformas, approvals, deliveries and an in-house POS into one verified procurement flow — fronted by a storefront and run from an Odoo-style back office.",
+    descriptionFr:
+      "Le comptoir d'approvisionnement des entreprises et artisans ghanéens. PrimeTijara réunit stock compétitif, proformas formels, approbations, livraisons et une caisse (POS) interne dans un flux d'achat vérifié — avec une vitrine en façade et un back-office façon Odoo.",
+    descriptionAr:
+      "مكتب التوريد للشركات والبنّائين في غانا. يوحّد PrimeTijara المخزون التنافسي وعروض الأسعار الرسمية والموافقات والتسليم ونقطة بيع داخلية في مسار شراء موثّق — بواجهة متجر ومكتب خلفي بأسلوب Odoo.",
+    study: {
+      challenge:
+        "Ghanaian contractors and businesses buy building materials through scattered WhatsApp chats and paper proformas — no verified pricing, no approval trail, and counter sales that never reconcile with stock or cash. Owners couldn't tell whether they were actually making money.",
+      approach:
+        "We modelled approval and proforma flows around how contractors work on site, then built an Odoo-style back office — orders, inventory, purchasing, accounting, payroll and POS shifts — wired to a storefront and courier settlement so every counter sale hits one source of stock and cash truth.",
+      result:
+        "One procurement OS replacing the WhatsApp-and-paper workflow: 20+ back-office modules, an in-house POS and a public storefront kept in sync, giving the business a single real-time view of stock, orders and cash.",
+    },
     role: "Product, architecture & full-stack engineering",
     impact: [
       "Modelled approval and proforma flows around how contractors actually work on site.",
@@ -208,6 +271,7 @@ export const projects: Project[] = [
     accentColor: "#EAB308",
     accentGlow: "rgba(234, 179, 8, 0.15)",
     featured: true,
+    flagship: true,
     defaultScreen: "admin",
     screens: [
       { id: "landing", label: "Home" },
@@ -218,16 +282,55 @@ export const projects: Project[] = [
       { id: "pos", label: "POS" },
     ],
     screenImages: {
-      landing: "/previews/primehub/landing.png",
-      products: "/previews/primehub/products.png",
-      categories: "/previews/primehub/categories.png",
-      admin: "/previews/primehub/admin.png",
-      orders: "/previews/primehub/orders.png",
-      inventory: "/previews/primehub/inventory.png",
-      pos: "/previews/primehub/pos.png",
+      landing: "/previews/primehub/landing.webp",
+      products: "/previews/primehub/products.webp",
+      categories: "/previews/primehub/categories.webp",
+      admin: "/previews/primehub/admin.webp",
+      orders: "/previews/primehub/orders.webp",
+      inventory: "/previews/primehub/inventory.webp",
+      pos: "/previews/primehub/pos.webp",
     },
     liveBaseUrl: "https://primehubgh.vercel.app",
     liveScreenPaths: { landing: "/", products: "/products", categories: "/categories" },
+  },
+  {
+    id: "alboyut",
+    slug: "al-boyut",
+    name: "Al-Boyut",
+    tagline: "Building Materials & Laundry Counter Platform",
+    year: "2026",
+    location: "Accra · Ghana",
+    services: [
+      "Brand identity",
+      "Commerce design",
+      "POS & back office",
+      "Full-stack engineering",
+    ],
+    description:
+      "Storefront and operations platform for an Accra building-materials merchant with a laundry counter. WhatsApp-first ordering with counter pickup and delivery, a role-based back office, POS, supplier portal and laundry operations — carried by a laterite-and-steel identity rooted in Accra's red earth.",
+    role: "Product, brand & full-stack engineering",
+    impact: [
+      "Gave a template-cloned storefront its own hard-wearing 'builder's merchant' identity — flat, committed, WCAG AA verified.",
+      "Modelled WhatsApp ordering, counter pickup and delivery around how Accra customers actually buy materials.",
+      "Built admin, POS, supplier and laundry-ops surfaces on one Drizzle/Postgres source of truth.",
+    ],
+    outcomes: [
+      { value: "5", label: "Operational surfaces" },
+      { value: "2", label: "Businesses, one system" },
+      { value: "AA", label: "Contrast verified" },
+    ],
+    category: "ecommerce",
+    categoryLabel: "E-Commerce · Operations",
+    stack: ["Next.js", "TypeScript", "Drizzle", "PostgreSQL", "Better Auth", "Vercel Blob"],
+    accentColor: "#A8462A",
+    accentGlow: "rgba(168, 70, 42, 0.16)",
+    featured: true,
+    screens: [
+      { id: "landing", label: "Storefront" },
+      { id: "admin", label: "Back office" },
+      { id: "pos", label: "POS" },
+      { id: "laundry", label: "Laundry ops" },
+    ],
   },
   {
     id: "enterprise-erp",
@@ -275,7 +378,7 @@ export const projects: Project[] = [
     accentColor: "#8B5CF6",
     accentGlow: "rgba(139, 92, 246, 0.18)",
     featured: true,
-    imagePath: "/images/projects/enterprise-erp.png",
+    imagePath: "/images/projects/enterprise-erp.webp",
     screens: [
       { id: "overview", label: "Overview" },
       { id: "modules", label: "Modules" },
@@ -286,7 +389,7 @@ export const projects: Project[] = [
     id: "redrow",
     name: "Redrow Minimart",
     tagline: "Premium Daily Essentials",
-    imagePath: "/images/projects/redrow.png",
+    imagePath: "/images/projects/redrow.webp",
     year: "2025",
     location: "Ghana",
     services: ["Brand direction", "Full-stack engineering"],
@@ -308,12 +411,11 @@ export const projects: Project[] = [
       { id: "shop", label: "Shop" },
     ],
   },
-/*
   {
     id: "ethika",
     name: "Ethika Finance",
     tagline: "Non-Interest Banking Hub",
-    imagePath: "/images/projects/ethika.png",
+    imagePath: "/images/projects/ethika.webp",
     description:
       "West Africa's definitive resource for non-interest banking (NIB). Bank of Ghana regulatory guidance, NIB vs conventional banking comparisons, and bilingual (EN/FR) education.",
     role: "Researcher, information architect & engineer",
@@ -327,6 +429,7 @@ export const projects: Project[] = [
     accentColor: "#EA580C",
     accentGlow: "rgba(234, 88, 12, 0.15)",
     featured: true,
+    flagship: true,
     screens: [
       { id: "landing", label: "Home" },
       { id: "comparison", label: "NIB vs Conv." },
@@ -335,12 +438,11 @@ export const projects: Project[] = [
     liveBaseUrl: "https://ethika.vercel.app",
     liveScreenPaths: { landing: "/", comparison: "/comparison", vault: "/vault" },
   },
-*/
   {
     id: "anisfoods",
     name: "Anis Food & Drink",
     tagline: "Ghanaian Restaurant · POS & Back Office",
-    imagePath: "/images/projects/anisfoods-live.png",
+    imagePath: "/images/projects/anisfoods-live.webp",
     year: "2024",
     location: "Accra · Ghana",
     services: ["Systems design", "POS & back-office", "Financial reporting"],
@@ -368,12 +470,11 @@ export const projects: Project[] = [
       { id: "reports", label: "Reports" },
     ],
     screenImages: {
-      landing: "/previews/anisfoods/landing.png",
+      landing: "/previews/anisfoods/landing.webp",
     },
     liveBaseUrl: "https://aniseatery.netlify.app",
     liveScreenPaths: { landing: "/", pos: "/", dashboard: "/", reports: "/" },
   },
-/*
   {
     id: "rentcheck",
     name: "Rentcheck Ghana",
@@ -397,35 +498,34 @@ export const projects: Project[] = [
       { id: "detail", label: "Property" },
     ],
   },
-*/
-  // {
-  //   id: "lenus",
-  //   name: "Lenus Pharmacy",
-  //   tagline: "Online Pharmacy & Delivery",
-  //   description:
-  //     "2000+ products, NEPP-registered, GhanaPostGPS delivery across Greater Accra, WhatsApp prescription handling. Branches in Botwe, Lakeside Estates, and Madina.",
-  //   role: "Platform architecture & DX",
-  //   impact: [
-  //     "Structured pharmacy catalogue, search and checkout for walk‑in and delivery customers.",
-  //     "Modelled branch operations and delivery zones around real Accra neighbourhoods.",
-  //   ],
-  //   category: "healthcare",
-  //   categoryLabel: "Healthcare · E-Commerce",
-  //   stack: ["Next.js 14", "Fastify", "Prisma", "PostgreSQL", "Turborepo"],
-  //   accentColor: "#0d9488",
-  //   accentGlow: "rgba(13, 148, 136, 0.15)",
-  //   featured: true,
-  //   screens: [
-  //     { id: "landing", label: "Home" },
-  //     { id: "shop", label: "Products" },
-  //     { id: "checkout", label: "Checkout" },
-  //   ],
-  // },
+  {
+    id: "lenus",
+    name: "Lenus Pharmacy",
+    tagline: "Online Pharmacy & Delivery",
+    description:
+      "2000+ products, NEPP-registered, GhanaPostGPS delivery across Greater Accra, WhatsApp prescription handling. Branches in Botwe, Lakeside Estates, and Madina.",
+    role: "Platform architecture & DX",
+    impact: [
+      "Structured pharmacy catalogue, search and checkout for walk‑in and delivery customers.",
+      "Modelled branch operations and delivery zones around real Accra neighbourhoods.",
+    ],
+    category: "healthcare",
+    categoryLabel: "Healthcare · E-Commerce",
+    stack: ["Next.js 14", "Fastify", "Prisma", "PostgreSQL", "Turborepo"],
+    accentColor: "#0d9488",
+    accentGlow: "rgba(13, 148, 136, 0.15)",
+    featured: true,
+    screens: [
+      { id: "landing", label: "Home" },
+      { id: "shop", label: "Products" },
+      { id: "checkout", label: "Checkout" },
+    ],
+  },
   {
     id: "ladyangel",
     name: "Lady Angel Network",
     tagline: "Private Investment Network for Women",
-    imagePath: "/images/projects/ladyangel-live.png",
+    imagePath: "/images/projects/ladyangel.webp",
     year: "2025",
     location: "Pan-Africa",
     services: ["Investment workflow", "Deal-flow UX", "Front-end"],
@@ -451,19 +551,12 @@ export const projects: Project[] = [
       { id: "membership", label: "Membership" },
       { id: "portfolio", label: "Portfolio" },
     ],
-    screenImages: {
-      landing: "/previews/ladyangel/landing.png",
-      membership: "/previews/ladyangel/membership.png",
-      portfolio: "/previews/ladyangel/portfolio.png",
-    },
-    liveBaseUrl: "https://lady-angel.vercel.app",
-    liveScreenPaths: { landing: "/", membership: "/membership", portfolio: "/portfolio" },
   },
   {
     id: "jireh",
     name: "Jireh Natural Foods",
     tagline: "Restaurant Platform · Website, POS & Back Office",
-    imagePath: "/images/projects/jireh-live.png",
+    imagePath: "/images/projects/jireh-live.webp",
     year: "2024",
     location: "Adenta · Accra",
     services: ["Conversion UX", "Front-end", "Cashier POS", "Back-office system"],
@@ -496,12 +589,12 @@ export const projects: Project[] = [
       { id: "dashboard", label: "Dashboard" },
     ],
     screenImages: {
-      landing: "/previews/jireh/landing.png",
-      menu: "/previews/jireh/menu.png",
-      pos: "/previews/jireh/pos.png",
-      orders: "/previews/jireh/orders.png",
-      inventory: "/previews/jireh/inventory.png",
-      dashboard: "/previews/jireh/dashboard.png",
+      landing: "/previews/jireh/landing.webp",
+      menu: "/previews/jireh/menu.webp",
+      pos: "/previews/jireh/pos.webp",
+      orders: "/previews/jireh/orders.webp",
+      inventory: "/previews/jireh/inventory.webp",
+      dashboard: "/previews/jireh/dashboard.webp",
     },
     liveBaseUrl: "https://jirehnaturalfoods.vercel.app",
     liveScreenPaths: { landing: "/" },
@@ -510,7 +603,7 @@ export const projects: Project[] = [
     id: "madinabasketball",
     name: "Madina Basketball",
     tagline: "Community Court Platform",
-    imagePath: "/images/projects/madinabasketball-live.png",
+    imagePath: "/images/projects/madinabasketball-live.webp",
     year: "2024",
     location: "Madina · Ghana",
     services: ["Community ops", "Transparency dashboards", "Full-stack"],
@@ -538,18 +631,18 @@ export const projects: Project[] = [
       { id: "events", label: "Events" },
     ],
     screenImages: {
-      landing: "/previews/madinabasketball/landing.png",
-      court: "/previews/madinabasketball/court.png",
-      events: "/previews/madinabasketball/events.png",
+      landing: "/previews/madinabasketball/landing.webp",
+      court: "/previews/madinabasketball/court.webp",
+      events: "/previews/madinabasketball/events.webp",
     },
     liveBaseUrl: "https://madinabball.vercel.app",
     liveScreenPaths: { landing: "/", court: "/court", events: "/events" },
   },
   {
     id: "pronaj",
-    name: "ProNaj International",
+    name: "Pronaj International",
     tagline: "Multi-Sector Conglomerate",
-    imagePath: "/images/projects/pronaj-live.png",
+    imagePath: "/images/projects/pronaj-live.webp",
     year: "2024",
     location: "Delaware · Ghana",
     services: ["Brand system", "Editorial web", "Narrative design"],
@@ -576,18 +669,18 @@ export const projects: Project[] = [
       { id: "contact", label: "Contact" },
     ],
     screenImages: {
-      landing: "/previews/pronaj/landing.png",
-      sectors: "/previews/pronaj/sectors.png",
-      contact: "/previews/pronaj/contact.png",
+      landing: "/previews/pronaj/landing.webp",
+      sectors: "/previews/pronaj/sectors.webp",
+      contact: "/previews/pronaj/contact.webp",
     },
     liveBaseUrl: "https://pronaj.vercel.app",
-    liveScreenPaths: { landing: "/", sectors: "/sectors", contact: "/contact" },
+    liveScreenPaths: { landing: "/", sectors: "/digital", contact: "/contact" },
   },
   {
     id: "makossa",
     name: "The Makossa Shop",
     tagline: "FMCG Web Shop & Counter POS",
-    imagePath: "/images/projects/makossa-landing.png",
+    imagePath: "/images/projects/makossa-landing.webp",
     year: "2025",
     location: "Accra · Ghana",
     services: ["Commerce design", "Inventory ops", "POS", "Full-stack engineering"],
@@ -619,7 +712,7 @@ export const projects: Project[] = [
     id: "rockmotion",
     name: "Rockmotion Auto Group",
     tagline: "US Automotive Export Platform",
-    imagePath: "/images/projects/rockmotion-live.png",
+    imagePath: "/images/projects/rockmotion-live.webp",
     year: "2025",
     location: "Atlanta → 40+ countries",
     services: ["Brand identity", "UX", "Full-stack engineering"],
@@ -647,14 +740,13 @@ export const projects: Project[] = [
       { id: "process", label: "Process" },
     ],
     screenImages: {
-      landing: "/previews/rockmotion/landing.png",
-      inventory: "/previews/rockmotion/inventory.png",
-      process: "/previews/rockmotion/process.png",
+      landing: "/previews/rockmotion/landing.webp",
+      inventory: "/previews/rockmotion/inventory.webp",
+      process: "/previews/rockmotion/process.webp",
     },
     liveBaseUrl: "https://rockmotion.vercel.app",
-    liveScreenPaths: { landing: "/", inventory: "/inventory", process: "/process" },
+    liveScreenPaths: { landing: "/", inventory: "/inventory", process: "/shipping" },
   },
-/*
   {
     id: "gaskiya",
     name: "Gaskiya",
@@ -678,8 +770,6 @@ export const projects: Project[] = [
       { id: "product", label: "Product" },
     ],
   },
-*/
-/*
   {
     id: "thepalms",
     name: "The Palms by Eagles",
@@ -703,12 +793,11 @@ export const projects: Project[] = [
       { id: "amenities", label: "Amenities" },
     ],
   },
-*/
   {
     id: "magilo",
     name: "Magilo Art College",
     tagline: "Art School, Design & Printing Hub",
-    imagePath: "/images/projects/magilo-live.png",
+    imagePath: "/images/projects/magilo-live.webp",
     year: "2024",
     location: "Adenta · Accra",
     services: ["Storytelling", "Information design", "Front-end"],
@@ -735,9 +824,9 @@ export const projects: Project[] = [
       { id: "college", label: "College" },
     ],
     screenImages: {
-      landing: "/previews/magilo/landing.png",
-      services: "/previews/magilo/services.png",
-      college: "/previews/magilo/college.png",
+      landing: "/previews/magilo/landing.webp",
+      services: "/previews/magilo/services.webp",
+      college: "/previews/magilo/college.webp",
     },
     liveBaseUrl: "https://magiloartcollege.com",
     liveScreenPaths: { landing: "/", services: "/services", college: "/college" },

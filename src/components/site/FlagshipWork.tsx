@@ -11,12 +11,13 @@ import {
   useTransform,
 } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { projects, projectSlug, type Project } from "@/lib/projects";
+import { projects, projectSlug, localizedProject, type Project } from "@/lib/projects";
 import BrowserMockup from "@/components/BrowserMockup";
 import PreviewRouter from "@/components/previews/PreviewRouter";
+import { useTranslations, useLocale } from "next-intl";
 import { drawLine, maskRise } from "@/lib/motion";
 
-const FLAGSHIP_IDS = ["primehub", "chalesocks", "koyi"];
+const FLAGSHIP_IDS = ["primehub", "ethika", "koyi"];
 
 /** Counts up the numeric part of values like "420+", "GHS 40K+", "3". */
 function StatValue({ value }: { value: string }) {
@@ -59,6 +60,9 @@ function FlagshipCard({
   index: number;
   total: number;
 }) {
+  const t = useTranslations("flagship");
+  const locale = useLocale();
+  const { description } = localizedProject(project, locale);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const [screen, setScreen] = useState(
@@ -105,7 +109,7 @@ function FlagshipCard({
                 {project.name}
               </h3>
               <p className="mt-3 text-[15px] md:text-[16px] leading-[1.6] text-[var(--ink-2)] text-pretty">
-                {project.description}
+                {description}
               </p>
             </div>
 
@@ -143,14 +147,14 @@ function FlagshipCard({
                 href={`/work/${projectSlug(project)}`}
                 className="group inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--foreground)] whitespace-nowrap"
               >
-                Case study
+                {t("caseStudy")}
                 <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
             </div>
           </div>
 
           {/* Right: live preview */}
-          <div className="p-4 md:p-8 md:pl-0 order-first md:order-none">
+          <div className="p-4 md:p-8 md:pl-0 order-first md:order-none min-w-0">
             <BrowserMockup
               project={project}
               activeScreen={screen}
@@ -166,6 +170,7 @@ function FlagshipCard({
 }
 
 export default function FlagshipWork() {
+  const t = useTranslations("flagship");
   const flagships = FLAGSHIP_IDS.map((id) => projects.find((p) => p.id === id)).filter(
     (p): p is Project => !!p
   );
@@ -174,7 +179,7 @@ export default function FlagshipWork() {
     <section id="flagship" className="relative px-4 md:px-6 py-24 md:py-36" aria-label="Selected work">
       <div className="max-w-[1440px] mx-auto">
         <header className="mb-14 md:mb-20">
-          <p className="eyebrow mb-5">Selected work — 01/0{flagships.length}</p>
+          <p className="eyebrow mb-5">{t("eyebrow", { count: flagships.length })}</p>
           <div className="overflow-hidden">
             <motion.h2
               variants={maskRise}

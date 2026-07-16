@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { EASE_OUT } from "@/lib/motion";
 
 interface Vertical {
@@ -13,14 +14,14 @@ interface Vertical {
 const VERTICALS: Vertical[] = [
   { label: "Restaurants", projectId: "anisfoods", projectName: "Anis Foods" },
   { label: "Hotels", projectId: "thepalms", projectName: "The Palms" },
-  { label: "Pharmacies" },
+  { label: "Pharmacies", projectId: "lenus", projectName: "Lenus Pharmacy" },
   { label: "Salons" },
   { label: "Construction" },
-  { label: "Auto", projectId: "gaskiya", projectName: "Gaskiya" },
+  { label: "Auto", projectId: "rockmotion", projectName: "Rockmotion" },
   { label: "Retail", projectId: "redrow", projectName: "Redrow Minimart" },
   { label: "Schools", projectId: "koyi", projectName: "Kōyi" },
   { label: "Real estate", projectId: "rentcheck", projectName: "Rentcheck" },
-  { label: "Fintech", projectId: "siif", projectName: "SIIF" },
+  { label: "Fintech", projectId: "ethika", projectName: "Ethika Finance" },
   { label: "Farms" },
   { label: "Events" },
   { label: "Faith orgs" },
@@ -36,13 +37,14 @@ function scrollToProject(projectId: string) {
 }
 
 export default function Range() {
+  const t = useTranslations("range");
   return (
     <section
       className="relative px-4 md:px-6 py-24 md:py-32 bg-[var(--surface)] border-y border-[var(--line)]"
       aria-labelledby="range-heading"
     >
       <div className="max-w-[1440px] mx-auto">
-        <p className="eyebrow mb-5">Range</p>
+        <p className="eyebrow mb-5">{t("eyebrow")}</p>
         <motion.h2
           id="range-heading"
           initial={{ opacity: 0, scale: 0.97 }}

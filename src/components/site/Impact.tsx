@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import { useTranslations } from "next-intl";
 import Reveal from "@/components/ui/Reveal";
 
 const STATS: { value: string; label: string; note?: string }[] = [
@@ -18,6 +19,7 @@ const FELLOWSHIPS: { title: string; org: string; year: string }[] = [
 ];
 
 export default function Impact() {
+  const t = useTranslations("impact");
   return (
     <section
       id="impact"
@@ -27,7 +29,7 @@ export default function Impact() {
       <div className="max-w-[1280px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-16">
           <div className="md:col-span-7">
-            <p className="eyebrow mb-5">Impact · 2022 to 2026</p>
+            <p className="eyebrow mb-5">{t("eyebrow")}</p>
             <h2
               id="impact-heading"
               className="font-display text-white text-balance"
@@ -37,8 +39,8 @@ export default function Impact() {
                 letterSpacing: "-0.03em",
               }}
             >
-              Numbers that{" "}
-              <span className="font-serif-it lowercase text-[var(--ink-2)]">earned themselves.</span>
+              {t("heading")}{" "}
+              <span className="font-serif-it lowercase text-[var(--ink-2)]">{t("headingAccent")}</span>
             </h2>
           </div>
           <p className="md:col-span-5 text-[15px] md:text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty">
@@ -53,7 +55,11 @@ export default function Impact() {
             <Reveal
               key={s.label}
               delay={i * 0.08}
-              className={`p-6 md:p-10 ${i < 3 ? "border-r border-[var(--line)]" : ""} ${
+              className={`p-6 md:p-10 ${
+                i % 2 === 0 ? "border-r border-[var(--line)]" : ""
+              } ${
+                i < 3 ? "md:border-r" : "md:border-r-0"
+              } ${
                 i < 2 ? "border-b md:border-b-0 border-[var(--line)]" : ""
               }`}
             >
@@ -71,7 +77,7 @@ export default function Impact() {
         {/* Fellowships */}
         <div className="mt-20 md:mt-28 grid grid-cols-1 md:grid-cols-12 gap-8">
           <div className="md:col-span-4">
-            <p className="eyebrow mb-4">Fellowships</p>
+            <p className="eyebrow mb-4">{t("fellowships")}</p>
             <h3
               className="font-display text-white"
               style={{

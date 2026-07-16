@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -232,6 +233,54 @@ export default function BrowserMockup({
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto preview-scroll relative bg-[#050505] min-h-[320px]">
+        <ScaledPreview>{children}</ScaledPreview>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Coded previews are desktop layouts; below ~700px they collapse into
+ * one-word-per-line columns. Render them at a fixed desktop width and
+ * scale down to fit narrow containers instead.
+ */
+const PREVIEW_DESKTOP_WIDTH = 1024;
+
+function ScaledPreview({ children }: { children: React.ReactNode }) {
+  const outerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+  const [scaledHeight, setScaledHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    const outer = outerRef.current;
+    if (!outer) return;
+    const measure = () => {
+      const w = outer.clientWidth;
+      const s = w >= 700 ? 1 : w / PREVIEW_DESKTOP_WIDTH;
+      setScale(s);
+      const inner = innerRef.current;
+      setScaledHeight(s < 1 && inner ? inner.scrollHeight * s : undefined);
+    };
+    const ro = new ResizeObserver(measure);
+    ro.observe(outer);
+    if (innerRef.current) ro.observe(innerRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  if (scale >= 1) {
+    return <div ref={outerRef} className="min-h-full">{children}</div>;
+  }
+  return (
+    <div ref={outerRef} style={{ height: scaledHeight }} className="overflow-hidden">
+      <div
+        ref={innerRef}
+        style={{
+          width: PREVIEW_DESKTOP_WIDTH,
+          transform: `scale(${scale})`,
+          transformOrigin: "top left",
+        }}
+      >
         {children}
       </div>
     </div>

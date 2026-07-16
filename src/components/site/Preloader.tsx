@@ -15,18 +15,34 @@ export default function Preloader() {
     if (reduce) return;
     try {
       if (sessionStorage.getItem(SEEN_KEY)) return;
-      sessionStorage.setItem(SEEN_KEY, "1");
     } catch {
       return;
     }
-    setShow(true);
+    const showFrame = requestAnimationFrame(() => setShow(true));
+    const markSeen = () => {
+      try {
+        sessionStorage.setItem(SEEN_KEY, "1");
+      } catch {}
+    };
     const controls = animate(0, 100, {
       duration: 1.2,
       ease: EASE_OUT,
       onUpdate: (v) => setCount(Math.round(v)),
-      onComplete: () => setTimeout(() => setShow(false), 150),
+      onComplete: () => {
+        markSeen();
+        setTimeout(() => setShow(false), 150);
+      },
     });
-    return () => controls.stop();
+    // Safety net: never leave the overlay covering the site.
+    const failsafe = setTimeout(() => {
+      markSeen();
+      setShow(false);
+    }, 3000);
+    return () => {
+      cancelAnimationFrame(showFrame);
+      controls.stop();
+      clearTimeout(failsafe);
+    };
   }, [reduce]);
 
   return (
