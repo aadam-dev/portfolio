@@ -81,6 +81,8 @@ export interface Project {
   accentGlow: string;
   featured?: boolean;
   flagship?: boolean;
+  /** Temporarily hidden from all listings (still routable directly). */
+  hidden?: boolean;
   isLead?: boolean;
   imagePath?: string;
   /**
@@ -112,6 +114,9 @@ export function localizedProject(
     description: pick(p.description, p.descriptionFr, p.descriptionAr),
   };
 }
+
+/** Projects shown in listings (index, flagship, sitemap). */
+export const visibleProjects = () => projects.filter((p) => !p.hidden);
 
 export function findProject(slug: string): Project | undefined {
   return projects.find((p) => projectSlug(p) === slug);
@@ -324,13 +329,21 @@ export const projects: Project[] = [
     stack: ["Next.js", "TypeScript", "Drizzle", "PostgreSQL", "Better Auth", "Vercel Blob"],
     accentColor: "#A8462A",
     accentGlow: "rgba(168, 70, 42, 0.16)",
-    featured: true,
+    featured: false,
+    hidden: true,
+    imagePath: "/previews/alboyut/landing.webp",
     screens: [
       { id: "landing", label: "Storefront" },
-      { id: "admin", label: "Back office" },
-      { id: "pos", label: "POS" },
-      { id: "laundry", label: "Laundry ops" },
+      { id: "products", label: "Products" },
+      { id: "laundry", label: "Laundry" },
     ],
+    screenImages: {
+      landing: "/previews/alboyut/landing.webp",
+      products: "/previews/alboyut/products.webp",
+      laundry: "/previews/alboyut/laundry.webp",
+    },
+    liveBaseUrl: "https://testing-al-boyut.vercel.app",
+    liveScreenPaths: { landing: "/", products: "/products", laundry: "/laundry" },
   },
   {
     id: "enterprise-erp",
@@ -435,8 +448,13 @@ export const projects: Project[] = [
       { id: "comparison", label: "NIB vs Conv." },
       { id: "vault", label: "Knowledge" },
     ],
+    screenImages: {
+      landing: "/previews/ethika/landing.webp",
+      comparison: "/previews/ethika/comparison.webp",
+      vault: "/previews/ethika/vault.webp",
+    },
     liveBaseUrl: "https://ethika.vercel.app",
-    liveScreenPaths: { landing: "/", comparison: "/comparison", vault: "/vault" },
+    liveScreenPaths: { landing: "/en", comparison: "/en/regulation", vault: "/en/education" },
   },
   {
     id: "anisfoods",
@@ -525,7 +543,14 @@ export const projects: Project[] = [
     id: "ladyangel",
     name: "Lady Angel Network",
     tagline: "Private Investment Network for Women",
-    imagePath: "/images/projects/ladyangel.webp",
+    imagePath: "/previews/ladyangel/landing.webp",
+    screenImages: {
+      landing: "/previews/ladyangel/landing.webp",
+      membership: "/previews/ladyangel/membership.webp",
+      portfolio: "/previews/ladyangel/portfolio.webp",
+    },
+    liveBaseUrl: "https://lady-angel.vercel.app",
+    liveScreenPaths: { landing: "/", membership: "/membership", portfolio: "/investments" },
     year: "2025",
     location: "Pan-Africa",
     services: ["Investment workflow", "Deal-flow UX", "Front-end"],
@@ -636,7 +661,7 @@ export const projects: Project[] = [
       events: "/previews/madinabasketball/events.webp",
     },
     liveBaseUrl: "https://madinabball.vercel.app",
-    liveScreenPaths: { landing: "/", court: "/court", events: "/events" },
+    liveScreenPaths: { landing: "/", court: "/court", events: "/media" },
   },
   {
     id: "pronaj",
@@ -678,6 +703,7 @@ export const projects: Project[] = [
   },
   {
     id: "makossa",
+    hidden: true,
     name: "The Makossa Shop",
     tagline: "FMCG Web Shop & Counter POS",
     imagePath: "/images/projects/makossa-landing.webp",
@@ -749,6 +775,7 @@ export const projects: Project[] = [
   },
   {
     id: "gaskiya",
+    hidden: true,
     name: "Gaskiya",
     tagline: "Luxury West African Fashion",
     description:
@@ -772,6 +799,7 @@ export const projects: Project[] = [
   },
   {
     id: "thepalms",
+    hidden: true,
     name: "The Palms by Eagles",
     tagline: "Luxury Hotel Website",
     description:

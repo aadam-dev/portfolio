@@ -17,7 +17,7 @@ import PreviewRouter from "@/components/previews/PreviewRouter";
 import { useTranslations, useLocale } from "next-intl";
 import { drawLine, maskRise } from "@/lib/motion";
 
-const FLAGSHIP_IDS = ["primehub", "ethika", "koyi"];
+const FLAGSHIP_IDS = ["primehub", "jireh", "rockmotion"];
 
 /** Counts up the numeric part of values like "420+", "GHS 40K+", "3". */
 function StatValue({ value }: { value: string }) {

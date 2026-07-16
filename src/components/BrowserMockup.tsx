@@ -63,7 +63,7 @@ const urlMap: Record<string, Record<string, string>> = {
   madinabasketball: {
     landing: "madinabball.vercel.app",
     court: "madinabball.vercel.app/court",
-    events: "madinabball.vercel.app/events",
+    events: "madinabball.vercel.app/media",
   },
   pronaj: {
     landing: "pronajinternational.com",

@@ -15,6 +15,7 @@ import {
 import { ArrowUpRight } from "lucide-react";
 import {
   projects,
+  visibleProjects,
   projectSlug,
   type Project,
   type ProjectCategory,
@@ -78,8 +79,9 @@ export default function WorkIndex() {
   // Flip below the cursor when hovering rows near the top of the viewport.
   const panelY = useTransform(py, (v) => (v < PANEL_H + 72 ? v + 28 : v - PANEL_H - 28));
 
+  const visible = visibleProjects();
   const filtered =
-    active === "all" ? projects : projects.filter((p) => p.category === active);
+    active === "all" ? visible : visible.filter((p) => p.category === active);
 
   const hoveredProject = projects.find((p) => p.id === hovered);
   const showPanel = pointerFine && !reduce && !!hoveredProject?.imagePath;
@@ -102,7 +104,7 @@ export default function WorkIndex() {
             className="font-display text-balance"
             style={{ fontSize: "clamp(2.4rem, 5.5vw, 4.5rem)", lineHeight: 1 }}
           >
-            {t("headingCount", { count: projects.length })}{" "}
+            {t("headingCount", { count: visible.length })}{" "}
             <span className="font-serif-it text-[var(--ink-2)] lowercase">
               {t("headingAccent")}
             </span>
@@ -114,7 +116,7 @@ export default function WorkIndex() {
             aria-label="Filter projects by category"
           >
             {FILTERS.filter(
-              (f) => f.value === "all" || projects.some((p) => p.category === f.value)
+              (f) => f.value === "all" || visible.some((p) => p.category === f.value)
             ).map((f) => (
               <button
                 key={f.value}

@@ -32,7 +32,7 @@ const jetBrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const SITE_URL = "https://aadam.dev";
+const SITE_URL = "https://aadambuilds.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
