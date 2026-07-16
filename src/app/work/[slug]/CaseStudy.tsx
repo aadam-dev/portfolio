@@ -144,7 +144,7 @@ export default function CaseStudy({ project, next }: Props) {
                 </div>
               ) : (
                 <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--ink-4)]">
-                  Simulated preview
+                  {project.screenImages?.[screen] ? "Actual system" : "Simulated preview"}
                 </span>
               )}
 

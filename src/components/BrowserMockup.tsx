@@ -19,6 +19,9 @@ interface BrowserMockupProps {
 }
 
 const urlMap: Record<string, Record<string, string>> = {
+  "enterprise-erp": {
+    backend: "delish-services.odoo.com",
+  },
   koyi: {
     landing: "koyiacademy.com",
     courses: "koyiacademy.com/courses",

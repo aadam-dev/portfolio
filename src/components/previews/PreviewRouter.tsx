@@ -18,7 +18,6 @@ import JirehPreview from "./JirehPreview";
 import SIIFPreview from "./SIIFPreview";
 import ChaleSocksPreview from "./ChaleSocksPreview";
 import RedrowPreview from "./RedrowPreview";
-import EnterpriseErpPreview from "./EnterpriseErpPreview";
 import AlBoyutPreview from "./AlBoyutPreview";
 
 import Image from "next/image";
@@ -93,8 +92,6 @@ export default function PreviewRouter({ projectId, screen }: Props) {
       return <ChaleSocksPreview screen={screen} />;
     case "redrow":
       return <RedrowPreview screen={screen} />;
-    case "enterprise-erp":
-      return <EnterpriseErpPreview screen={screen} />;
     case "alboyut":
       return <AlBoyutPreview screen={screen} />;
     default:
