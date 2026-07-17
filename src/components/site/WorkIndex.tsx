@@ -79,7 +79,10 @@ export default function WorkIndex() {
   // Flip below the cursor when hovering rows near the top of the viewport.
   const panelY = useTransform(py, (v) => (v < PANEL_H + 72 ? v + 28 : v - PANEL_H - 28));
 
-  const visible = visibleProjects();
+  // Projects without a live deployment sink to the bottom (stable within groups).
+  const visible = [...visibleProjects()].sort(
+    (a, b) => Number(!!b.liveBaseUrl) - Number(!!a.liveBaseUrl)
+  );
   const filtered =
     active === "all" ? visible : visible.filter((p) => p.category === active);
 

@@ -20,6 +20,8 @@ interface BrowserMockupProps {
 
 const urlMap: Record<string, Record<string, string>> = {
   "enterprise-erp": {
+    site: "delish-rho.vercel.app",
+    menu: "delish-rho.vercel.app/menu",
     backend: "delish-services.odoo.com",
   },
   koyi: {

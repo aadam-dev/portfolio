@@ -349,19 +349,19 @@ export const projects: Project[] = [
     id: "enterprise-erp",
     slug: "enterprise-erp",
     name: "Delish Restaurant",
-    tagline: "Odoo 19 ERP · POS, recipes & live stock",
+    tagline: "Restaurant website + Odoo 19 ERP",
     year: "2026",
     location: "Accra · Ghana",
     services: [
+      "Marketing website",
       "Process mapping",
       "Odoo 19 configuration",
       "Custom addon development",
-      "Stock reconciliation",
-      "Team training",
+      "Stock reconciliation & training",
     ],
     description:
-      "A live Odoo 19 rollout for Delish, an Accra restaurant, replacing a fragmented Appsol POS and manual spreadsheets with one system for point of sale, recipes, stock and purchasing — configured around how the kitchen and counter actually run day to day.",
-    role: "ERP implementation lead",
+      "The full stack for Delish, a restaurant at the University of Ghana poolside in Accra: a marketing website with menu and table booking, plus a live Odoo 19 back office replacing a fragmented Appsol POS and manual spreadsheets with one system for point of sale, recipes, stock and purchasing.",
+    role: "Website & ERP implementation lead",
     study: {
       challenge:
         "Delish ran on a fragmented Appsol POS and manual spreadsheets. Stock never reconciled with sales, suppliers delivered in packs — crates, sacks, kirks — that didn't map to how ingredients were counted, and the numbers stopped adding up at month-end.",
@@ -394,11 +394,19 @@ export const projects: Project[] = [
     accentColor: "#8B5CF6",
     accentGlow: "rgba(139, 92, 246, 0.18)",
     featured: true,
-    imagePath: "/images/projects/enterprise-erp.webp",
-    screens: [{ id: "backend", label: "Odoo Backend" }],
+    imagePath: "/previews/delish/site.webp",
+    screens: [
+      { id: "site", label: "Website" },
+      { id: "menu", label: "Menu" },
+      { id: "backend", label: "Odoo Backend" },
+    ],
     screenImages: {
+      site: "/previews/delish/site.webp",
+      menu: "/previews/delish/menu.webp",
       backend: "/images/projects/enterprise-erp.webp",
     },
+    liveBaseUrl: "https://delish-rho.vercel.app",
+    liveScreenPaths: { site: "/", menu: "/menu" },
   },
   {
     id: "redrow",
@@ -512,11 +520,19 @@ export const projects: Project[] = [
     accentColor: "#F59E0B",
     accentGlow: "rgba(245, 158, 11, 0.15)",
     featured: true,
+    imagePath: "/previews/rentcheck/landing.webp",
     screens: [
       { id: "landing", label: "Home" },
       { id: "listings", label: "Listings" },
       { id: "detail", label: "Property" },
     ],
+    screenImages: {
+      landing: "/previews/rentcheck/landing.webp",
+      listings: "/previews/rentcheck/listings.webp",
+      detail: "/previews/rentcheck/detail.webp",
+    },
+    liveBaseUrl: "https://rentcheck-ghana.vercel.app",
+    liveScreenPaths: { landing: "/", listings: "/search", detail: "/property/r1" },
   },
   {
     id: "lenus",
