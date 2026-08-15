@@ -96,6 +96,8 @@ export interface Project {
   liveBaseUrl?: string;
   /** Map screen id → path (e.g. landing → "/", courses → "/courses"). Used with liveBaseUrl. */
   liveScreenPaths?: Record<string, string>;
+  /** Set false when the deploy sends X-Frame-Options/frame-ancestors DENY — hides the Live tab, keeps the outbound link. */
+  liveEmbeddable?: boolean;
 }
 
 export function projectSlug(p: Project): string {
@@ -302,48 +304,78 @@ export const projects: Project[] = [
     id: "alboyut",
     slug: "al-boyut",
     name: "Al-Boyut",
-    tagline: "Building Materials & Laundry Counter Platform",
+    tagline: "Builder's Merchant & Laundry — Brand, Site and Operations",
+    taglineFr: "Négoce de matériaux et blanchisserie — marque, site et opérations",
+    taglineAr: "تاجر مواد بناء ومغسلة — الهوية والموقع والتشغيل",
     year: "2026",
-    location: "Accra · Ghana",
+    location: "Lakeside Estate, Accra · Ghana",
     services: [
-      "Brand identity",
-      "Commerce design",
-      "POS & back office",
+      "Brand identity & logo system",
+      "Storefront & commerce design",
+      "POS, admin & laundry operations",
+      "Google Business Profile & local discovery",
       "Full-stack engineering",
     ],
     description:
-      "Storefront and operations platform for an Accra building-materials merchant with a laundry counter. WhatsApp-first ordering with counter pickup and delivery, a role-based back office, POS, supplier portal and laundry operations — carried by a laterite-and-steel identity rooted in Accra's red earth.",
-    role: "Product, brand & full-stack engineering",
+      "Everything customer-facing for an Accra builder's merchant that also runs a laundry counter: the logo and identity system, the live storefront at alboyut.com with a 450+ item catalogue and WhatsApp-first ordering, the staff POS, admin and laundry job board behind it, and a verified Google Business Profile that finally put the shop on Maps.",
+    descriptionFr:
+      "Tout le visible pour un négoce de matériaux d'Accra qui tient aussi une blanchisserie : le logo et le système d'identité, la boutique en ligne alboyut.com avec un catalogue de 450+ références et la commande par WhatsApp, la caisse, l'administration et le tableau de bord blanchisserie côté équipe, plus une fiche Google Business vérifiée qui met enfin la boutique sur Maps.",
+    descriptionAr:
+      "كل ما يراه العميل لتاجر مواد بناء في أكرا يدير أيضًا مغسلة: الشعار ونظام الهوية، والمتجر المباشر على alboyut.com بكتالوج يضم أكثر من 450 صنفًا وطلب عبر واتساب، ونقطة البيع والإدارة ولوحة تشغيل المغسلة للموظفين، إضافة إلى ملف تجاري موثّق على Google وضع المحل أخيرًا على الخرائط.",
+    study: {
+      challenge:
+        "Al-Boyut sold pipes, cement, roofing and tools over a counter on Lakeside Estate — and washed clothes at the same counter — with no logo, no website, and no Google Business Profile. Customers who searched for it found nothing on Maps, prices lived in WhatsApp threads, and the two businesses shared one till but no shared record.",
+      approach:
+        "We started with the identity: a hexagonal AB mark, wordmark and lockup set with reverse, mono and receipt variants, plus a written design system and brand voice so signage, receipts and screens speak the same language. That identity then carried a Next.js storefront — 450+ item catalogue, search and filters, 'Ask for price' via WhatsApp, counter pickup or Accra delivery — and the staff side behind it: admin, POS, supplier portal, and a laundry job board running RECEIVED → washing → drying → finishing → quality check → READY, where nothing is released with a balance owing. In parallel we claimed and verified the Google Business Profile, choosing truthful categories and holding name, address and phone identical to the site.",
+      result:
+        "One brand and one system across both businesses: a live site at alboyut.com, five working surfaces on a single Postgres source of truth, and a verified Business Profile so people searching for building materials on Lakeside Estate actually find the shop.",
+      metrics: [
+        { value: "450+", label: "Catalogue items live" },
+        { value: "5", label: "Operational surfaces" },
+        { value: "2", label: "Businesses, one system" },
+        { value: "Verified", label: "Google Business Profile" },
+      ],
+    },
+    role: "Brand, product & full-stack engineering",
     impact: [
-      "Gave a template-cloned storefront its own hard-wearing 'builder's merchant' identity — flat, committed, WCAG AA verified.",
-      "Modelled WhatsApp ordering, counter pickup and delivery around how Accra customers actually buy materials.",
-      "Built admin, POS, supplier and laundry-ops surfaces on one Drizzle/Postgres source of truth.",
+      "Designed the logo and identity system — mark, wordmark, lockups, reverse and receipt variants — plus a written design system and brand voice.",
+      "Built the live storefront at alboyut.com: 450+ item catalogue, search and filters, WhatsApp-first ordering, counter pickup or delivery.",
+      "Built admin, POS, supplier portal and a laundry job board on one Drizzle/Postgres source of truth — QC before release, no clothes leave with a balance owing.",
+      "Created and verified the Google Business Profile, with categories and NAP details held identical to the site.",
     ],
     outcomes: [
+      { value: "450+", label: "Catalogue items live" },
       { value: "5", label: "Operational surfaces" },
-      { value: "2", label: "Businesses, one system" },
-      { value: "AA", label: "Contrast verified" },
+      { value: "Verified", label: "Google Business Profile" },
     ],
     category: "ecommerce",
-    categoryLabel: "E-Commerce · Operations",
+    categoryLabel: "E-Commerce · Brand & Operations",
     stack: ["Next.js", "TypeScript", "Drizzle", "PostgreSQL", "Better Auth", "Vercel Blob"],
-    accentColor: "#A8462A",
-    accentGlow: "rgba(168, 70, 42, 0.16)",
-    featured: false,
-    hidden: true,
+    accentColor: "#B4552F",
+    accentGlow: "rgba(180, 85, 47, 0.16)",
+    featured: true,
     imagePath: "/previews/alboyut/landing.webp",
     screens: [
       { id: "landing", label: "Storefront" },
-      { id: "products", label: "Products" },
+      { id: "products", label: "Catalogue" },
       { id: "laundry", label: "Laundry" },
+      { id: "contact", label: "Visit us" },
     ],
     screenImages: {
       landing: "/previews/alboyut/landing.webp",
       products: "/previews/alboyut/products.webp",
       laundry: "/previews/alboyut/laundry.webp",
+      contact: "/previews/alboyut/contact.webp",
     },
-    liveBaseUrl: "https://testing-al-boyut.vercel.app",
-    liveScreenPaths: { landing: "/", products: "/products", laundry: "/laundry" },
+    liveBaseUrl: "https://alboyut.com",
+    liveScreenPaths: {
+      landing: "/",
+      products: "/products",
+      laundry: "/laundry",
+      contact: "/contact",
+    },
+    // alboyut.com sends X-Frame-Options: DENY — the embedded live tab would be blank.
+    liveEmbeddable: false,
   },
   {
     id: "enterprise-erp",

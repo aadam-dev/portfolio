@@ -99,6 +99,12 @@ const urlMap: Record<string, Record<string, string>> = {
     inventory: "rockmotionautogroup.com/inventory",
     process: "rockmotionautogroup.com/process",
   },
+  alboyut: {
+    landing: "alboyut.com",
+    products: "alboyut.com/products",
+    laundry: "alboyut.com/laundry",
+    contact: "alboyut.com/contact",
+  },
   jireh: {
     landing: "jirehnaturalfoods.vercel.app",
     menu: "backoffice.jireh.app/admin/menu",

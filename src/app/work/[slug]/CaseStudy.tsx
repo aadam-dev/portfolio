@@ -33,6 +33,8 @@ export default function CaseStudy({ project, next }: Props) {
   const locale = useLocale();
   const { tagline, description } = localizedProject(project, locale);
   const [mode, setMode] = useState<Mode>("simulated");
+  /** Some deploys send X-Frame-Options: DENY — no live tab, outbound link only. */
+  const canEmbedLive = !!project.liveBaseUrl && project.liveEmbeddable !== false;
 
   return (
     <>
@@ -122,7 +124,7 @@ export default function CaseStudy({ project, next }: Props) {
           <div className="max-w-[1280px] mx-auto">
             {/* Mode toggle */}
             <div className="flex items-center justify-between gap-4 flex-wrap mb-4">
-              {project.liveBaseUrl ? (
+              {canEmbedLive ? (
                 <div
                   className="inline-flex p-1 rounded-full border border-[var(--line)]"
                   style={{ background: "rgba(255,255,255,0.02)" }}
@@ -148,7 +150,7 @@ export default function CaseStudy({ project, next }: Props) {
                 </span>
               )}
 
-              {mode === "live" && project.liveBaseUrl && (
+              {mode === "live" && canEmbedLive && (
                 <a
                   href={buildLiveUrl(project, screen)}
                   target="_blank"
@@ -164,7 +166,7 @@ export default function CaseStudy({ project, next }: Props) {
             <Reveal>
               <div className="w-full">
                 <AnimatePresence mode="wait">
-                  {mode === "live" && project.liveBaseUrl ? (
+                  {mode === "live" && canEmbedLive ? (
                     <motion.div
                       key="live"
                       initial={{ opacity: 0 }}
