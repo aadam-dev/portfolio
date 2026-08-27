@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocale } from "next-intl";
@@ -223,6 +224,46 @@ export default function CaseStudy({ project, next }: Props) {
             </Reveal>
           </div>
         </section>
+
+        {/* ── On mobile ───────────────────────────────────── */}
+        {project.mobileShowcase && project.mobileShowcase.length > 0 && (
+          <section
+            className="relative px-4 md:px-6 pt-14 md:pt-20"
+            aria-label="On mobile"
+          >
+            <div className="max-w-[1280px] mx-auto">
+              <Reveal>
+                <p className="eyebrow mb-2">On mobile</p>
+                <p className="text-[var(--ink-3)] text-sm mb-7 max-w-md">
+                  The same counter, catalogue and back office — built to work on
+                  the phone in a shopkeeper&apos;s hand.
+                </p>
+              </Reveal>
+              <Reveal>
+                <div className="flex gap-5 md:gap-8 overflow-x-auto pb-4 md:justify-center preview-scroll">
+                  {project.mobileShowcase.map((m) => (
+                    <figure key={m.src} className="shrink-0 w-[180px] md:w-[208px]">
+                      <div className="rounded-[2rem] border border-[var(--line)] bg-[var(--surface-2)] p-2 shadow-2xl">
+                        <div className="relative overflow-hidden rounded-[1.6rem] aspect-[9/19.5] bg-black">
+                          <Image
+                            src={m.src}
+                            alt={`${project.name} — ${m.label} on mobile`}
+                            fill
+                            sizes="208px"
+                            className="object-cover object-top"
+                          />
+                        </div>
+                      </div>
+                      <figcaption className="mt-3 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--ink-3)]">
+                        {m.label}
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              </Reveal>
+            </div>
+          </section>
+        )}
 
         {/* ── Narrative ───────────────────────────────────── */}
         <section className="relative px-4 md:px-6 pt-20 md:pt-28 pb-10 md:pb-16">

@@ -102,6 +102,11 @@ const urlMap: Record<string, Record<string, string>> = {
   alboyut: {
     landing: "alboyut.com",
     products: "alboyut.com/products",
+    pos: "alboyut.com/pos/terminal",
+    queue: "alboyut.com/pos/terminal",
+    orders: "alboyut.com/admin/orders",
+    inventory: "alboyut.com/admin/inventory",
+    sales: "alboyut.com/admin/analytics",
     laundry: "alboyut.com/laundry",
     contact: "alboyut.com/contact",
   },
