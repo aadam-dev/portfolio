@@ -305,10 +305,10 @@ export const projects: Project[] = [
   {
     id: "alboyut",
     slug: "al-boyut",
-    name: "Al-Boyut",
-    tagline: "Builder's Merchant & Laundry — Brand, Site and Operations",
-    taglineFr: "Négoce de matériaux et blanchisserie — marque, site et opérations",
-    taglineAr: "تاجر مواد بناء ومغسلة — الهوية والموقع والتشغيل",
+    name: "Al Boyut",
+    tagline: "Builder's Merchant: Brand, Storefront and Counter Operations",
+    taglineFr: "Négoce de matériaux : marque, boutique et opérations de comptoir",
+    taglineAr: "تاجر مواد بناء: الهوية والموقع وتشغيل الكاونتر",
     year: "2026",
     location: "Lakeside Estate, Accra · Ghana",
     services: [
@@ -320,16 +320,16 @@ export const projects: Project[] = [
       "Full-stack engineering",
     ],
     description:
-      "Everything customer-facing and behind the counter for an Accra builder's merchant: the logo and identity system, the live storefront at alboyut.com with a 450+ item catalogue and WhatsApp-first ordering, and the staff platform that runs the shop — a touch POS register, a cashier queue that calls each order out loud by the salesperson who raised it, an orders workstation, stock-controlled inventory with physical stock-takes, a sales dashboard and branded receipts — all on one Postgres source of truth. Plus a verified Google Business Profile and ongoing stock-counting and support.",
+      "Everything customer-facing and behind the counter for an Accra builder's merchant: the logo and identity system, the live storefront at alboyut.com with a 450+ item catalogue and WhatsApp-first ordering, and the staff platform that runs the shop. A touch POS register, a cashier queue that calls each order out loud by the salesperson who raised it, an orders workstation, stock-controlled inventory with physical stock-takes, a sales dashboard and branded receipts, all on one Postgres source of truth. Plus a verified Google Business Profile and ongoing stock-counting and support.",
     descriptionFr:
-      "Tout le visible et l'arrière-comptoir d'un négoce de matériaux d'Accra : le logo et le système d'identité, la boutique en ligne alboyut.com avec un catalogue de 450+ références et la commande par WhatsApp, et la plateforme d'équipe qui fait tourner le magasin — une caisse tactile, une file caissier qui annonce chaque commande à voix haute au nom du vendeur qui l'a saisie, un poste de commandes, un stock contrôlé avec inventaires physiques, un tableau de bord des ventes et des reçus à la marque — le tout sur une seule source Postgres. Plus une fiche Google Business vérifiée et un accompagnement continu, comptage de stock inclus.",
+      "Tout le visible et l'arrière-comptoir d'un négoce de matériaux d'Accra : le logo et le système d'identité, la boutique en ligne alboyut.com avec un catalogue de 450+ références et la commande par WhatsApp, et la plateforme d'équipe qui fait tourner le magasin. Une caisse tactile, une file caissier qui annonce chaque commande à voix haute au nom du vendeur qui l'a saisie, un poste de commandes, un stock contrôlé avec inventaires physiques, un tableau de bord des ventes et des reçus à la marque, le tout sur une seule source Postgres. Plus une fiche Google Business vérifiée et un accompagnement continu, comptage de stock inclus.",
     descriptionAr:
-      "كل ما يراه العميل وما خلف الكاونتر لتاجر مواد بناء في أكرا: الشعار ونظام الهوية، والمتجر المباشر على alboyut.com بكتالوج يضم أكثر من 450 صنفًا وطلب عبر واتساب، ومنصّة الموظفين التي تُدير المحل — نقطة بيع باللمس، وطابور للكاشير ينادي كل طلب بصوت عالٍ باسم البائع الذي أنشأه، ومحطة طلبات، ومخزون مضبوط مع جرد فعلي، ولوحة مبيعات وإيصالات بالهوية — كلها على مصدر Postgres واحد. إضافةً إلى ملف تجاري موثّق على Google ودعم تشغيلي مستمر يشمل جرد المخزون.",
+      "كل ما يراه العميل وما خلف الكاونتر لتاجر مواد بناء في أكرا: الشعار ونظام الهوية، والمتجر المباشر على alboyut.com بكتالوج يضم أكثر من 450 صنفًا وطلب عبر واتساب، ومنصّة الموظفين التي تُدير المحل. نقطة بيع باللمس، وطابور للكاشير ينادي كل طلب بصوت عالٍ باسم البائع الذي أنشأه، ومحطة طلبات، ومخزون مضبوط مع جرد فعلي، ولوحة مبيعات وإيصالات بالهوية، كلها على مصدر Postgres واحد. إضافةً إلى ملف تجاري موثّق على Google ودعم تشغيلي مستمر يشمل جرد المخزون.",
     study: {
       challenge:
-        "Al-Boyut sold pipes, cement, roofing and tools over a counter on Lakeside Estate with no logo, no website, and no Google Business Profile. Customers who searched for it found nothing on Maps, prices lived in WhatsApp threads, and sales at the counter never reconciled with stock — a salesperson would raise a ticket and then have to physically walk it to the cashier for collection.",
+        "Al Boyut sold pipes, cement, roofing and tools over a counter on Lakeside Estate with no logo, no website, and no Google Business Profile. Customers who searched for it found nothing on Maps, prices lived in WhatsApp threads, and sales at the counter never reconciled with stock. A salesperson would raise a ticket and then have to physically walk it to the cashier for collection.",
       approach:
-        "We started with the identity — a hexagonal AB mark, wordmark and lockups with reverse, mono and receipt variants, plus a written design system and brand voice. That identity carries a Next.js storefront (450+ item catalogue, search, 'Ask for price' on WhatsApp, counter pickup or Accra delivery) and the staff platform that actually runs the counter: a touch POS register, an orders workstation for POS and online sales, stock-controlled inventory with physical stock-takes, and analytics — one Drizzle/Postgres source of truth. The detail that makes the floor flow: when a salesperson sends a ticket to the cashier, the cashier's screen chimes and speaks the salesperson's name aloud — “New order from Baria” — so a ticket is claimed across a noisy shop floor without anyone leaving the till. We also created and verified the Google Business Profile, with categories and NAP held identical to the site.",
+        "We started with the identity: a hexagonal AB mark, wordmark and lockups with reverse, mono and receipt variants, plus a written design system and brand voice. That identity carries a Next.js storefront (450+ item catalogue, search, 'Ask for price' on WhatsApp, counter pickup or Accra delivery) and the staff platform that actually runs the counter: a touch POS register, an orders workstation for POS and online sales, stock-controlled inventory with physical stock-takes, and analytics, all on one Drizzle/Postgres source of truth. The detail that makes the floor flow: when a salesperson sends a ticket to the cashier, the cashier's screen chimes and speaks the salesperson's name aloud, 'New order from Baria', so a ticket is claimed across a noisy shop floor without anyone leaving the till. We also created and verified the Google Business Profile, with categories and NAP held identical to the site.",
       result:
         "One brand and one system, counter to cash: a live site at alboyut.com; a POS register, orders, inventory and analytics on a single Postgres truth; branded receipts; and a verified Business Profile so people searching for building materials on Lakeside Estate find the shop. We stay on as ongoing support, including physical stock counts.",
       metrics: [
@@ -341,16 +341,16 @@ export const projects: Project[] = [
     },
     role: "Brand, product & full-stack engineering",
     impact: [
-      "Designed the logo and identity system — mark, wordmark, lockups, reverse and receipt variants — plus a written design system and brand voice.",
+      "Designed the logo and identity system: mark, wordmark, lockups, reverse and receipt variants, plus a written design system and brand voice.",
       "Built the live storefront at alboyut.com: 450+ item catalogue, search and filters, WhatsApp-first ordering, counter pickup or delivery.",
-      "Built the staff platform on one Drizzle/Postgres source of truth — a touch POS register, an orders workstation across POS and online, stock-controlled inventory with physical stock-takes, and a sales dashboard.",
-      "Gave the counter a voice: when a salesperson sends a ticket to the cashier, the cashier's screen chimes and announces the salesperson's name aloud, so orders are claimed without leaving the till — mutable, with a chime-and-banner fallback.",
+      "Built the staff platform on one Drizzle/Postgres source of truth: a touch POS register, an orders workstation across POS and online, stock-controlled inventory with physical stock-takes, and a sales dashboard.",
+      "Gave the counter a voice: when a salesperson sends a ticket to the cashier, the cashier's screen chimes and announces the salesperson's name aloud, so orders are claimed without leaving the till (mutable, with a chime-and-banner fallback).",
       "Created and verified the Google Business Profile, and stay on for ongoing operational support, including physical stock counts.",
     ],
     outcomes: [
       { value: "450+", label: "Catalogue items live" },
-      { value: "Counter→cash", label: "On one system" },
-      { value: "Verified", label: "Google Business Profile" },
+      { value: "6", label: "Materials surfaces" },
+      { value: "GBP", label: "Verified on Maps" },
     ],
     category: "ecommerce",
     categoryLabel: "E-Commerce · Brand & Operations",
@@ -393,7 +393,7 @@ export const projects: Project[] = [
       inventory: "/admin/inventory",
       sales: "/admin/analytics",
     },
-    // alboyut.com sends X-Frame-Options: DENY — the embedded live tab would be blank.
+    // alboyut.com sends X-Frame-Options: DENY, so the embedded live tab would be blank.
     liveEmbeddable: false,
   },
   {

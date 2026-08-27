@@ -18,7 +18,7 @@ function Landing() {
       <nav className="px-6 py-4 flex items-center justify-between bg-white border-b border-[#ddd]">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-md flex items-center justify-center text-white font-black" style={{ background: LATERITE }}>AB</div>
-          <span className="font-black tracking-tight uppercase">Al-Boyut</span>
+          <span className="font-black tracking-tight uppercase">Al Boyut</span>
         </div>
         <div className="hidden md:flex gap-8 text-[10px] font-bold uppercase tracking-widest text-[#5c554b]">
           <span style={{ color: LATERITE }}>Materials</span>
@@ -57,7 +57,7 @@ function Shell({ title, tab, children }: { title: string; tab: string; children:
   return (
     <div className="min-h-full bg-[#eeeeeb] font-sans text-[#211d18] flex">
       <aside className="hidden md:flex w-44 flex-col bg-[#211d18] text-white/80 p-4 gap-1 text-[11px] font-semibold">
-        <p className="font-black text-white mb-4 uppercase tracking-widest text-[10px]">Al-Boyut · {title}</p>
+        <p className="font-black text-white mb-4 uppercase tracking-widest text-[10px]">Al Boyut · {title}</p>
         {["Dashboard", "Orders", "Products", "Inventory", "POS", "Laundry", "Suppliers", "Reports"].map((i) => (
           <span key={i} className={`px-3 py-2 rounded-sm ${i === tab ? "text-white" : ""}`} style={i === tab ? { background: LATERITE } : undefined}>{i}</span>
         ))}
