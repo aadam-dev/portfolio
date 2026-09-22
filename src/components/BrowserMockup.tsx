@@ -25,10 +25,22 @@ const urlMap: Record<string, Record<string, string>> = {
     backend: "delish-services.odoo.com",
   },
   koyi: {
-    landing: "koyiacademy.com",
-    courses: "koyiacademy.com/courses",
-    lesson: "koyiacademy.com/learn/wassce-maths/lesson-3",
-    dashboard: "koyiacademy.com/dashboard",
+    hub: "koyi-web.vercel.app/en/hub",
+    pathway: "koyi-web.vercel.app/en/hub/pathways/wassce",
+    schools: "koyi-web.vercel.app/en/hub/schools",
+    madrasah: "koyi-web.vercel.app/en/madrasah",
+  },
+  munamuse: {
+    landing: "temporarymunamusedomain.vercel.app",
+    shop: "temporarymunamusedomain.vercel.app/shop",
+    product: "temporarymunamusedomain.vercel.app/product/emerald-feather-kaftan",
+    about: "temporarymunamusedomain.vercel.app/about",
+  },
+  zainas: {
+    landing: "temporaryzainascouturedomain.vercel.app",
+    shop: "temporaryzainascouturedomain.vercel.app/shop",
+    product: "temporaryzainascouturedomain.vercel.app/product/naa-corset-midi",
+    about: "temporaryzainascouturedomain.vercel.app/about",
   },
   primehub: {
     landing: "primetijara.com",
@@ -40,9 +52,10 @@ const urlMap: Record<string, Record<string, string>> = {
     pos: "primetijara.com/pos",
   },
   ethika: {
-    landing: "ethikawestafrica.com",
-    comparison: "ethikawestafrica.com/compare",
-    vault: "ethikawestafrica.com/knowledge",
+    landing: "ethika.vercel.app/en",
+    regulation: "ethika.vercel.app/en/regulation",
+    vault: "ethika.vercel.app/en/education",
+    tools: "ethika.vercel.app/en/tools",
   },
   anisfoods: {
     landing: "anisfoods.com",
@@ -71,13 +84,15 @@ const urlMap: Record<string, Record<string, string>> = {
     events: "madinabball.vercel.app/media",
   },
   pronaj: {
-    landing: "pronajinternational.com",
-    sectors: "pronajinternational.com/sectors",
-    contact: "pronajinternational.com/contact",
+    landing: "pronajgh.com",
+    digital: "pronajgh.com/digital",
+    global: "pronajgh.com/global",
+    contact: "pronajgh.com/contact",
   },
   makossa: {
-    landing: "themakossashop.com",
-    catalog: "themakossashop.com/catalog",
+    landing: "makossashop.vercel.app/en",
+    catalog: "makossashop.vercel.app/en/catalog",
+    locations: "makossashop.vercel.app/en/locations",
   },
   gaskiya: {
     landing: "gaskiya.com",

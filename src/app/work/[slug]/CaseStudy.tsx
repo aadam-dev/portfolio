@@ -371,7 +371,10 @@ export default function CaseStudy({ project, next }: Props) {
               {project.liveBaseUrl && (
                 <Reveal delay={0.2}>
                   <MagneticButton
-                    href={project.liveBaseUrl}
+                    href={buildLiveUrl(
+                      project,
+                      project.defaultScreen ?? project.screens[0]?.id ?? "landing"
+                    )}
                     external
                     variant="secondary"
                   >
