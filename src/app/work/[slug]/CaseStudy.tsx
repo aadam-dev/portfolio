@@ -15,6 +15,7 @@ import PreviewRouter from "@/components/previews/PreviewRouter";
 import ScaledIframe from "@/components/ui/ScaledIframe";
 import Reveal from "@/components/ui/Reveal";
 import MagneticButton from "@/components/ui/MagneticButton";
+import WalkthroughPlayer from "@/components/site/WalkthroughPlayer";
 
 type Mode = "simulated" | "live";
 
@@ -224,6 +225,14 @@ export default function CaseStudy({ project, next }: Props) {
             </Reveal>
           </div>
         </section>
+
+        {/* ── Live walkthrough ─────────────────────────────── */}
+        {project.walkthroughs && project.walkthroughs.length > 0 && (
+          <WalkthroughPlayer
+            walkthroughs={project.walkthroughs}
+            accentColor={project.accentColor}
+          />
+        )}
 
         {/* ── On mobile ───────────────────────────────────── */}
         {project.mobileShowcase && project.mobileShowcase.length > 0 && (

@@ -132,7 +132,7 @@ function FlagshipCard({
               </dl>
             )}
 
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
               <div className="flex flex-wrap gap-1.5">
                 {project.stack.slice(0, 4).map((t) => (
                   <span
@@ -143,13 +143,23 @@ function FlagshipCard({
                   </span>
                 ))}
               </div>
-              <Link
-                href={`/work/${projectSlug(project)}`}
-                className="group inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--foreground)] whitespace-nowrap"
-              >
-                {t("caseStudy")}
-                <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Link>
+              <div className="flex items-center gap-4">
+                {project.walkthroughs && project.walkthroughs.length > 0 && (
+                  <Link
+                    href={`/work/${projectSlug(project)}#walkthrough`}
+                    className="font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--ink-3)] hover:text-[var(--foreground)] transition-colors whitespace-nowrap"
+                  >
+                    Watch walkthrough
+                  </Link>
+                )}
+                <Link
+                  href={`/work/${projectSlug(project)}`}
+                  className="group inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--foreground)] whitespace-nowrap"
+                >
+                  {t("caseStudy")}
+                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
+              </div>
             </div>
           </div>
 

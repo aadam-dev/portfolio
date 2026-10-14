@@ -49,6 +49,19 @@ export interface ProjectTestimonial {
   org?: string;
 }
 
+/** Silent live recording of the real system UI, played on the case study. */
+export interface ProjectWalkthrough {
+  id: string;
+  title: string;
+  caption: string;
+  /** Path under /public, e.g. /walkthroughs/an-nur-laundry.mp4 */
+  src: string;
+  /** Poster frame (reuse a screen capture under /public). */
+  poster: string;
+  /** Display duration, e.g. "2:23". */
+  duration: string;
+}
+
 export interface Project {
   id: string;
   /** URL slug for /work/[slug]. Defaults to id. */
@@ -100,6 +113,8 @@ export interface Project {
   liveScreenPaths?: Record<string, string>;
   /** Set false when the deploy sends X-Frame-Options/frame-ancestors DENY — hides the Live tab, keeps the outbound link. */
   liveEmbeddable?: boolean;
+  /** Silent live walkthroughs of the real system, shown on the case study. */
+  walkthroughs?: ProjectWalkthrough[];
 }
 
 export function projectSlug(p: Project): string {
@@ -291,6 +306,17 @@ export const projects: Project[] = [
       product: "/product/naa-corset-midi",
       about: "/about",
     },
+    walkthroughs: [
+      {
+        id: "zainas-ops",
+        title: "Storefront & owner catalogue",
+        caption:
+          "Live recording of the real boutique: home, shop, a piece, the bag, then Zaina’s admin catalogue, inventory, and orders.",
+        src: "/walkthroughs/zainas-ops.mp4",
+        poster: "/previews/zainas/shop.webp",
+        duration: "3:13",
+      },
+    ],
   },
   {
     id: "siif",
@@ -418,6 +444,17 @@ export const projects: Project[] = [
     },
     liveBaseUrl: "https://primehubgh.vercel.app",
     liveScreenPaths: { landing: "/", products: "/products", categories: "/categories" },
+    walkthroughs: [
+      {
+        id: "primetijara-ops",
+        title: "Storefront, POS & back office",
+        caption:
+          "Live recording of the real PrimeTijara UI: storefront, back office, a counter sale, orders, and inventory.",
+        src: "/walkthroughs/primetijara-ops.mp4",
+        poster: "/previews/primehub/pos.webp",
+        duration: "2:45",
+      },
+    ],
   },
   {
     id: "alboyut",
@@ -512,6 +549,26 @@ export const projects: Project[] = [
     },
     // alboyut.com sends X-Frame-Options: DENY, so the embedded live tab would be blank.
     liveEmbeddable: false,
+    walkthroughs: [
+      {
+        id: "an-nur-laundry",
+        title: "An-Nur laundry ops",
+        caption:
+          "Live recording of the real laundry counter: drop-off, workstation stages, scan, collect, reports, and public tracking.",
+        src: "/walkthroughs/an-nur-laundry.mp4",
+        poster: "/previews/alboyut/laundry.webp",
+        duration: "2:23",
+      },
+      {
+        id: "al-boyut-counter",
+        title: "Counter & back office",
+        caption:
+          "Live recording of the real shop floor: storefront, open register, salesperson basket, send to cashier, orders, inventory, and sales.",
+        src: "/walkthroughs/al-boyut-counter.mp4",
+        poster: "/previews/alboyut/pos.webp",
+        duration: "6:15",
+      },
+    ],
   },
   {
     id: "enterprise-erp",
@@ -685,6 +742,17 @@ export const projects: Project[] = [
     },
     liveBaseUrl: "https://aniseatery.netlify.app",
     liveScreenPaths: { landing: "/", pos: "/", dashboard: "/", reports: "/" },
+    walkthroughs: [
+      {
+        id: "anis-ops",
+        title: "Website, POS & back office",
+        caption:
+          "Live recording of the real Anis system: public site, cashier POS, owner dashboard, orders, and reports.",
+        src: "/walkthroughs/anis-ops.mp4",
+        poster: "/previews/anisfoods/landing.webp",
+        duration: "2:08",
+      },
+    ],
   },
   {
     id: "rentcheck",
