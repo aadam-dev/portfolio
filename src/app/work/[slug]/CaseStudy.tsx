@@ -61,13 +61,21 @@ export default function CaseStudy({ project, next }: Props) {
           />
 
           <div className="relative z-10 max-w-[1280px] mx-auto">
-            <Link
-              href="/#work"
-              className="inline-flex items-center gap-2 text-[13px] text-[var(--ink-3)] hover:text-white transition-colors mb-8 md:mb-10"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              Selected work
-            </Link>
+            <nav aria-label="Breadcrumb" className="mb-8 md:mb-10 text-[13px] text-[var(--ink-3)]">
+              <ol className="flex items-center gap-2">
+                <li>
+                  <Link href="/" className="hover:text-white transition-colors">Aadam</Link>
+                </li>
+                <li aria-hidden="true">/</li>
+                <li>
+                  <Link href="/work" className="inline-flex items-center gap-1.5 hover:text-white transition-colors">
+                    <ArrowLeft className="w-3.5 h-3.5" /> Work
+                  </Link>
+                </li>
+                <li aria-hidden="true">/</li>
+                <li aria-current="page" className="text-[var(--ink-2)]">{project.name}</li>
+              </ol>
+            </nav>
 
             <div className="flex items-center gap-3 mb-6 flex-wrap">
               <span

@@ -10,7 +10,11 @@
     "closeMenu": "Close menu",
     "deployments": "Deployments",
     "build": "Build",
-    "buildWithMe": "Build with me"
+    "buildWithMe": "Build with me",
+    "lab": "Lab",
+    "about": "About",
+    "soundOn": "Turn sound on",
+    "soundOff": "Turn sound off"
   },
   "hero": {
     "eyebrow": "Aadam · Full-stack studio, Accra → worldwide",
@@ -32,7 +36,9 @@
     "eyebrow": "The index · 2022 to 2026",
     "headingCount": "{count} products,",
     "headingAccent": "zero templates",
-    "filterAll": "All"
+    "filterAll": "All",
+    "title": "Work",
+    "sub": "{count} projects from 2022 to 2026: point of sale and back offices, storefronts, learning platforms and sites. Open one for the case study."
   },
   "flagship": {
     "eyebrow": "Selected work · 01/0{count}",
@@ -50,8 +56,8 @@
   },
   "impact": {
     "eyebrow": "Impact · 2022 to 2026",
-    "heading": "Numbers that",
-    "headingAccent": "earned themselves.",
+    "heading": "In numbers",
+    "headingAccent": "",
     "fellowships": "Fellowships"
   },
   "range": {
@@ -75,15 +81,16 @@
     "phone": "Phone"
   },
   "footer": {
-    "eyebrow": "Studio · Aadam",
+    "eyebrow": "Aadam, Accra",
     "heading": "Let's build",
-    "headingAccent": "something that pays rent.",
+    "headingAccent": "what the business runs on.",
     "navigate": "Navigate",
     "elsewhere": "Elsewhere",
     "impact": "Impact",
     "voices": "Voices",
     "availability": "Available globally · Any timezone",
-    "builtWith": "Built by hand, shipped with AI"
+    "builtWith": "Built by hand, shipped with AI",
+    "privacy": "Privacy"
   },
   "common": {
     "skipToContent": "Skip to content",

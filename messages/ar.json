@@ -10,7 +10,11 @@
     "closeMenu": "إغلاق القائمة",
     "deployments": "Deployments",
     "build": "Build",
-    "buildWithMe": "Build with me"
+    "buildWithMe": "Build with me",
+    "lab": "المختبر",
+    "about": "نبذة",
+    "soundOn": "تشغيل الصوت",
+    "soundOff": "إيقاف الصوت"
   },
   "hero": {
     "eyebrow": "آدم · استوديو تطوير متكامل، أكرا ← حول العالم",
@@ -32,7 +36,9 @@
     "eyebrow": "الفهرس · 2022 إلى 2026",
     "headingCount": "{count} منتجًا،",
     "headingAccent": "بدون قوالب جاهزة",
-    "filterAll": "الكل"
+    "filterAll": "الكل",
+    "title": "الأعمال",
+    "sub": "{count} projects from 2022 to 2026: point of sale and back offices, storefronts, learning platforms and sites. Open one for the case study."
   },
   "flagship": {
     "eyebrow": "أعمال مختارة · 01/0{count}",
@@ -83,7 +89,8 @@
     "impact": "الأثر",
     "voices": "آراء",
     "availability": "متاح عالميًا · أي منطقة زمنية",
-    "builtWith": "صُنع يدويًا، وسُلِّم بالذكاء الاصطناعي"
+    "builtWith": "صُنع يدويًا، وسُلِّم بالذكاء الاصطناعي",
+    "privacy": "Privacy"
   },
   "common": {
     "skipToContent": "تخطَّ إلى المحتوى",

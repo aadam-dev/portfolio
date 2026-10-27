@@ -58,7 +58,7 @@ function usePointerFine() {
 let lastScroll = 0;
 const isScrolling = () => performance.now() - lastScroll < 150;
 
-export default function WorkIndex() {
+export default function WorkIndex({ asPage = false }: { asPage?: boolean }) {
   const t = useTranslations("work");
   const [active, setActive] = useState<ProjectCategory | "all">("all");
   const [hovered, setHovered] = useState<string | null>(null);
@@ -111,17 +111,20 @@ export default function WorkIndex() {
     >
       <div className="max-w-[1440px] mx-auto">
         <header className="mb-10 md:mb-14">
-          <p className="eyebrow mb-5">{t("eyebrow")}</p>
-          <h2
-            id="work-heading"
-            className="font-display text-balance"
-            style={{ fontSize: "clamp(2.4rem, 5.5vw, 4.5rem)", lineHeight: 1 }}
-          >
-            {t("headingCount", { count: visible.length })}{" "}
-            <span className="font-serif-it text-[var(--ink-2)] lowercase">
-              {t("headingAccent")}
-            </span>
-          </h2>
+          {asPage ? (
+            <h1
+              id="work-heading"
+              className="font-display text-white text-balance"
+              style={{ fontSize: "clamp(2.75rem, 8vw, 6rem)", lineHeight: 0.95, letterSpacing: "-0.04em" }}
+            >
+              {t("title")}
+            </h1>
+          ) : (
+            <h2 id="work-heading" className="font-display text-balance" style={{ fontSize: "clamp(2.4rem, 5.5vw, 4.5rem)", lineHeight: 1 }}>
+              {t("title")}
+            </h2>
+          )}
+          <p className="mt-4 max-w-[620px] text-[15px] md:text-[16px] leading-relaxed text-[var(--ink-2)]">{t("sub", { count: visible.length })}</p>
 
           {/* Filters as inline mono links */}
           <nav

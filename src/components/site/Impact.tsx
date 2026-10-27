@@ -13,8 +13,8 @@ const STATS: { value: string; label: string; note?: string }[] = [
 ];
 
 const FELLOWSHIPS: { title: string; org: string; year: string }[] = [
-  { title: "Aspire Leaders Program", org: "Harvard-affiliated · Cohort 4", year: "2025" },
-  { title: "AI-Integrated Leadership", org: "Aspire Institute · AILP", year: "2026" },
+  { title: "Aspire Leadership Programme", org: "Harvard faculty-led, Cohort 4", year: "2025" },
+  { title: "AI-Integrated Leadership Program", org: "Aspire Institute", year: "2026" },
   { title: "VC Analyst Program", org: "1 of 10 selected by VCTF, Ministry of Finance and the World Bank", year: "" },
 ];
 
@@ -29,7 +29,6 @@ export default function Impact() {
       <div className="max-w-[1280px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-16">
           <div className="md:col-span-7">
-            <p className="eyebrow mb-5">{t("eyebrow")}</p>
             <h2
               id="impact-heading"
               className="font-display text-white text-balance"
@@ -40,7 +39,6 @@ export default function Impact() {
               }}
             >
               {t("heading")}{" "}
-              <span className="font-serif-it lowercase text-[var(--ink-2)]">{t("headingAccent")}</span>
             </h2>
           </div>
           <p className="md:col-span-5 text-[15px] md:text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty">

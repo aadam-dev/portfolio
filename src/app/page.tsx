@@ -3,10 +3,9 @@ import DeskHero from "@/components/desk/DeskHero";
 import FieldKit from "@/components/fieldkit/FieldKit";
 import BuildDesk from "@/components/build/BuildDesk";
 import FlagshipWork from "@/components/site/FlagshipWork";
-import WorkIndex from "@/components/site/WorkIndex";
 import Practices from "@/components/site/Practices";
 import WorkMap from "@/components/map/WorkMap";
-import Process from "@/components/site/Process";
+import LabTeaser from "@/components/site/LabTeaser";
 import Impact from "@/components/site/Impact";
 import Voices from "@/components/site/Voices";
 import Contact from "@/components/site/Contact";
@@ -30,8 +29,7 @@ export default function Home() {
         <FieldKit />
         <WorkMap />
         <FlagshipWork />
-        <WorkIndex />
-        <Process />
+        <LabTeaser />
         <Impact />
         <Voices />
         <BuildDesk />

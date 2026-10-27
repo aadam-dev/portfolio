@@ -2,18 +2,38 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight, Volume2, VolumeX } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useSound } from "@/components/desk/sound";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { NavThemeToggle } from "@/components/fieldkit/ThemeSwitch";
 
 const LINKS = [
-  { key: "deployments", href: "/#deployments" },
-  { key: "work", href: "/#work" },
-  { key: "build", href: "/#build" },
+  { key: "work", href: "/work" },
+  { key: "lab", href: "/lab" },
+  { key: "about", href: "/about" },
   { key: "contact", href: "/#contact" },
 ] as const;
+
+/** Sound for the desk and the car, off until asked for. */
+function SoundToggle() {
+  const t = useTranslations("nav");
+  const [on, set] = useSound();
+  return (
+    <button
+      type="button"
+      onClick={() => set(!on)}
+      aria-pressed={on}
+      aria-label={on ? t("soundOff") : t("soundOn")}
+      title={on ? t("soundOff") : t("soundOn")}
+      className="w-9 h-9 grid place-items-center rounded-full border border-[var(--line-strong)] text-white hover:bg-white/5"
+    >
+      {on ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+    </button>
+  );
+}
 
 const SOCIALS = [
   { label: "GitHub", href: "https://github.com/aadam-dev" },
@@ -25,6 +45,8 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [condensed, setCondensed] = useState(false);
   const { scrollY } = useScroll();
+  const path = usePathname();
+  const current = (href: string) => (href.startsWith("/#") ? false : path === href || path.startsWith(`${href}/`));
 
   useMotionValueEvent(scrollY, "change", (y) => {
     setCondensed(y > 24);
@@ -80,13 +102,14 @@ export default function Nav() {
             className="hidden md:flex items-center gap-1"
           >
             {LINKS.map((l) => (
-              <a
+              <Link
                 key={l.href}
                 href={l.href}
-                className="px-3 py-2 text-[13px] text-[var(--ink-3)] hover:text-white transition-colors"
+                aria-current={current(l.href) ? "page" : undefined}
+                className={`px-3 py-2 text-[13px] transition-colors ${current(l.href) ? "text-white" : "text-[var(--ink-3)] hover:text-white"}`}
               >
                 {t(l.key)}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -103,17 +126,19 @@ export default function Nav() {
               </a>
             ))}
             <LanguageSwitcher />
+            <SoundToggle />
             <NavThemeToggle />
             <Link
               href="/#build"
               className="group inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-medium rounded-full border border-[var(--line-strong)] text-white hover:bg-white hover:text-black transition-colors"
             >
-              {t("buildWithMe")}
+              {t("startProject")}
               <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </div>
 
           <div className="md:hidden flex items-center gap-2">
+          <SoundToggle />
           <NavThemeToggle />
           <button
             type="button"
@@ -185,6 +210,7 @@ export default function Nav() {
                   <motion.a
                     key={l.href}
                     href={l.href}
+                    aria-current={current(l.href) ? "page" : undefined}
                     onClick={() => setOpen(false)}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -224,7 +250,7 @@ export default function Nav() {
                   onClick={() => setOpen(false)}
                   className="inline-flex items-center justify-between w-full px-5 py-4 rounded-full bg-white text-black text-sm font-medium"
                 >
-                  {t("buildWithMe")}
+                  {t("startProject")}
                   <ArrowUpRight className="w-4 h-4" />
                 </Link>
               </div>

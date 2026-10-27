@@ -39,7 +39,6 @@ export default function Voices() {
     >
       <div className="max-w-[1280px] mx-auto">
         <div className="mb-12 md:mb-16 max-w-2xl">
-          <p className="eyebrow mb-5">{t("eyebrow")}</p>
           <h2
             id="voices-heading"
             className="font-display text-white text-balance"

@@ -9,7 +9,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { projects, projectSlug, localizedProject, type Project } from "@/lib/projects";
+import { projects, projectSlug, localizedProject, visibleProjects, type Project } from "@/lib/projects";
 import BrowserMockup from "@/components/BrowserMockup";
 import PreviewRouter from "@/components/previews/PreviewRouter";
 import { useTranslations, useLocale } from "next-intl";
@@ -147,8 +147,7 @@ function FlagshipCard({
   );
 }
 
-export default function FlagshipWork() {
-  const t = useTranslations("flagship");
+export default function FlagshipWork({ compact = false }: { compact?: boolean }) {
   const flagships = FLAGSHIP_IDS.map((id) => projects.find((p) => p.id === id)).filter(
     (p): p is Project => !!p
   );
@@ -157,7 +156,6 @@ export default function FlagshipWork() {
     <section id="flagship" className="relative px-4 md:px-6 py-24 md:py-36" aria-label="Selected work">
       <div className="max-w-[1440px] mx-auto">
         <header className="mb-14 md:mb-20">
-          <p className="eyebrow mb-5">{t("eyebrow", { count: flagships.length })}</p>
           <div className="overflow-hidden">
             <motion.h2
               variants={maskRise}
@@ -167,9 +165,12 @@ export default function FlagshipWork() {
               className="font-display"
               style={{ fontSize: "clamp(2.4rem, 5.5vw, 4.5rem)", lineHeight: 1 }}
             >
-              Built to <span className="font-serif-it text-[var(--accent)] lowercase">perform</span>
+              {compact ? "Up close" : "Selected work"}
             </motion.h2>
           </div>
+          <p className="mt-4 max-w-[560px] text-[15px] md:text-[16px] leading-relaxed text-[var(--ink-2)]">
+            Four systems we shipped. The screens step through on their own, and Try it opens a working copy where there is one.
+          </p>
           <motion.div
             variants={drawLine}
             initial="hidden"
@@ -184,6 +185,14 @@ export default function FlagshipWork() {
             <FlagshipCard key={p.id} project={p} index={i} total={flagships.length} />
           ))}
         </div>
+        {!compact && (
+          <Link
+            href="/work"
+            className="mt-12 inline-flex items-center gap-2 h-12 px-6 rounded-full border border-[var(--line-strong)] text-[14.5px] text-white hover:bg-white hover:text-black transition-colors"
+          >
+            All {visibleProjects().length} projects <ArrowUpRight className="w-4 h-4" />
+          </Link>
+        )}
       </div>
     </section>
   );

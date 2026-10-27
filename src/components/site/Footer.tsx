@@ -5,12 +5,12 @@ import { ArrowUpRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 const QUICK_LINKS = [
-  { ns: "nav", key: "services", href: "/#services" },
-  { ns: "nav", key: "work", href: "/#work" },
-  { ns: "nav", key: "process", href: "/#process" },
-  { ns: "footer", key: "impact", href: "/#impact" },
-  { ns: "footer", key: "voices", href: "/#voices" },
+  { ns: "nav", key: "work", href: "/work" },
+  { ns: "nav", key: "lab", href: "/lab" },
+  { ns: "nav", key: "about", href: "/about" },
+  { ns: "nav", key: "startProject", href: "/#build" },
   { ns: "nav", key: "contact", href: "/#contact" },
+  { ns: "footer", key: "privacy", href: "/privacy" },
 ] as const;
 
 const SOCIAL = [
