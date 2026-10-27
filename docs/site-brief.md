@@ -5,7 +5,7 @@ Update it when a decision changes. Older thinking lives in `docs/field-kit-plan.
 
 ## 1. What the site is for
 
-Aadam is a studio for product, data and engineering, run by one person who has worked both sides of the table: four years as an analyst in Ghanaian private equity and venture capital, and the engineer who builds and runs the systems businesses operate on. The site has to work for three kinds of guest:
+Aadam is a studio for product, data and engineering, run by one person who has worked both sides of the table: three years (2023 to 2025) as an analyst in Ghanaian private equity and venture capital, and the engineer who builds and runs the systems businesses operate on. The site has to work for three kinds of guest:
 
 | Guest | What they came to find | Where they should land |
 |---|---|---|
@@ -39,7 +39,7 @@ When the site and the CV disagree, the CV wins.
 **Experience**
 - Software Engineer & Systems Consultant, independent practice, Accra, 2025 to present. Production systems for 17 businesses across retail, healthcare, construction, hospitality, fashion and education; seven of them full operating systems (POS, inventory, back office). Includes an end-to-end Odoo 19 ERP for an Accra restaurant (Delish): process mapping, Bills of Materials mapping 77 ingredients with pack-to-piece conversions, stock counts and reconciliation with documented roll-forward workings.
 - Co-Founder & Operations Lead, PrimeTijara, Accra, Jan to Aug 2026. Team of five; order pipeline, supplier terms, inventory, pricing, daily reconciliation. Built the platform from January, opened trading late June, GHS 177,532 in the first month with 20+ repeat customers. Operations paused in August 2026.
-- Analyst & IT Systems Lead, Mirepa Investment Advisors, Accra, Sep 2023 to Jun 2025. Full deal cycle on 50+ SMEs (sourcing, due diligence, Investment Committee, portfolio monitoring); built a deal-screening dashboard that cut evaluation time by 40% and a standardised ESG assessment framework.
+- Analyst & IT Systems Lead, Mirepa Investment Advisors, Accra, Sep 2023 to Jun 2025 officially, then ongoing work to Dec 2025 (so PE/VC is "three years"). Full deal cycle on 50+ SMEs (sourcing, due diligence, Investment Committee, portfolio monitoring); built a deal-screening dashboard that cut evaluation time by 40% and a standardised ESG assessment framework.
 - Investment Analyst, Venture Capital Trust Fund Ghana, Jan 2023 to Dec 2024. Business analysis, due diligence, sector research, IC materials, ESG risk.
 - National Service, Accra Metropolitan Assembly, Traffic and Parks Unit, Sep 2020 to Aug 2021.
 
