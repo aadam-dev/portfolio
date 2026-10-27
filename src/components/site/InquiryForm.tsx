@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Loader2 } from "lucide-react";
+import { visitSession } from "@/components/site/Tracker";
 import { useTranslations } from "next-intl";
 import { EASE_OUT } from "@/lib/motion";
 
@@ -37,7 +38,7 @@ export default function InquiryForm() {
       const res = await fetch("/api/inquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...fields, budget: t(`budgets.${fields.budget}`) }),
+        body: JSON.stringify({ ...fields, budget: t(`budgets.${fields.budget}`), sid: visitSession() }),
       });
       if (res.ok) {
         setStatus("sent");

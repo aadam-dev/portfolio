@@ -108,3 +108,12 @@ export const cedi = (n: number) =>
 
 export const clock = (t: number) =>
   new Date(t).toLocaleTimeString("en-GB", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+/** Hear every event as it is emitted (used by the visit tracker). */
+export function onEmit(cb: (e: KitEvent) => void) {
+  const l = () => cb(events[0]);
+  listeners.add(l);
+  return () => {
+    listeners.delete(l);
+  };
+}

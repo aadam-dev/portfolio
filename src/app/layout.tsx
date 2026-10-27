@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import "./globals.css";
 import SmoothScroll from "@/components/site/SmoothScroll";
+import Tracker from "@/components/site/Tracker";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -127,6 +128,7 @@ export default async function RootLayout({
             {t("skipToContent")}
           </a>
           <SmoothScroll>{children}</SmoothScroll>
+          <Tracker />
         </NextIntlClientProvider>
       </body>
     </html>

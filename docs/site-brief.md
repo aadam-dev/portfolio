@@ -118,11 +118,20 @@ Named by Aadam in review (URL to confirm, please fill in):
 
 ## 8. Back office setup (owner checklist)
 
+Everything degrades gracefully until these are set: forms fall back to WhatsApp, tracking is skipped, `/office` shows what is missing.
+
 1. Vercel → project → Storage → add **Neon** (Postgres). This sets `DATABASE_URL` for production and previews.
-2. Vercel → Settings → Environment Variables: `RESEND_API_KEY`, `OFFICE_PASSWORD` (long, unique), `SESSION_SECRET` (32+ random characters), `TRACK_SALT` (32+ random characters), optional `INQUIRY_FROM` (e.g. `Aadam <hello@aadambuilds.dev>`).
-3. Resend → Domains → add and verify `aadambuilds.dev` so mail lands in the inbox, then set `INQUIRY_FROM` to that domain.
-4. Redeploy. Run `npm run db:push` once (or let the first request create the tables).
-5. Open `/office`, sign in, press "Send test email".
+2. Create the tables once: `DATABASE_URL=… npm run db:push` (Drizzle; schema in `src/db/schema.ts`).
+3. Vercel → Settings → Environment Variables:
+   - `RESEND_API_KEY` (Resend → API keys)
+   - `INQUIRY_FROM`, e.g. `Aadam <hello@aadambuilds.dev>`, after verifying the domain in Resend → Domains (until then mail sends from `onboarding@resend.dev`, which only delivers to the Resend account owner)
+   - `OFFICE_PASSWORD` (long and unique), `SESSION_SECRET` (32+ random characters)
+   - `TRACK_SALT` (32+ random characters, hashes visitor ids)
+   - `CRON_SECRET` (any long random string; Vercel sends it with the daily digest)
+4. Redeploy. Open `/office`, sign in, press **Send test email**.
+5. The digest runs daily at 08:00 Accra (`vercel.json`). Tracking only runs on Vercel deployments and respects Do Not Track and Global Privacy Control. `/privacy` explains it to visitors.
+
+What emails you get: every message and Build desk brief at once (reply-to is the sender, with where they are, their device and what they did on the site), an instant alert for a notable visit (returned, stayed 60s+, opened a case study, or played with the desk or Lab; one per visit), and the morning digest.
 
 ## 9. Performance budget
 
@@ -145,3 +154,4 @@ Tags live in the local repo only (the sandbox can push the branch, not tags). Ea
 Map notes: tiles come from OpenFreeMap (no key, attribution shown). Night mode inverts the day style in CSS. The MapLibre worker is copied to `public/maplibre/` by `predev`/`prebuild` (`scripts/copy-map-worker.mjs`).
 | v3-p8 | Mockups that switch and work | Browser mockups auto-advance (4.2 s, pause on hover, focus, offscreen and reduced motion; stop once the visitor picks a screen). "Try it" opens a working replica: Jireh POS (real 11-item food menu and prices), PrimeTijara open shift + stock take, and the shared desk modes for Al Boyut, Delish, Zaina's, Muna Muse, Ethika, Madina and Kōyi. Anis has no POS capture, so no replica was built for it. |
 | v3-p4 | Lab | `/lab`, `/lab/model` (Harmattan Foods Ltd, illustrative: linked three statements, revolver, DSCR covenant, three shocks, CSV; balances in all shock combinations and 2,000 random input sets) and `/lab/car` (a car built in code from separate parts: showroom with flip and paint, How it works with an explode slider and step-by-step lessons for eight systems, and a race on an oval with lap times and an engine note). |
+| v3-p6 | Back office | Neon + Drizzle schema (visitors, sessions, events, messages), `/api/track` (bots dropped, IP hashed, rate limited, Vercel only), stored and emailed inquiries with a confirmation to the sender, notable-visit alerts, daily digest cron, `/office` with password login (live count, 30-day chart, visitor map, breakdowns, inbox with Reply in Gmail and status, last 50 visits), `/privacy`. Tested end to end against a local Postgres and a mail catcher. |

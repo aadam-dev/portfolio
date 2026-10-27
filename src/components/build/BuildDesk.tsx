@@ -4,6 +4,7 @@ import { useMemo, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Check, Loader2, Plane, Printer } from "lucide-react";
+import { visitSession } from "@/components/site/Tracker";
 import { useTranslations } from "next-intl";
 import Gantt from "./Gantt";
 import Clock24 from "./Clock24";
@@ -151,6 +152,7 @@ export default function BuildDesk() {
           budget: mode === "build" ? `Build brief ~${fmtW(p.weeks)}` : `Hire: ${ROLES[role]}`,
           message: text(),
           brief: ticket?.url,
+          sid: visitSession(),
         }),
       });
       if (res.ok) {
