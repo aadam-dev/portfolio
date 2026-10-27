@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "Aadam · Forward deployed engineer";
+export const alt = "Aadam · Product, data and engineering studio";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -58,7 +58,7 @@ export default function OG() {
             letterSpacing: "-0.035em",
           }}
         >
-          <div>I ship the systems</div>
+          <div>We help businesses</div>
           <div>
             <span
               style={{
@@ -68,7 +68,7 @@ export default function OG() {
                 backgroundClip: "text",
               }}
             >
-              people run on.
+              sell, count, decide.
             </span>
           </div>
         </div>
@@ -85,7 +85,7 @@ export default function OG() {
             color: "rgba(242,242,245,0.55)",
           }}
         >
-          <span>Forward deployed engineer · 20+ systems</span>
+          <span>Product, data and engineering studio</span>
           <span>Accra GMT+0 · Remote</span>
         </div>
       </div>

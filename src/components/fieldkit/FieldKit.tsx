@@ -11,10 +11,10 @@ import {
 } from "framer-motion";
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
 import { useTranslations } from "next-intl";
-import MagneticButton from "@/components/ui/MagneticButton";
 import CountUp from "@/components/ui/CountUp";
 import { EASE_OUT } from "@/lib/motion";
 import Stage, { InlineDevice } from "./Stage";
+import HeroCopy from "@/components/home/HeroCopy";
 import { CHAPTERS, MODES, chapterProjects, modeIndex, type Chapter, type ModeId } from "./chapters";
 
 /* ---------- helpers ---------- */
@@ -61,20 +61,6 @@ function AccraClock() {
   return <span className="tabular-nums">Accra {time ?? "--:--:--"} GMT</span>;
 }
 
-function Line({ children, delay, reduce }: { children: React.ReactNode; delay: number; reduce: boolean }) {
-  return (
-    <span className="block overflow-hidden pb-[0.08em]">
-      <motion.span
-        className="block"
-        initial={{ y: "110%" }}
-        animate={{ y: 0 }}
-        transition={reduce ? { duration: 0 } : { delay, duration: 1.0, ease: EASE_OUT }}
-      >
-        {children}
-      </motion.span>
-    </span>
-  );
-}
 
 /** Rises in with a slight backwards tilt, then boots. */
 function RisingDevice({
@@ -174,9 +160,6 @@ function ChapterBlock({
           transition={{ delay: 0.2, duration: 0.7, ease: EASE_OUT }}
         >
           <p className="mt-6 text-[16px] md:text-[17px] leading-[1.6] text-[var(--ink-2)] text-pretty">
-            <span className="font-mono text-[10.5px] tracking-[0.18em] uppercase text-[var(--ink-4)] mr-2">
-              {t("fieldNote")}
-            </span>
             {k("note")}
           </p>
 
@@ -208,11 +191,10 @@ function ChapterBlock({
             </ul>
           )}
 
-          <p className="mt-7 inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.16em] uppercase text-[var(--accent)]">
-            {t("tryIt")}
-            <ArrowRight className="hidden lg:block w-3.5 h-3.5" />
-            <ArrowDown className="lg:hidden w-3.5 h-3.5" />
-            <span className="normal-case tracking-normal font-body text-[13px] text-[var(--ink-3)]">{k("hint")}</span>
+          <p className="mt-7 flex items-center gap-2 text-[13.5px] text-[var(--ink-3)]">
+            <ArrowRight className="hidden lg:block w-3.5 h-3.5 text-[var(--accent)]" />
+            <ArrowDown className="lg:hidden w-3.5 h-3.5 text-[var(--accent)]" />
+            {k("hint")}
           </p>
         </motion.div>
       </div>
@@ -231,6 +213,7 @@ function ChapterBlock({
 
 export default function FieldKit() {
   const t = useTranslations("fieldkit");
+  const th = useTranslations("home.hero");
   const reduce = !!useReducedMotion();
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const chaptersRef = useRef<HTMLDivElement>(null);
@@ -268,58 +251,7 @@ export default function FieldKit() {
         <div>
           {/* Chapter 00: hero */}
           <div ref={heroRef} className="min-h-[auto] lg:min-h-[100vh] flex flex-col justify-center pt-32 pb-14 lg:py-28">
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="flex items-start gap-3 eyebrow leading-relaxed"
-            >
-              <span className="relative inline-flex w-2 h-2 mt-[5px] shrink-0">
-                <span className="ping-soft absolute inline-flex w-full h-full rounded-full bg-[var(--accent)]" />
-                <span className="relative inline-flex w-2 h-2 rounded-full bg-[var(--accent)]" />
-              </span>
-              {t("hero.eyebrow")}
-            </motion.p>
-
-            <h1
-              id="hero-heading"
-              className="mt-8 font-display"
-              style={{ fontSize: "clamp(2.9rem, 6.2vw, 6.4rem)", lineHeight: 0.98, letterSpacing: "-0.045em" }}
-            >
-              <Line delay={0.12} reduce={reduce}>
-                {t("hero.titleA")}
-              </Line>
-              <Line delay={0.24} reduce={reduce}>
-                <span className="font-serif-it text-[var(--accent)]" style={{ letterSpacing: "-0.02em" }}>
-                  {t("hero.titleB")}
-                </span>
-              </Line>
-            </h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.55, duration: 0.7, ease: EASE_OUT }}
-              className="mt-7 max-w-[520px] text-[17px] md:text-[18px] leading-[1.6] text-[var(--ink-2)] text-pretty"
-            >
-              {t("hero.sub")}
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.75, duration: 0.6, ease: EASE_OUT }}
-              className="mt-9 flex flex-col sm:flex-row sm:items-center gap-3"
-            >
-              <MagneticButton href="#chapter-01" variant="primary">
-                {t("hero.play")}
-                <ArrowDown className="w-4 h-4" />
-              </MagneticButton>
-              <MagneticButton href="#build" variant="secondary">
-                {t("hero.build")}
-                <ArrowUpRight className="w-4 h-4" />
-              </MagneticButton>
-            </motion.div>
+            <HeroCopy delay={0.9} />
 
             <motion.div
               initial={{ opacity: 0 }}
@@ -330,9 +262,9 @@ export default function FieldKit() {
               <AccraClock />
               <span className="flex items-center gap-2">
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--success)]" />
-                {t("hero.available")}
+                {th("open")}
               </span>
-              <span className="text-[var(--ink-4)]">{t("hero.shipped")}</span>
+              <span className="text-[var(--ink-4)]">{th("count")}</span>
             </motion.div>
 
             {isDesktop === false && (

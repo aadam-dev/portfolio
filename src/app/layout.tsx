@@ -34,14 +34,14 @@ const jetBrainsMono = JetBrains_Mono({
 
 const SITE_URL = "https://aadambuilds.dev";
 
-const TITLE = "Aadam · Forward deployed engineer";
+const TITLE = "Aadam · Product, data and engineering studio";
 const DESCRIPTION =
-  "Forward deployed engineer in Accra (GMT+0, overlaps EU and US East). I embed with operators, analysts and coaches, ship the system they run on, and stay until the numbers move. 20+ systems in production: POS, ERP and Odoo, finance models, commerce and data.";
+  "Aadam is a product, data and engineering studio in Accra. We build point of sale, ERP and storefronts, model the numbers, design the brand and put businesses on the map. 17 businesses run on our systems.";
 const SHORT =
-  "I embed with operators, ship the system they run on, and stay until the numbers move. 20+ systems in production.";
+  "Point of sale, ERP, storefronts, financial models and brands for businesses in Accra and beyond.";
 
 /** Runs before paint so the saved theme never flashes. Day is the default. */
-const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem("fk-theme");if(t!=="light"&&t!=="dark")t="light";document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="light";}})();`;
+const THEME_SCRIPT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("fk-theme");if(t!=="light"&&t!=="dark")t="light";d.dataset.theme=t;}catch(e){d.dataset.theme="light";}try{if(sessionStorage.getItem("preloader-seen")==="1"||matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("pl-seen");}catch(e){}})();`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -51,8 +51,9 @@ export const metadata: Metadata = {
   },
   description: DESCRIPTION,
   keywords: [
+    "product studio Accra",
+    "software engineer Ghana",
     "forward deployed engineer",
-    "remote software engineer",
     "full-stack engineer",
     "Odoo ERP",
     "point of sale",

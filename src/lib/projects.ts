@@ -413,7 +413,7 @@ export const projects: Project[] = [
       "Wired the storefront, courier settlement and counter POS to a single source of stock and cash truth.",
     ],
     outcomes: [
-      { value: "1", label: "Procurement OS" },
+      { value: "GHS 177K", label: "Sales in the first month" },
       { value: "20+", label: "Back-office modules" },
       { value: "POS", label: "+ storefront in sync" },
     ],
@@ -603,7 +603,7 @@ export const projects: Project[] = [
     ],
     outcomes: [
       { value: "130+", label: "Menu items on POS" },
-      { value: "59", label: "SKUs reconciled" },
+      { value: "77", label: "Ingredients mapped to recipes" },
       { value: "3", label: "Physical count sessions" },
       { value: "Odoo 19", label: "Live instance" },
     ],
@@ -902,7 +902,7 @@ export const projects: Project[] = [
     location: "Madina · Ghana",
     services: ["Community ops", "Transparency dashboards", "Full-stack"],
     outcomes: [
-      { value: "GHS 40K+", label: "Raised" },
+      { value: "GHS 40K+", label: "Raised from 11 donors" },
       { value: "1", label: "Solar-powered court" },
     ],
     description:

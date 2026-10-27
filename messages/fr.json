@@ -115,8 +115,6 @@
     "required": "Merci d'indiquer votre nom, un contact et un message."
   },
   "fieldkit": {
-    "fieldNote": "Field note",
-    "tryIt": "Try it",
     "projectsIn": "Projects in this deployment",
     "hero": {
       "eyebrow": "Aadam · Forward deployed engineer · Accra GMT+0, overlaps EU + US East",
@@ -133,25 +131,25 @@
       "c01": {
         "title": "The counter",
         "accent": "never guesses.",
-        "note": "A builder's merchant sold over a counter, with prices in WhatsApp threads and stock that never matched the till. I shipped a touch POS, a cashier queue that calls each order out loud, and one stock truth behind the storefront.",
+        "note": "Al Boyut sold over a counter, with prices in WhatsApp threads and stock that never matched the till. We built the register, a cashier queue that calls each order out loud, and one stock record behind both the shop and the website.",
         "m1": "Catalogue items live",
         "m2": "Order channels at Jireh",
-        "m3": "Back-office modules",
-        "hint": "Ring up a sale, send it to the cashier, collect to print."
+        "m3": "Full operating systems shipped",
+        "hint": "Tap stock, send it to the cashier, then collect to print."
       },
       "c02": {
         "title": "Every garment",
         "accent": "gets a ticket.",
-        "note": "An-Nur's counter ran on paper slips and memory. Now every drop-off is counted garment by garment, moves through the workstation (washing, drying, ironing, quality check), texts the customer when it is ready and closes with a scan.",
-        "m1": "Stages tracked per ticket",
+        "note": "An-Nur's counter ran on paper slips. Now each drop-off is counted garment by garment, moves through washing, drying, ironing and a quality check, texts the customer when it is ready and closes with a scan.",
+        "m1": "Stages on every ticket",
         "m2": "Scan to collect",
         "m3": "Customer told when ready",
-        "hint": "Count garments in, confirm, then move the ticket through the stages."
+        "hint": "Count garments in, confirm, then move the ticket along."
       },
       "c03": {
         "title": "Commerce that",
         "accent": "dresses the part.",
-        "note": "Fashion brands selling African print to two markets. Prices are set per market instead of FX-converted, and the bag becomes a WhatsApp order, because that is where these customers already buy.",
+        "note": "Fashion labels selling African print to two markets. Prices are set per market instead of converted, and the bag turns into a WhatsApp order, because that is where these customers already buy.",
         "m1": "Markets, each priced on its own",
         "m2": "Fashion storefronts live",
         "m3": "Global rollout (Chale Socks)",
@@ -160,34 +158,34 @@
       "c04": {
         "title": "Models that",
         "accent": "survive a bad year.",
-        "note": "Before writing software for finance teams I screened 50+ SMEs for investment. The models I ship carry that habit: show the downside first, then the base case, then what breaks the covenant.",
-        "m1": "SMEs screened for investment",
-        "m2": "Investment models (Lady Angel)",
+        "note": "The studio started on the investment side: four years in Ghanaian private equity and venture capital, taking 50+ SMEs from sourcing to Investment Committee. The models we build still show the downside first.",
+        "m1": "SMEs taken through the deal cycle",
+        "m2": "Faster deal screening",
         "m3": "Decision tools at Ethika",
         "hint": "Hit the shocks. Watch the covenant light."
       },
       "c05": {
         "title": "Sell a dish,",
         "accent": "the stock knows.",
-        "note": "Delish ran on a fragmented POS and spreadsheets that never reconciled. On Odoo 19 every dish explodes into its recipe, supplier packs convert to pieces, and counts reconcile with a formula an auditor can follow.",
+        "note": "Delish ran on a POS and spreadsheets that never agreed. On Odoo 19, every dish deducts its recipe, supplier packs convert to pieces, and counts reconcile with workings an auditor can follow.",
         "m1": "Menu items on POS",
-        "m2": "SKUs reconciled",
+        "m2": "Ingredients mapped to recipes",
         "m3": "Physical count sessions",
         "hint": "Open Inventory, sell a plate, then count the shelf."
       },
       "c06": {
         "title": "Shots and donors,",
         "accent": "one pipeline.",
-        "note": "I co-led turning an inactive court in Madina into a solar-powered hub, then built the platform that runs it: bookings, events, highlights and a transparency ledger for every cedi raised.",
+        "note": "A public court in Madina had been unusable for years. We co-led its renovation, raised the money from local donors, then built the platform that runs bookings, events and an open ledger of every cedi.",
         "m1": "Raised for the court",
-        "m2": "Solar-powered court",
-        "m3": "Teams on the platform",
+        "m2": "Donors",
+        "m3": "Solar-lit court",
         "hint": "Tap the chart to shoot."
       },
       "c07": {
         "title": "Platforms people",
         "accent": "learn and live on.",
-        "note": "Exam pathways for West African students in three languages, verified rentals, an online pharmacy, an export platform serving 40+ countries. Different users, the same habit: ship, measure, stay.",
+        "note": "Exam pathways for West African students in three languages, verified rentals, an online pharmacy, and an export platform shipping cars to 40+ countries.",
         "m1": "Exam pathways on Kōyi",
         "m2": "Languages: EN, FR, AR",
         "m3": "Countries served (Rockmotion)",
@@ -200,6 +198,23 @@
       "accent": "build with me.",
       "note": "Flip the switch on the device. Build sizes a project in weeks, with no price tags. Hire sets up a role and checks our working-hours overlap. Both print a ticket with what you did on the kit and send it straight to me.",
       "fallback": "Or just write to me"
+    }
+  },
+  "home": {
+    "hero": {
+      "lineA": "We help",
+      "lineB": "businesses",
+      "words": {
+        "sell": "sell.",
+        "count": "count.",
+        "decide": "decide.",
+        "showUp": "show up."
+      },
+      "sub": "Aadam is a product, data and engineering studio in Accra. We build the point of sale, the ERP and the storefront, model the numbers, design the brand and put the business on the map.",
+      "seeWork": "See the work",
+      "startProject": "Start a project",
+      "open": "Open for projects",
+      "count": "17 businesses run on our systems"
     }
   }
 }

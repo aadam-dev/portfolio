@@ -10,12 +10,14 @@ import Voices from "@/components/site/Voices";
 import Contact from "@/components/site/Contact";
 import Footer from "@/components/site/Footer";
 import Cursor from "@/components/site/Cursor";
+import Preloader from "@/components/site/Preloader";
 import ScrollProgress from "@/components/site/ScrollProgress";
 import MobileCtaBar from "@/components/site/MobileCtaBar";
 
 export default function Home() {
   return (
     <>
+      <Preloader />
       <ScrollProgress />
       <Cursor />
       <Nav />

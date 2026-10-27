@@ -38,7 +38,7 @@ export const CHAPTERS: Chapter[] = [
     metrics: [
       { value: "450+", key: "m1" },
       { value: "4", key: "m2" },
-      { value: "20+", key: "m3" },
+      { value: "7", key: "m3" },
     ],
     projects: [
       { slug: "al-boyut" },
@@ -77,7 +77,7 @@ export const CHAPTERS: Chapter[] = [
     mode: "analyst",
     metrics: [
       { value: "50+", key: "m1" },
-      { value: "5", key: "m2" },
+      { value: "40%", key: "m2" },
       { value: "4", key: "m3" },
     ],
     projects: [{ slug: "ethika" }, { slug: "ladyangel" }, { slug: "siif" }],
@@ -88,7 +88,7 @@ export const CHAPTERS: Chapter[] = [
     mode: "ledger",
     metrics: [
       { value: "130+", key: "m1" },
-      { value: "59", key: "m2" },
+      { value: "77", key: "m2" },
       { value: "3", key: "m3" },
     ],
     projects: [
@@ -104,8 +104,8 @@ export const CHAPTERS: Chapter[] = [
     mode: "court",
     metrics: [
       { value: "GHS 40K+", key: "m1" },
-      { value: "1", key: "m2" },
-      { value: "2", key: "m3" },
+      { value: "11", key: "m2" },
+      { value: "1", key: "m3" },
     ],
     projects: [{ slug: "madinabasketball" }],
   },

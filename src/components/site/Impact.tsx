@@ -6,16 +6,16 @@ import { useTranslations } from "next-intl";
 import Reveal from "@/components/ui/Reveal";
 
 const STATS: { value: string; label: string; note?: string }[] = [
-  { value: "20+", label: "Production products", note: "Shipped to real users" },
-  { value: "50+", label: "SMEs evaluated", note: "Investment & diligence" },
-  { value: "4+", label: "Years shipping", note: "In-market experience" },
-  { value: "GHS 40K+", label: "Community funds raised", note: "Madina basketball" },
+  { value: "17", label: "Businesses on our systems", note: "7 of them full operating systems" },
+  { value: "50+", label: "SMEs through the deal cycle", note: "Private equity and venture capital" },
+  { value: "GHS 177K", label: "First month of trading", note: "PrimeTijara, team of five" },
+  { value: "GHS 40K+", label: "Raised from 11 donors", note: "Madina basketball court" },
 ];
 
 const FELLOWSHIPS: { title: string; org: string; year: string }[] = [
   { title: "Aspire Leaders Program", org: "Harvard-affiliated · Cohort 4", year: "2025" },
   { title: "AI-Integrated Leadership", org: "Aspire Institute · AILP", year: "2026" },
-  { title: "NexaYouth Fellowship", org: "Climate & Social Justice · Washington DC", year: "2024" },
+  { title: "VC Analyst Program", org: "1 of 10 selected by VCTF, Ministry of Finance and the World Bank", year: "" },
 ];
 
 export default function Impact() {
