@@ -42,9 +42,9 @@ export default function Impact() {
             </h2>
           </div>
           <p className="md:col-span-5 text-[15px] md:text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty">
-            Portfolio compounded across EdTech, FinTech, e-commerce and
-            community operations. Every number below has a real project
-            behind it: no vanity metrics.
+            From the CV and the case studies: the businesses on our
+            systems, the deals evaluated as an analyst, one shop&apos;s first
+            month and one court&apos;s fundraise.
           </p>
         </div>
 

@@ -81,7 +81,7 @@ function shape(g: THREE.BufferGeometry, top: [number, number, number], ends: num
   for (let i = 0; i < p.count; i++) {
     const x = p.getX(i);
     const y = p.getY(i);
-    const k = (1 - top[2] * smooth(top[0], top[1], y)) * (1 - ends * smooth(1.55, 2.35, Math.abs(x)));
+    const k = (1 - top[2] * smooth(top[0], top[1], y)) * (1 - ends * smooth(1.3, 2.4, Math.abs(x)));
     p.setZ(i, p.getZ(i) * k);
   }
   g.computeVertexNormals();
@@ -97,21 +97,17 @@ function geometries() {
   body.lineTo(WB - 0.43, 0.3);
   body.absarc(WB, WR - 0.01, 0.43, Math.PI, 0, true);
   body.lineTo(2.18, 0.3);
-  body.lineTo(2.27, 0.42);
-  body.lineTo(2.25, 0.62);
-  body.lineTo(2.12, 0.75);
-  body.lineTo(1.98, 0.81);
+  body.quadraticCurveTo(2.3, 0.5, 2.26, 0.62);
+  body.quadraticCurveTo(2.2, 0.76, 1.98, 0.81);
   body.lineTo(0.95, 0.93);
   body.lineTo(-1.95, 0.97);
-  body.lineTo(-2.12, 0.94);
-  body.lineTo(-2.26, 0.84);
-  body.lineTo(-2.28, 0.6);
-  body.lineTo(-2.25, 0.42);
+  body.quadraticCurveTo(-2.2, 0.95, -2.3, 0.8);
+  body.quadraticCurveTo(-2.36, 0.62, -2.3, 0.42);
   body.closePath();
   const W = 1.74;
   const bodyGeo = new THREE.ExtrudeGeometry(body, { depth: W, bevelEnabled: true, bevelThickness: 0.09, bevelSize: 0.06, bevelSegments: 6, curveSegments: 28, steps: 6 });
   bodyGeo.translate(0, 0, -W / 2);
-  shape(bodyGeo, [0.7, 1.0, 0.06], 0.1);
+  shape(bodyGeo, [0.7, 1.0, 0.06], 0.17);
 
   const cabin = new THREE.Shape();
   cabin.moveTo(0.92, 0.93);
@@ -355,13 +351,25 @@ export default function Car({
           <mesh material={m.body.dark} position={[2.27, 0.5, 0]}>
             <boxGeometry args={[0.04, 0.14, 0.86]} />
           </mesh>
+          {/* bumpers and sills in black trim break up the slab sides */}
+          <mesh material={m.body.dark} position={[2.2, 0.36, 0]}>
+            <boxGeometry args={[0.14, 0.1, 1.52]} />
+          </mesh>
+          <mesh material={m.body.dark} position={[-2.33, 0.42, 0]}>
+            <boxGeometry args={[0.12, 0.1, 1.44]} />
+          </mesh>
+          {[-1, 1].map((sd) => (
+            <mesh key={sd} material={m.body.dark} position={[0, 0.33, sd * 0.86]}>
+              <boxGeometry args={[1.82, 0.07, 0.05]} />
+            </mesh>
+          ))}
           {[-1, 1].map((s) => (
             <group key={s}>
               <mesh material={m.body.head} position={[2.22, 0.66, s * 0.62]}>
                 <boxGeometry args={[0.08, 0.08, 0.32]} />
               </mesh>
-              <mesh material={m.body.tail} position={[-2.29, 0.78, s * 0.64]}>
-                <boxGeometry args={[0.04, 0.08, 0.3]} />
+              <mesh material={m.body.tail} position={[-2.37, 0.72, s * 0.56]} rotation={[0, 0, 0.35]}>
+                <boxGeometry args={[0.03, 0.07, 0.34]} />
               </mesh>
               <mesh material={m.body.dark} position={[0.78, 1.0, s * 0.86]}>
                 <boxGeometry args={[0.12, 0.07, 0.12]} />
@@ -373,14 +381,14 @@ export default function Car({
           <mesh geometry={g.cabinGeo} material={m.body.glass} />
         </Part>
         <Part ex={[0, 1.8, 0]}>
-          <mesh material={m.body.paint} position={[-0.47, 1.42, 0]} castShadow>
-            <boxGeometry args={[1.22, 0.035, 1.46]} />
+          <mesh material={m.body.paint} position={[-0.47, 1.435, 0]} castShadow>
+            <boxGeometry args={[1.18, 0.025, 1.22]} />
           </mesh>
         </Part>
         <Part ex={[0.35, 1.3, 0]}>
           {/* bonnet */}
-          <mesh material={m.body.paint} position={[1.47, 0.9, 0]} rotation={[0, 0, -0.11]} castShadow>
-            <boxGeometry args={[1.08, 0.03, 1.6]} />
+          <mesh material={m.body.paint} position={[1.45, 0.925, 0]} rotation={[0, 0, -0.115]} castShadow>
+            <boxGeometry args={[1.0, 0.018, 1.46]} />
           </mesh>
         </Part>
         {[-1, 1].map((s) =>

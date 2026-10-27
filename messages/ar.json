@@ -124,14 +124,6 @@
   "fieldkit": {
     "projectsIn": "Projects in this deployment",
     "hero": {
-      "eyebrow": "Aadam · Forward deployed engineer · Accra GMT+0, overlaps EU + US East",
-      "titleA": "I ship the systems",
-      "titleB": "people run on.",
-      "sub": "I embed with operators, analysts and coaches, build the system they run their day on, and stay until the numbers move. Every screen on this kit is a system that shipped, with its real items and prices.",
-      "play": "Play with the kit",
-      "build": "Build with me",
-      "available": "Open to remote roles",
-      "shipped": "20+ systems in production",
       "hint": "Tap stock, send it to the cashier, then collect to print."
     },
     "chapters": {
@@ -165,7 +157,7 @@
       "c04": {
         "title": "Models that",
         "accent": "survive a bad year.",
-        "note": "The studio started on the investment side: four years in Ghanaian private equity and venture capital, taking 50+ SMEs from sourcing to Investment Committee. The models we build still show the downside first.",
+        "note": "The studio started on the investment side: two and a half years in Ghanaian private equity and venture capital, taking 50+ SMEs from sourcing to Investment Committee. The models we build still show the downside first.",
         "m1": "SMEs taken through the deal cycle",
         "m2": "Faster deal screening",
         "m3": "Decision tools at Ethika",

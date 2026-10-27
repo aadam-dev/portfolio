@@ -111,7 +111,7 @@ export default function AboutPage() {
           <div className="mt-8 grid grid-cols-1 md:grid-cols-12 gap-8">
             <div className="md:col-span-7 space-y-4 text-[17px] md:text-[18px] leading-[1.65] text-[var(--ink-2)] text-pretty">
               <p>
-                I&apos;m a software engineer and analyst in Accra. I studied mathematics, spent two years evaluating businesses for investors, and now build the systems those businesses run on.
+                I&apos;m a software engineer and analyst in Accra. I studied mathematics, spent two and a half years evaluating businesses for investors, and now build the systems those businesses run on.
               </p>
               <p>
                 The studio is me and the people I bring in for a job. Clients get one person who can read the books, map the stockroom, write the code and stay for the stock count.

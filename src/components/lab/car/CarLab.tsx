@@ -4,6 +4,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { ContactShadows, Environment, Lightformer, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
+import { useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, FlipVertical2, Volume2, VolumeX } from "lucide-react";
 import Car from "./Car";
 import Race, { Hud, type Controls } from "./Race";
@@ -56,6 +57,7 @@ export default function CarLab() {
   const [touched, setTouched] = useState(false);
   const [laps, setLaps] = useState<number[]>([]);
   const [sound, setSound] = useSound();
+  const reduce = useReducedMotion();
   const controls = useRef<Controls>({ up: false, down: false, left: false, right: false });
   const [hud] = useState(() => new Hud());
   const { bindSpeed, bindTime } = hud;
@@ -169,7 +171,7 @@ export default function CarLab() {
                 <Race controls={controls} paint={paint} hud={hud} onLap={(ms) => setLaps((l) => [...l, ms].slice(-5))} />
               ) : (
                 <>
-                  <Turntable flipped={flipped} spin={mode === "showroom" && !touched}>
+                  <Turntable flipped={flipped} spin={mode === "showroom" && !touched && !reduce}>
                     <Car paint={paint} explode={mode === "anatomy" ? explode : 0} focus={mode === "anatomy" ? focus : null} step={step} />
                   </Turntable>
                   <ContactShadows position={[0, 0, 0]} opacity={0.55} scale={9} blur={2.4} far={2} />
