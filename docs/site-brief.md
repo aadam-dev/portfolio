@@ -143,3 +143,4 @@ Named by Aadam in review (URL to confirm, please fill in):
 Tags live in the local repo only (the sandbox can push the branch, not tags). Each phase is also a single commit on `prototype/field-kit-hero-1eqww3`, so `git revert <sha>` undoes it.
 
 Map notes: tiles come from OpenFreeMap (no key, attribution shown). Night mode inverts the day style in CSS. The MapLibre worker is copied to `public/maplibre/` by `predev`/`prebuild` (`scripts/copy-map-worker.mjs`).
+| v3-p8 | Mockups that switch and work | Browser mockups auto-advance (4.2 s, pause on hover, focus, offscreen and reduced motion; stop once the visitor picks a screen). "Try it" opens a working replica: Jireh POS (real 11-item food menu and prices), PrimeTijara open shift + stock take, and the shared desk modes for Al Boyut, Delish, Zaina's, Muna Muse, Ethika, Madina and Kōyi. Anis has no POS capture, so no replica was built for it. |

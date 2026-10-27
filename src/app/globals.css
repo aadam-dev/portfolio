@@ -491,3 +491,14 @@ html.pl-seen .preloader {
 .map-shell .maplibregl-ctrl-attrib {
   font-size: 10px;
 }
+
+/* Browser mockup: progress of the current screen before it auto-advances */
+@keyframes mock-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.mock-progress {
+  animation-name: mock-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}

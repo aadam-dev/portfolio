@@ -1,13 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "framer-motion";
 import {
   ChevronLeft,
   ChevronRight,
   Lock,
+  MousePointerClick,
   RotateCcw,
+  X,
 } from "lucide-react";
 import { Project } from "@/lib/projects";
+import { Fit, REPLICAS } from "@/components/replicas";
+
+/** How long each screen shows before the mockup moves to the next one. */
+const CYCLE_MS = 4200;
 
 interface BrowserMockupProps {
   project: Project;
@@ -16,6 +23,8 @@ interface BrowserMockupProps {
   children: React.ReactNode;
   /** Hide the simulated address bar for a tighter live-site framing. */
   compact?: boolean;
+  /** Step through the screens on its own until the visitor takes over. */
+  autoplay?: boolean;
 }
 
 const urlMap: Record<string, Record<string, string>> = {
@@ -142,23 +151,58 @@ export default function BrowserMockup({
   onScreenChange,
   children,
   compact,
+  autoplay = true,
 }: BrowserMockupProps) {
   const screens = project.screens;
   const currentIndex = screens.findIndex((s) => s.id === activeScreen);
-  const url = urlMap[project.id]?.[activeScreen] ?? `${project.id}.com`;
+  const replica = REPLICAS[project.id];
+  const [trying, setTrying] = useState(false);
+  const url = trying && replica ? replica.url : urlMap[project.id]?.[activeScreen] ?? `${project.id}.com`;
 
+  // Auto-advance: pauses on hover, focus, touch, offscreen and reduced
+  // motion; stops for good once the visitor picks a screen themselves.
+  const root = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const [took, setTook] = useState(false);
+  const [held, setHeld] = useState(false);
+  const [seen, setSeen] = useState(false);
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setSeen(e.isIntersecting), { threshold: 0.4 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const playing = autoplay && !compact && !trying && !took && !held && seen && !reduce && screens.length > 1;
+  useEffect(() => {
+    if (!playing) return;
+    const id = window.setTimeout(() => {
+      const i = screens.findIndex((s) => s.id === activeScreen);
+      onScreenChange(screens[(i + 1) % screens.length].id);
+    }, CYCLE_MS);
+    return () => window.clearTimeout(id);
+  }, [playing, activeScreen, screens, onScreenChange]);
+
+  const choose = (id: string) => {
+    setTook(true);
+    onScreenChange(id);
+  };
   const goPrev = () => {
-    if (currentIndex > 0) onScreenChange(screens[currentIndex - 1].id);
+    if (currentIndex > 0) choose(screens[currentIndex - 1].id);
   };
   const goNext = () => {
-    if (currentIndex < screens.length - 1)
-      onScreenChange(screens[currentIndex + 1].id);
+    if (currentIndex < screens.length - 1) choose(screens[currentIndex + 1].id);
   };
 
   return (
     <div
+      ref={root}
       className="theme-fixed flex flex-col h-full w-full overflow-hidden"
       style={{ background: "#050507" }}
+      onPointerEnter={() => setHeld(true)}
+      onPointerLeave={() => setHeld(false)}
+      onFocus={() => setHeld(true)}
+      onBlur={(e) => !e.currentTarget.contains(e.relatedTarget as Node) && setHeld(false)}
     >
       {/* Chrome bar */}
       <div
@@ -221,11 +265,32 @@ export default function BrowserMockup({
           <span className="truncate font-mono">{url}</span>
         </div>
 
-        <div className="w-[44px] md:w-[72px] shrink-0" aria-hidden="true" />
+        {replica && !compact ? (
+          <button
+            type="button"
+            onClick={() => {
+              setTook(true);
+              setTrying((v) => !v);
+            }}
+            aria-pressed={trying}
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-full px-2.5 md:px-3 h-7 text-[11px] md:text-[12px] font-medium transition-colors"
+            style={
+              trying
+                ? { background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.8)" }
+                : { background: "var(--accent)", color: "var(--on-accent)" }
+            }
+          >
+            {trying ? <X className="w-3.5 h-3.5" /> : <MousePointerClick className="w-3.5 h-3.5" />}
+            <span className="hidden sm:inline">{trying ? "Back to screens" : replica.label}</span>
+            <span className="sm:hidden">{trying ? "Back" : "Try it"}</span>
+          </button>
+        ) : (
+          <div className="w-[44px] md:w-[72px] shrink-0" aria-hidden="true" />
+        )}
       </div>
 
       {/* Screen tab strip - visible on all sizes, horizontally scrollable on small */}
-      {!compact && screens.length > 1 && (
+      {!compact && !trying && screens.length > 1 && (
         <div
           className="flex-shrink-0 border-b border-[rgba(255,255,255,0.05)] overflow-x-auto scrollbar-none"
           role="tablist"
@@ -240,8 +305,8 @@ export default function BrowserMockup({
                   type="button"
                   role="tab"
                   aria-selected={active}
-                  onClick={() => onScreenChange(screen.id)}
-                  className="px-3 py-1.5 rounded-md text-[10px] md:text-[11px] uppercase font-mono tracking-[0.16em] transition-colors whitespace-nowrap"
+                  onClick={() => choose(screen.id)}
+                  className="relative overflow-hidden px-3 py-1.5 rounded-md text-[10px] md:text-[11px] uppercase font-mono tracking-[0.16em] transition-colors whitespace-nowrap"
                   style={{
                     background: active
                       ? `${project.accentColor}22`
@@ -255,6 +320,14 @@ export default function BrowserMockup({
                   }}
                 >
                   {screen.label}
+                  {active && playing && (
+                    <span
+                      key={activeScreen}
+                      aria-hidden="true"
+                      className="mock-progress absolute left-0 bottom-0 h-[2px] w-full origin-left"
+                      style={{ background: project.accentColor, animationDuration: `${CYCLE_MS}ms` }}
+                    />
+                  )}
                 </button>
               );
             })}
@@ -263,9 +336,23 @@ export default function BrowserMockup({
       )}
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto preview-scroll relative bg-[#050505] min-h-[320px]">
-        <ScaledPreview>{children}</ScaledPreview>
-      </div>
+      {trying && replica ? (
+        replica.native ? (
+          <div className="relative flex-1 bg-[#050505] aspect-[16/10]">
+            <Fit w={replica.native[0]} h={replica.native[1]}>
+              <replica.Component />
+            </Fit>
+          </div>
+        ) : (
+          <div className="relative flex-1 bg-[#050505] aspect-[4/5] sm:aspect-[16/11] min-h-[440px] max-h-[760px]">
+            <replica.Component />
+          </div>
+        )
+      ) : (
+        <div className="flex-1 overflow-y-auto preview-scroll relative bg-[#050505] min-h-[320px]">
+          <ScaledPreview>{children}</ScaledPreview>
+        </div>
+      )}
     </div>
   );
 }
