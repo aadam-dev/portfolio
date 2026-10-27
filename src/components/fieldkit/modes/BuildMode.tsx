@@ -201,7 +201,7 @@ export default function BuildMode() {
     }`;
 
   return (
-    <div className="flex flex-col h-full gap-2.5">
+    <div className="flex flex-col h-full gap-2.5 bg-[#121211] p-3 text-white font-body">
       <div className="flex items-center justify-between gap-2">
         <SlideSwitch
           value={mode}

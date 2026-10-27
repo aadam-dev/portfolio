@@ -50,7 +50,6 @@ export default function Contact({ compact = false }: { compact?: boolean }) {
           height: "480px",
           background:
             "radial-gradient(ellipse at center bottom, var(--accent-glow) 0%, transparent 60%)",
-          filter: "blur(40px)",
         }}
       />
 

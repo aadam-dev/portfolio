@@ -97,21 +97,21 @@ export function DeviceThemeSwitch() {
       aria-checked={night}
       aria-label="Night mode"
       onClick={(e) => set(night ? "light" : "dark", e.currentTarget)}
-      className="group inline-flex items-center gap-2 font-mono text-[8.5px] tracking-[0.18em] uppercase text-[var(--shell-ink)]"
+      className="group inline-flex items-center gap-2 font-mono text-[9.5px] tracking-[0.14em] uppercase text-[var(--ink-3)]"
     >
       <span className={night ? "opacity-50" : ""}>Day</span>
       <span
         className="relative w-[34px] h-[16px] rounded-full"
         style={{
-          background: "var(--shell-lo)",
-          boxShadow: "inset 0 1px 3px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.15)",
+          background: "var(--surface-3)",
+          boxShadow: "inset 0 1px 3px rgba(0,0,0,0.3)",
         }}
       >
         <motion.span
           className="absolute top-[2px] left-[2px] w-[14px] h-[12px] rounded-[4px]"
           style={{
-            background: "linear-gradient(180deg, var(--shell-hi), var(--shell-key))",
-            boxShadow: "0 1px 2px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.35)",
+            background: "var(--foreground)",
+            boxShadow: "0 1px 2px rgba(0,0,0,0.4)",
           }}
           initial={false}
           animate={{ x: night ? 16 : 0 }}

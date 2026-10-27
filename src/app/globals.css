@@ -49,17 +49,16 @@
   --accent-glow: rgba(255, 91, 31, 0.12);
   --success: #4ade80;
 
-  /* Field Kit device: warm aluminium shell at night */
-  --shell: #cfc9bd;
-  --shell-hi: #e8e3d9;
-  --shell-lo: #a39d91;
-  --shell-ink: rgba(20, 18, 15, 0.62);
-  --shell-key: #ddd8ce;
-  --shell-key-ink: #2a2723;
-  --shell-shadow: 0 1px 0 rgba(255, 255, 255, 0.55) inset, 0 -2px 0 rgba(0, 0, 0, 0.18) inset,
-    0 40px 80px -30px rgba(0, 0, 0, 0.75), 0 18px 40px -20px rgba(0, 0, 0, 0.6);
   --paper: #f4f0e6;
   --paper-ink: #1d1a16;
+
+  /* Hardware materials: space-grey aluminium and graphite rails at night */
+  --hw-alu: #4a4a4e;
+  --hw-alu-hi: #6c6c71;
+  --hw-alu-lo: #2c2c2f;
+  --hw-rail: #3b3b3f;
+  --hw-rail-hi: #77777d;
+  --hw-rail-lo: #222225;
 }
 
 .theme-fixed {
@@ -97,15 +96,14 @@
   --color-black: #ece8df;
   color-scheme: light;
 
-  /* Graphite shell by day */
-  --shell: #2c2a27;
-  --shell-hi: #3b3834;
-  --shell-lo: #1c1b19;
-  --shell-ink: rgba(236, 232, 223, 0.5);
-  --shell-key: #3a3733;
-  --shell-key-ink: #e9e4da;
-  --shell-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset, 0 -2px 0 rgba(0, 0, 0, 0.4) inset,
-    0 40px 80px -30px rgba(40, 30, 15, 0.45), 0 18px 40px -20px rgba(40, 30, 15, 0.35);
+  /* Silver aluminium and natural-titanium rails by day */
+  --hw-alu: #cfcdc8;
+  --hw-alu-hi: #eeede9;
+  --hw-alu-lo: #a9a7a1;
+  --hw-rail: #b9b6ae;
+  --hw-rail-hi: #e9e6df;
+  --hw-rail-lo: #8f8c85;
+
 }
 :root[data-theme="light"] .theme-fixed {
   --color-white: #fff;
@@ -162,10 +160,12 @@ body::before {
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* pre-rendered noise tile: no per-frame SVG filter work */
+  background-image: url("/fieldkit/grain.png");
   background-repeat: repeat;
-  background-size: 220px 220px;
+  background-size: 160px 160px;
   opacity: 0.03;
+  transform: translateZ(0);
 }
 
 body::after {
@@ -180,6 +180,7 @@ body::after {
   background-size: 96px 96px;
   mask-image: radial-gradient(ellipse at 50% 20%, black 0%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse at 50% 20%, black 0%, transparent 75%);
+  transform: translateZ(0);
 }
 
 /* Scrollbar */

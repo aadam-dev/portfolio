@@ -56,7 +56,6 @@ export default function CaseStudy({ project, next }: Props) {
               width: "min(900px, 100vw)",
               height: "500px",
               background: `radial-gradient(ellipse at center, ${project.accentGlow} 0%, transparent 60%)`,
-              filter: "blur(40px)",
               zIndex: 0,
             }}
           />

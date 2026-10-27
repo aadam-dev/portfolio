@@ -7,8 +7,6 @@ import {
   useInView,
   useReducedMotion,
   useScroll,
-  useSpring,
-  useTransform,
   type Variants,
 } from "framer-motion";
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
@@ -16,7 +14,7 @@ import { useTranslations } from "next-intl";
 import MagneticButton from "@/components/ui/MagneticButton";
 import CountUp from "@/components/ui/CountUp";
 import { EASE_OUT } from "@/lib/motion";
-import Device from "./Device";
+import Stage, { InlineDevice } from "./Stage";
 import { CHAPTERS, MODES, chapterProjects, modeIndex, type Chapter, type ModeId } from "./chapters";
 
 /* ---------- helpers ---------- */
@@ -79,14 +77,23 @@ function Line({ children, delay, reduce }: { children: React.ReactNode; delay: n
 }
 
 /** Rises in with a slight backwards tilt, then boots. */
-function RisingDevice({ children, reduce, delay = 0.35 }: { children: React.ReactNode; reduce: boolean; delay?: number }) {
+function RisingDevice({
+  children,
+  reduce,
+  delay = 0.35,
+  className = "",
+}: {
+  children: React.ReactNode;
+  reduce: boolean;
+  delay?: number;
+  className?: string;
+}) {
   return (
     <motion.div
-      className="w-full"
-      style={{ perspective: 1200 }}
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 60, rotateX: 12 }}
-      animate={{ opacity: 1, y: 0, rotateX: 0 }}
-      transition={{ delay, duration: 1.1, ease: EASE_OUT }}
+      className={`w-full ${className}`}
+      initial={{ opacity: 0, y: 60 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={reduce ? { duration: 0.2, y: { duration: 0 } } : { delay, type: "spring", stiffness: 90, damping: 20 }}
     >
       {children}
     </motion.div>
@@ -98,7 +105,7 @@ function RisingDevice({ children, reduce, delay = 0.35 }: { children: React.Reac
 // Each chapter enters differently from the last.
 const ENTRANCES: Variants[] = [
   { hidden: { clipPath: "inset(0 0 100% 0)", y: 30 }, show: { clipPath: "inset(0 0 0% 0)", y: 0 } },
-  { hidden: { opacity: 0, x: -40, filter: "blur(10px)" }, show: { opacity: 1, x: 0, filter: "blur(0px)" } },
+  { hidden: { opacity: 0, x: -40 }, show: { opacity: 1, x: 0 } },
   { hidden: { clipPath: "inset(0 100% 0 0)" }, show: { clipPath: "inset(0 0% 0 0)" } },
   { hidden: { opacity: 0, scale: 0.92, y: 20 }, show: { opacity: 1, scale: 1, y: 0 } },
 ];
@@ -119,8 +126,6 @@ function ChapterBlock({
   const ref = useRef<HTMLElement>(null);
   const centered = useInView(ref, { margin: "-50% 0px -50% 0px" });
   const seen = useInView(ref, { once: true, amount: 0.25 });
-  const near = useInView(ref, { once: true, margin: "400px 0px 400px 0px" });
-  const [localMode, setLocalMode] = useState<ModeId>(chapter.mode);
   const meta = MODES[modeIndex(chapter.mode)];
   const projects = chapterProjects(chapter);
   const entrance = ENTRANCES[i % ENTRANCES.length];
@@ -214,8 +219,8 @@ function ChapterBlock({
 
       {/* Mobile: the chapter carries its own compact device */}
       {isDesktop === false && (
-        <div className="mt-10 lg:hidden min-h-[520px]">
-          {near && <Device mode={localMode} onSelect={setLocalMode} compact serial={`FDE-${chapter.n}`} />}
+        <div className="mt-10 lg:hidden">
+          <InlineDevice mode={chapter.mode} />
         </div>
       )}
     </article>
@@ -230,17 +235,13 @@ export default function FieldKit() {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const chaptersRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  const [heroMode, setHeroMode] = useState<ModeId>("counter");
 
   const { scrollYProgress } = useScroll({ target: chaptersRef, offset: ["start center", "end center"] });
-  const n = CHAPTERS.length;
-  const rawPos = useTransform(scrollYProgress, (v) => Math.min(n - 1, Math.max(0, v * n - 0.5)));
-  const position = useSpring(rawPos, { stiffness: 140, damping: 24 });
 
   const heroRef = useRef<HTMLDivElement>(null);
   const heroCentered = useInView(heroRef, { margin: "-50% 0px -50% 0px" });
   const current = heroCentered ? -1 : active;
-  const desktopMode: ModeId = current < 0 ? heroMode : CHAPTERS[current].mode;
+  const desktopMode: ModeId = current < 0 ? "counter" : CHAPTERS[current].mode;
 
   const selectDesktop = (m: ModeId) => {
     if (m === "build") {
@@ -260,8 +261,7 @@ export default function FieldKit() {
         style={{
           width: "min(900px, 90vw)",
           height: "700px",
-          background: "radial-gradient(ellipse at 70% 30%, var(--accent-glow) 0%, transparent 60%)",
-          filter: "blur(50px)",
+          background: "radial-gradient(ellipse at 70% 30%, var(--accent-glow) 0%, transparent 65%)",
         }}
       />
       <div className="relative max-w-[1440px] mx-auto px-4 md:px-6 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,600px)] lg:gap-12 xl:gap-20">
@@ -338,7 +338,7 @@ export default function FieldKit() {
             {isDesktop === false && (
               <div className="mt-12">
                 <RisingDevice reduce={reduce} delay={0.5}>
-                  <Device mode={heroMode} onSelect={setHeroMode} boot compact />
+                  <InlineDevice mode="counter" />
                 </RisingDevice>
                 <p className="mt-4 font-mono text-[10.5px] tracking-[0.14em] uppercase text-[var(--ink-4)]">
                   {t("hero.hint")}
@@ -357,21 +357,15 @@ export default function FieldKit() {
 
         {/* Desktop: one sticky device runs every deployment */}
         <div className="hidden lg:block">
-          <div className="sticky top-0 h-[100vh] flex flex-col justify-center pt-16">
+          <div className="sticky top-0 h-[100vh] pt-16">
             {isDesktop && (
-              <RisingDevice reduce={reduce}>
-                <Device
+              <RisingDevice reduce={reduce} className="h-full">
+                <Stage
                   mode={desktopMode}
                   onSelect={selectDesktop}
-                  position={position}
                   progress={scrollYProgress}
-                  boot
-                  tilt
-                  keepAlive
+                  hint={current < 0 ? t("hero.hint") : t(`chapters.${CHAPTERS[current].id}.hint`)}
                 />
-                <p className="mt-5 text-center font-mono text-[10.5px] tracking-[0.14em] uppercase text-[var(--ink-4)]">
-                  {current < 0 ? t("hero.hint") : t(`chapters.${CHAPTERS[current].id}.hint`)}
-                </p>
               </RisingDevice>
             )}
           </div>

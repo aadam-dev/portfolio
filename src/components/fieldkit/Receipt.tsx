@@ -2,10 +2,10 @@
 
 import { createContext, useContext } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { EASE_OUT } from "@/lib/motion";
 
 export interface Paper {
   id: number;
+  logo?: string;
   head: string;
   sub?: string;
   lines: { l: string; r?: string }[];
@@ -17,63 +17,59 @@ type PrintFn = (p: Omit<Paper, "id">) => void;
 export const PrinterContext = createContext<PrintFn>(() => {});
 export const usePrinter = () => useContext(PrinterContext);
 
-/** Perforated, slightly jittering paper strip that feeds out of the top slot. */
+/**
+ * 58mm thermal paper feeding up out of the printer slot. It grows from the
+ * slot (bottom-anchored), settles with a spring and tears off on tap.
+ */
 export default function Receipt({ paper, onTear }: { paper: Paper | null; onTear: () => void }) {
   const reduce = useReducedMotion();
   return (
-    <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 w-[min(250px,78%)] flex justify-center">
+    <div className="pointer-events-none absolute bottom-[73px] left-[14px] right-[14px] z-30 flex justify-center overflow-hidden pt-6">
       <AnimatePresence mode="wait">
         {paper && (
           <motion.div
             key={paper.id}
-            className="pointer-events-auto w-full origin-bottom overflow-hidden"
-            initial={reduce ? { opacity: 0 } : { clipPath: "inset(100% 0 0 0)", y: 18 }}
-            animate={
-              reduce
-                ? { opacity: 1 }
-                : { clipPath: "inset(0% 0 0 0)", y: 0, x: [0, -0.6, 0.5, -0.3, 0] }
-            }
-            exit={reduce ? { opacity: 0 } : { y: -60, rotate: -6, opacity: 0 }}
-            transition={{
-              duration: reduce ? 0.2 : 1.1,
-              ease: EASE_OUT,
-              x: { duration: 1.1, ease: "linear" },
-            }}
+            className="pointer-events-auto w-full"
+            initial={{ y: "100%" }}
+            animate={{ y: "0%" }}
+            exit={{ opacity: 0, y: -16, transition: { duration: 0.25 } }}
+            // a thermal head feeds at a constant speed
+            transition={reduce ? { duration: 0 } : { duration: 1.5, ease: "linear" }}
           >
             <button
               type="button"
               onClick={onTear}
               aria-label="Tear off the printout"
-              className="fk-paper block w-full text-left px-4 pt-4 pb-3 font-mono text-[10px] leading-[1.5] shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.35)] max-h-[min(380px,46vh)] overflow-y-auto scrollbar-none"
+              className="fk-paper block w-full text-left px-2.5 pt-3 pb-2 font-mono text-[8.5px] leading-[1.45] max-h-[min(420px,52vh)] overflow-y-auto scrollbar-none"
             >
-              <span className="block text-center text-[11px] font-semibold tracking-[0.12em] uppercase">
-                {paper.head}
-              </span>
-              {paper.sub && <span className="block text-center opacity-60 mb-1">{paper.sub}</span>}
-              <span className="block border-t border-dashed border-current/30 my-1.5 opacity-40" />
+              {paper.logo && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={paper.logo} alt="" width={28} height={28} className="mx-auto mb-1 w-7 h-7 grayscale contrast-150 mix-blend-multiply" />
+              )}
+              <span className="block text-center text-[9.5px] font-bold tracking-[0.08em] uppercase">{paper.head}</span>
+              {paper.sub && <span className="block text-center opacity-70 mb-1">{paper.sub}</span>}
+              <span className="block border-t border-dashed border-black/40 my-1" />
               {paper.lines.map((ln, i) => (
-                <span key={i} className="flex justify-between gap-3">
-                  <span className="truncate">{ln.l}</span>
+                <span key={i} className="flex justify-between gap-2">
+                  <span className="min-w-0">{ln.l}</span>
                   {ln.r && <span className="tabular-nums shrink-0">{ln.r}</span>}
                 </span>
               ))}
               {paper.total && (
                 <>
-                  <span className="block border-t border-dashed my-1.5 opacity-40" />
-                  <span className="flex justify-between font-semibold text-[11px]">
+                  <span className="block border-t border-dashed border-black/40 my-1" />
+                  <span className="flex justify-between font-bold text-[9.5px]">
                     <span>{paper.total.l}</span>
                     <span className="tabular-nums">{paper.total.r}</span>
                   </span>
                 </>
               )}
               {paper.foot?.map((f, i) => (
-                <span key={i} className="block text-center opacity-60 mt-1">
+                <span key={i} className="block text-center opacity-70 mt-1">
                   {f}
                 </span>
               ))}
-              <span className="block text-center opacity-35 mt-2 text-[8.5px] tracking-[0.2em] uppercase">
-                tap to tear
-              </span>
+              <span className="block text-center opacity-40 mt-1.5 text-[7.5px] tracking-[0.18em] uppercase">tap to tear</span>
             </button>
           </motion.div>
         )}

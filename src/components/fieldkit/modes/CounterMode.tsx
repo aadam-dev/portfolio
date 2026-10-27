@@ -1,27 +1,31 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Volume2, VolumeX } from "lucide-react";
-import { cedi, emit } from "../events";
+import { Bell, Minus, Plus, Search, Volume2, VolumeX } from "lucide-react";
+import { emit } from "../events";
 import { usePrinter } from "../Receipt";
-import { EASE_OUT } from "@/lib/motion";
+import { ALBOYUT } from "../items";
 
-const CATALOGUE = [
-  { id: "cement", name: "Cement 50kg", price: 95, stock: 42, tone: "#9C9384" },
-  { id: "pipe", name: "PVC pipe 4in", price: 60, stock: 18, tone: "#4E7FA8" },
-  { id: "sheet", name: "Roofing sheet", price: 120, stock: 9, tone: "#B4552F" },
-  { id: "rods", name: "Iron rod 12mm", price: 88, stock: 30, tone: "#5A5550" },
-  { id: "paint", name: "Emulsion 20L", price: 340, stock: 6, tone: "#E8B23A" },
-  { id: "tiles", name: "Floor tile m²", price: 75, stock: 64, tone: "#C9B79C" },
-] as const;
+type Item = (typeof ALBOYUT.items)[number];
+type ItemId = Item["id"];
+interface Ticket {
+  code: string;
+  lines: { id: ItemId; name: string; qty: number; total: number }[];
+  total: number;
+}
 
-type ItemId = (typeof CATALOGUE)[number]["id"];
-const LOW = 4;
-const SALESPERSON = "Baria";
+const ORANGE = "#c2410c";
+const SP = ALBOYUT.salesperson;
+const money = (n: number) => `GHS ${n.toFixed(2)}`;
+const code = () => {
+  const r = (n: number) => Array.from({ length: n }, () => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[Math.floor(Math.random() * 32)]).join("");
+  return `TKT-MT${r(6)}-${r(4)}`;
+};
 
-/** Two-note chime plus the spoken handoff, the way the real cashier screen calls orders. */
-function announce(no: string) {
+/** The cashier screen chimes, then says who raised the order (as in the real queue). */
+function announce() {
   try {
     const AC = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     const ctx = new AC();
@@ -29,7 +33,6 @@ function announce(no: string) {
       const o = ctx.createOscillator();
       const g = ctx.createGain();
       o.frequency.value = f;
-      o.type = "sine";
       const t = ctx.currentTime + i * 0.16;
       g.gain.setValueAtTime(0.0001, t);
       g.gain.exponentialRampToValueAtTime(0.18, t + 0.02);
@@ -39,209 +42,290 @@ function announce(no: string) {
       o.stop(t + 0.55);
     });
     setTimeout(() => ctx.close().catch(() => {}), 1200);
-  } catch {
-    // no audio: the banner still shows
-  }
-  try {
-    const u = new SpeechSynthesisUtterance(`New order from ${SALESPERSON}. Ticket ${no}.`);
-    u.rate = 1;
+    const u = new SpeechSynthesisUtterance(`New order from ${SP}.`);
     setTimeout(() => window.speechSynthesis.speak(u), 380);
   } catch {
-    // speech unavailable
+    // no audio: the banner still shows
   }
 }
 
 export default function CounterMode() {
   const reduce = useReducedMotion();
   const print = usePrinter();
-  const [basket, setBasket] = useState<Partial<Record<ItemId, number>>>({});
+  const [cat, setCat] = useState<string>("all");
+  const [cart, setCart] = useState<Partial<Record<ItemId, number>>>({});
   const [stock, setStock] = useState<Record<ItemId, number>>(
-    () => Object.fromEntries(CATALOGUE.map((c) => [c.id, c.stock])) as Record<ItemId, number>,
+    () => Object.fromEntries(ALBOYUT.items.map((i) => [i.id, i.stock])) as Record<ItemId, number>,
   );
-  const [receiptNo, setReceiptNo] = useState(41);
-  const [handoff, setHandoff] = useState(true);
+  const [queue, setQueue] = useState<Ticket[]>([]);
+  const [sales, setSales] = useState(0);
   const [sound, setSound] = useState(false);
   const [banner, setBanner] = useState<string | null>(null);
   const bannerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => void (bannerTimer.current && clearTimeout(bannerTimer.current)), []);
 
-  useEffect(
-    () => () => {
-      if (bannerTimer.current) clearTimeout(bannerTimer.current);
-    },
-    [],
-  );
+  const items = ALBOYUT.items.filter((i) => cat === "all" || i.cat === cat);
+  const lines = ALBOYUT.items
+    .filter((i) => cart[i.id])
+    .map((i) => ({ id: i.id, name: i.name, qty: cart[i.id]!, total: cart[i.id]! * i.price }));
+  const total = lines.reduce((a, l) => a + l.total, 0);
+  const held = (id: ItemId) => queue.reduce((a, t) => a + (t.lines.find((l) => l.id === id)?.qty ?? 0), 0);
+  const left = (id: ItemId) => stock[id] - (cart[id] ?? 0) - held(id);
 
-  const lines = CATALOGUE.filter((c) => basket[c.id]).map((c) => ({
-    id: c.id,
-    name: c.name,
-    qty: basket[c.id]!,
-    total: basket[c.id]! * c.price,
-  }));
-  const total = lines.reduce((s, l) => s + l.total, 0);
-
-  const add = (id: ItemId) => {
-    const inBasket = basket[id] ?? 0;
-    if (inBasket >= stock[id]) return;
-    setBasket((b) => ({ ...b, [id]: inBasket + 1 }));
-    const item = CATALOGUE.find((c) => c.id === id)!;
-    emit("pos", "basket.add", `${item.name} × ${inBasket + 1}`);
+  const add = (i: Item, d = 1) => {
+    const q = (cart[i.id] ?? 0) + d;
+    if (q < 0 || (d > 0 && left(i.id) <= 0)) return;
+    setCart((c) => ({ ...c, [i.id]: q || undefined }));
+    if (d > 0) emit("pos", "basket.add", `${i.name} × ${q}`);
   };
 
-  const charge = () => {
+  const send = () => {
     if (!lines.length) return;
-    const no = receiptNo + 1;
-    const code = `#${String(no).padStart(4, "0")}`;
-    setReceiptNo(no);
+    const t = { code: code(), lines, total };
+    setQueue((q) => [t, ...q].slice(0, 3));
+    setCart({});
+    emit("pos", "cashier.notified", `${t.code} · ${SP} → cashier · ${money(total)}`);
+    setBanner(t.code);
+    if (bannerTimer.current) clearTimeout(bannerTimer.current);
+    bannerTimer.current = setTimeout(() => setBanner(null), 3000);
+    if (sound) announce();
+  };
+
+  const collect = (t: Ticket) => {
     const next = { ...stock };
-    lines.forEach((l) => (next[l.id] = stock[l.id] - l.qty));
+    t.lines.forEach((l) => (next[l.id] -= l.qty));
     setStock(next);
-    emit("pos", "sale.completed", `${code} · ${cedi(total)}`);
-    lines.forEach((l) => emit("pos", "stock.decrement", `${l.name} −${l.qty}`));
-    lines.forEach((l) => {
-      if (next[l.id] <= LOW) emit("pos", "stock.low", `${l.name} · ${next[l.id]} left, reorder`);
+    setQueue((q) => q.filter((x) => x.code !== t.code));
+    setSales((s) => s + 1);
+    emit("pos", "sale.completed", `${t.code} · ${money(t.total)} · MoMo`);
+    t.lines.forEach((l) => {
+      if (next[l.id] <= ALBOYUT.alertAt) emit("pos", "stock.low", `${l.name} · ${next[l.id]} on hand, alert at ${ALBOYUT.alertAt}`);
     });
     print({
-      head: "Al Boyut · Lakeside",
-      sub: `Receipt ${code} · served by ${SALESPERSON}`,
-      lines: lines.map((l) => ({ l: `${l.qty}× ${l.name}`, r: `${l.total}.00` })),
-      total: { l: "Total", r: cedi(total) },
-      foot: ["Paid · MoMo", "Thank you. Goods sold are counted."],
+      logo: ALBOYUT.logo,
+      head: "Al Boyut Building Materials",
+      sub: `Lakeside Estate, Accra · ${t.code}`,
+      lines: [...t.lines.map((l) => ({ l: `${l.qty} × ${l.name}`, r: l.total.toFixed(2) })), { l: "Tax (0%)", r: "0.00" }],
+      total: { l: "Total", r: money(t.total) },
+      foot: [`Raised by ${SP} · paid MoMo`, "Goods sold are counted. Thank you."],
     });
-    if (handoff) {
-      emit("pos", "cashier.notified", `${code} · ${SALESPERSON} → cashier`);
-      setBanner(code);
-      if (bannerTimer.current) clearTimeout(bannerTimer.current);
-      bannerTimer.current = setTimeout(() => setBanner(null), 3200);
-      if (sound) announce(String(no));
-    }
-    setBasket({});
   };
 
   return (
-    <div className="relative grid grid-cols-1 @[440px]:grid-cols-[1.35fr_1fr] gap-3 h-full">
-      {/* Catalogue */}
-      <div className="grid grid-cols-3 @[440px]:grid-cols-2 gap-2 content-start">
-        {CATALOGUE.map((c) => {
-          const left = stock[c.id] - (basket[c.id] ?? 0);
-          return (
-            <motion.button
-              key={c.id}
-              type="button"
-              onClick={() => add(c.id)}
-              whileTap={reduce ? undefined : { scale: 0.95 }}
-              disabled={left <= 0}
-              className="group relative text-left rounded-[10px] bg-[#1A1814] hover:bg-[#221F1A] border border-white/[0.06] p-2 @[440px]:p-2.5 transition-colors disabled:opacity-35"
-            >
-              <span className="block w-4 h-4 @[440px]:w-5 @[440px]:h-5 rounded-[5px] mb-1.5" style={{ background: c.tone }} aria-hidden="true" />
-              <span className="block text-[11px] @[440px]:text-[11.5px] leading-tight text-[#F2EEE6]">{c.name}</span>
-              <span className="mt-1 flex items-baseline justify-between font-mono text-[9.5px] text-white/45 tabular-nums">
-                <span>{c.price}.00</span>
-                <span className={left <= LOW ? "text-[var(--accent)]" : ""}>{left} left</span>
-              </span>
-              {basket[c.id] ? (
-                <motion.span
-                  key={basket[c.id]}
-                  initial={reduce ? false : { scale: 0.4, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="absolute top-1.5 right-1.5 min-w-5 h-5 px-1 rounded-full bg-[var(--accent)] text-[var(--on-accent)] font-mono text-[10px] font-semibold grid place-items-center"
-                >
-                  {basket[c.id]}
-                </motion.span>
-              ) : null}
-            </motion.button>
-          );
-        })}
-      </div>
-
-      {/* Basket */}
-      <div className="flex flex-col rounded-[10px] bg-[#13120F] border border-white/[0.06] p-3 min-h-[170px]">
-        <div className="flex items-center justify-between font-mono text-[9.5px] uppercase tracking-[0.14em] text-white/40">
-          <span>Basket · {SALESPERSON}</span>
-          <span>#{String(receiptNo + 1).padStart(4, "0")}</span>
+    <div className="relative h-full flex flex-col bg-[#f8fafc] text-[#0f172a] font-body">
+      {/* top bar, as on the live register */}
+      <div className="shrink-0 h-[38px] flex items-center gap-2 px-2.5 bg-white border-b border-slate-200">
+        <Image unoptimized src={ALBOYUT.logo} alt="" width={22} height={22} className="rounded-full" />
+        <div className="leading-[1.1] min-w-0">
+          <div className="text-[9.5px] font-extrabold tracking-[0.02em]">
+            AL <span style={{ color: ORANGE }}>BOYUT</span>
+          </div>
+          <div className="text-[8.5px] text-slate-500 truncate">
+            {SP} · {ALBOYUT.branch} · {sales} sale{sales === 1 ? "" : "s"}
+          </div>
         </div>
-        <div className="mt-2 flex-1 min-h-0 overflow-hidden">
-          {lines.length === 0 ? (
-            <p className="text-[11px] text-white/35 leading-relaxed mt-2">Tap items to ring them up.</p>
-          ) : (
-            <ul className="space-y-1.5">
-              <AnimatePresence initial={false}>
-                {lines.map((l) => (
-                  <motion.li
-                    key={l.id}
-                    layout={!reduce}
-                    initial={reduce ? false : { opacity: 0, x: 12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.35, ease: EASE_OUT }}
-                    className="flex justify-between gap-2 text-[11px] text-white/80"
-                  >
-                    <span className="truncate">
-                      <span className="font-mono text-white/40">{l.qty}×</span> {l.name}
-                    </span>
-                    <span className="font-mono tabular-nums">{l.total}.00</span>
-                  </motion.li>
-                ))}
-              </AnimatePresence>
-            </ul>
-          )}
-        </div>
-
-        <div className="mt-2 flex items-center justify-between gap-2">
-          <label className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.12em] text-white/45 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={handoff}
-              onChange={(e) => setHandoff(e.target.checked)}
-              className="accent-[var(--accent)] w-3 h-3"
-            />
-            Send to cashier
-          </label>
-          <button
-            type="button"
-            onClick={() => setSound((s) => !s)}
-            aria-pressed={sound}
-            aria-label={sound ? "Mute the cashier voice" : "Unmute the cashier voice"}
-            className="p-1 rounded text-white/45 hover:text-white"
-          >
-            {sound ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
-          </button>
-        </div>
-
-        <div className="pt-2 mt-1.5 border-t border-dashed border-white/10 flex items-baseline justify-between">
-          <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-white/40">Total</span>
-          <span className="font-mono text-[15px] text-[#F2EEE6] tabular-nums">{cedi(total)}</span>
-        </div>
+        <span className="ml-auto font-mono text-[10px] font-semibold tabular-nums" style={{ color: ORANGE }}>
+          {money(total)}
+        </span>
         <button
           type="button"
-          onClick={charge}
-          disabled={!lines.length}
-          className="mt-2 h-9 rounded-[8px] bg-[var(--accent)] text-[var(--on-accent)] text-[12px] font-semibold tracking-wide disabled:bg-white/[0.07] disabled:text-white/30 transition-colors"
+          onClick={() => setSound((s) => !s)}
+          aria-pressed={sound}
+          aria-label={sound ? "Mute the cashier voice" : "Unmute the cashier voice"}
+          className="w-6 h-6 grid place-items-center rounded-full border border-orange-200 bg-orange-50"
+          style={{ color: ORANGE }}
         >
-          Charge &amp; print
+          {sound ? <Volume2 className="w-3 h-3" /> : <VolumeX className="w-3 h-3" />}
         </button>
       </div>
 
-      {/* Cashier screen banner */}
+      <div className="flex-1 min-h-0 grid grid-cols-1 @[400px]:grid-cols-[minmax(0,1fr)_152px]">
+        {/* catalogue */}
+        <div className="min-h-0 flex flex-col p-2 gap-1.5">
+          <div className="flex items-center gap-1.5 h-[24px] rounded-[7px] border border-slate-200 bg-white px-2 text-[9px] text-slate-400">
+            <Search className="w-3 h-3" /> Search products or scan barcode…
+          </div>
+          <div className="flex gap-1 overflow-x-auto scrollbar-none" role="group" aria-label="Category">
+            {ALBOYUT.categories.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => setCat(c.id)}
+                aria-pressed={cat === c.id}
+                className="shrink-0 h-[20px] px-2 rounded-full border text-[8.5px] whitespace-nowrap transition-colors"
+                style={
+                  cat === c.id
+                    ? { background: "#fff7ed", borderColor: "#fdba74", color: ORANGE }
+                    : { background: "#fff", borderColor: "#e2e8f0", color: "#475569" }
+                }
+              >
+                {c.label} <span className="opacity-60">{c.count}</span>
+              </button>
+            ))}
+          </div>
+          <div className="flex-1 min-h-0 overflow-y-auto scrollbar-none">
+            <div className="grid grid-cols-3 @[560px]:grid-cols-4 gap-1.5">
+              {items.map((i) => {
+                const n = left(i.id);
+                const low = n <= ALBOYUT.alertAt;
+                return (
+                  <motion.button
+                    key={i.id}
+                    type="button"
+                    onClick={() => add(i)}
+                    whileTap={reduce ? undefined : { scale: 0.96 }}
+                    disabled={n <= 0}
+                    aria-label={`Add ${i.name}, ${money(i.price)}`}
+                    className="relative text-left rounded-[9px] bg-white border border-slate-200 overflow-hidden disabled:opacity-45 hover:border-orange-300 transition-colors"
+                  >
+                    <span className="relative block aspect-square bg-white">
+                      <Image unoptimized src={i.img} alt="" fill sizes="96px" className="object-contain p-0.5" />
+                    </span>
+                    <span className="block px-1.5 pt-1 pb-1.5">
+                      <span className="block text-[8.5px] font-semibold leading-tight line-clamp-2 min-h-[2.2em]">{i.name}</span>
+                      <span className="flex items-center justify-between mt-0.5">
+                        <span className="text-[9px] font-bold tabular-nums" style={{ color: ORANGE }}>
+                          {money(i.price)}
+                        </span>
+                        <span className={`text-[7.5px] tabular-nums ${low ? "font-semibold text-red-600" : "text-slate-400"}`}>
+                          {low ? `Low ${n}` : n}
+                        </span>
+                      </span>
+                    </span>
+                    {cart[i.id] ? (
+                      <motion.span
+                        key={cart[i.id]}
+                        initial={reduce ? false : { scale: 0.5 }}
+                        animate={{ scale: 1 }}
+                        className="absolute top-1 right-1 min-w-[16px] h-[16px] px-1 rounded-full text-white text-[8.5px] font-bold grid place-items-center"
+                        style={{ background: "#ea580c" }}
+                      >
+                        {cart[i.id]}
+                      </motion.span>
+                    ) : null}
+                  </motion.button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* cart + cashier queue */}
+        <div className="min-h-0 flex flex-col border-t @[400px]:border-t-0 @[400px]:border-l border-slate-200 bg-white p-2">
+          <div className="text-[9.5px] font-bold">Your Cart</div>
+          <div className="mt-1 flex-1 min-h-[40px] overflow-y-auto scrollbar-none">
+            {!lines.length ? (
+              <p className="text-[8.5px] text-slate-400 mt-1">Tap products to add.</p>
+            ) : (
+              <ul className="space-y-1">
+                {lines.map((l) => {
+                  const item = ALBOYUT.items.find((x) => x.id === l.id)!;
+                  return (
+                    <li key={l.id} className="text-[8.5px]">
+                      <div className="flex justify-between gap-1">
+                        <span className="truncate font-medium">{l.name}</span>
+                        <span className="tabular-nums">{l.total.toFixed(2)}</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-slate-500">
+                        <button type="button" onClick={() => add(item, -1)} aria-label={`One less ${l.name}`} className="w-3.5 h-3.5 grid place-items-center rounded border border-slate-200">
+                          <Minus className="w-2 h-2" />
+                        </button>
+                        <span className="tabular-nums w-3 text-center">{l.qty}</span>
+                        <button type="button" onClick={() => add(item)} aria-label={`One more ${l.name}`} className="w-3.5 h-3.5 grid place-items-center rounded border border-slate-200">
+                          <Plus className="w-2 h-2" />
+                        </button>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+          <div className="border-t border-slate-200 pt-1 text-[8.5px] text-slate-500 space-y-px">
+            <div className="flex justify-between">
+              <span>Tax (0%)</span>
+              <span>GHS 0.00</span>
+            </div>
+            <div className="flex justify-between text-[10px] font-bold text-[#0f172a]">
+              <span>Total</span>
+              <span className="tabular-nums" style={{ color: ORANGE }}>
+                {money(total)}
+              </span>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={send}
+            disabled={!lines.length}
+            className="mt-1.5 h-[26px] rounded-[7px] text-white text-[9.5px] font-semibold disabled:opacity-40 transition-opacity"
+            style={{ background: "#ea580c" }}
+          >
+            Send to cashier
+          </button>
+
+          <div className="mt-2 flex items-center gap-1 text-[8.5px] font-bold">
+            Orders
+            <span className="inline-flex items-center gap-0.5 px-1.5 rounded-full border border-orange-200 bg-orange-50 font-medium" style={{ color: ORANGE }}>
+              <Bell className="w-2 h-2" /> {queue.length} to collect
+            </span>
+          </div>
+          <div className="mt-1 space-y-1">
+            <AnimatePresence initial={false}>
+              {queue.map((t) => (
+                <motion.div
+                  key={t.code}
+                  layout={!reduce}
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  className="rounded-[6px] border border-orange-200 bg-orange-50/60 px-1.5 py-1"
+                >
+                  <div className="flex items-center gap-1">
+                    <span className="px-1 rounded-[3px] bg-[#ea580c] text-white text-[6.5px] font-bold leading-[11px]">TO COLLECT</span>
+                    <span className="ml-auto font-mono text-[8px] font-bold tabular-nums" style={{ color: ORANGE }}>
+                      {money(t.total)}
+                    </span>
+                  </div>
+                  <div className="font-mono text-[7.5px] font-semibold mt-0.5 truncate">{t.code}</div>
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-[7.5px] text-slate-500 truncate">Walk-in · Pickup · {SP}</span>
+                    <button type="button" onClick={() => collect(t)} className="shrink-0 px-1.5 h-[15px] rounded-[4px] bg-[#0f172a] text-white text-[7.5px] font-semibold">
+                      Collect
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
+
+      {/* cashier screen call-out */}
       <AnimatePresence>
         {banner && (
           <motion.div
             role="status"
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: -14, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.35, ease: EASE_OUT }}
-            className="absolute left-1/2 -translate-x-1/2 top-1 z-10 flex items-center gap-2.5 rounded-full bg-[#F2EEE6] text-[#14120F] pl-2 pr-3.5 py-1.5 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.7)]"
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={reduce ? { duration: 0.15 } : { type: "spring", stiffness: 420, damping: 32 }}
+            className="absolute left-1/2 top-[44px] -translate-x-1/2 z-10"
           >
-            <span className="w-6 h-6 rounded-full bg-[var(--accent)] text-[var(--on-accent)] grid place-items-center text-[11px] font-bold">
-              B
-            </span>
-            <span className="text-[11.5px] leading-tight">
-              <span className="block font-semibold">New order from {SALESPERSON}</span>
-              <span className="block font-mono text-[9.5px] opacity-60">Cashier queue · {banner}</span>
-            </span>
+            <div className="flex items-center gap-2 rounded-full bg-[#0f172a] text-white pl-1.5 pr-3 py-1 shadow-xl whitespace-nowrap">
+              <span className="w-5 h-5 rounded-full grid place-items-center text-[9px] font-bold" style={{ background: "#ea580c" }}>
+                B
+              </span>
+              <span className="text-[9.5px] leading-tight">
+                <span className="block font-semibold">New order from {SP}</span>
+                <span className="block font-mono text-[7.5px] opacity-60">{banner}</span>
+              </span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
+      <span className="absolute bottom-0.5 left-2 text-[6.5px] text-slate-400 pointer-events-none">
+        Live catalogue prices · sample stock
+      </span>
     </div>
   );
 }

@@ -51,11 +51,8 @@ export default function Nav() {
         }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         style={{
-          background: condensed
-            ? "var(--veil)"
-            : "var(--veil-soft)",
-          backdropFilter: "blur(14px)",
-          WebkitBackdropFilter: "blur(14px)",
+          // solid veil instead of a backdrop blur: blur re-samples everything under it on every scroll frame
+          background: condensed ? "var(--veil-strong)" : "transparent",
           borderBottom: condensed ? "1px solid var(--line)" : "1px solid transparent",
           transition: "background 0.3s, border-color 0.3s",
         }}

@@ -1,267 +1,303 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ChevronLeft, ShoppingBag } from "lucide-react";
 import { emit } from "../events";
-import { EASE_IN_OUT, EASE_OUT } from "@/lib/motion";
-import { ClothFilters, GARMENTS, PRINTS, PrintPattern, type GarmentId, type PrintId } from "../prints";
+import { MUNAMUSE, ZAINAS } from "../items";
 
-type Market = "USD" | "GHS";
-interface Look {
-  print: PrintId;
-  way: number;
-}
-interface BagLine {
-  garment: GarmentId;
-  print: PrintId;
-  way: number;
+type Store = "zainas" | "munamuse";
+type Market = "GHS" | "USD";
+interface Line {
+  name: string;
+  size: string;
+  price: number;
   market: Market;
 }
 
-const money = (m: Market, n: number) => (m === "USD" ? `USD ${n}` : `GHS ${n.toLocaleString("en-GH")}`);
+const cedis = (n: number) => `GH₵${n.toLocaleString("en-GH")}`;
+const fmt = (m: Market, n: number) => (m === "USD" ? `$${n}` : cedis(n));
 
-function GarmentStage({ garment, look, prev, version }: { garment: GarmentId; look: Look; prev: Look | null; version: number }) {
+function WhatsAppChat({ to, lines, total, footer, onBack }: { to: string; lines: Line[]; total: string; footer: string; onBack: () => void }) {
   const reduce = useReducedMotion();
-  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
-  const g = GARMENTS.find((x) => x.id === garment)!;
-  const p = PRINTS.find((x) => x.id === look.print)!;
-  const pp = prev ? PRINTS.find((x) => x.id === prev.print)! : null;
-
+  const msg = `Hi ${to}, I'd like to order:\n${lines.map((l) => `· ${l.name} (size ${l.size}) ${fmt(l.market, l.price)}`).join("\n")}\nTotal ${total}. ${footer}`;
   return (
-    <svg viewBox="0 0 200 260" className="w-full h-full" role="img" aria-label={`${g.name} in ${p.name}, ${p.ways[look.way].name}`}>
-      <defs>
-        <ClothFilters id={uid} />
-        <PrintPattern id={`${uid}-p`} print={look.print} c={p.ways[look.way].c} scale={g.scale} />
-        {pp && prev && <PrintPattern id={`${uid}-pp`} print={prev.print} c={pp.ways[prev.way].c} scale={g.scale} />}
-        <clipPath id={`${uid}-clip`}>
-          {g.paths.map((d, i) => (
-            <path key={i} d={d} />
-          ))}
-        </clipPath>
-        <clipPath id={`${uid}-wipe`}>
-          <motion.path
-            key={version}
-            initial={reduce || !prev ? { d: "M-20 -20 H220 V280 H-20 Z" } : { d: "M-20 -20 H220 V-20 Q100 -6 -20 -20 Z" }}
-            animate={{ d: "M-20 -20 H220 V280 Q100 300 -20 280 Z" }}
-            transition={{ duration: reduce ? 0 : 0.8, ease: EASE_IN_OUT }}
-          />
-        </clipPath>
-      </defs>
-
-      <g filter={`url(#${uid}-shadow)`}>
-        <g clipPath={`url(#${uid}-clip)`}>
-          {prev && <rect x={-10} y={-10} width={220} height={280} fill={`url(#${uid}-pp)`} filter={`url(#${uid}-drape)`} />}
-          <g clipPath={`url(#${uid}-wipe)`}>
-            <rect x={-10} y={-10} width={220} height={280} fill={`url(#${uid}-p)`} filter={`url(#${uid}-drape)`} />
-          </g>
-          <rect x={0} y={0} width={200} height={260} fill={`url(#${uid}-folds)`} />
-          <rect x={0} y={0} width={200} height={260} fill={`url(#${uid}-light)`} />
-        </g>
-        {g.paths.map((d, i) => (
-          <path key={i} d={d} fill="none" stroke="rgba(0,0,0,0.45)" strokeWidth={1} />
-        ))}
-        {g.seams.map((d, i) => (
-          <path key={i} d={d} fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth={0.7} strokeDasharray="2 1.6" />
-        ))}
-      </g>
-    </svg>
+    <div className="absolute inset-0 flex flex-col bg-[#efeae2]">
+      <div className="h-[42px] flex items-center gap-2 px-2 bg-[#f6f6f6] border-b border-black/10">
+        <button type="button" onClick={onBack} aria-label="Back to the shop" className="p-1 text-[#128c7e]">
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <span className="w-6 h-6 rounded-full bg-[#25d366]/20 grid place-items-center text-[10px] font-semibold text-[#128c7e]">{to[0]}</span>
+        <span className="text-[11.5px] font-semibold text-black">{to}</span>
+      </div>
+      <div className="flex-1 p-3 flex flex-col justify-end">
+        <motion.div
+          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 14, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={reduce ? { duration: 0.15 } : { type: "spring", stiffness: 380, damping: 28 }}
+          className="self-end max-w-[88%] rounded-[10px] rounded-tr-[3px] bg-[#d9fdd3] px-2.5 py-1.5 text-[10.5px] leading-snug text-black whitespace-pre-line shadow-sm"
+        >
+          {msg}
+          <span className="block text-right text-[8px] text-black/40 mt-0.5">now ✓✓</span>
+        </motion.div>
+      </div>
+      <div className="h-[46px] pb-3 px-2 flex items-center gap-2 bg-[#f6f6f6]">
+        <span className="flex-1 h-[28px] rounded-full bg-white px-3 text-[10px] leading-[28px] text-black/35">Message</span>
+      </div>
+    </div>
   );
 }
 
-export default function AtelierMode() {
+function Zainas({ bag, setBag, onChat }: { bag: Line[]; setBag: (l: Line[]) => void; onChat: () => void }) {
   const reduce = useReducedMotion();
-  const [garment, setGarment] = useState<GarmentId>("kaftan");
-  const [look, setLook] = useState<Look>({ print: "kente", way: 0 });
-  const [prev, setPrev] = useState<Look | null>(null);
-  const [version, setVersion] = useState(0);
-  const [market, setMarket] = useState<Market>("USD");
-  const [bag, setBag] = useState<BagLine[]>([]);
-  const [sent, setSent] = useState(false);
-
-  const g = GARMENTS.find((x) => x.id === garment)!;
-  const p = PRINTS.find((x) => x.id === look.print)!;
-
-  const change = (next: Look) => {
-    if (next.print === look.print && next.way === look.way) return;
-    setPrev(look);
-    setLook(next);
-    setVersion((v) => v + 1);
-    const np = PRINTS.find((x) => x.id === next.print)!;
-    emit("atelier", "print.changed", `${np.name} · ${np.ways[next.way].name}`);
-  };
+  const [open, setOpen] = useState<(typeof ZAINAS.items)[number] | null>(null);
+  const [size, setSize] = useState("M");
+  const total = bag.reduce((a, l) => a + l.price, 0);
 
   const add = () => {
-    const line = { garment, print: look.print, way: look.way, market };
-    setBag((b) => [...b, line]);
-    setSent(false);
-    emit("atelier", "bag.add", `${g.name} · ${p.name} ${p.ways[look.way].name} · ${money(market, g.price[market])}`);
-  };
-
-  const total = bag.reduce((a, l) => a + GARMENTS.find((x) => x.id === l.garment)!.price[market], 0);
-  const message = `Hi Muna Muse, I'd like to order:\n${bag
-    .map((l) => {
-      const gg = GARMENTS.find((x) => x.id === l.garment)!;
-      const pr = PRINTS.find((x) => x.id === l.print)!;
-      return `· ${gg.name} in ${pr.name} (${pr.ways[l.way].name})`;
-    })
-    .join("\n")}\nTotal ${money(market, total)}. Delivery in Accra, please.`;
-
-  const send = () => {
-    if (!bag.length) return;
-    setSent(true);
-    emit("atelier", "order.whatsapp", `${bag.length} items · ${money(market, total)} · the bag is the order`);
+    if (!open) return;
+    setBag([...bag, { name: open.name, size, price: open.price, market: "GHS" }]);
+    emit("atelier", "bag.add", `Zaina's · ${open.name} (${size}) · ${cedis(open.price)}`);
+    setOpen(null);
   };
 
   return (
-    <div className="grid grid-cols-1 @[440px]:grid-cols-[minmax(0,1fr)_236px] gap-3 h-full">
-      {/* Stage */}
-      <div className="relative rounded-[10px] overflow-hidden min-h-[230px]" style={{ background: "radial-gradient(ellipse at 50% 35%, #2a2520, #121110 75%)" }}>
-        <div className="absolute inset-0 p-3 pb-9">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={garment}
-              className="w-full h-full"
-              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 14, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={reduce ? { opacity: 0 } : { opacity: 0, y: -10 }}
-              transition={{ duration: 0.4, ease: EASE_OUT }}
-            >
-              <GarmentStage garment={garment} look={look} prev={prev} version={version} />
-            </motion.div>
-          </AnimatePresence>
-        </div>
-        <div className="absolute left-3 right-3 bottom-2.5 flex items-end justify-between gap-2">
-          <div className="min-w-0">
-            <div className="text-[12px] text-[#F2EEE6] leading-tight truncate">
-              {g.name} · {p.name}
-            </div>
-            <div className="font-mono text-[9px] text-white/40 truncate">{p.origin}</div>
-          </div>
-          <div className="font-mono text-[13px] text-[#F2EEE6] shrink-0">{money(market, g.price[market])}</div>
+    <div className="absolute inset-0 flex flex-col bg-[#f9f1ee] text-[#2a1a1f]">
+      <div className="h-[34px] flex items-center justify-between px-3 text-[8px] tracking-[0.16em] uppercase">
+        <span>Shop</span>
+        <span className="font-serif text-[12px] tracking-[0.12em]">
+          ZAINA&apos;S
+        </span>
+        <button type="button" onClick={() => bag.length && onChat()} className="flex items-center gap-1" aria-label={`Bag, ${bag.length} items`}>
+          Bag <span className="w-4 h-4 rounded-full bg-[#2a1a1f] text-white grid place-items-center text-[8px] tracking-normal">{bag.length}</span>
+        </button>
+      </div>
+      <div className="flex-1 min-h-0 overflow-y-auto scrollbar-none px-3 pb-3">
+        <h3 className="font-serif text-[21px] leading-[1.05] mt-1">
+          Everything we have <em className="text-[#a0435a]">right now</em>.
+        </h3>
+        <p className="mt-1 text-[8.5px] leading-snug text-[#2a1a1f]/60">Stock is small on purpose. If something says low stock, it means it.</p>
+        <div className="mt-2.5 grid grid-cols-2 gap-2">
+          {ZAINAS.items.map((it) => (
+            <button key={it.id} type="button" onClick={() => setOpen(it)} className="text-left" aria-label={`${it.name}, ${cedis(it.price)}`}>
+              <span className="relative block aspect-[3/4] overflow-hidden rounded-[3px] bg-white">
+                <Image unoptimized src={it.img} alt="" fill sizes="140px" className="object-cover" />
+              </span>
+              <span className="mt-1 flex items-baseline justify-between gap-1">
+                <span className="font-serif text-[11px] leading-tight">
+                  {it.name}
+                </span>
+                <span className="text-[9px] font-semibold shrink-0">
+                  {"was" in it && <s className="font-normal opacity-50 mr-0.5">{cedis(it.was)}</s>}
+                  {cedis(it.price)}
+                </span>
+              </span>
+              <span className="block text-[8px] text-[#2a1a1f]/55 truncate">{it.note}</span>
+            </button>
+          ))}
         </div>
       </div>
+      {bag.length > 0 && (
+        <div className="px-3 pt-2 pb-5 bg-white border-t border-black/5 flex items-center justify-between gap-2">
+          <span className="text-[10px]">
+            Bag · {bag.length} · <b>{cedis(total)}</b>
+          </span>
+          <button type="button" onClick={onChat} className="h-[28px] px-3 rounded-[4px] bg-[#128c7e] text-white text-[9px] tracking-[0.12em] uppercase">
+            Finish on WhatsApp
+          </button>
+        </div>
+      )}
 
-      {/* Controls */}
-      <div className="flex flex-col gap-2 min-w-0">
-        <div className="grid grid-cols-4 gap-1" role="group" aria-label="Silhouette">
-          {GARMENTS.map((x) => (
-            <button
-              key={x.id}
-              type="button"
-              onClick={() => {
-                setPrev(null);
-                setGarment(x.id);
-              }}
-              aria-pressed={garment === x.id}
-              title={x.name}
-              className={`h-9 rounded-[7px] border grid place-items-center transition-colors ${
-                garment === x.id ? "border-[var(--accent)] bg-[var(--accent)]/10" : "border-white/10 hover:border-white/30"
-              }`}
-            >
-              <svg viewBox="0 0 200 260" className="h-6 w-6" aria-hidden="true">
-                {x.paths.map((d, i) => (
-                  <path key={i} d={d} fill={garment === x.id ? "#F2EEE6" : "rgba(242,238,230,0.45)"} />
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            key={open.id}
+            className="absolute inset-0 z-10 flex flex-col bg-[#f9f1ee]"
+            initial={reduce ? { opacity: 0 } : { y: "100%" }}
+            animate={reduce ? { opacity: 1 } : { y: 0 }}
+            exit={reduce ? { opacity: 0 } : { y: "100%" }}
+            transition={reduce ? { duration: 0.15 } : { type: "spring", stiffness: 300, damping: 32 }}
+          >
+            <div className="relative h-[52%] shrink-0">
+              <Image unoptimized src={open.img} alt={open.name} fill sizes="300px" className="object-cover" />
+              <button type="button" onClick={() => setOpen(null)} aria-label="Back to the shop" className="absolute top-2 left-2 w-7 h-7 rounded-full bg-white/90 grid place-items-center">
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="flex-1 flex flex-col px-3 pt-2 pb-5">
+              <div className="font-serif text-[19px] leading-tight">
+                {open.name}
+              </div>
+              <div className="text-[12px]">
+                {cedis(open.price)} {"was" in open && <s className="text-[10px] opacity-50">{cedis(open.was)}</s>}
+                {"low" in open && <span className="ml-1.5 text-[8px] tracking-[0.1em] uppercase text-[#a0435a]">Low stock</span>}
+              </div>
+              <p className="mt-1 text-[9.5px] text-[#2a1a1f]/65">{open.note}</p>
+              <div className="mt-2 flex gap-1" role="group" aria-label="Size">
+                {ZAINAS.sizes.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setSize(s)}
+                    aria-pressed={size === s}
+                    className={`w-8 h-7 border text-[9.5px] ${size === s ? "bg-[#2a1a1f] text-white border-[#2a1a1f]" : "border-[#2a1a1f]/20"}`}
+                  >
+                    {s}
+                  </button>
                 ))}
-              </svg>
-              <span className="sr-only">{x.name}</span>
-            </button>
-          ))}
-        </div>
+              </div>
+              <button type="button" onClick={add} className="mt-auto h-[32px] bg-[#2a1a1f] text-white text-[9.5px] tracking-[0.16em] uppercase">
+                Add to bag
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
-        <div className="grid grid-cols-5 gap-1" role="group" aria-label="Print">
-          {PRINTS.map((x) => (
-            <button
-              key={x.id}
-              type="button"
-              onClick={() => change({ print: x.id, way: 0 })}
-              aria-pressed={look.print === x.id}
-              title={x.name}
-              className={`relative h-9 rounded-[7px] overflow-hidden border transition-colors ${
-                look.print === x.id ? "border-[var(--accent)]" : "border-white/10 hover:border-white/30"
-              }`}
-            >
-              <svg viewBox="0 0 40 40" className="absolute inset-0 w-full h-full" aria-hidden="true">
-                <defs>
-                  <PrintPattern id={`sw-${x.id}`} print={x.id} c={x.ways[0].c} scale={0.55} />
-                </defs>
-                <rect width={40} height={40} fill={`url(#sw-${x.id})`} />
-              </svg>
-              <span className="sr-only">{x.name}</span>
-            </button>
-          ))}
-        </div>
-
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5" role="group" aria-label="Colourway">
-            {p.ways.map((w, i) => (
-              <button
-                key={w.name}
-                type="button"
-                onClick={() => change({ print: look.print, way: i })}
-                aria-pressed={look.way === i}
-                aria-label={w.name}
-                title={w.name}
-                className={`w-5 h-5 rounded-full border-2 transition-transform ${look.way === i ? "border-[#F2EEE6] scale-110" : "border-transparent"}`}
-                style={{ background: `conic-gradient(${w.c.map((c, k) => `${c} ${(k / w.c.length) * 360}deg ${((k + 1) / w.c.length) * 360}deg`).join(",")})` }}
-              />
-            ))}
-            <span className="font-mono text-[9px] text-white/40 ml-1 truncate">{p.ways[look.way].name}</span>
-          </div>
-          <div role="group" aria-label="Market" className="flex rounded-[7px] bg-white/[0.05] p-0.5 shrink-0">
+function MunaMuse({ bag, setBag, onChat }: { bag: Line[]; setBag: (l: Line[]) => void; onChat: () => void }) {
+  const p = MUNAMUSE.product;
+  const [market, setMarket] = useState<Market>("GHS");
+  const [size, setSize] = useState("12");
+  const add = () => {
+    setBag([...bag, { name: p.name, size, price: p.price[market], market }]);
+    emit("atelier", "bag.add", `Muna Muse · ${p.name} (${size}) · ${fmt(market, p.price[market])}`);
+  };
+  return (
+    <div className="absolute inset-0 flex flex-col bg-[#0b1020] text-[#ece6da]">
+      <div className="h-[34px] flex items-center justify-between px-3 text-[8px] tracking-[0.16em] uppercase">
+        <span className="text-[#c9a46a] font-serif text-[10.5px] tracking-[0.14em]">
+          MUNA <span className="text-[#ece6da]">MUSE</span>
+        </span>
+        <span className="flex items-center gap-2">
+          <span role="group" aria-label="Market" className="flex border border-white/20">
             {(["USD", "GHS"] as const).map((m) => (
               <button
                 key={m}
                 type="button"
                 onClick={() => {
                   setMarket(m);
-                  emit("atelier", "market.switched", `${m} · priced per market, not converted`);
+                  emit("atelier", "market.switched", `${m} · set per market, not converted`);
                 }}
                 aria-pressed={market === m}
-                className={`px-1.5 h-5 rounded-[5px] font-mono text-[9px] ${market === m ? "bg-[#F2EEE6] text-[#14100A]" : "text-white/50"}`}
+                className={`px-1.5 h-[16px] text-[8px] ${market === m ? "bg-[#ece6da] text-[#0b1020]" : "text-white/60"}`}
               >
-                {m}
+                {m === "USD" ? "$" : "GH₵"}
+              </button>
+            ))}
+          </span>
+          <button type="button" onClick={() => bag.length && onChat()} aria-label={`Bag, ${bag.length} items`} className="flex items-center gap-1">
+            <ShoppingBag className="w-3 h-3" /> {bag.length}
+          </button>
+        </span>
+      </div>
+      <div className="flex-1 min-h-0 overflow-y-auto scrollbar-none">
+        <div className="relative h-[230px]">
+          <Image unoptimized src={p.img} alt={`${p.name} fabric`} fill sizes="300px" className="object-cover" />
+          <span className="absolute left-2 bottom-2 px-1.5 py-0.5 bg-black/50 text-[7.5px] tracking-[0.14em] uppercase">Kaftans &amp; boubous</span>
+        </div>
+        <div className="px-3 pt-2.5 pb-3">
+          <div className="font-serif text-[20px] leading-tight">
+            {p.name}
+          </div>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div key={market} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} className="text-[13px] mt-0.5">
+              {fmt(market, p.price[market])}
+            </motion.div>
+          </AnimatePresence>
+          <div className="text-[8px] text-white/40">Priced for each market, not converted at checkout.</div>
+          <p className="mt-1.5 text-[9px] leading-snug text-white/70">{p.note}</p>
+          <div className="mt-2 text-[7.5px] tracking-[0.16em] uppercase text-white/50">Size</div>
+          <div className="mt-1 grid grid-cols-5 gap-1" role="group" aria-label="Size">
+            {p.sizes.map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => setSize(s)}
+                aria-pressed={size === s}
+                className={`h-6 border text-[9px] ${size === s ? "border-[#ece6da] bg-[#ece6da] text-[#0b1020]" : "border-white/20 text-white/80"}`}
+              >
+                {s}
               </button>
             ))}
           </div>
         </div>
-
+      </div>
+      <div className="px-3 pt-2 pb-5 grid grid-cols-2 gap-1.5">
+        <button type="button" onClick={add} className="h-[30px] bg-[#f3e9dc] text-[#0b1020] text-[8.5px] tracking-[0.14em] uppercase">
+          Add to bag
+        </button>
         <button
           type="button"
-          onClick={add}
-          className="h-8 rounded-[8px] bg-[var(--accent)] text-[var(--on-accent)] text-[12px] font-semibold"
+          onClick={() => (bag.length ? onChat() : (add(), onChat()))}
+          className="h-[30px] bg-[#25d366] text-[#06210f] text-[8.5px] tracking-[0.1em] uppercase font-semibold"
         >
-          Add to bag · {money(market, g.price[market])}
+          Order on WhatsApp
         </button>
+      </div>
+    </div>
+  );
+}
 
-        <div className="flex-1 min-h-[64px] rounded-[8px] bg-[#13120F] border border-white/[0.06] p-2 flex flex-col">
-          {!bag.length ? (
-            <p className="text-[10px] leading-snug text-white/35">
-              The bag is the order: it becomes a WhatsApp message, prices set per market.
-            </p>
-          ) : sent ? (
-            <motion.div
-              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="rounded-[10px] rounded-br-[3px] bg-[#1f3b2c] px-2 py-1.5 text-[9.5px] leading-snug text-[#dcf8e5] whitespace-pre-line self-end max-w-full overflow-hidden"
+export default function AtelierMode() {
+  const [store, setStore] = useState<Store>("zainas");
+  const [bags, setBags] = useState<Record<Store, Line[]>>({ zainas: [], munamuse: [] });
+  const [chat, setChat] = useState(false);
+  const bag = bags[store];
+  const setBag = (l: Line[]) => setBags((b) => ({ ...b, [store]: l }));
+
+  const openChat = () => {
+    setChat(true);
+    emit("atelier", "order.whatsapp", `${store === "zainas" ? "Zaina's" : "Muna Muse"} · the bag is the order`);
+  };
+
+  // Muna Muse can switch market mid-bag; totals are per line's own market.
+  const total = (lines: Line[]) => {
+    const usd = lines.filter((l) => l.market === "USD").reduce((a, l) => a + l.price, 0);
+    const ghs = lines.filter((l) => l.market === "GHS").reduce((a, l) => a + l.price, 0);
+    return [ghs ? cedis(ghs) : "", usd ? `$${usd}` : ""].filter(Boolean).join(" + ");
+  };
+
+  return (
+    <div className="relative h-full">
+      {/* storefront switch, like browser tabs */}
+      <div className="absolute inset-x-0 top-0 z-20 flex justify-center pt-1">
+        <div role="group" aria-label="Storefront" className="flex rounded-full bg-black/70 p-0.5">
+          {(
+            [
+              ["zainas", "Zaina's · Accra"],
+              ["munamuse", "Muna Muse · NY"],
+            ] as const
+          ).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => {
+                setStore(id);
+                setChat(false);
+              }}
+              aria-pressed={store === id}
+              className={`px-2.5 h-[18px] rounded-full text-[8.5px] ${store === id ? "bg-white text-black font-semibold" : "text-white/70"}`}
             >
-              {message}
-            </motion.div>
-          ) : (
-            <>
-              <div className="flex justify-between font-mono text-[9px] uppercase tracking-[0.1em] text-white/40">
-                <span>Bag · {bag.length}</span>
-                <span className="text-[#F2EEE6] normal-case tracking-normal">{money(market, total)}</span>
-              </div>
-              <button
-                type="button"
-                onClick={send}
-                className="mt-auto h-7 rounded-[7px] bg-[#25d366] text-[#06210f] text-[11px] font-semibold"
-              >
-                Send as WhatsApp order
-              </button>
-            </>
-          )}
+              {label}
+            </button>
+          ))}
         </div>
+      </div>
+      <div className="absolute inset-0 top-[24px]">
+        {store === "zainas" ? <Zainas bag={bag} setBag={setBag} onChat={openChat} /> : <MunaMuse bag={bag} setBag={setBag} onChat={openChat} />}
+        {chat && bag.length > 0 && (
+          <WhatsAppChat
+            to={store === "zainas" ? "Zaina's Couture" : "Muna Muse"}
+            lines={bag}
+            total={total(bag)}
+            footer={store === "zainas" ? "Delivery Fri to Sun in Accra, paying with MoMo." : "Shipping to Accra, please."}
+            onBack={() => setChat(false)}
+          />
+        )}
       </div>
     </div>
   );

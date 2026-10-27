@@ -2,7 +2,9 @@
 
 import { useRef, useState } from "react";
 import { animate, motion, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
+import Image from "next/image";
 import { emit } from "../events";
+import { MADINA } from "../items";
 
 /* Half court in feet ×10: 50ft wide, 47ft deep, baseline at the top. */
 const W = 500;
@@ -138,7 +140,7 @@ function ShotChart() {
   });
 
   return (
-    <div className="grid grid-cols-1 @[440px]:grid-cols-[1fr_150px] gap-3 h-full">
+    <div className="grid grid-cols-[minmax(0,1fr)_96px] gap-2 h-full">
       <div className="relative min-h-0 flex items-start justify-center">
         <svg
           ref={svgRef}
@@ -194,7 +196,7 @@ function ShotChart() {
       </div>
 
       <div className="flex flex-col gap-1.5 min-w-0">
-        <div className="grid grid-cols-2 @[440px]:grid-cols-1 gap-1.5">
+        <div className="grid grid-cols-1 gap-1.5">
           {[
             { k: "FG%", v: pct(fgm, fga), sub: `${fgm}/${fga}` },
             { k: "eFG%", v: fga ? `${(((fgm + 0.5 * tpm) / fga) * 100).toFixed(0)}%` : "--", sub: `${tpm} from three` },
@@ -236,123 +238,29 @@ function ShotChart() {
   );
 }
 
-/* Illustrative figures for the demo, not the club's books. */
-const HOURS = [
-  { h: "6", v: 0.7 },
-  { h: "8", v: 0.35 },
-  { h: "10", v: 0.2 },
-  { h: "12", v: 0.15 },
-  { h: "14", v: 0.25 },
-  { h: "16", v: 0.8 },
-  { h: "18", v: 1 },
-  { h: "20", v: 0.9 },
-];
-const LEDGER = [
-  { l: "Resurfacing & lines", v: 14200 },
-  { l: "Solar array + battery", v: 11800 },
-  { l: "Hoops, nets, boards", v: 6400 },
-  { l: "Floodlights", v: 4900 },
-  { l: "Fencing & benches", v: 3100 },
-];
-
-function CourtOps() {
-  const reduce = useReducedMotion();
-  const total = LEDGER.reduce((a, b) => a + b.v, 0);
-  return (
-    <div className="grid grid-cols-1 @[440px]:grid-cols-2 gap-3 h-full">
-      <div className="flex flex-col gap-2 min-w-0">
-        <div className="rounded-[8px] bg-[#13120F] border border-white/[0.06] p-2.5">
-          <div className="font-mono text-[8.5px] uppercase tracking-[0.12em] text-white/40">Bookings · utilisation by hour</div>
-          <div className="mt-2 flex items-end gap-1.5 h-[70px]">
-            {HOURS.map((h, i) => (
-              <div key={h.h} className="flex-1 flex flex-col items-center gap-1 h-full justify-end">
-                <motion.span
-                  className="w-full rounded-t-[3px]"
-                  style={{ background: h.v > 0.75 ? "var(--accent)" : "rgba(242,238,230,0.35)" }}
-                  initial={reduce ? false : { height: 0 }}
-                  animate={{ height: `${h.v * 100}%` }}
-                  transition={{ delay: i * 0.04, duration: 0.5 }}
-                />
-                <span className="font-mono text-[8px] text-white/35">{h.h}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="rounded-[8px] bg-[#13120F] border border-white/[0.06] p-2.5 flex items-center justify-between">
-          <div>
-            <div className="font-mono text-[8.5px] uppercase tracking-[0.12em] text-white/40">Solar today</div>
-            <div className="font-mono text-[18px] text-[#F2EEE6]">
-              18.4 <span className="text-[11px] text-white/45">kWh</span>
-            </div>
-          </div>
-          <div className="text-right font-mono text-[9px] text-white/45 leading-relaxed">
-            lights 6 hrs
-            <br />
-            battery 82%
-          </div>
-        </div>
-        <p className="text-[10.5px] leading-snug text-white/55">
-          The pipeline that tracks shots is the one that tracks donors.
-        </p>
-      </div>
-      <div className="rounded-[8px] bg-[#13120F] border border-white/[0.06] p-2.5 flex flex-col min-w-0">
-        <div className="flex justify-between font-mono text-[8.5px] uppercase tracking-[0.12em] text-white/40">
-          <span>Donation ledger</span>
-          <span>illustrative split</span>
-        </div>
-        <ul className="mt-2 space-y-1.5">
-          {LEDGER.map((r) => (
-            <li key={r.l}>
-              <div className="flex justify-between text-[10.5px] text-white/75">
-                <span>{r.l}</span>
-                <span className="font-mono text-white/55">{r.v.toLocaleString("en-GH")}</span>
-              </div>
-              <div className="mt-0.5 h-[4px] rounded-full bg-white/[0.06]">
-                <span className="block h-full rounded-full bg-[var(--accent)]/70" style={{ width: `${(r.v / LEDGER[0].v) * 100}%` }} />
-              </div>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-auto pt-2 border-t border-dashed border-white/10 flex justify-between font-mono text-[11px]">
-          <span className="text-white/45">Raised</span>
-          <span className="text-[#F2EEE6]">GHS {total.toLocaleString("en-GH")}+</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function CourtMode() {
-  const [tab, setTab] = useState<"court" | "ops">("court");
   return (
-    <div className="flex flex-col h-full gap-2.5">
-      <div className="flex items-center justify-between gap-2">
-        <div role="group" aria-label="Court view" className="flex rounded-[8px] bg-white/[0.05] p-0.5">
-          {(
-            [
-              ["court", "Shoot"],
-              ["ops", "Court ops"],
-            ] as const
-          ).map(([id, label]) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => {
-                setTab(id);
-                if (id === "ops") emit("court", "ops.viewed", "bookings · solar · donation ledger");
-              }}
-              aria-pressed={tab === id}
-              className={`px-2.5 h-6 rounded-[6px] font-mono text-[9.5px] uppercase tracking-[0.12em] transition-colors ${
-                tab === id ? "bg-[#F2EEE6] text-[#14100A]" : "text-white/50 hover:text-white"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-        <span className="font-mono text-[9px] text-white/30 truncate">Madina · Libya Quarters court</span>
+    <div className="absolute inset-0 flex flex-col bg-[#111] text-white font-body">
+      <div className="h-[30px] shrink-0 flex items-center gap-2 px-3 border-b border-white/10 bg-[#161616]">
+        <span className="text-[10.5px] font-bold tracking-[0.02em]">
+          MADINA <span className="text-[#f97316]">BASKETBALL</span>
+        </span>
+        <span className="text-[8.5px] text-white/45">Libya Quarters court · shot tracking</span>
+        <span className="ml-auto flex items-center gap-1 text-[8.5px] text-[#4ade80]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80]" /> Court active
+        </span>
       </div>
-      <div className="flex-1 min-h-0">{tab === "court" ? <ShotChart /> : <CourtOps />}</div>
+      <div className="flex-1 min-h-0 grid grid-cols-1 grid-rows-[110px_1fr] @[480px]:grid-rows-1 @[480px]:grid-cols-[34%_1fr]">
+        <div className="relative">
+          <Image unoptimized src={MADINA.court} alt="The renovated, solar-lit court at Libya Quarters, Madina" fill sizes="220px" className="object-cover" />
+          <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/80 to-transparent text-[8.5px] leading-snug text-white/85">
+            Renovated with community funds. The pipeline that tracks shots is the one that tracks donors.
+          </div>
+        </div>
+        <div className="min-h-0 p-2.5">
+          <ShotChart />
+        </div>
+      </div>
     </div>
   );
 }

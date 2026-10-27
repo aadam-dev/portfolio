@@ -44,7 +44,7 @@ export default function MobileCtaBar() {
           transition={{ duration: 0.35, ease: EASE_OUT }}
           className="fixed bottom-0 inset-x-0 z-50 md:hidden px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
         >
-          <div className="flex items-stretch gap-2 rounded-2xl border border-[var(--line-strong)] bg-[color-mix(in_srgb,var(--background)_88%,transparent)] backdrop-blur-md p-2 shadow-2xl">
+          <div className="flex items-stretch gap-2 rounded-2xl border border-[var(--line-strong)] bg-[var(--veil-strong)] p-2 shadow-2xl">
             <a
               href={WHATSAPP_URL}
               target="_blank"

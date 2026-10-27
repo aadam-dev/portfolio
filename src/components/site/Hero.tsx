@@ -132,7 +132,6 @@ export default function Hero() {
           height: "480px",
           background:
             "radial-gradient(ellipse at 20% 100%, var(--accent-glow) 0%, transparent 62%)",
-          filter: "blur(40px)",
         }}
       />
 

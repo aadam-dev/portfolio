@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useSyncExternalStore } from "react";
+import { memo, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -53,6 +53,11 @@ function usePointerFine() {
   );
 }
 
+// Rows scrolling under a still cursor fire mouseenter; ignore those so
+// scrolling never re-renders the list or pops the preview.
+let lastScroll = 0;
+const isScrolling = () => performance.now() - lastScroll < 150;
+
 export default function WorkIndex() {
   const t = useTranslations("work");
   const [active, setActive] = useState<ProjectCategory | "all">("all");
@@ -60,6 +65,11 @@ export default function WorkIndex() {
   const reduce = !!useReducedMotion();
   const pointerFine = usePointerFine();
   const listRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const on = () => (lastScroll = performance.now());
+    window.addEventListener("scroll", on, { passive: true });
+    return () => window.removeEventListener("scroll", on);
+  }, []);
 
   // Floating preview follows cursor with lag
   const PANEL_W = 440;
@@ -149,14 +159,17 @@ export default function WorkIndex() {
         </header>
 
         {/* Editorial rows */}
-        <div ref={listRef} onMouseLeave={() => setHovered(null)}>
+        <div
+          ref={listRef}
+          onMouseLeave={() => setHovered(null)}
+          className="[&:hover>*]:!opacity-35 [&>*]:transition-opacity [&>*]:duration-300 [&>*:hover]:!opacity-100"
+        >
           <AnimatePresence mode="popLayout" initial={false}>
             {filtered.map((p, i) => (
               <IndexRow
                 key={p.id}
                 project={p}
                 index={i}
-                dimmed={hovered !== null && hovered !== p.id}
                 onHover={setHovered}
                 pointerFine={pointerFine}
               />
@@ -201,24 +214,21 @@ export default function WorkIndex() {
   );
 }
 
-function IndexRow({
+const IndexRow = memo(function IndexRow({
   project,
   index,
-  dimmed,
   onHover,
   pointerFine,
 }: {
   project: Project;
   index: number;
-  dimmed: boolean;
   onHover: (id: string | null) => void;
   pointerFine: boolean;
 }) {
   return (
     <motion.div
-      layout
       initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: dimmed ? 0.35 : 1, y: 0 }}
+      animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -12 }}
       transition={{
         delay: Math.min(index * 0.04, 0.3),
@@ -226,7 +236,8 @@ function IndexRow({
         ease: [0.22, 1, 0.36, 1],
         opacity: { duration: 0.3 },
       }}
-      onMouseEnter={() => onHover(project.id)}
+      onMouseEnter={() => !isScrolling() && onHover(project.id)}
+      onMouseMove={() => onHover(project.id)}
     >
       <Link
         href={`/work/${projectSlug(project)}`}
@@ -277,4 +288,4 @@ function IndexRow({
       </Link>
     </motion.div>
   );
-}
+});

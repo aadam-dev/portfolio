@@ -122,12 +122,12 @@
       "eyebrow": "Aadam · Forward deployed engineer · Accra GMT+0, overlaps EU + US East",
       "titleA": "I ship the systems",
       "titleB": "people run on.",
-      "sub": "I embed with operators, analysts and coaches, build the system they run their day on, and stay until the numbers move. Every toy on this kit is a system that shipped.",
+      "sub": "I embed with operators, analysts and coaches, build the system they run their day on, and stay until the numbers move. Every screen on this kit is a system that shipped, with its real items and prices.",
       "play": "Play with the kit",
       "build": "Build with me",
       "available": "Open to remote roles",
       "shipped": "20+ systems in production",
-      "hint": "Tap stock, then Charge. Scroll to turn the dial."
+      "hint": "Tap stock, send it to the cashier, then collect to print."
     },
     "chapters": {
       "c01": {
@@ -137,16 +137,16 @@
         "m1": "Catalogue items live",
         "m2": "Order channels at Jireh",
         "m3": "Back-office modules",
-        "hint": "Ring up a sale. Unmute the cashier voice."
+        "hint": "Ring up a sale, send it to the cashier, collect to print."
       },
       "c02": {
         "title": "Every garment",
         "accent": "gets a ticket.",
-        "note": "An-Nur's laundry counter ran on paper slips and memory. Now each drop-off gets a code, moves through workstation stages, texts the customer when it is ready and closes with a scan.",
+        "note": "An-Nur's counter ran on paper slips and memory. Now every drop-off is counted garment by garment, moves through the workstation (washing, drying, ironing, quality check), texts the customer when it is ready and closes with a scan.",
         "m1": "Stages tracked per ticket",
         "m2": "Scan to collect",
         "m3": "Customer told when ready",
-        "hint": "Drag garments into the drum, then start the cycle."
+        "hint": "Count garments in, confirm, then move the ticket through the stages."
       },
       "c03": {
         "title": "Commerce that",
@@ -155,7 +155,7 @@
         "m1": "Markets, each priced on its own",
         "m2": "Fashion storefronts live",
         "m3": "Global rollout (Chale Socks)",
-        "hint": "Pick a silhouette and a print. Switch the market."
+        "hint": "Open a piece, add it to the bag, finish on WhatsApp."
       },
       "c04": {
         "title": "Models that",
@@ -173,7 +173,7 @@
         "m1": "Menu items on POS",
         "m2": "SKUs reconciled",
         "m3": "Physical count sessions",
-        "hint": "Sell a plate. Then run a physical count."
+        "hint": "Open Inventory, sell a plate, then count the shelf."
       },
       "c06": {
         "title": "Shots and donors,",
@@ -182,7 +182,7 @@
         "m1": "Raised for the court",
         "m2": "Solar-powered court",
         "m3": "Teams on the platform",
-        "hint": "Click the court to shoot. Then open Court ops."
+        "hint": "Tap the chart to shoot."
       },
       "c07": {
         "title": "Platforms people",

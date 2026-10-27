@@ -38,7 +38,6 @@ export default function Footer() {
           height: "500px",
           background:
             "radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 60%)",
-          filter: "blur(40px)",
         }}
       />
 

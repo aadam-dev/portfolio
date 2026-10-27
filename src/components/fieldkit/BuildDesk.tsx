@@ -4,8 +4,9 @@ import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { EASE_OUT } from "@/lib/motion";
-import Device from "./Device";
-import { useMediaQuery } from "./FieldKit";
+import PosTerminal from "./hardware/PosTerminal";
+import ModeScreen from "./ModeScreen";
+import EventLog from "./EventLog";
 
 export default function BuildDesk() {
   const t = useTranslations("fieldkit.buildDesk");
@@ -13,7 +14,6 @@ export default function BuildDesk() {
   const ref = useRef<HTMLElement>(null);
   const seen = useInView(ref, { once: true, amount: 0.2 });
   const near = useInView(ref, { once: true, margin: "600px 0px 600px 0px" });
-  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   return (
     <section
@@ -28,8 +28,7 @@ export default function BuildDesk() {
         style={{
           width: "min(1000px, 110vw)",
           height: "600px",
-          background: "radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 62%)",
-          filter: "blur(50px)",
+          background: "radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 65%)",
         }}
       />
       <div className="relative max-w-[1280px] mx-auto">
@@ -58,15 +57,23 @@ export default function BuildDesk() {
         </div>
 
         <motion.div
-          className="mt-14 md:mt-20 mx-auto max-w-[640px] min-h-[600px]"
-          style={{ perspective: 1400 }}
-          initial={{ opacity: 0, rotateX: 18, y: 80 }}
-          animate={seen ? { opacity: 1, rotateX: 0, y: 0 } : undefined}
+          className="mt-14 md:mt-20 mx-auto max-w-[760px] min-h-[740px] @container"
+          initial={{ opacity: 0, y: 80 }}
+          animate={seen ? { opacity: 1, y: 0 } : undefined}
           transition={
-            reduce ? { duration: 0.3, rotateX: { duration: 0 }, y: { duration: 0 } } : { delay: 0.15, duration: 1.1, ease: EASE_OUT }
+            reduce ? { duration: 0.3, y: { duration: 0 } } : { delay: 0.1, type: "spring", stiffness: 90, damping: 20 }
           }
         >
-          {near && isDesktop !== null && <Device mode="build" serial="FDE-08" compact={!isDesktop} />}
+          {near && (
+            <>
+              <PosTerminal screenClass="h-[600px] @[560px]/pos:h-[420px]">
+                <ModeScreen mode="build" />
+              </PosTerminal>
+              <div className="theme-fixed mt-4 rounded-[10px] bg-[#0e0d0b] px-3 py-2 border border-white/[0.06]">
+                <EventLog lines={2} />
+              </div>
+            </>
+          )}
         </motion.div>
       </div>
     </section>

@@ -2,12 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import { emit } from "../events";
 import { EASE_OUT } from "@/lib/motion";
-import { findProject, projectSlug } from "@/lib/projects";
 
 const CORE = ["English", "Core Maths", "Int. Science", "Social Studies"] as const;
 const ELECTIVES = ["Biology", "Chemistry", "Physics", "Elec. Maths", "Economics", "Literature", "Government", "Accounting"] as const;
@@ -59,10 +56,6 @@ const PROGRAMMES: Programme[] = [
   },
 ];
 
-const PLATFORMS = ["rentcheck", "lenus", "rockmotion", "pronaj", "thepalms", "magilo"]
-  .map((slug) => findProject(slug))
-  .filter((p): p is NonNullable<typeof p> => !!p && !p.hidden);
-
 function Cell({ s, grade, either, delay }: { s: Subject; grade?: string; either: boolean; delay: number }) {
   const reduce = useReducedMotion();
   const on = !!grade || either;
@@ -86,9 +79,7 @@ function Cell({ s, grade, either, delay }: { s: Subject; grade?: string; either:
 export default function ClassroomMode() {
   const reduce = useReducedMotion();
   const [pid, setPid] = useState<string | null>(null);
-  const [hover, setHover] = useState<string | null>(null);
   const prog = PROGRAMMES.find((p) => p.id === pid) ?? null;
-  const preview = PLATFORMS.find((p) => p.id === hover);
 
   const pick = (p: Programme) => {
     setPid(p.id);
@@ -96,110 +87,54 @@ export default function ClassroomMode() {
   };
 
   return (
-    <div className="grid grid-cols-1 @[440px]:grid-cols-[minmax(0,1fr)_150px] gap-3 h-full">
-      <div className="flex flex-col gap-2 min-w-0">
+    <div className="absolute inset-0 bg-white font-body">
+      <Image unoptimized src="/previews/koyi/pathway.webp" alt="Kōyi Knowledge Hub: the WASSCE pathway page" fill sizes="600px" className="object-cover object-left-top" />
+      <div className="absolute inset-0 bg-[#0d2a1f]/20" />
+      <div className="theme-fixed absolute left-3 right-3 bottom-3 @[480px]:left-auto @[480px]:top-3 @[480px]:w-[300px] rounded-[10px] bg-[#0f1714] text-white shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)] border border-white/10 p-3 flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/40">Kōyi · WASSCE pathway</span>
-          <span className="font-mono text-[9px] text-white/30">EN · FR · AR</span>
+          <span className="text-[11px] font-semibold">Pick a programme</span>
+          <span className="text-[8.5px] text-white/40">EN · FR · AR</span>
         </div>
-        <div className="flex flex-wrap gap-1.5" role="group" aria-label="Target programme">
+        <div className="flex flex-wrap gap-1" role="group" aria-label="Target programme">
           {PROGRAMMES.map((p) => (
             <button
               key={p.id}
               type="button"
               onClick={() => pick(p)}
               aria-pressed={pid === p.id}
-              className={`h-7 px-2.5 rounded-full border text-[11px] transition-colors ${
-                pid === p.id ? "bg-[#F2EEE6] text-[#14100A] border-[#F2EEE6]" : "border-white/12 text-white/70 hover:border-white/35"
+              className={`h-[22px] px-2 rounded-full border text-[9.5px] transition-colors ${
+                pid === p.id ? "bg-[#22c55e] text-[#052e16] border-[#22c55e] font-semibold" : "border-white/15 text-white/75 hover:border-white/40"
               }`}
             >
               {p.name}
             </button>
           ))}
         </div>
-
-        <div className="font-mono text-[8.5px] uppercase tracking-[0.12em] text-white/35 mt-0.5">Core</div>
-        <div className="grid grid-cols-4 gap-1.5">
+        <div className="text-[8px] uppercase tracking-[0.12em] text-white/35">Core</div>
+        <div className="grid grid-cols-4 gap-1">
           {CORE.map((s, i) => (
             <Cell key={s} s={s} grade={prog?.need[s]} either={false} delay={i * 0.04} />
           ))}
         </div>
-        <div className="font-mono text-[8.5px] uppercase tracking-[0.12em] text-white/35">Electives</div>
-        <div className="grid grid-cols-4 gap-1.5">
+        <div className="text-[8px] uppercase tracking-[0.12em] text-white/35">Electives</div>
+        <div className="grid grid-cols-4 gap-1">
           {ELECTIVES.map((s, i) => (
             <Cell key={s} s={s} grade={prog?.need[s]} either={!!prog?.oneOf?.includes(s)} delay={0.16 + i * 0.04} />
           ))}
         </div>
-
-        <div className="mt-auto flex items-center justify-between gap-2 rounded-[8px] bg-[#13120F] border border-white/[0.06] px-2.5 py-2">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.span
-              key={pid ?? "none"}
-              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              className="text-[10.5px] text-white/70 leading-snug"
-            >
-              {prog
-                ? `${prog.name}: typical aggregate ${prog.aggregate} across best six. Check each university's list.`
-                : "Pick a programme. The subjects and grades it needs light up."}
-            </motion.span>
-          </AnimatePresence>
-          {prog && <span className="font-mono text-[15px] text-[var(--accent)] shrink-0">{prog.aggregate.split(" ")[0]}</span>}
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-1.5 min-w-0">
-        <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/40">Also shipped</span>
-        <div className="relative h-[78px] rounded-[8px] overflow-hidden border border-white/[0.06] bg-[#13120F]">
-          <AnimatePresence mode="wait">
-            {preview?.imagePath ? (
-              <motion.div
-                key={preview.id}
-                className="absolute inset-0"
-                initial={{ opacity: 0, scale: 1.04 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-              >
-                <Image src={preview.imagePath} alt="" fill sizes="150px" className="object-cover object-top" />
-                <span className="absolute left-1.5 bottom-1.5 right-1.5 truncate rounded bg-black/65 px-1.5 py-0.5 font-mono text-[8.5px] text-white/85">
-                  {preview.tagline}
-                </span>
-              </motion.div>
-            ) : (
-              <motion.span
-                key="empty"
-                className="absolute inset-0 grid place-items-center px-3 text-center font-mono text-[9px] leading-snug text-white/30"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                hover a platform
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </div>
-        <ul className="grid grid-cols-2 @[440px]:grid-cols-1 gap-1">
-          {PLATFORMS.map((p) => (
-            <li key={p.id}>
-              <Link
-                href={`/work/${projectSlug(p)}`}
-                onMouseEnter={() => setHover(p.id)}
-                onFocus={() => setHover(p.id)}
-                onMouseLeave={() => setHover(null)}
-                onBlur={() => setHover(null)}
-                className="group flex items-center justify-between gap-1 rounded-[6px] border border-white/[0.08] px-2 h-[26px] text-[10.5px] text-white/70 hover:text-white hover:border-white/30"
-              >
-                <span className="flex items-center gap-1.5 min-w-0">
-                  <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: p.accentColor }} />
-                  <span className="truncate">{p.name}</span>
-                </span>
-                <ArrowUpRight className="w-3 h-3 opacity-40 group-hover:opacity-100 shrink-0" />
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.p
+            key={pid ?? "none"}
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="text-[9.5px] leading-snug text-white/70"
+          >
+            {prog
+              ? `${prog.name}: typical aggregate ${prog.aggregate} across the best six. Each university publishes its own list.`
+              : "The subjects and minimum grades it needs light up, as on the Knowledge Hub."}
+          </motion.p>
+        </AnimatePresence>
       </div>
     </div>
   );

@@ -54,7 +54,7 @@ export const CHAPTERS: Chapter[] = [
     n: "02",
     mode: "laundry",
     metrics: [
-      { value: "5", key: "m1" },
+      { value: "6", key: "m1" },
       { value: "1", key: "m2" },
       { value: "SMS", key: "m3" },
     ],
