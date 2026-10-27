@@ -178,7 +178,7 @@ export default function DeskHero() {
   return (
     <section ref={sectionRef} id="top" aria-labelledby="hero-heading" className="relative h-[100svh] min-h-[640px] overflow-hidden bg-[#2a2119]">
       {/* the canvas is wider than the viewport and anchored so the desk sits right of the headline */}
-      <div className={`absolute inset-y-0 left-0 ${focused ? "w-full" : "w-[140%] -translate-x-[2%]"} transition-[width,transform] duration-700`}>
+      <div className={`absolute inset-y-0 left-0 ${focused ? "w-full" : "w-[140%] translate-x-[5%]"} transition-[width,transform] duration-700`}>
         {scene}
       </div>
       <AnimatePresence>

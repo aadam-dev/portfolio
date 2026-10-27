@@ -30,12 +30,14 @@ function CyclingWord() {
     };
   }, [reduce]);
   const words = WORDS.map((w) => t(w));
-  const longest = words.reduce((a, b) => (b.length > a.length ? b : a), "");
   return (
     <span ref={box} className="relative inline-grid overflow-hidden align-baseline pb-[0.08em] -mb-[0.08em]">
-      <span className="font-serif-it invisible col-start-1 row-start-1" aria-hidden="true">
-        {longest}
-      </span>
+      {/* every word sits invisibly in the same cell, so the box fits the widest one as set, not the longest by letters */}
+      {words.map((w) => (
+        <span key={w} className="font-serif-it invisible col-start-1 row-start-1" aria-hidden="true">
+          {w}
+        </span>
+      ))}
       {/* both words share one grid cell, so no layout measuring is needed on a swap */}
       <AnimatePresence initial={false}>
         <motion.span
