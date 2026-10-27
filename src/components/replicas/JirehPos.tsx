@@ -68,7 +68,7 @@ export default function JirehPos() {
 
   const finish = (method: string, change: number) => {
     setPay({ step: "done", method, order: orderNo, change });
-    emit("pos", "sale.rung", `Jireh ${ghs(total)} ${method}`);
+    emit("pos", "sale.completed", `Jireh ${ghs(total)} ${method}`);
   };
 
   const reset = () => {

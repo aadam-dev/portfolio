@@ -9,7 +9,7 @@ import Schematic from "@/components/map/Schematic";
 import { PLACES } from "@/components/map/places";
 
 /** Marks and colours picked from the Al Boyut and An-Nur identities. */
-function BrandSheet() {
+export function BrandSheet() {
   return (
     <div className="absolute inset-0 grid grid-cols-2 gap-px bg-[var(--line-strong)]">
       {[

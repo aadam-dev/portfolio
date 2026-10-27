@@ -264,6 +264,35 @@
       "directions": "Find on Google Maps",
       "close": "Close",
       "approx": "Pins are placed by neighbourhood, not street address."
+    },
+    "build": {
+      "title": "Build with us, or hire Aadam",
+      "sub": "Pick what the business needs and the board lays out the weeks. Or set up a role and see how our working hours line up. Either way you get a brief to share and we get it by email.",
+      "switch": "Build or hire",
+      "build": "Build a project",
+      "hire": "Hire Aadam",
+      "catalogue": "What we build",
+      "board": "Project board",
+      "parallel": "Tracks run side by side. One after another it would be ~{serial}.",
+      "pick": "Pick what the business needs.",
+      "print": "Print the brief",
+      "name": "Your name",
+      "contact": "Email or WhatsApp",
+      "invalid": "Add your name and a way to reach you.",
+      "sendHint": "It arrives by email straight away.",
+      "send": "Send",
+      "sent": "Sent. We reply within one business day.",
+      "fallback": "Couldn't send from here, so WhatsApp opened with your brief.",
+      "again": "New brief",
+      "edit": "Change the brief",
+      "pass": "Boarding pass",
+      "overlap": "overlap a day",
+      "you": "You, {city}",
+      "role": "Role",
+      "departs": "Starts",
+      "stack": "Stack",
+      "stub": "Your brief",
+      "overlapLabel": "Overlap"
     }
   }
 }

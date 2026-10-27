@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 const TO = "aadamsays@gmail.com";
 
 export async function POST(request: Request) {
-  let body: { name?: string; contact?: string; budget?: string; message?: string };
+  let body: { name?: string; contact?: string; budget?: string; message?: string; brief?: string; kind?: string };
   try {
     body = await request.json();
   } catch {
@@ -14,6 +14,7 @@ export async function POST(request: Request) {
   const contact = body.contact?.trim().slice(0, 200);
   const budget = body.budget?.trim().slice(0, 50) || "unspecified";
   const message = body.message?.trim().slice(0, 5000);
+  const brief = body.brief?.startsWith("http") ? body.brief.slice(0, 300) : undefined;
   if (!name || !contact || !message) {
     return NextResponse.json({ ok: false, error: "missing_fields" }, { status: 400 });
   }
@@ -32,7 +33,7 @@ export async function POST(request: Request) {
       to: [TO],
       reply_to: contact.includes("@") ? contact : undefined,
       subject: `Project inquiry: ${name} (${budget})`,
-      text: `Name: ${name}\nContact: ${contact}\nBudget: ${budget}\n\n${message}`,
+      text: `Name: ${name}\nContact: ${contact}\nBudget: ${budget}${brief ? `\nBrief: ${brief}` : ""}\n\n${message}`,
     }),
   });
 

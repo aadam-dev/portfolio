@@ -94,9 +94,10 @@ export function sessionSummary(): string[] {
   if (compared) out.push(`compared ${plural(compared, "financing quote")}`);
   const dishes = count("ledger.dishes");
   if (dishes) out.push(`sold ${plural(dishes, "dish", "dishes")} through the BOM`);
-  if (count("ledger.count.reconciled")) out.push("reconciled a stock count");
+  if (count("ledger.count.reconciled") || count("ledger.stock.counted")) out.push("reconciled a stock count");
   const shots = count("court.shot.made") + count("court.shot.missed");
   if (shots) out.push(`${count("court.shot.made")}/${shots} from the field`);
+  if (count("court.ball.played")) out.push("bounced the ball on the desk");
   const paths = count("class.pathway.picked");
   if (paths) out.push(`checked ${plural(paths, "exam pathway")}`);
   return out;
