@@ -199,7 +199,7 @@ export default function DeskHero() {
               }}
             />
             <div className="relative h-full max-w-[1440px] mx-auto px-4 md:px-6 flex flex-col justify-center">
-              <div className="pointer-events-auto max-w-[640px]">
+              <div className="pointer-events-auto max-w-[780px]">
                 <HeroCopy delay={0.2} />
                 {meta}
               </div>
