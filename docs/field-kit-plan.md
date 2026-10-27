@@ -1,3 +1,5 @@
+> **Superseded** by `docs/site-brief.md` (v3). Kept for history.
+
 # Field Kit: forward deployed engineer rebrand (prototype)
 
 ## Context
