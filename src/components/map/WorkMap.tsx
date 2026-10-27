@@ -31,25 +31,25 @@ function Card({ place, onClose }: { place: Place; onClose: () => void }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 8 }}
       transition={{ duration: 0.25 }}
-      className="absolute z-10 left-3 right-3 bottom-3 md:left-auto md:right-4 md:bottom-4 md:w-[340px] rounded-2xl overflow-hidden bg-[var(--background)] border border-[var(--line-strong)] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.45)]"
+      className="card card-float absolute z-10 left-3 right-3 bottom-3 md:left-auto md:right-4 md:bottom-4 md:w-[340px] !bg-[var(--background)]"
     >
-      <div className="relative aspect-[16/6] md:aspect-[16/8] bg-[var(--surface-2)]">
+      <div className="card-media !aspect-[16/6] md:!aspect-[16/10]">
         <Image src={place.image} alt="" fill sizes="360px" className="object-cover object-top" />
         <button
           type="button"
           onClick={onClose}
           aria-label={t("close")}
-          className="theme-fixed absolute top-2 right-2 w-8 h-8 rounded-full bg-black/60 text-white grid place-items-center"
+          className="on-media absolute top-2 right-2 !w-8 !h-8 !p-0 justify-center"
         >
           <X className="w-4 h-4" />
         </button>
       </div>
-      <div className="p-3.5 md:p-4">
-        <p className="text-[12px] text-[var(--ink-3)] flex items-center gap-1.5">
+      <div className="p-4">
+        <p className="card-meta">
           <MapPin className="w-3.5 h-3.5" /> {place.area}
         </p>
-        <h3 className="mt-1 font-display text-[20px] tracking-[-0.01em] text-white">{place.name}</h3>
-        <p className="mt-1.5 text-[13.5px] leading-snug text-[var(--ink-2)]">{place.shipped}</p>
+        <h3 className="mt-1 card-title">{place.name}</h3>
+        <p className="card-text !mt-1.5 !text-[13.5px]">{place.shipped}</p>
         <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[13px]">
           <Link href={placeHref(place)} className="inline-flex items-center gap-1 text-white underline-offset-4 hover:underline">
             {t("caseStudy")} <ArrowUpRight className="w-3.5 h-3.5" />
@@ -149,7 +149,7 @@ export default function WorkMap() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-4">
           <div
-            className={`relative h-[62svh] min-h-[420px] max-h-[680px] rounded-2xl overflow-hidden border border-[var(--line-strong)] bg-[var(--surface-2)] map-shell`}
+            className="card relative h-[62svh] min-h-[420px] max-h-[680px] !bg-[var(--surface-2)] map-shell"
             data-view={view}
           >
             <Schematic places={PLACES} selected={selected} onSelect={pick} />
@@ -168,7 +168,7 @@ export default function WorkMap() {
 
             <div className="absolute z-10 top-3 left-3 flex flex-wrap gap-2">
               {live && (
-                <div className="theme-fixed inline-flex rounded-full bg-black/70 p-1 text-[12.5px] text-white">
+                <div className="seg seg-dark">
                   {(["accra", "world"] as const).map((v) => (
                     <button
                       key={v}
@@ -179,7 +179,7 @@ export default function WorkMap() {
                         setSelected(null);
                         setView(v);
                       }}
-                      className={`px-3 py-1.5 rounded-full transition-colors ${view === v ? "bg-white text-black" : "text-white/80"}`}
+                      className="seg-item"
                     >
                       {t(v)}
                     </button>
@@ -190,7 +190,7 @@ export default function WorkMap() {
                 type="button"
                 onClick={() => setTouring((x) => !x)}
                 aria-pressed={touring}
-                className="theme-fixed inline-flex items-center gap-2 rounded-full bg-black/70 text-white px-3.5 py-2 text-[12.5px]"
+                className="on-media"
               >
                 {touring ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
                 {touring ? t("stop") : t("tour")}
@@ -205,20 +205,16 @@ export default function WorkMap() {
               {[...accra, ...abroad].map((p, i) => (
                 <li key={p.id} className="snap-start shrink-0 lg:shrink">
                   {i === accra.length && (
-                    <p className="hidden lg:block mt-2 mb-1.5 text-[12px] text-[var(--ink-3)]">{t("world")}</p>
+                    <p className="hidden lg:block mt-2 mb-1.5 label">{t("world")}</p>
                   )}
                   <button
                     type="button"
                     onClick={() => pick(p.id)}
                     aria-pressed={selected === p.id}
-                    className={`w-full text-left rounded-xl border px-3.5 py-2.5 lg:py-2 transition-colors ${
-                      selected === p.id
-                        ? "border-[var(--accent)] bg-[var(--background)]"
-                        : "border-[var(--line-strong)] hover:bg-[var(--background)]"
-                    }`}
+                    className={`card card-link w-full px-3.5 py-2.5 lg:py-2 !bg-[var(--background)] ${selected === p.id ? "card-on" : ""}`}
                   >
-                    <span className="block text-[14px] leading-tight font-medium text-white whitespace-nowrap">{p.name}</span>
-                    <span className="block text-[12px] leading-tight mt-0.5 text-[var(--ink-3)] whitespace-nowrap">{p.area}</span>
+                    <span className="block text-[14px] leading-tight font-medium whitespace-nowrap">{p.name}</span>
+                    <span className="block card-meta mt-0.5 whitespace-nowrap">{p.area}</span>
                   </button>
                 </li>
               ))}

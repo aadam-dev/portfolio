@@ -5,7 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 export default function LabTeaser() {
   const items = [
     { href: "/lab/model", title: "Stress a three-statement model", body: "Shock the cedi, rates or demand and watch the covenant." },
-    { href: "/lab/car", title: "Take a car apart", body: "Flip it, explode it, learn the brakes, drive a lap." },
+    { href: "/lab/car", title: "Buy a car you haven't seen", body: "Check the VIN, walk round the car, ship it and add up the landed cost, the way Rockmotion does." },
   ];
   return (
     <section aria-labelledby="lab-heading" className="px-4 md:px-6 py-20 md:py-24">
@@ -21,12 +21,15 @@ export default function LabTeaser() {
         <ul className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
           {items.map((x) => (
             <li key={x.href}>
-              <Link href={x.href} className="group block h-full rounded-2xl border border-[var(--line-strong)] p-5 hover:bg-[var(--surface)] transition-colors">
-                <span className="flex items-start justify-between gap-3">
-                  <span className="font-display text-[21px] leading-tight text-white">{x.title}</span>
-                  <ArrowUpRight className="w-5 h-5 shrink-0 text-[var(--ink-3)] group-hover:text-[var(--accent)]" />
+              <Link href={x.href} className="card card-link h-full">
+                <span className="card-pad">
+                  <span className="card-title">{x.title}</span>
+                  <span className="card-text">{x.body}</span>
+                  <span className="card-foot">
+                    <span>Open</span>
+                    <ArrowUpRight className="card-arrow" />
+                  </span>
                 </span>
-                <span className="mt-2 block text-[14.5px] text-[var(--ink-2)]">{x.body}</span>
               </Link>
             </li>
           ))}

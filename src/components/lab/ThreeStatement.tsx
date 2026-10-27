@@ -160,7 +160,7 @@ export default function ThreeStatement() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] gap-6">
       {/* inputs */}
-      <aside className="lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto rounded-2xl border border-[var(--line-strong)] bg-[var(--surface)] p-4">
+      <aside className="lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto card p-5">
         <div className="flex items-center justify-between">
           <p className="font-medium text-white">Assumptions</p>
           <button type="button" onClick={() => { setInputs(DEFAULTS); setShocks(NO_SHOCKS); }} className="inline-flex items-center gap-1.5 text-[12.5px] text-[var(--ink-3)] hover:text-white">
@@ -169,7 +169,7 @@ export default function ThreeStatement() {
         </div>
         {GROUPS.map((g) => (
           <fieldset key={g.title} className="mt-5">
-            <legend className="text-[11px] font-mono uppercase tracking-[0.14em] text-[var(--ink-3)]">{g.title}</legend>
+            <legend className="label">{g.title}</legend>
             <div className="mt-2 space-y-3">
               {g.fields.map((f) => (
                 <label key={f.key} className="block">
@@ -195,8 +195,8 @@ export default function ThreeStatement() {
 
       <div className="min-w-0 space-y-6">
         {/* shocks and the two checks */}
-        <div className="rounded-2xl border border-[var(--line-strong)] p-4">
-          <p className="text-[13px] text-[var(--ink-3)]">Stress it</p>
+        <div className="card p-5">
+          <p className="label">Stress it</p>
           <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2">
             {SHOCKS.map((s) => {
               const on = shocks[s.key];
@@ -209,20 +209,20 @@ export default function ThreeStatement() {
                     setShocks((x) => ({ ...x, [s.key]: !on }));
                     if (!on) emit("finance", "shock.applied", s.label);
                   }}
-                  className={`text-left rounded-xl border px-3.5 py-3 transition-colors ${on ? "border-[var(--accent)] bg-[var(--accent)]/10" : "border-[var(--line-strong)] hover:border-[var(--ink-4)]"}`}
+                  className={`card card-link px-3.5 py-3 !bg-[var(--background)] ${on ? "card-on" : ""}`}
                 >
-                  <span className="block text-[14px] font-medium text-white">{s.label}</span>
-                  <span className="block text-[12px] text-[var(--ink-3)]">{s.note}</span>
+                  <span className="block text-[14px] font-medium">{s.label}</span>
+                  <span className="block card-meta mt-0.5">{s.note}</span>
                 </button>
               );
             })}
           </div>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <p className={`flex items-center gap-2 rounded-xl px-3.5 py-3 text-[13.5px] ${m.balances ? "bg-[var(--success)]/10 text-white" : "bg-red-500/10 text-red-500"}`}>
+            <p className={`flex items-center gap-2 rounded-[var(--radius-field)] px-3.5 py-3 text-[13.5px] ${m.balances ? "bg-[var(--success)]/10" : "bg-red-500/10 text-red-500"}`}>
               <Check className="w-4 h-4 text-[var(--success)]" />
               Assets equal liabilities plus equity in all five years.
             </p>
-            <p className={`flex items-center gap-2 rounded-xl px-3.5 py-3 text-[13.5px] ${breach ? "bg-[var(--accent)]/12 text-white" : "bg-[var(--success)]/10 text-white"}`}>
+            <p className={`flex items-center gap-2 rounded-[var(--radius-field)] px-3.5 py-3 text-[13.5px] ${breach ? "bg-[var(--accent)]/12" : "bg-[var(--success)]/10"}`}>
               {breach ? <TriangleAlert className="w-4 h-4 text-[var(--accent)]" /> : <Check className="w-4 h-4 text-[var(--success)]" />}
               Lowest DSCR {Number.isFinite(m.minDscr) ? `${m.minDscr.toFixed(2)}x` : "n/a"}: {breach ? `below the ${COVENANT}x covenant` : `above the ${COVENANT}x covenant`}.
             </p>
@@ -231,33 +231,33 @@ export default function ThreeStatement() {
 
         <dl className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {kpis.map((x) => (
-            <div key={x.label} className="rounded-xl border border-[var(--line)] p-3.5">
-              <dt className="text-[12px] text-[var(--ink-3)]">{x.label}</dt>
-              <dd className="mt-1 font-display text-[22px] text-white tabular-nums">{x.value}</dd>
-              {x.was && <dd className="text-[11.5px] text-[var(--ink-4)] tabular-nums">was {x.was}</dd>}
+            <div key={x.label} className="card p-4">
+              <dt className="stat-label">{x.label}</dt>
+              <dd className="stat-value">{x.value}</dd>
+              {x.was && <dd className="card-meta tabular-nums mt-1">was {x.was}</dd>}
             </div>
           ))}
         </dl>
 
-        <div className="rounded-2xl border border-[var(--line-strong)] p-4">
+        <div className="card p-5">
           <Bars m={m} />
         </div>
 
-        <div className="rounded-2xl border border-[var(--line-strong)] overflow-hidden">
+        <div className="card">
           <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2.5 border-b border-[var(--line)]">
-            <div className="flex gap-1" role="tablist" aria-label="Statement">
+            <div className="seg" role="tablist" aria-label="Statement">
               {([
                 ["income", "Income", " statement"],
                 ["balance", "Balance", " sheet"],
                 ["cash", "Cash", " flow"],
               ] as const).map(([id, a, b]) => (
-                <button key={id} type="button" role="tab" aria-selected={tab === id} onClick={() => setTab(id)} className={`h-9 px-3 rounded-lg text-[13px] whitespace-nowrap ${tab === id ? "bg-white text-black" : "text-[var(--ink-2)] hover:text-white"}`}>
+                <button key={id} type="button" role="tab" aria-selected={tab === id} onClick={() => setTab(id)} className="seg-item">
                   {a}
                   <span className={id === "cash" ? "" : "hidden sm:inline"}>{b}</span>
                 </button>
               ))}
             </div>
-            <button type="button" onClick={download} className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg border border-[var(--line-strong)] text-[13px] text-white">
+            <button type="button" onClick={download} className="pill">
               <Download className="w-4 h-4" /> CSV
             </button>
           </div>

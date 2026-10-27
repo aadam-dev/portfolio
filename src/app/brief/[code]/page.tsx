@@ -6,7 +6,8 @@ import { ArrowUpRight } from "lucide-react";
 import Nav from "@/components/site/Nav";
 import Footer from "@/components/site/Footer";
 import Gantt from "@/components/build/Gantt";
-import { BrandSheet } from "@/components/site/Practices";
+import Schematic from "@/components/map/Schematic";
+import { PLACES } from "@/components/map/places";
 import { ROLES, STACK, STARTS, TRACK_TONE, decodeBrief, fmtW, plan } from "@/lib/brief";
 
 export const metadata: Metadata = {
@@ -29,10 +30,10 @@ export default async function BriefPage({ params }: { params: Promise<{ code: st
           </p>
           {brief.kind === "build" ? <BuildBrief ids={brief.ids} /> : <HireBrief role={brief.role} start={brief.start} stack={brief.stack} />}
           <div className="mt-12 flex flex-wrap gap-3">
-            <Link href="/#build" className="inline-flex items-center gap-2 h-12 px-5 rounded-full bg-white text-black font-medium text-[14.5px]">
+            <Link href="/#build" className="btn btn-solid">
               Change this brief <ArrowUpRight className="w-4 h-4" />
             </Link>
-            <a href={`mailto:aadamsays@gmail.com?subject=${encodeURIComponent("About a brief")}&body=${encodeURIComponent(`Brief: https://aadambuilds.dev/brief/${code}`)}`} className="inline-flex items-center gap-2 h-12 px-5 rounded-full border border-[var(--line-strong)] text-[14.5px]">
+            <a href={`mailto:aadamsays@gmail.com?subject=${encodeURIComponent("About a brief")}&body=${encodeURIComponent(`Brief: https://aadambuilds.dev/brief/${code}`)}`} className="btn btn-line">
               Email Aadam about it
             </a>
           </div>
@@ -53,21 +54,21 @@ function BuildBrief({ ids }: { ids: string[] }) {
       <p className="mt-4 max-w-[620px] text-[16px] leading-relaxed text-[var(--ink-2)]">
         Week one is discovery: we sit with the team and map how the business runs. Then the tracks below run side by side. One after another, the same work would take about {fmtW(p.serial)}.
       </p>
-      <div className="theme-fixed mt-8 rounded-2xl bg-[#0e0d0b] text-white p-5 md:p-6">
+      <div className="theme-fixed card mt-8 p-5 md:p-6">
         <Gantt lanes={p.lanes} weeks={p.weeks} still />
       </div>
-      <h2 className="mt-12 font-display text-[24px] text-white">What is in it, and where we built it before</h2>
+      <h2 className="mt-12 font-display text-[26px] text-white">What is in it, and where we built it before</h2>
       <ul className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {p.chosen.map((s) => (
-          <li key={s.id} className="rounded-xl overflow-hidden border border-[var(--line-strong)] bg-[var(--surface)]">
-            <div className="relative aspect-[16/9] bg-[var(--surface-2)]">
-              {s.thumb === "brand" ? <BrandSheet /> : s.thumb === "map" ? <div className="absolute inset-0 grid place-items-center text-[13px] text-[var(--ink-3)]">Google Business Profile</div> : <Image src={s.thumb} alt="" fill sizes="300px" className="object-cover object-top" />}
+          <li key={s.id} className="card">
+            <div className="card-media">
+              {s.thumb === "map" ? <Schematic places={PLACES} selected="alboyut" interactive={false} /> : <Image src={s.thumb} alt="" fill sizes="300px" className="object-cover object-top" />}
             </div>
-            <div className="p-4">
-              <p className="font-medium text-white">{s.label}</p>
-              <p className="mt-1 flex items-center gap-1.5 text-[13px] text-[var(--ink-3)]">
-                <span className="w-2 h-2 rounded-full" style={{ background: TRACK_TONE[s.track] }} />
-                {s.track}, {fmtW(s.weeks)}. Built for {s.proof}.
+            <div className="card-pad">
+              <p className="card-title">{s.label}</p>
+              <p className="mt-2 card-meta">
+                <span className="card-dot" style={{ background: TRACK_TONE[s.track] }} />
+                {fmtW(s.weeks)}, {s.track}. Built for {s.proof}.
               </p>
             </div>
           </li>
@@ -89,7 +90,7 @@ function HireBrief({ role, start, stack }: { role: number; start: number; stack:
       {stack.length > 0 && (
         <ul className="mt-6 flex flex-wrap gap-2">
           {stack.map((i) => (
-            <li key={i} className="h-9 px-3 rounded-md border-2 border-dashed border-[var(--accent)] font-mono text-[12px] uppercase tracking-[0.06em] grid place-items-center text-white">
+            <li key={i} className="pill" aria-pressed="true">
               {STACK[i]}
             </li>
           ))}

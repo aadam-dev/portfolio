@@ -150,7 +150,7 @@ export default function AboutPage() {
               ["leadership", "Leadership"],
               ["skills", "Skills"],
             ].map(([id, label]) => (
-              <a key={id} href={`#${id}`} className="h-9 px-3.5 rounded-full border border-[var(--line-strong)] grid place-items-center text-[var(--ink-2)] hover:text-white">
+              <a key={id} href={`#${id}`} className="pill">
                 {label}
               </a>
             ))}
@@ -180,12 +180,12 @@ export default function AboutPage() {
             <H2 id="research">Research</H2>
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               {RESEARCH.map((r) => (
-                <article key={r.title} className="rounded-2xl border border-[var(--line-strong)] bg-[var(--surface)] p-6">
-                  <h3 className="font-display text-[21px] leading-snug text-white text-balance">{r.title}</h3>
-                  <p className="mt-2 text-[13.5px] text-[var(--ink-3)]">{r.where}</p>
-                  <p className="mt-3 text-[15px] leading-relaxed text-[var(--ink-2)]">{r.body}</p>
+                <article key={r.title} className="card card-pad">
+                  <h3 className="card-title text-balance">{r.title}</h3>
+                  <p className="mt-2 card-meta">{r.where}</p>
+                  <p className="card-text">{r.body}</p>
                   {r.link && (
-                    <Link href={r.link.href} className="mt-3 inline-flex items-center gap-1 text-[14px] text-white underline-offset-4 hover:underline">
+                    <Link href={r.link.href} className="mt-auto pt-5 inline-flex items-center gap-1 text-[13px] text-white underline-offset-4 hover:underline">
                       {r.link.label} <ArrowUpRight className="w-3.5 h-3.5" />
                     </Link>
                   )}
@@ -233,16 +233,16 @@ export default function AboutPage() {
             </dl>
           </section>
 
-          <section className="mt-20 rounded-2xl border border-[var(--line-strong)] p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <section className="card mt-20 p-6 md:p-8 md:!flex-row md:items-center justify-between gap-5">
             <div>
-              <p className="font-display text-[24px] text-white">Hiring, or need the full CV?</p>
+              <p className="card-title">Hiring, or need the full CV?</p>
               <p className="mt-1 text-[15px] text-[var(--ink-2)]">I send the CV on request, usually the same day.</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <a href="mailto:aadamsays@gmail.com?subject=CV%20request" className="h-11 px-5 rounded-full bg-white text-black text-[14.5px] font-medium grid place-items-center">
+              <a href="mailto:aadamsays@gmail.com?subject=CV%20request" className="btn btn-solid">
                 Ask for the CV
               </a>
-              <Link href="/#build" className="h-11 px-5 rounded-full border border-[var(--line-strong)] text-[14.5px] grid place-items-center text-white">
+              <Link href="/#build" className="btn btn-line">
                 Hire Aadam
               </Link>
             </div>

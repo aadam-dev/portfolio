@@ -49,24 +49,18 @@ function FlagshipCard({
   return (
     <div ref={wrapperRef} className="md:min-h-[110vh]">
       <motion.article
-        className="md:sticky md:top-[8vh] rounded-3xl border border-[var(--line-strong)] bg-[var(--surface-2)] overflow-hidden"
+        className="card md:sticky md:top-[8vh] !bg-[var(--surface-2)]"
         style={{ scale, opacity }}
       >
         <div className="grid md:grid-cols-[5fr_7fr]">
           {/* Left: story */}
           <div className="p-6 md:p-10 flex flex-col justify-between gap-8 min-w-0">
             <div>
-              <div className="flex items-center justify-between gap-4 mb-6">
-                <span
-                  className="font-mono text-[10px] tracking-[0.22em] uppercase"
-                  style={{ color: project.accentColor }}
-                >
-                  {project.categoryLabel}
-                </span>
-                <span className="font-mono text-[10px] tracking-[0.2em] text-[var(--ink-4)]">
-                  {String(index + 1).padStart(2, "0")}/{String(total).padStart(2, "0")}
-                </span>
-              </div>
+              <p className="card-meta mb-5">
+                <span className="card-dot" style={{ background: project.accentColor }} />
+                {project.categoryLabel.replace(/ · /g, ", ")}
+                {project.year && `, ${project.year}`}
+              </p>
               <h3
                 className="font-display"
                 style={{
@@ -86,13 +80,10 @@ function FlagshipCard({
                 {project.outcomes.slice(0, 3).map((o) => (
                   <div key={o.label} className="min-w-0">
                     <dt className="sr-only">{o.label}</dt>
-                    <dd
-                      className="font-display text-[1.4rem] md:text-[1.8rem]"
-                      style={{ color: "var(--accent)" }}
-                    >
+                    <dd className="stat-value !mt-0">
                       <CountUp value={o.value} />
                     </dd>
-                    <dd className="mt-1 font-mono text-[10px] tracking-[0.14em] uppercase text-[var(--ink-3)] leading-snug">
+                    <dd className="mt-1 stat-label leading-snug">
                       {o.label}
                     </dd>
                   </div>
@@ -101,31 +92,22 @@ function FlagshipCard({
             )}
 
             <div className="flex items-center justify-between gap-4 flex-wrap">
-              <div className="flex flex-wrap gap-1.5">
-                {project.stack.slice(0, 4).map((t) => (
-                  <span
-                    key={t}
-                    className="font-mono text-[10px] tracking-[0.08em] px-2 py-1 rounded-full border border-[var(--line)] text-[var(--ink-3)]"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
+              <p className="card-meta">{project.stack.slice(0, 4).join(", ")}</p>
               <div className="flex items-center gap-4">
                 {project.walkthroughs && project.walkthroughs.length > 0 && (
                   <Link
                     href={`/work/${projectSlug(project)}#walkthrough`}
-                    className="font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--ink-3)] hover:text-[var(--foreground)] transition-colors whitespace-nowrap"
+                    className="text-[13px] text-[var(--ink-2)] hover:text-[var(--foreground)] transition-colors whitespace-nowrap"
                   >
                     Watch walkthrough
                   </Link>
                 )}
                 <Link
                   href={`/work/${projectSlug(project)}`}
-                  className="group inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--foreground)] whitespace-nowrap"
+                  className="card-link inline-flex items-center gap-1.5 text-[13px] text-[var(--foreground)] whitespace-nowrap"
                 >
                   {t("caseStudy")}
-                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  <ArrowUpRight className="card-arrow" />
                 </Link>
               </div>
             </div>

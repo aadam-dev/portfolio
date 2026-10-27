@@ -57,7 +57,7 @@ export default function Voices() {
           {VOICES.map((v, i) => (
             <Reveal key={v.author + v.role} delay={i * 0.08}>
               <figure
-                className="relative h-full p-6 md:p-8 rounded-2xl border border-[var(--line)]"
+                className="card h-full p-6 md:p-8"
                 style={{ background: "var(--tint)" }}
               >
                 <Quote
@@ -76,7 +76,7 @@ export default function Voices() {
                 </blockquote>
                 <figcaption className="mt-6 pt-5 border-t border-[var(--line)]">
                   <p className="text-[14px] text-white">{v.author}</p>
-                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--ink-4)]">
+                  <p className="mt-0.5 card-meta">
                     {v.role}
                   </p>
                 </figcaption>

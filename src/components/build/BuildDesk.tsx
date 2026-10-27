@@ -11,7 +11,6 @@ import Clock24 from "./Clock24";
 import Ticket, { type TicketData } from "./Ticket";
 import Schematic from "@/components/map/Schematic";
 import { PLACES } from "@/components/map/places";
-import { BrandSheet } from "@/components/site/Practices";
 import { emit, sessionSummary } from "@/components/fieldkit/events";
 import {
   MY_HOURS,
@@ -48,7 +47,6 @@ function useVisitorZone() {
 }
 
 function Thumb({ thumb }: { thumb: string }) {
-  if (thumb === "brand") return <BrandSheet />;
   if (thumb === "map")
     return (
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
@@ -176,7 +174,7 @@ export default function BuildDesk() {
           type="button"
           onClick={print}
           disabled={!canPrint}
-          className="w-full h-12 rounded-xl bg-[var(--accent)] text-[var(--on-accent)] font-semibold text-[14.5px] inline-flex items-center justify-center gap-2 disabled:opacity-40"
+          className="btn btn-primary w-full"
         >
           <Printer className="w-4 h-4" /> {t("print")}
         </button>
@@ -196,12 +194,12 @@ export default function BuildDesk() {
                 className="space-y-2"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("name")} aria-label={t("name")} autoComplete="name" className="h-11 rounded-xl bg-white/[0.06] border border-white/15 px-3 text-[14px] placeholder:text-white/40 outline-none focus:border-[var(--accent)]" />
-                  <input value={contact} onChange={(e) => setContact(e.target.value)} placeholder={t("contact")} aria-label={t("contact")} autoComplete="email" className="h-11 rounded-xl bg-white/[0.06] border border-white/15 px-3 text-[14px] placeholder:text-white/40 outline-none focus:border-[var(--accent)]" />
+                  <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("name")} aria-label={t("name")} autoComplete="name" className="field" />
+                  <input value={contact} onChange={(e) => setContact(e.target.value)} placeholder={t("contact")} aria-label={t("contact")} autoComplete="email" className="field" />
                 </div>
                 <div className="flex items-center justify-between gap-3">
-                  <span className={`text-[12.5px] ${invalid ? "text-[var(--accent)]" : "text-white/50"}`}>{invalid ? t("invalid") : t("sendHint")}</span>
-                  <button type="submit" disabled={step === "sending"} className="shrink-0 h-11 px-5 rounded-xl bg-[var(--accent)] text-[var(--on-accent)] font-semibold text-[14px] inline-flex items-center gap-2 disabled:opacity-60">
+                  <span className={`text-[12.5px] ${invalid ? "text-[var(--accent)]" : "text-[var(--ink-3)]"}`}>{invalid ? t("invalid") : t("sendHint")}</span>
+                  <button type="submit" disabled={step === "sending"} className="btn btn-primary shrink-0">
                     {step === "sending" ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowUpRight className="w-4 h-4" />}
                     {t("send")}
                   </button>
@@ -209,9 +207,9 @@ export default function BuildDesk() {
               </form>
             )}
             {(step === "sent" || step === "fallback") && (
-              <div role="status" className="rounded-xl border border-white/15 px-4 py-3 text-[13.5px] flex items-center justify-between gap-3">
+              <div role="status" className="card px-4 py-3 text-[13.5px] flex-row items-center justify-between gap-3">
                 <span className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-[#86efac]" />
+                  <Check className="w-4 h-4 text-[var(--success)]" />
                   {step === "sent" ? t("sent") : t("fallback")}
                 </span>
                 {step === "fallback" ? (
@@ -219,14 +217,14 @@ export default function BuildDesk() {
                     WhatsApp
                   </a>
                 ) : (
-                  <button type="button" onClick={() => setStep("compose")} className="shrink-0 text-white/60 hover:text-white">
+                  <button type="button" onClick={() => setStep("compose")} className="shrink-0 text-[var(--ink-2)] hover:text-[var(--foreground)]">
                     {t("again")}
                   </button>
                 )}
               </div>
             )}
             {step !== "sent" && (
-              <button type="button" onClick={() => setStep("compose")} className="mt-2 text-[12.5px] text-white/50 hover:text-white">
+              <button type="button" onClick={() => setStep("compose")} className="mt-3 text-[12.5px] text-[var(--ink-3)] hover:text-[var(--foreground)]">
                 {t("edit")}
               </button>
             )}
@@ -237,16 +235,16 @@ export default function BuildDesk() {
   );
 
   return (
-    <section id="build" aria-labelledby="build-heading" className="theme-fixed relative px-4 md:px-6 py-24 md:py-32 bg-[#0e0d0b] text-white scroll-mt-10">
+    <section id="build" aria-labelledby="build-heading" className="theme-fixed relative px-4 md:px-6 py-24 md:py-32 bg-[var(--background)] text-[var(--foreground)] scroll-mt-10">
       <div className="max-w-[1280px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 items-end">
           <h2 id="build-heading" className="md:col-span-7 font-display text-balance" style={{ fontSize: "clamp(2.25rem, 5.5vw, 4.25rem)", lineHeight: 0.98, letterSpacing: "-0.03em" }}>
             {t("title")}
           </h2>
-          <p className="md:col-span-5 text-[15px] md:text-[16px] leading-[1.65] text-white/70 text-pretty">{t("sub")}</p>
+          <p className="md:col-span-5 text-[15px] md:text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty">{t("sub")}</p>
         </div>
 
-        <div className="mt-10 inline-flex rounded-full bg-white/[0.06] p-1" role="tablist" aria-label={t("switch")}>
+        <div className="mt-10 seg" role="tablist" aria-label={t("switch")}>
           {(["build", "hire"] as const).map((m) => (
             <button
               key={m}
@@ -257,10 +255,9 @@ export default function BuildDesk() {
                 setMode(m);
                 setStep("compose");
               }}
-              className={`relative px-5 h-10 rounded-full text-[14px] transition-colors ${mode === m ? "text-black" : "text-white/70 hover:text-white"}`}
+              className="seg-item"
             >
-              {mode === m && <motion.span layoutId="build-tab" className="absolute inset-0 rounded-full bg-white" transition={{ type: "spring", stiffness: 400, damping: 34 }} />}
-              <span className="relative">{t(m)}</span>
+              {t(m)}
             </button>
           ))}
         </div>
@@ -277,23 +274,21 @@ export default function BuildDesk() {
                         type="button"
                         aria-pressed={on}
                         onClick={() => toggle(s.id)}
-                        className={`group w-full h-full text-left rounded-xl overflow-hidden border transition-colors ${on ? "border-[var(--accent)] bg-white/[0.06]" : "border-white/10 hover:border-white/30"}`}
+                        className={`card card-link w-full h-full ${on ? "card-on" : ""}`}
                       >
-                        <div className="relative aspect-[16/9] bg-white/5 overflow-hidden">
-                          <div className={`absolute inset-0 transition-[filter,opacity] duration-300 ${on ? "" : "grayscale-[0.6] opacity-70 group-hover:opacity-100 group-hover:grayscale-0"}`}>
-                            <Thumb thumb={s.thumb} />
-                          </div>
-                          <span className={`absolute top-2 right-2 w-6 h-6 rounded-full grid place-items-center border ${on ? "bg-[var(--accent)] border-[var(--accent)] text-black" : "bg-black/50 border-white/30"}`}>
-                            {on && <Check className="w-3.5 h-3.5" />}
-                          </span>
+                        <span className="card-check" aria-hidden="true">
+                          <Check className="w-3.5 h-3.5" />
+                        </span>
+                        <div className="card-media">
+                          <Thumb thumb={s.thumb} />
                         </div>
-                        <div className="px-3 py-2.5">
-                          <p className="text-[13.5px] font-medium leading-tight">{s.label}</p>
-                          <p className="mt-1 flex items-center gap-1.5 text-[11.5px] text-white/50">
-                            <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: TRACK_TONE[s.track] }} />
-                            {fmtW(s.weeks)}
+                        <div className="px-3.5 py-3">
+                          <p className="text-[14px] font-medium leading-tight">{s.label}</p>
+                          <p className="mt-1.5 card-meta">
+                            <span className="card-dot" style={{ background: TRACK_TONE[s.track] }} />
+                            {fmtW(s.weeks)}, {s.track}
                           </p>
-                          <p className="mt-0.5 text-[11.5px] text-white/40 truncate">{s.proof}</p>
+                          <p className="mt-0.5 card-meta block truncate">Built for {s.proof}</p>
                         </div>
                       </button>
                     </li>
@@ -301,12 +296,12 @@ export default function BuildDesk() {
                 })}
               </ul>
               <div className="lg:col-span-5">
-                <div className="lg:sticky lg:top-24 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                <div className="card lg:sticky lg:top-24 p-5">
                   <div className="flex items-baseline justify-between gap-3">
-                    <p className="text-[13px] text-white/60">{t("board")}</p>
-                    <p className="font-display text-[28px] leading-none tabular-nums">{p.chosen.length ? `~${fmtW(p.weeks)}` : "-"}</p>
+                    <p className="stat-label">{t("board")}</p>
+                    <p className="stat-value !mt-0">{p.chosen.length ? `~${fmtW(p.weeks)}` : "-"}</p>
                   </div>
-                  <p className="mt-1 text-[12px] text-white/45">{p.chosen.length ? t("parallel", { serial: fmtW(p.serial) }) : t("pick")}</p>
+                  <p className="mt-1 card-meta">{p.chosen.length ? t("parallel", { serial: fmtW(p.serial) }) : t("pick")}</p>
                   <div className="mt-4">
                     <Gantt lanes={p.lanes} weeks={p.weeks} />
                   </div>
@@ -317,31 +312,31 @@ export default function BuildDesk() {
           ) : (
             <motion.div key="hire" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }} className="mt-6">
               {/* boarding pass */}
-              <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] rounded-2xl overflow-hidden text-[#1d1a16]">
-                <div className="p-5 md:p-7 bg-[#f4f0e6]">
-                  <div className="flex items-center justify-between gap-4 text-[11px] font-mono uppercase tracking-[0.16em] text-[#1d1a16]/60">
+              <div className="card grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px]">
+                <div className="theme-paper p-5 md:p-7">
+                  <div className="flex items-center justify-between gap-4 label">
                     <span>{t("pass")}</span>
                     <span>Remote</span>
                   </div>
                   <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
                     <div>
                       <p className="font-display text-[44px] md:text-[56px] leading-none">ACC</p>
-                      <p className="text-[13px] text-[#1d1a16]/60">Accra, GMT+0</p>
+                      <p className="card-meta">Accra, GMT+0</p>
                     </div>
                     <Plane className="w-6 h-6 text-[var(--accent)]" />
                     <div className="text-right">
                       <p className="font-display text-[44px] md:text-[56px] leading-none">{zone.code}</p>
-                      <p className="text-[13px] text-[#1d1a16]/60">
+                      <p className="card-meta">
                         {zone.city}, GMT{zone.offset >= 0 ? "+" : ""}
                         {zone.offset}
                       </p>
                     </div>
                   </div>
-                  <div className="mt-6 flex flex-wrap items-center justify-around gap-6 rounded-xl bg-[#1d1a16]/[0.04] py-4">
+                  <div className="mt-6 flex flex-wrap items-center justify-around gap-6 rounded-[var(--radius-field)] bg-[var(--tint)] border border-[var(--line)] py-4">
                     <Clock24 offset={0} work={MY_HOURS} overlap={overlapGmt} tone="#ff5b1f" label="Aadam, Accra" />
                     <div className="text-center">
                       <p className="font-display text-[40px] leading-none tabular-nums">{ov.hours}h</p>
-                      <p className="text-[12px] text-[#1d1a16]/60">{t("overlap")}</p>
+                      <p className="card-meta">{t("overlap")}</p>
                     </div>
                     <Clock24
                       offset={zone.offset}
@@ -353,20 +348,20 @@ export default function BuildDesk() {
                   </div>
                   <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5">
                     <fieldset>
-                      <legend className="text-[11px] font-mono uppercase tracking-[0.16em] text-[#1d1a16]/60">{t("role")}</legend>
+                      <legend className="label">{t("role")}</legend>
                       <div className="mt-2 flex flex-wrap gap-2">
                         {ROLES.map((r, i) => (
-                          <button key={r} type="button" aria-pressed={role === i} onClick={() => { setRole(i); setStep("compose"); }} className={`h-9 px-3 rounded-full border text-[13px] ${role === i ? "bg-[#1d1a16] text-[#f4f0e6] border-[#1d1a16]" : "border-[#1d1a16]/20 hover:border-[#1d1a16]/50"}`}>
+                          <button key={r} type="button" aria-pressed={role === i} onClick={() => { setRole(i); setStep("compose"); }} className="pill">
                             {r}
                           </button>
                         ))}
                       </div>
                     </fieldset>
                     <fieldset>
-                      <legend className="text-[11px] font-mono uppercase tracking-[0.16em] text-[#1d1a16]/60">{t("departs")}</legend>
+                      <legend className="label">{t("departs")}</legend>
                       <div className="mt-2 flex flex-wrap gap-2">
                         {STARTS.map((s, i) => (
-                          <button key={s} type="button" aria-pressed={start === i} onClick={() => { setStart(i); setStep("compose"); }} className={`h-9 px-3 rounded-full border text-[13px] ${start === i ? "bg-[#1d1a16] text-[#f4f0e6] border-[#1d1a16]" : "border-[#1d1a16]/20 hover:border-[#1d1a16]/50"}`}>
+                          <button key={s} type="button" aria-pressed={start === i} onClick={() => { setStart(i); setStep("compose"); }} className="pill">
                             {s}
                           </button>
                         ))}
@@ -374,7 +369,7 @@ export default function BuildDesk() {
                     </fieldset>
                   </div>
                   <fieldset className="mt-5">
-                    <legend className="text-[11px] font-mono uppercase tracking-[0.16em] text-[#1d1a16]/60">{t("stack")}</legend>
+                    <legend className="label">{t("stack")}</legend>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {STACK.map((s, i) => {
                         const on = stack.includes(i);
@@ -387,8 +382,9 @@ export default function BuildDesk() {
                               setStack((x) => (on ? x.filter((y) => y !== i) : [...x, i].sort()));
                               setStep("compose");
                             }}
-                            className={`h-9 px-3 rounded-md border-2 border-dashed font-mono text-[12px] uppercase tracking-[0.06em] transition-transform ${on ? "border-[var(--accent)] text-[var(--ember)] -rotate-2" : "border-[#1d1a16]/20 text-[#1d1a16]/60"}`}
+                            className="pill"
                           >
+                            {on && <Check className="w-3.5 h-3.5" />}
                             {s}
                           </button>
                         );
@@ -397,14 +393,14 @@ export default function BuildDesk() {
                   </fieldset>
                 </div>
                 {/* stub */}
-                <div className="relative bg-[#1a1814] text-white p-5 md:p-6 border-t-2 lg:border-t-0 lg:border-l-2 border-dashed border-[#f4f0e6]/25">
-                  <p className="text-[11px] font-mono uppercase tracking-[0.16em] text-white/50">{t("stub")}</p>
+                <div className="relative p-5 md:p-6 border-t lg:border-t-0 lg:border-l border-dashed border-[var(--line-strong)]">
+                  <p className="label">{t("stub")}</p>
                   <dl className="mt-3 grid grid-cols-2 gap-y-3 text-[13px]">
-                    <dt className="text-white/50">{t("role")}</dt>
+                    <dt className="text-[var(--ink-3)]">{t("role")}</dt>
                     <dd className="text-right">{ROLES[role]}</dd>
-                    <dt className="text-white/50">{t("departs")}</dt>
+                    <dt className="text-[var(--ink-3)]">{t("departs")}</dt>
                     <dd className="text-right">{STARTS[start]}</dd>
-                    <dt className="text-white/50">{t("overlapLabel")}</dt>
+                    <dt className="text-[var(--ink-3)]">{t("overlapLabel")}</dt>
                     <dd className="text-right tabular-nums">{ov.hours} h a day</dd>
                   </dl>
                   {output}

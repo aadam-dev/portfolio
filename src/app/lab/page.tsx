@@ -19,8 +19,8 @@ const ITEMS = [
   },
   {
     href: "/lab/car",
-    title: "How a car works",
-    body: "For people buying a car from abroad, like Rockmotion's customers: flip it, pull it apart system by system, see how the brakes and drivetrain work, then take it for a lap.",
+    title: "Buy a car you haven't seen",
+    body: "Rockmotion's export flow on a real car: check the VIN, inspect it panel by panel, follow it to your port and add up the landed cost.",
     image: "/previews/rockmotion/landing.webp",
   },
   {
@@ -46,15 +46,16 @@ export default function LabPage() {
           <ul className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
             {ITEMS.map((x) => (
               <li key={x.href}>
-                <Link href={x.href} className="group flex flex-col h-full rounded-2xl overflow-hidden border border-[var(--line-strong)] bg-[var(--surface)] hover:border-[var(--ink-4)] transition-colors">
-                  <div className="relative aspect-[16/10] bg-[var(--surface-2)] overflow-hidden">
-                    <Image src={x.image} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]" />
+                <Link href={x.href} className="card card-link h-full">
+                  <div className="card-media">
+                    <Image src={x.image} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover object-top" />
                   </div>
-                  <div className="p-5 flex-1 flex flex-col">
-                    <h2 className="font-display text-[22px] text-white">{x.title}</h2>
-                    <p className="mt-2 text-[14.5px] leading-relaxed text-[var(--ink-2)]">{x.body}</p>
-                    <span className="mt-auto pt-4 inline-flex items-center gap-1 text-[13.5px] text-white">
-                      Open <ArrowUpRight className="w-4 h-4 group-hover:text-[var(--accent)]" />
+                  <div className="card-pad">
+                    <h2 className="card-title">{x.title}</h2>
+                    <p className="card-text">{x.body}</p>
+                    <span className="card-foot">
+                      <span>Open</span>
+                      <ArrowUpRight className="card-arrow" />
                     </span>
                   </div>
                 </Link>

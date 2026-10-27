@@ -52,7 +52,7 @@ export default function InquiryForm() {
   };
 
   const inputCls =
-    "w-full rounded-xl border border-[var(--line-strong)] bg-[var(--surface-2)] px-4 py-3 text-[15px] text-[var(--foreground)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[var(--accent)] transition-colors";
+    "w-full rounded-[var(--radius-field)] border border-[var(--line-strong)] bg-[var(--surface-2)] px-4 py-3 text-[15px] text-[var(--foreground)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[var(--accent)] transition-colors";
 
   if (status === "sent") {
     return (
@@ -61,7 +61,7 @@ export default function InquiryForm() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: EASE_OUT }}
         role="status"
-        className="mt-12 max-w-xl rounded-2xl border border-[var(--line-strong)] bg-[var(--surface-2)] p-6 text-[15px] text-[var(--foreground)]"
+        className="card mt-12 max-w-xl p-6 text-[15px]"
       >
         {t("sent")}
       </motion.p>
@@ -134,7 +134,7 @@ export default function InquiryForm() {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="inline-flex items-center gap-2 rounded-full bg-white text-black px-7 py-3.5 text-sm font-medium disabled:opacity-60 hover:bg-[var(--accent)] transition-colors"
+          className="btn btn-solid"
         >
           {status === "sending" ? (
             <>

@@ -8,18 +8,18 @@ export default function LoginForm() {
   return (
     <form action={action} className="mt-6 space-y-3">
       <label className="block">
-        <span className="text-[13px] text-[var(--ink-3)]">Password</span>
+        <span className="label">Password</span>
         <input
           name="password"
           type="password"
           autoComplete="current-password"
           required
           autoFocus
-          className="mt-1 w-full h-11 rounded-xl bg-[var(--surface)] border border-[var(--line-strong)] px-3 text-white outline-none focus:border-[var(--accent)]"
+          className="field mt-1"
         />
       </label>
       {state?.error && <p className="text-[13px] text-[var(--accent)]">{state.error}</p>}
-      <button type="submit" disabled={pending} className="w-full h-11 rounded-xl bg-white text-black font-medium disabled:opacity-60">
+      <button type="submit" disabled={pending} className="btn btn-solid w-full">
         {pending ? "Checking…" : "Sign in"}
       </button>
     </form>

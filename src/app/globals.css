@@ -502,3 +502,317 @@ html.pl-seen .preloader {
   animation-timing-function: linear;
   animation-fill-mode: both;
 }
+
+:root {
+  --radius-card: 16px;
+  --radius-field: 12px;
+  --shadow-float: 0 24px 48px -24px rgba(0, 0, 0, 0.45);
+}
+
+@layer components {
+/* ------------------------------------------------------------------
+   One card system. Every card, tile, panel, pill and field on the site
+   uses these, so radius, border, type and hover behave the same in both
+   themes and inside .theme-fixed sections.
+   ------------------------------------------------------------------ */
+
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--foreground);
+  overflow: hidden;
+  text-align: left;
+}
+.card-link {
+  transition: border-color 0.25s var(--ease-out), transform 0.35s var(--ease-out);
+}
+.card-link:hover {
+  border-color: var(--ink-4);
+  transform: translateY(-2px);
+}
+.card-link:focus-visible,
+.pill:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.card-on,
+.card-on:hover {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.card-float {
+  box-shadow: var(--shadow-float);
+}
+.card-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+.card-media img {
+  transition: transform 0.8s var(--ease-out);
+}
+.card-link:hover .card-media img {
+  transform: scale(1.035);
+}
+.card-pad {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 20px;
+}
+.card-title {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+.card-text {
+  margin-top: 8px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.card-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ink-3);
+}
+.card-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.card-foot {
+  margin-top: auto;
+  padding-top: 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--foreground);
+}
+.card-arrow {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--ink-3);
+  transition: color 0.25s, transform 0.25s var(--ease-out);
+}
+.card-link:hover .card-arrow {
+  color: var(--accent);
+  transform: translate(2px, -2px);
+}
+.card-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  background: color-mix(in srgb, var(--background) 75%, transparent);
+  color: transparent;
+}
+.card-on .card-check {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+/* stat inside a card: a label above a number */
+.stat-label {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.stat-value {
+  margin-top: 4px;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground);
+}
+
+/* choices: one pill style for every toggle on the site */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  font-size: 13px;
+  white-space: nowrap;
+  color: var(--ink-2);
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+}
+.pill:hover {
+  border-color: var(--ink-4);
+  color: var(--foreground);
+}
+.pill[aria-pressed="true"],
+.pill[aria-selected="true"] {
+  background: var(--foreground);
+  border-color: var(--foreground);
+  color: var(--background);
+}
+
+/* buttons: pills, primary is the accent */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, opacity 0.2s;
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+.btn-solid {
+  background: var(--foreground);
+  color: var(--background);
+}
+.btn-line {
+  border: 1px solid var(--line-strong);
+  color: var(--foreground);
+}
+.btn-line:hover {
+  border-color: var(--ink-4);
+}
+
+/* text fields */
+.field {
+  height: 44px;
+  width: 100%;
+  border-radius: var(--radius-field);
+  border: 1px solid var(--line-strong);
+  background: var(--tint);
+  padding: 0 12px;
+  font-size: 14px;
+  color: var(--foreground);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.field::placeholder {
+  color: var(--ink-4);
+}
+.field:focus {
+  border-color: var(--accent);
+}
+
+/* a group label above pills or fields */
+.label {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* segmented control: tabs and mode switches */
+.seg {
+  display: inline-flex;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--tint);
+}
+.seg-item {
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  white-space: nowrap;
+  color: var(--ink-2);
+  transition: background-color 0.2s, color 0.2s;
+}
+.seg-item:hover {
+  color: var(--foreground);
+}
+.seg-item[aria-selected="true"],
+.seg-item[aria-pressed="true"] {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+/* paper: printed artefacts (tickets, the boarding pass) keep light tokens in either theme */
+.theme-paper {
+  --background: #f4f0e6;
+  --surface: #ebe5d8;
+  --surface-2: #e2dbcc;
+  --foreground: #1d1a16;
+  --ink-2: rgba(29, 26, 22, 0.74);
+  --ink-3: rgba(29, 26, 22, 0.56);
+  --ink-4: rgba(29, 26, 22, 0.36);
+  --line: rgba(29, 26, 22, 0.1);
+  --line-strong: rgba(29, 26, 22, 0.2);
+  --tint: rgba(29, 26, 22, 0.04);
+  background: var(--background);
+  color: var(--foreground);
+}
+
+
+/* controls that sit on top of images, maps and 3D scenes */
+.on-media {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(12, 11, 10, 0.72);
+  color: #fff;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.seg-dark {
+  background: rgba(12, 11, 10, 0.72);
+  border-color: transparent;
+}
+.seg-dark .seg-item {
+  height: 28px;
+  padding: 0 12px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.78);
+}
+.seg-dark .seg-item[aria-pressed="true"],
+.seg-dark .seg-item[aria-selected="true"] {
+  background: #fff;
+  color: #121110;
+}
+}

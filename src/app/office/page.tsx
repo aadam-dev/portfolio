@@ -24,8 +24,8 @@ const ago = (d: Date) => {
 
 function Card({ title, children, className = "" }: { title: string; children: React.ReactNode; className?: string }) {
   return (
-    <section className={`rounded-2xl border border-[var(--line-strong)] bg-[var(--surface)] p-4 ${className}`}>
-      <h2 className="text-[13px] text-[var(--ink-3)]">{title}</h2>
+    <section className={`card p-5 ${className}`}>
+      <h2 className="label">{title}</h2>
       <div className="mt-3">{children}</div>
     </section>
   );
@@ -87,10 +87,10 @@ export default async function Office({ searchParams }: { searchParams: Promise<{
       <div className="flex items-center gap-2">
         {test && <span className="text-[13px] text-[var(--ink-2)]">{test === "sent" ? "Test email sent." : `Test email failed: ${test}`}</span>}
         <form action={testEmail}>
-          <button className="h-10 px-4 rounded-full border border-[var(--line-strong)] text-[13.5px] text-white">Send test email</button>
+          <button className="btn btn-line">Send test email</button>
         </form>
         <form action={logout}>
-          <button className="h-10 px-4 rounded-full border border-[var(--line-strong)] text-[13.5px] text-[var(--ink-2)]">Sign out</button>
+          <button className="btn btn-line">Sign out</button>
         </form>
       </div>
     </header>
@@ -167,12 +167,12 @@ export default async function Office({ searchParams }: { searchParams: Promise<{
           ["Average stay, 7 days", `${Math.round(week.totals.seconds)}s`, ""],
           ["New messages", newCount, ""],
         ].map(([k, v, tag]) => (
-          <div key={String(k)} className="rounded-2xl border border-[var(--line-strong)] bg-[var(--surface)] p-4">
-            <dt className="text-[12.5px] text-[var(--ink-3)] flex items-center gap-2">
+          <div key={String(k)} className="card p-5">
+            <dt className="stat-label flex items-center gap-2">
               {tag && <span className="w-2 h-2 rounded-full bg-[var(--success)] animate-pulse" />}
               {k}
             </dt>
-            <dd className="mt-1 font-display text-[30px] text-white tabular-nums">{v}</dd>
+            <dd className="stat-value">{v}</dd>
           </div>
         ))}
       </dl>
@@ -192,7 +192,7 @@ export default async function Office({ searchParams }: { searchParams: Promise<{
           </div>
         </Card>
         <Card title="Where visitors are, last 30 days">
-          <div className="relative h-[180px] rounded-xl overflow-hidden">
+          <div className="relative h-[180px] rounded-[var(--radius-field)] overflow-hidden">
             <OfficeMap points={located.filter((p) => p.lat != null && p.lng != null).map((p) => ({ lat: p.lat!, lng: p.lng!, n: p.n, label: `${p.city ? decodeURIComponent(p.city) : ""} ${p.country ?? ""}` }))} />
           </div>
         </Card>
@@ -233,13 +233,13 @@ export default async function Office({ searchParams }: { searchParams: Promise<{
                       <span className="text-[12px] text-[var(--ink-4)] uppercase tracking-wide">{m.kind}</span>
                       <span className="ml-auto text-[12px] text-[var(--ink-3)]">{ago(m.at)}</span>
                     </summary>
-                    <pre className="mt-3 whitespace-pre-wrap text-[13px] leading-relaxed text-[var(--ink-2)] font-mono bg-[var(--surface-2)] rounded-xl p-3">{m.body}</pre>
+                    <pre className="mt-3 whitespace-pre-wrap text-[13px] leading-relaxed text-[var(--ink-2)] font-mono bg-[var(--surface-2)] rounded-[var(--radius-field)] p-3">{m.body}</pre>
                     <div className="mt-3 flex flex-wrap items-center gap-2">
-                      <a href={reply} target="_blank" rel="noreferrer" className="h-9 px-3 rounded-full bg-white text-black text-[13px] grid place-items-center">
+                      <a href={reply} target="_blank" rel="noreferrer" className="pill" aria-pressed="true">
                         {email ? "Reply in Gmail" : "Reply on WhatsApp"}
                       </a>
                       {m.brief && (
-                        <a href={m.brief} target="_blank" rel="noreferrer" className="h-9 px-3 rounded-full border border-[var(--line-strong)] text-[13px] grid place-items-center text-white">
+                        <a href={m.brief} target="_blank" rel="noreferrer" className="pill">
                           Open brief
                         </a>
                       )}
@@ -249,7 +249,7 @@ export default async function Office({ searchParams }: { searchParams: Promise<{
                           <form key={s} action={setStatus}>
                             <input type="hidden" name="id" value={m.id} />
                             <input type="hidden" name="status" value={s} />
-                            <button className="h-9 px-3 rounded-full border border-[var(--line-strong)] text-[13px] text-[var(--ink-2)]">Mark {s}</button>
+                            <button className="pill">Mark {s}</button>
                           </form>
                         ))}
                     </div>

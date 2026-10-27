@@ -14,13 +14,13 @@ export interface Service {
   weeks: number;
   track: Track;
   /** A capture of the same thing, shipped for a client. */
-  thumb: string | "brand" | "map";
+  thumb: string | "map";
   /** Where it was shipped. */
   proof: string;
 }
 
 export const SERVICES: Service[] = [
-  { id: "storefront", label: "Storefront", weeks: 3, track: "Web", thumb: "/previews/alboyut/landing.webp", proof: "Al Boyut" },
+  { id: "storefront", label: "Storefront", weeks: 3, track: "Web", thumb: "/previews/alboyut/products.webp", proof: "Al Boyut" },
   { id: "whatsapp", label: "WhatsApp ordering", weeks: 1, track: "Web", thumb: "/previews/zainas/shop.webp", proof: "Zaina's Couture" },
   { id: "pos", label: "POS register", weeks: 3, track: "Ops", thumb: "/previews/jireh/pos.webp", proof: "Jireh, Al Boyut" },
   { id: "inventory", label: "Inventory and stock takes", weeks: 2, track: "Ops", thumb: "/previews/primehub/inventory.webp", proof: "PrimeTijara" },
@@ -28,7 +28,7 @@ export const SERVICES: Service[] = [
   { id: "backoffice", label: "Back office and payroll", weeks: 3, track: "Data", thumb: "/previews/jireh/dashboard.webp", proof: "Jireh" },
   { id: "reporting", label: "Data and reporting", weeks: 2, track: "Data", thumb: "/previews/alboyut/sales.webp", proof: "Al Boyut" },
   { id: "model", label: "Financial model", weeks: 2, track: "Data", thumb: "/previews/ethika/tools.webp", proof: "Mirepa, Ethika" },
-  { id: "brand", label: "Brand identity", weeks: 2, track: "Brand", thumb: "brand", proof: "Al Boyut, An-Nur" },
+  { id: "brand", label: "Brand identity", weeks: 2, track: "Brand", thumb: "/previews/alboyut/landing.webp", proof: "Al Boyut, An-Nur" },
   { id: "listing", label: "Google listing and map", weeks: 1, track: "Brand", thumb: "map", proof: "Al Boyut" },
   { id: "i18n", label: "English, French, Arabic", weeks: 1, track: "Web", thumb: "/previews/koyi/madrasah.webp", proof: "Kōyi" },
 ];
