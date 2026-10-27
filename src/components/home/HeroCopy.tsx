@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -14,19 +14,30 @@ function CyclingWord() {
   const t = useTranslations("home.hero.words");
   const reduce = useReducedMotion();
   const [i, setI] = useState(0);
+  const box = useRef<HTMLSpanElement>(null);
   useEffect(() => {
     if (reduce) return;
-    const id = setInterval(() => setI((v) => (v + 1) % WORDS.length), CYCLE_MS);
-    return () => clearInterval(id);
+    // only turn while the headline is on screen and the tab is visible
+    let seen = true;
+    const io = new IntersectionObserver(([e]) => (seen = e.isIntersecting));
+    if (box.current) io.observe(box.current);
+    const id = setInterval(() => {
+      if (seen && document.visibilityState === "visible") setI((v) => (v + 1) % WORDS.length);
+    }, CYCLE_MS);
+    return () => {
+      clearInterval(id);
+      io.disconnect();
+    };
   }, [reduce]);
   const words = WORDS.map((w) => t(w));
   const longest = words.reduce((a, b) => (b.length > a.length ? b : a), "");
   return (
-    <span className="relative inline-grid overflow-hidden align-baseline pb-[0.08em] -mb-[0.08em]">
+    <span ref={box} className="relative inline-grid overflow-hidden align-baseline pb-[0.08em] -mb-[0.08em]">
       <span className="font-serif-it invisible col-start-1 row-start-1" aria-hidden="true">
         {longest}
       </span>
-      <AnimatePresence mode="popLayout" initial={false}>
+      {/* both words share one grid cell, so no layout measuring is needed on a swap */}
+      <AnimatePresence initial={false}>
         <motion.span
           key={WORDS[i]}
           className="font-serif-it text-[var(--accent)] col-start-1 row-start-1"

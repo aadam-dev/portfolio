@@ -19,6 +19,8 @@ import type { Tier } from "./tier";
 const TOP = 0.76; // desk height (m)
 
 export interface DeskProps {
+  /** Off screen: render nothing at all. */
+  paused?: boolean;
   tier: Tier;
   night: boolean;
   wide: boolean;
@@ -486,7 +488,7 @@ function Contents(props: DeskProps) {
 export default function DeskScene(props: DeskProps) {
   return (
     <Canvas
-      frameloop="demand"
+      frameloop={props.paused ? "never" : "demand"}
       shadows={props.tier === "high" ? "soft" : false}
       dpr={props.tier === "high" ? [1, 1.5] : [1, 1]}
       camera={{ fov: 36, near: 0.05, far: 20, position: [0, 1.5, 1.3] }}

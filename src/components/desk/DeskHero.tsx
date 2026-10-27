@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -47,6 +47,8 @@ export default function DeskHero() {
   const [sound, setSound] = useSound();
   const [focused, setFocused] = useState<ScreenId | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [onScreen, setOnScreen] = useState(true);
+  const sectionRef = useRef<HTMLElement>(null);
   const time = useAccraClock();
 
   // Mount the scene after first paint so the headline is never blocked.
@@ -54,6 +56,15 @@ export default function DeskHero() {
     const id = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(id);
   }, []);
+
+  // stop rendering entirely once the desk scrolls away
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting), { rootMargin: "100px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [wide]);
 
   useEffect(() => {
     if (!focused) return;
@@ -78,6 +89,7 @@ export default function DeskHero() {
   const scene = live ? (
     <DeskScene
       tier={tier}
+      paused={!onScreen}
       night={theme === "dark"}
       wide={wide}
       screens={screens}
@@ -150,7 +162,7 @@ export default function DeskHero() {
   // Phones and narrow windows: headline first, then the desk in its own frame.
   if (!wide) {
     return (
-      <section id="top" aria-labelledby="hero-heading" className="relative">
+      <section ref={sectionRef} id="top" aria-labelledby="hero-heading" className="relative">
         <div className="px-4 md:px-6 pt-28 pb-8">
           <HeroCopy delay={0.2} />
           {meta}
@@ -164,7 +176,7 @@ export default function DeskHero() {
   }
 
   return (
-    <section id="top" aria-labelledby="hero-heading" className="relative h-[100svh] min-h-[640px] overflow-hidden bg-[#2a2119]">
+    <section ref={sectionRef} id="top" aria-labelledby="hero-heading" className="relative h-[100svh] min-h-[640px] overflow-hidden bg-[#2a2119]">
       {/* the canvas is wider than the viewport and anchored so the desk sits right of the headline */}
       <div className={`absolute inset-y-0 left-0 ${focused ? "w-full" : "w-[140%] -translate-x-[2%]"} transition-[width,transform] duration-700`}>
         {scene}

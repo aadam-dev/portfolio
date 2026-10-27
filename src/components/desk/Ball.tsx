@@ -102,7 +102,8 @@ export default function Ball({ start, onFirstPlay }: { start: [number, number, n
     if (!b) return;
     const v = b.linvel();
     lastVel.current.set(v.x, v.y, v.z);
-    if (!b.isSleeping() || drag.current) kick(300);
+    // a resting body can jitter without ever sleeping; only real motion keeps the scene awake
+    if (drag.current || (!b.isSleeping() && lastVel.current.lengthSq() > 0.0004)) kick(300);
   });
 
   return (
