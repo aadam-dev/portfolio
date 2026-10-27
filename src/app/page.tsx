@@ -1,4 +1,5 @@
 import Nav from "@/components/site/Nav";
+import DeskHero from "@/components/desk/DeskHero";
 import FieldKit from "@/components/fieldkit/FieldKit";
 import BuildDesk from "@/components/fieldkit/BuildDesk";
 import FlagshipWork from "@/components/site/FlagshipWork";
@@ -22,6 +23,8 @@ export default function Home() {
       <Cursor />
       <Nav />
       <main id="main" className="relative">
+        <DeskHero />
+        <div id="deployments" />
         <FieldKit />
         <FlagshipWork />
         <WorkIndex />

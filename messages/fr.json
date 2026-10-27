@@ -215,6 +215,19 @@
       "startProject": "Start a project",
       "open": "Open for projects",
       "count": "17 businesses run on our systems"
+    },
+    "desk": {
+      "screens": {
+        "left": "Delish inventory on Odoo",
+        "center": "Al Boyut register",
+        "right": "Deal screen"
+      },
+      "back": "Back to the desk",
+      "hint": "Grab the ball, touch the water, brush the curtain, open a screen. The lamp switches the lights.",
+      "hintStill": "Open a screen below to try the systems.",
+      "soundOn": "Sound on",
+      "soundOff": "Sound off",
+      "posterAlt": "The studio desk: a laptop with two extender screens, a basketball, a glass of water, a notebook and a phone by a curtained window in Accra."
     }
   }
 }

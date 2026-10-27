@@ -14,7 +14,6 @@ import { useTranslations } from "next-intl";
 import CountUp from "@/components/ui/CountUp";
 import { EASE_OUT } from "@/lib/motion";
 import Stage, { InlineDevice } from "./Stage";
-import HeroCopy from "@/components/home/HeroCopy";
 import { CHAPTERS, MODES, chapterProjects, modeIndex, type Chapter, type ModeId } from "./chapters";
 
 /* ---------- helpers ---------- */
@@ -40,26 +39,6 @@ export function scrollToEl(el: HTMLElement | null, offset = 0) {
   else window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + offset, behavior: "smooth" });
 }
 
-function AccraClock() {
-  const [time, setTime] = useState<string | null>(null);
-  useEffect(() => {
-    const fmt = new Intl.DateTimeFormat("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-      timeZone: "Africa/Accra",
-    });
-    const tick = () => setTime(fmt.format(new Date()));
-    const first = requestAnimationFrame(tick);
-    const id = setInterval(tick, 1000);
-    return () => {
-      cancelAnimationFrame(first);
-      clearInterval(id);
-    };
-  }, []);
-  return <span className="tabular-nums">Accra {time ?? "--:--:--"} GMT</span>;
-}
 
 
 /** Rises in with a slight backwards tilt, then boots. */
@@ -213,7 +192,6 @@ function ChapterBlock({
 
 export default function FieldKit() {
   const t = useTranslations("fieldkit");
-  const th = useTranslations("home.hero");
   const reduce = !!useReducedMotion();
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const chaptersRef = useRef<HTMLDivElement>(null);
@@ -237,7 +215,7 @@ export default function FieldKit() {
   };
 
   return (
-    <section id="deployments" aria-labelledby="hero-heading" className="relative">
+    <section id="work-in-motion" aria-label="Work in motion" className="relative">
       <div
         aria-hidden="true"
         className="absolute top-0 right-0 pointer-events-none"
@@ -249,36 +227,6 @@ export default function FieldKit() {
       />
       <div className="relative max-w-[1440px] mx-auto px-4 md:px-6 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,600px)] lg:gap-12 xl:gap-20">
         <div>
-          {/* Chapter 00: hero */}
-          <div ref={heroRef} className="min-h-[auto] lg:min-h-[100vh] flex flex-col justify-center pt-32 pb-14 lg:py-28">
-            <HeroCopy delay={0.9} />
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 0.6 }}
-              className="mt-10 flex flex-wrap gap-x-6 gap-y-2 font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--ink-3)]"
-            >
-              <AccraClock />
-              <span className="flex items-center gap-2">
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--success)]" />
-                {th("open")}
-              </span>
-              <span className="text-[var(--ink-4)]">{th("count")}</span>
-            </motion.div>
-
-            {isDesktop === false && (
-              <div className="mt-12">
-                <RisingDevice reduce={reduce} delay={0.5}>
-                  <InlineDevice mode="counter" />
-                </RisingDevice>
-                <p className="mt-4 font-mono text-[10.5px] tracking-[0.14em] uppercase text-[var(--ink-4)]">
-                  {t("hero.hint")}
-                </p>
-              </div>
-            )}
-          </div>
-
           {/* Chapters 01-07 */}
           <div ref={chaptersRef}>
             {CHAPTERS.map((c, i) => (
