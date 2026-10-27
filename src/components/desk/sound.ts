@@ -146,3 +146,52 @@ export function click() {
   n.connect(hp).connect(g).connect(out);
   n.start(t);
 }
+
+/**
+ * A small engine note: two detuned oscillators through a lowpass, pitched
+ * by road speed and opened up by the throttle. Silent while sound is off.
+ */
+export function createEngine() {
+  let n: { o1: OscillatorNode; o2: OscillatorNode; f: BiquadFilterNode; g: GainNode } | null = null;
+  const stop = () => {
+    if (!n) return;
+    const { o1, o2, g } = n;
+    const t = g.context.currentTime;
+    g.gain.setTargetAtTime(0, t, 0.05);
+    o1.stop(t + 0.3);
+    o2.stop(t + 0.3);
+    n = null;
+  };
+  return {
+    update(speed: number, throttle: number) {
+      if (!enabled) return stop();
+      const { ctx: c, out } = audio();
+      if (!n) {
+        const o1 = c.createOscillator();
+        const o2 = c.createOscillator();
+        o1.type = "sawtooth";
+        o2.type = "square";
+        const f = c.createBiquadFilter();
+        f.type = "lowpass";
+        const g = c.createGain();
+        g.gain.value = 0;
+        o1.connect(f);
+        o2.connect(f);
+        f.connect(g);
+        g.connect(out);
+        o1.start();
+        o2.start();
+        n = { o1, o2, f, g };
+      }
+      const t = c.currentTime;
+      // a rev that rises with speed and drops at each upshift
+      const gear = Math.min(5, Math.floor(Math.abs(speed) / 9));
+      const rev = 38 + (Math.abs(speed) - gear * 9) * 7 + gear * 6;
+      n.o1.frequency.setTargetAtTime(rev, t, 0.05);
+      n.o2.frequency.setTargetAtTime(rev * 0.501, t, 0.05);
+      n.f.frequency.setTargetAtTime(400 + throttle * 1400, t, 0.08);
+      n.g.gain.setTargetAtTime(0.035 + throttle * 0.05, t, 0.08);
+    },
+    stop,
+  };
+}
