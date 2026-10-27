@@ -228,6 +228,42 @@
       "soundOn": "Sound on",
       "soundOff": "Sound off",
       "posterAlt": "The studio desk: a laptop with two extender screens, a basketball, a glass of water, a notebook and a phone by a curtained window in Accra."
+    },
+    "practices": {
+      "heading": "What we do",
+      "sub": "Four practices under one roof. The team that models the numbers also builds the system and draws the brand, so nothing is lost in a handover.",
+      "analysis": {
+        "title": "Analysis and models",
+        "body": "Valuations, deal screens, three-statement models and due diligence, from years of PE and VC analyst work.",
+        "proof": "50+ SMEs evaluated at Mirepa, evaluation time cut 40%"
+      },
+      "systems": {
+        "title": "Systems and software",
+        "body": "Point of sale, ERP, storefronts and back offices, built around the counter, the stockroom and the books.",
+        "proof": "17 businesses on our systems, 7 run end to end"
+      },
+      "brand": {
+        "title": "Brand and identity",
+        "body": "Marks, colour, receipts, packaging and signage, drawn as one system so the shop looks the same everywhere.",
+        "proof": "Identity systems for Al Boyut and An-Nur"
+      },
+      "map": {
+        "title": "On the map",
+        "body": "Google Business Profiles, listings and local search, so people nearby can find you, call you and get directions.",
+        "proof": "See where the work runs"
+      }
+    },
+    "map": {
+      "heading": "Where the work runs",
+      "sub": "Shops, kitchens, a court and a college across Accra, and two clients in the US. Pick a pin to see what we built there.",
+      "accra": "Accra",
+      "world": "Beyond Accra",
+      "tour": "Fly the route",
+      "stop": "Stop the tour",
+      "caseStudy": "Case study",
+      "directions": "Find on Google Maps",
+      "close": "Close",
+      "approx": "Pins are placed by neighbourhood, not street address."
     }
   }
 }

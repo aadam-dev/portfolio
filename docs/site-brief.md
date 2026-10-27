@@ -136,3 +136,10 @@ Named by Aadam in review (URL to confirm, please fill in):
 |---|---|---|
 | v2-baseline | Field Kit v2 | Rollback point before v3 |
 | v3-p0 | Brief | This file |
+| v3-p1 | Brand moments, copy | Preloader back, rotating words, studio voice, CV numbers |
+| v3-p2 | Desk hero | three.js desk with live screens, ball, water, curtain, lamp; still poster fallback |
+| v3-p3 | Practices, map, background | Four practices with proof; MapLibre + OpenFreeMap map with a drawn fallback; template grid removed |
+
+Tags live in the local repo only (the sandbox can push the branch, not tags). Each phase is also a single commit on `prototype/field-kit-hero-1eqww3`, so `git revert <sha>` undoes it.
+
+Map notes: tiles come from OpenFreeMap (no key, attribution shown). Night mode inverts the day style in CSS. The MapLibre worker is copied to `public/maplibre/` by `predev`/`prebuild` (`scripts/copy-map-worker.mjs`).

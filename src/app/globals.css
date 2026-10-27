@@ -40,7 +40,6 @@
 
   --line: rgba(242, 238, 230, 0.07);
   --line-strong: rgba(242, 238, 230, 0.14);
-  --grid-line: rgba(242, 238, 230, 0.02);
   --veil: rgba(11, 10, 8, 0.72);
   --veil-soft: rgba(11, 10, 8, 0.35);
   --veil-strong: rgba(11, 10, 8, 0.88);
@@ -83,7 +82,6 @@
 
   --line: rgba(18, 17, 16, 0.09);
   --line-strong: rgba(18, 17, 16, 0.18);
-  --grid-line: rgba(18, 17, 16, 0.035);
   --veil: rgba(236, 232, 223, 0.78);
   --veil-soft: rgba(236, 232, 223, 0.4);
   --veil-strong: rgba(236, 232, 223, 0.92);
@@ -153,7 +151,7 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* Film grain + subtle grid backdrop */
+/* Film grain (pre-rendered tile). Sections carry their own surfaces. */
 body::before {
   content: "";
   position: fixed;
@@ -168,20 +166,7 @@ body::before {
   transform: translateZ(0);
 }
 
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image:
-    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-  background-size: 96px 96px;
-  mask-image: radial-gradient(ellipse at 50% 20%, black 0%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 20%, black 0%, transparent 75%);
-  transform: translateZ(0);
-}
+
 
 /* Scrollbar */
 ::-webkit-scrollbar {
@@ -452,4 +437,57 @@ html.pl-seen .preloader {
 }
 .pl-rise {
   animation: pl-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+
+/* Work map pins (MapLibre DOM markers) */
+.map-pin {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 0 4px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.map-pin-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--accent);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s var(--ease-out);
+}
+.map-pin-label {
+  font: 600 12px/1 var(--font-inter), system-ui, sans-serif;
+  color: #121110;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 4px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+.map-pin[data-on] .map-pin-dot,
+.map-pin:hover .map-pin-dot {
+  transform: scale(1.35);
+}
+.map-pin[data-on] .map-pin-label {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.map-pin:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+/* zoomed out, the Accra pins overlap: keep their dots, drop their labels */
+.map-shell[data-view="world"] .map-pin:not([data-abroad]):not([data-on]) .map-pin-label {
+  display: none;
+}
+/* night: the day tiles, inverted and warmed */
+:root[data-theme="dark"] .map-shell .maplibregl-canvas {
+  filter: invert(1) hue-rotate(180deg) brightness(0.88) contrast(0.92) saturate(0.5) sepia(0.12);
+}
+.map-shell .maplibregl-ctrl-attrib {
+  font-size: 10px;
 }

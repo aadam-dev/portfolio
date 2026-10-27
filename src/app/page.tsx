@@ -4,7 +4,8 @@ import FieldKit from "@/components/fieldkit/FieldKit";
 import BuildDesk from "@/components/fieldkit/BuildDesk";
 import FlagshipWork from "@/components/site/FlagshipWork";
 import WorkIndex from "@/components/site/WorkIndex";
-import Services from "@/components/site/Services";
+import Practices from "@/components/site/Practices";
+import WorkMap from "@/components/map/WorkMap";
 import Process from "@/components/site/Process";
 import Impact from "@/components/site/Impact";
 import Voices from "@/components/site/Voices";
@@ -24,11 +25,12 @@ export default function Home() {
       <Nav />
       <main id="main" className="relative">
         <DeskHero />
+        <Practices />
         <div id="deployments" />
         <FieldKit />
+        <WorkMap />
         <FlagshipWork />
         <WorkIndex />
-        <Services />
         <Process />
         <Impact />
         <Voices />
