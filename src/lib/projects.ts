@@ -32,7 +32,7 @@ export interface CaseStudyGalleryItem {
   caption: string;
 }
 
-/** Long-form case-study narrative. Optional — the case study degrades gracefully without it. */
+/** Long-form case-study narrative. Optional: the case study degrades gracefully without it. */
 export interface ProjectStudy {
   challenge: string;
   approach: string;
@@ -111,7 +111,7 @@ export interface Project {
   liveBaseUrl?: string;
   /** Map screen id → path (e.g. landing → "/", courses → "/courses"). Used with liveBaseUrl. */
   liveScreenPaths?: Record<string, string>;
-  /** Set false when the deploy sends X-Frame-Options/frame-ancestors DENY — hides the Live tab, keeps the outbound link. */
+  /** Set false when the deploy sends X-Frame-Options/frame-ancestors DENY: hides the Live tab, keeps the outbound link. */
   liveEmbeddable?: boolean;
   /** Silent live walkthroughs of the real system, shown on the case study. */
   walkthroughs?: ProjectWalkthrough[];
@@ -393,16 +393,16 @@ export const projects: Project[] = [
     location: "Ghana · B2B",
     services: ["Product architecture", "Procurement workflows", "POS & back office", "Full-stack engineering"],
     description:
-      "The supply desk for Ghanaian businesses and builders. PrimeTijara unifies competitive stock, formal proformas, approvals, deliveries and an in-house POS into one verified procurement flow — fronted by a storefront and run from an Odoo-style back office.",
+      "The supply desk for Ghanaian businesses and builders. PrimeTijara unifies competitive stock, formal proformas, approvals, deliveries and an in-house POS into one verified procurement flow, fronted by a storefront and run from an Odoo-style back office.",
     descriptionFr:
-      "Le comptoir d'approvisionnement des entreprises et artisans ghanéens. PrimeTijara réunit stock compétitif, proformas formels, approbations, livraisons et une caisse (POS) interne dans un flux d'achat vérifié — avec une vitrine en façade et un back-office façon Odoo.",
+      "Le comptoir d'approvisionnement des entreprises et artisans ghanéens. PrimeTijara réunit stock compétitif, proformas formels, approbations, livraisons et une caisse (POS) interne dans un flux d'achat vérifié, avec une vitrine en façade et un back-office façon Odoo.",
     descriptionAr:
-      "مكتب التوريد للشركات والبنّائين في غانا. يوحّد PrimeTijara المخزون التنافسي وعروض الأسعار الرسمية والموافقات والتسليم ونقطة بيع داخلية في مسار شراء موثّق — بواجهة متجر ومكتب خلفي بأسلوب Odoo.",
+      "مكتب التوريد للشركات والبنّائين في غانا. يوحّد PrimeTijara المخزون التنافسي وعروض الأسعار الرسمية والموافقات والتسليم ونقطة بيع داخلية في مسار شراء موثّق، بواجهة متجر ومكتب خلفي بأسلوب Odoo.",
     study: {
       challenge:
-        "Ghanaian contractors and businesses buy building materials through scattered WhatsApp chats and paper proformas — no verified pricing, no approval trail, and counter sales that never reconcile with stock or cash. Owners couldn't tell whether they were actually making money.",
+        "Ghanaian contractors and businesses buy building materials through scattered WhatsApp chats and paper proformas: no verified pricing, no approval trail, and counter sales that never reconcile with stock or cash. Owners couldn't tell whether they were actually making money.",
       approach:
-        "We modelled approval and proforma flows around how contractors work on site, then built an Odoo-style back office — orders, inventory, purchasing, accounting, payroll and POS shifts — wired to a storefront and courier settlement so every counter sale hits one source of stock and cash truth.",
+        "We modelled approval and proforma flows around how contractors work on site, then built an Odoo-style back office (orders, inventory, purchasing, accounting, payroll and POS shifts) wired to a storefront and courier settlement so every counter sale hits one source of stock and cash truth.",
       result:
         "One procurement OS replacing the WhatsApp-and-paper workflow: 20+ back-office modules, an in-house POS and a public storefront kept in sync, giving the business a single real-time view of stock, orders and cash.",
     },
@@ -589,11 +589,11 @@ export const projects: Project[] = [
     role: "Website & ERP implementation lead",
     study: {
       challenge:
-        "Delish ran on a fragmented Appsol POS and manual spreadsheets. Stock never reconciled with sales, suppliers delivered in packs — crates, sacks, kirks — that didn't map to how ingredients were counted, and the numbers stopped adding up at month-end.",
+        "Delish ran on a fragmented Appsol POS and manual spreadsheets. Stock never reconciled with sales, suppliers delivered in packs (crates, sacks, kirks) that didn't map to how ingredients were counted, and the numbers stopped adding up at month-end.",
       approach:
         "I mapped every POS, stock and purchasing workflow onto Odoo 19 before configuring a field, then built it around how Delish works: a POS menu with categories, prices, staff PINs and a two-step waiter → cashier flow; phantom Bills of Materials so selling a dish deducts its exact ingredients; and pack → piece unit conversions (crate, sack, kirk = 53 bottles, beef by the gram per dish) so receipts match how suppliers sell.",
       result:
-        "Delish now runs on one live Odoo 19 instance — 130+ menu items on POS, recipes deducting stock on every sale, and physical counts reconciled in across three dated sessions with an auditable formula. Training manuals and monitoring runbooks were handed over so the team runs it without me.",
+        "Delish now runs on one live Odoo 19 instance: 130+ menu items on POS, recipes deducting stock on every sale, and physical counts reconciled in across three dated sessions with an auditable formula. Training manuals and monitoring runbooks were handed over so the team runs it without me.",
     },
     impact: [
       "Mapped every POS, stock and purchasing workflow onto Odoo 19 before configuring a single field.",

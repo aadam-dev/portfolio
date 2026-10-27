@@ -34,17 +34,29 @@ const jetBrainsMono = JetBrains_Mono({
 
 const SITE_URL = "https://aadambuilds.dev";
 
+const TITLE = "Aadam · Forward deployed engineer";
+const DESCRIPTION =
+  "Forward deployed engineer in Accra (GMT+0, overlaps EU and US East). I embed with operators, analysts and coaches, ship the system they run on, and stay until the numbers move. 20+ systems in production: POS, ERP and Odoo, finance models, commerce and data.";
+const SHORT =
+  "I embed with operators, ship the system they run on, and stay until the numbers move. 20+ systems in production.";
+
+/** Runs before paint so the saved theme never flashes. Day is the default. */
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem("fk-theme");if(t!=="light"&&t!=="dark")t="light";document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="light";}})();`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Aadam · Studio for product, data & engineering",
+    default: TITLE,
     template: "%s · Aadam",
   },
-  description:
-    "Independent studio designing and shipping premium digital products across EdTech, FinTech, PropTech, e-commerce and enterprise ERP. 20+ production apps. 50+ SMEs evaluated. Available globally.",
+  description: DESCRIPTION,
   keywords: [
-    "product studio",
-    "full-stack developer",
+    "forward deployed engineer",
+    "remote software engineer",
+    "full-stack engineer",
+    "Odoo ERP",
+    "point of sale",
+    "financial modelling",
     "investment analysis",
     "business analysis",
     "data & business analysis",
@@ -64,15 +76,13 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE_URL,
     siteName: "Aadam",
-    title: "Aadam · Studio for product, data & engineering",
-    description:
-      "20+ production apps. 50+ SMEs evaluated. Independent studio building premium digital products.",
+    title: TITLE,
+    description: SHORT,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Aadam · Studio for product, data & engineering",
-    description:
-      "20+ production apps. 50+ SMEs evaluated. Independent studio building premium digital products.",
+    title: TITLE,
+    description: SHORT,
   },
   robots: {
     index: true,
@@ -81,11 +91,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0B0A08",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ECE8DF" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B0A08" },
+  ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  colorScheme: "dark",
+  colorScheme: "light dark",
 };
 
 export default async function RootLayout({
@@ -100,8 +113,13 @@ export default async function RootLayout({
     <html
       lang={locale}
       dir={locale === "ar" ? "rtl" : "ltr"}
+      data-theme="light"
+      suppressHydrationWarning
       className={`${inter.variable} ${instrumentSerif.variable} ${jetBrainsMono.variable} ${archivo.variable}`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <a href="#main" className="skip-link">

@@ -129,7 +129,7 @@ export default function CaseStudy({ project, next }: Props) {
               {canEmbedLive ? (
                 <div
                   className="inline-flex p-1 rounded-full border border-[var(--line)]"
-                  style={{ background: "rgba(255,255,255,0.02)" }}
+                  style={{ background: "var(--tint)" }}
                   role="tablist"
                   aria-label="Preview mode"
                 >
@@ -244,7 +244,7 @@ export default function CaseStudy({ project, next }: Props) {
               <Reveal>
                 <p className="eyebrow mb-2">On mobile</p>
                 <p className="text-[var(--ink-3)] text-sm mb-7 max-w-md">
-                  The same counter, catalogue and back office — built to work on
+                  The same counter, catalogue and back office, built to work on
                   the phone in a shopkeeper&apos;s hand.
                 </p>
               </Reveal>
@@ -252,11 +252,11 @@ export default function CaseStudy({ project, next }: Props) {
                 <div className="flex gap-5 md:gap-8 overflow-x-auto pb-4 md:justify-center preview-scroll">
                   {project.mobileShowcase.map((m) => (
                     <figure key={m.src} className="shrink-0 w-[180px] md:w-[208px]">
-                      <div className="rounded-[2rem] border border-[var(--line)] bg-[var(--surface-2)] p-2 shadow-2xl">
+                      <div className="theme-fixed rounded-[2rem] border border-[var(--line)] bg-[var(--surface-2)] p-2 shadow-2xl">
                         <div className="relative overflow-hidden rounded-[1.6rem] aspect-[9/19.5] bg-black">
                           <Image
                             src={m.src}
-                            alt={`${project.name} — ${m.label} on mobile`}
+                            alt={`${project.name}: ${m.label} on mobile`}
                             fill
                             sizes="208px"
                             className="object-cover object-top"
@@ -360,7 +360,7 @@ export default function CaseStudy({ project, next }: Props) {
                       <div
                         key={o.label}
                         className="rounded-xl p-4 border border-[var(--line)]"
-                        style={{ background: "rgba(255,255,255,0.015)" }}
+                        style={{ background: "var(--tint)" }}
                       >
                         <dt className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--ink-4)]">
                           {o.label}
@@ -414,7 +414,7 @@ export default function CaseStudy({ project, next }: Props) {
                         className="font-mono text-[11px] uppercase tracking-[0.2em] mb-4"
                         style={{ color: project.accentColor }}
                       >
-                        {String(i + 1).padStart(2, "0")} — {block.label}
+                        {String(i + 1).padStart(2, "0")} · {block.label}
                       </p>
                       <p className="text-[15px] md:text-[16px] leading-[1.7] text-[var(--ink-2)] text-pretty">
                         {block.body}
@@ -514,8 +514,8 @@ function ToggleBtn({
       aria-selected={active}
       className="px-4 py-1.5 rounded-full text-[12px] font-mono uppercase tracking-[0.14em] transition-colors"
       style={{
-        background: active ? "#fff" : "transparent",
-        color: active ? "#000" : "var(--ink-3)",
+        background: active ? "var(--foreground)" : "transparent",
+        color: active ? "var(--background)" : "var(--ink-3)",
       }}
     >
       {children}

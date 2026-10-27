@@ -21,7 +21,7 @@ export default function Cursor() {
   useEffect(() => {
     if (reduce) return;
     const mq = window.matchMedia("(pointer: fine)");
-    setEnabled(mq.matches);
+    const initFrame = requestAnimationFrame(() => setEnabled(mq.matches));
     const onChange = (e: MediaQueryListEvent) => setEnabled(e.matches);
     mq.addEventListener("change", onChange);
 
@@ -33,6 +33,7 @@ export default function Cursor() {
     };
     window.addEventListener("mousemove", onMove, { passive: true });
     return () => {
+      cancelAnimationFrame(initFrame);
       mq.removeEventListener("change", onChange);
       window.removeEventListener("mousemove", onMove);
     };

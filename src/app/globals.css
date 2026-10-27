@@ -10,38 +10,118 @@
 }
 
 :root {
-  /* Surfaces — warm charcoal */
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Signal orange: one accent for both themes */
+  --accent: #ff5b1f;
+  --accent-2: #ff8a5c;
+  --on-accent: #140b06;
+  --ember: #b33a2b;
+  --forest: #1e3b2e;
+}
+
+/* Night: warm charcoal. Also the default before the theme script runs,
+   and the fixed palette for artifacts (.theme-fixed) and the device screen. */
+:root,
+:root[data-theme="dark"],
+.theme-fixed {
   --background: #0b0a08;
   --surface: #12100d;
   --surface-2: #181511;
   --surface-3: #201c16;
 
-  /* Ink — warm off-white */
   --foreground: #f2eee6;
   --ink-2: rgba(242, 238, 230, 0.72);
   --ink-3: rgba(242, 238, 230, 0.48);
   --ink-4: rgba(242, 238, 230, 0.28);
   --ink-5: rgba(242, 238, 230, 0.12);
 
-  /* Lines */
   --line: rgba(242, 238, 230, 0.07);
   --line-strong: rgba(242, 238, 230, 0.14);
+  --grid-line: rgba(242, 238, 230, 0.02);
+  --veil: rgba(11, 10, 8, 0.72);
+  --veil-soft: rgba(11, 10, 8, 0.35);
+  --veil-strong: rgba(11, 10, 8, 0.88);
+  --tint: rgba(255, 255, 255, 0.03);
 
-  /* Accent — gold, single signature */
-  --accent: #e8b23a;
-  --accent-2: #f2cb6b;
-  --accent-glow: rgba(232, 178, 58, 0.14);
-
-  /* Deep secondaries for large tinted bands */
-  --ember: #b33a2b;
-  --forest: #1e3b2e;
-
-  /* Semantic */
+  --accent-glow: rgba(255, 91, 31, 0.12);
   --success: #4ade80;
 
-  /* Motion */
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  /* Field Kit device: warm aluminium shell at night */
+  --shell: #cfc9bd;
+  --shell-hi: #e8e3d9;
+  --shell-lo: #a39d91;
+  --shell-ink: rgba(20, 18, 15, 0.62);
+  --shell-key: #ddd8ce;
+  --shell-key-ink: #2a2723;
+  --shell-shadow: 0 1px 0 rgba(255, 255, 255, 0.55) inset, 0 -2px 0 rgba(0, 0, 0, 0.18) inset,
+    0 40px 80px -30px rgba(0, 0, 0, 0.75), 0 18px 40px -20px rgba(0, 0, 0, 0.6);
+  --paper: #f4f0e6;
+  --paper-ink: #1d1a16;
+}
+
+.theme-fixed {
+  --color-white: #fff;
+  --color-black: #000;
+  color-scheme: dark;
+}
+
+/* Day: paper and ink. Tailwind white/black utilities remap to ink/paper so
+   the site flips without touching every class; artifacts opt out above. */
+:root[data-theme="light"] {
+  --background: #ece8df;
+  --surface: #e3ded3;
+  --surface-2: #d9d3c6;
+  --surface-3: #cfc8b9;
+
+  --foreground: #121110;
+  --ink-2: rgba(18, 17, 16, 0.74);
+  --ink-3: rgba(18, 17, 16, 0.54);
+  --ink-4: rgba(18, 17, 16, 0.34);
+  --ink-5: rgba(18, 17, 16, 0.12);
+
+  --line: rgba(18, 17, 16, 0.09);
+  --line-strong: rgba(18, 17, 16, 0.18);
+  --grid-line: rgba(18, 17, 16, 0.035);
+  --veil: rgba(236, 232, 223, 0.78);
+  --veil-soft: rgba(236, 232, 223, 0.4);
+  --veil-strong: rgba(236, 232, 223, 0.92);
+  --tint: rgba(18, 17, 16, 0.03);
+
+  --accent-glow: rgba(255, 91, 31, 0.16);
+  --success: #16a34a;
+
+  --color-white: #121110;
+  --color-black: #ece8df;
+  color-scheme: light;
+
+  /* Graphite shell by day */
+  --shell: #2c2a27;
+  --shell-hi: #3b3834;
+  --shell-lo: #1c1b19;
+  --shell-ink: rgba(236, 232, 223, 0.5);
+  --shell-key: #3a3733;
+  --shell-key-ink: #e9e4da;
+  --shell-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset, 0 -2px 0 rgba(0, 0, 0, 0.4) inset,
+    0 40px 80px -30px rgba(40, 30, 15, 0.45), 0 18px 40px -20px rgba(40, 30, 15, 0.35);
+}
+:root[data-theme="light"] .theme-fixed {
+  --color-white: #fff;
+  --color-black: #000;
+}
+
+/* Theme change: circle wipe via View Transitions where supported */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html.theme-fade,
+html.theme-fade * {
+  transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-out),
+    border-color 0.4s var(--ease-out) !important;
 }
 
 * {
@@ -95,8 +175,8 @@ body::after {
   pointer-events: none;
   z-index: 0;
   background-image:
-    linear-gradient(to right, rgba(242, 238, 230, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(242, 238, 230, 0.02) 1px, transparent 1px);
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 96px 96px;
   mask-image: radial-gradient(ellipse at 50% 20%, black 0%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse at 50% 20%, black 0%, transparent 75%);
@@ -121,7 +201,7 @@ body::after {
 /* Selection */
 ::selection {
   background: var(--accent);
-  color: #14100a;
+  color: var(--on-accent);
 }
 
 /* Focus */
@@ -144,7 +224,7 @@ a:focus-visible {
   z-index: 100;
   padding: 12px 16px;
   background: var(--accent);
-  color: #14100a;
+  color: var(--on-accent);
   font-size: 13px;
   font-weight: 600;
   border-radius: 8px;
@@ -196,9 +276,9 @@ a:focus-visible {
   color: transparent;
 }
 
-/* Signature text gradient — gold, used sparingly */
+/* Signature text gradient, used sparingly */
 .text-gradient {
-  background: linear-gradient(135deg, #f2eee6 0%, #f2cb6b 55%, #e8b23a 100%);
+  background: linear-gradient(135deg, var(--foreground) 0%, var(--accent-2) 55%, var(--accent) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -296,7 +376,7 @@ a:focus-visible {
   width: 4px;
 }
 .preview-scroll::-webkit-scrollbar-thumb {
-  background: rgba(242, 238, 230, 0.1);
+  background: var(--line-strong);
   border-radius: 2px;
 }
 
@@ -316,4 +396,43 @@ a:focus-visible {
   .ping-soft {
     animation: none !important;
   }
+}
+
+/* ---------- Field Kit ---------- */
+
+/* Thermal paper with a perforated top edge */
+.fk-paper {
+  background: var(--paper);
+  color: var(--paper-ink);
+  -webkit-mask:
+    radial-gradient(circle 3px at 6px 0, transparent 2.6px, #000 3px) top left / 12px 100% repeat-x;
+  mask:
+    radial-gradient(circle 3px at 6px 0, transparent 2.6px, #000 3px) top left / 12px 100% repeat-x;
+}
+
+/* Range input on the device screen */
+.fk-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  outline-offset: 4px;
+}
+.fk-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: #f2eee6;
+  border: 3px solid var(--accent);
+  cursor: pointer;
+}
+.fk-range::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #f2eee6;
+  border: 3px solid var(--accent);
+  cursor: pointer;
 }

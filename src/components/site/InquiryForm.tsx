@@ -21,7 +21,7 @@ export default function InquiryForm() {
     setFields((f) => ({ ...f, [k]: e.target.value }));
 
   const whatsappUrl = () => {
-    const text = `Hi Aadam — project inquiry.\nName: ${fields.name}\nContact: ${fields.contact}\nBudget: ${t(`budgets.${fields.budget}`)}\n\n${fields.message}`;
+    const text = `Hi Aadam, project inquiry.\nName: ${fields.name}\nContact: ${fields.contact}\nBudget: ${t(`budgets.${fields.budget}`)}\n\n${fields.message}`;
     return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
   };
 

@@ -6,11 +6,12 @@ import { Menu, X, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { NavThemeToggle } from "@/components/fieldkit/ThemeSwitch";
 
 const LINKS = [
-  { key: "services", href: "/#services" },
+  { key: "deployments", href: "/#deployments" },
   { key: "work", href: "/#work" },
-  { key: "process", href: "/#process" },
+  { key: "build", href: "/#build" },
   { key: "contact", href: "/#contact" },
 ] as const;
 
@@ -51,8 +52,8 @@ export default function Nav() {
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         style={{
           background: condensed
-            ? "rgba(8, 8, 12, 0.72)"
-            : "rgba(8, 8, 12, 0.35)",
+            ? "var(--veil)"
+            : "var(--veil-soft)",
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",
           borderBottom: condensed ? "1px solid var(--line)" : "1px solid transparent",
@@ -105,15 +106,18 @@ export default function Nav() {
               </a>
             ))}
             <LanguageSwitcher />
-            <a
-              href="#contact"
+            <NavThemeToggle />
+            <Link
+              href="/#build"
               className="group inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-medium rounded-full border border-[var(--line-strong)] text-white hover:bg-white hover:text-black transition-colors"
             >
-              {t("startProject")}
+              {t("buildWithMe")}
               <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
+            </Link>
           </div>
 
+          <div className="md:hidden flex items-center gap-2">
+          <NavThemeToggle />
           <button
             type="button"
             onClick={() => setOpen(true)}
@@ -122,6 +126,7 @@ export default function Nav() {
           >
             <Menu className="w-4 h-4" />
           </button>
+          </div>
         </div>
       </motion.header>
 
@@ -144,7 +149,7 @@ export default function Nav() {
               exit={{ opacity: 0 }}
               className="absolute inset-0"
               style={{
-                background: "rgba(8,8,12,0.85)",
+                background: "var(--veil-strong)",
                 backdropFilter: "blur(16px)",
                 WebkitBackdropFilter: "blur(16px)",
               }}
@@ -217,14 +222,14 @@ export default function Nav() {
                   </a>
                   <LanguageSwitcher />
                 </div>
-                <a
-                  href="#contact"
+                <Link
+                  href="/#build"
                   onClick={() => setOpen(false)}
                   className="inline-flex items-center justify-between w-full px-5 py-4 rounded-full bg-white text-black text-sm font-medium"
                 >
-                  {t("startProject")}
+                  {t("buildWithMe")}
                   <ArrowUpRight className="w-4 h-4" />
-                </a>
+                </Link>
               </div>
             </motion.div>
           </motion.div>

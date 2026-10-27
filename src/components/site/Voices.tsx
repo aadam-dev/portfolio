@@ -59,7 +59,7 @@ export default function Voices() {
             <Reveal key={v.author + v.role} delay={i * 0.08}>
               <figure
                 className="relative h-full p-6 md:p-8 rounded-2xl border border-[var(--line)]"
-                style={{ background: "rgba(255,255,255,0.015)" }}
+                style={{ background: "var(--tint)" }}
               >
                 <Quote
                   aria-hidden="true"

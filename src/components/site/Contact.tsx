@@ -8,7 +8,7 @@ import { EASE_IN_OUT, EASE_OUT } from "@/lib/motion";
 import InquiryForm from "./InquiryForm";
 
 const EMAIL = "aadamsays@gmail.com";
-const MAILTO = `mailto:${EMAIL}?subject=Hi%20Aadam%20%E2%80%94%20Let%E2%80%99s%20Work%20Together`;
+const MAILTO = `mailto:${EMAIL}?subject=Hi%20Aadam%2C%20Let%E2%80%99s%20Work%20Together`;
 
 const LINKS = [
   { key: "whatsapp", href: "https://wa.me/233559602056" },
@@ -16,8 +16,9 @@ const LINKS = [
   { key: "phone", href: "tel:+233559602056" },
 ] as const;
 
-export default function Contact() {
+export default function Contact({ compact = false }: { compact?: boolean }) {
   const t = useTranslations("contact");
+  const tb = useTranslations("fieldkit.buildDesk");
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -36,7 +37,9 @@ export default function Contact() {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="relative px-4 md:px-6 py-32 md:py-44 border-t border-[var(--line)] overflow-hidden min-h-[70vh] flex items-center"
+      className={`relative px-4 md:px-6 overflow-hidden flex items-center ${
+        compact ? "pt-16 pb-28 md:pb-36" : "py-32 md:py-44 border-t border-[var(--line)] min-h-[70vh]"
+      }`}
     >
       {/* Single gold glow */}
       <div
@@ -59,7 +62,7 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
           className="eyebrow mb-8"
         >
-          {t("eyebrow")}
+          {compact ? tb("fallback") : t("eyebrow")}
         </motion.p>
 
         <h2 id="contact-heading" className="sr-only">
@@ -77,7 +80,7 @@ export default function Contact() {
               transition={{ duration: 1.0, ease: EASE_OUT }}
               className="group relative block font-display lowercase break-all"
               style={{
-                fontSize: "clamp(1.8rem, 6.5vw, 6.2rem)",
+                fontSize: compact ? "clamp(1.6rem, 4.4vw, 4rem)" : "clamp(1.8rem, 6.5vw, 6.2rem)",
                 lineHeight: 1.05,
                 letterSpacing: "-0.03em",
               }}

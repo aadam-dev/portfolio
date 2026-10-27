@@ -70,7 +70,7 @@ export default function FinanceMode() {
 
   const rows = [
     { key: "loan", label: "Conventional loan", sub: `${LOAN_APR * 100}% APR, reducing`, total: q.loanTotal, monthly: q.loanMonthly, color: "#6B655C" },
-    { key: "murabaha", label: "Murabaha", sub: `${MARKUP_PA * 100}% markup p.a., fixed`, total: q.murabahaTotal, monthly: q.murabahaMonthly, color: "#E8B23A" },
+    { key: "murabaha", label: "Murabaha", sub: `${MARKUP_PA * 100}% markup p.a., fixed`, total: q.murabahaTotal, monthly: q.murabahaMonthly, color: "var(--accent)" },
   ];
 
   return (
@@ -156,7 +156,7 @@ export default function FinanceMode() {
           <div className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-white/40">
             {diff >= 0 ? "Murabaha saves" : "Loan saves"}
           </div>
-          <div className="font-mono text-[17px] text-[#E8B23A] mt-0.5">
+          <div className="font-mono text-[17px] text-[var(--accent)] mt-0.5">
             <Num value={Math.abs(diff)} format={fmtCedi} />
           </div>
         </div>

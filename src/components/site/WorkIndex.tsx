@@ -182,7 +182,7 @@ export default function WorkIndex() {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="relative w-[440px] h-[300px] rounded-xl overflow-hidden border border-[var(--line-strong)] shadow-2xl bg-[var(--surface-2)]">
+            <div className="theme-fixed relative w-[440px] h-[300px] rounded-xl overflow-hidden border border-[var(--line-strong)] shadow-2xl bg-[var(--surface-2)]">
               <Image
                 src={hoveredProject.imagePath}
                 alt=""
@@ -232,7 +232,7 @@ function IndexRow({
         href={`/work/${projectSlug(project)}`}
         data-project-row={project.id}
         className="group grid grid-cols-[auto_1fr_auto] md:grid-cols-[3rem_1fr_auto_2.5rem] items-center gap-4 md:gap-8 py-5 md:py-6 border-b border-[var(--line)] focus:outline-none focus-visible:bg-[var(--surface)]"
-        aria-label={`${project.name} — ${project.tagline}`}
+        aria-label={`${project.name}: ${project.tagline}`}
       >
         <span className="font-mono text-[11px] tracking-[0.14em] text-[var(--ink-4)] tabular-nums">
           {String(index + 1).padStart(2, "0")}

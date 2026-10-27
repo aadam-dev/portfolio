@@ -24,11 +24,12 @@ export default function Reveal({
   const reduce = useReducedMotion();
 
   const variants: Variants = {
-    hidden: { opacity: 0, y: reduce ? 0 : y },
+    hidden: { opacity: 0, y },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.7, ease: EASE_OUT, delay },
+      // Same initial state on server and client; reduced motion just skips the rise.
+      transition: reduce ? { duration: 0.4, y: { duration: 0 } } : { duration: 0.7, ease: EASE_OUT, delay },
     },
   };
 

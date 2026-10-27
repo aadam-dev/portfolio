@@ -7,10 +7,13 @@
     "startProject": "ابدأ مشروعًا",
     "email": "البريد الإلكتروني",
     "openMenu": "فتح القائمة",
-    "closeMenu": "إغلاق القائمة"
+    "closeMenu": "إغلاق القائمة",
+    "deployments": "Deployments",
+    "build": "Build",
+    "buildWithMe": "Build with me"
   },
   "hero": {
-    "eyebrow": "آدم — استوديو تطوير متكامل، أكرا ← حول العالم",
+    "eyebrow": "آدم · استوديو تطوير متكامل، أكرا ← حول العالم",
     "line1": "المواقع",
     "that": "التي",
     "shipFast": "وتُسلَّم بسرعة.",
@@ -32,7 +35,7 @@
     "filterAll": "الكل"
   },
   "flagship": {
-    "eyebrow": "أعمال مختارة — 01/0{count}",
+    "eyebrow": "أعمال مختارة · 01/0{count}",
     "caseStudy": "دراسة حالة"
   },
   "services": {
@@ -88,7 +91,8 @@
   },
   "cta": {
     "whatsapp": "واتساب",
-    "startProject": "ابدأ مشروعًا"
+    "startProject": "ابدأ مشروعًا",
+    "buildWithMe": "Build with me"
   },
   "form": {
     "title": "أو أرسل تفاصيل مشروعك الآن",
@@ -105,9 +109,97 @@
     "message": "ما الذي سنبنيه؟",
     "send": "إرسال",
     "sending": "جارٍ الإرسال…",
-    "sent": "وصلتني الرسالة — سأرد خلال يوم عمل واحد.",
-    "error": "تعذّر الإرسال — سيتم فتح واتساب بدلًا من ذلك.",
+    "sent": "وصلتني الرسالة · سأرد خلال يوم عمل واحد.",
+    "error": "تعذّر الإرسال · سيتم فتح واتساب بدلًا من ذلك.",
     "whatsappInstead": "تفضّل واتساب؟ أرسلها هناك",
     "required": "يرجى إدخال الاسم ووسيلة التواصل والرسالة."
+  },
+  "fieldkit": {
+    "fieldNote": "Field note",
+    "tryIt": "Try it",
+    "projectsIn": "Projects in this deployment",
+    "hero": {
+      "eyebrow": "Aadam · Forward deployed engineer · Accra GMT+0, overlaps EU + US East",
+      "titleA": "I ship the systems",
+      "titleB": "people run on.",
+      "sub": "I embed with operators, analysts and coaches, build the system they run their day on, and stay until the numbers move. Every toy on this kit is a system that shipped.",
+      "play": "Play with the kit",
+      "build": "Build with me",
+      "available": "Open to remote roles",
+      "shipped": "20+ systems in production",
+      "hint": "Tap stock, then Charge. Scroll to turn the dial."
+    },
+    "chapters": {
+      "c01": {
+        "title": "The counter",
+        "accent": "never guesses.",
+        "note": "A builder's merchant sold over a counter, with prices in WhatsApp threads and stock that never matched the till. I shipped a touch POS, a cashier queue that calls each order out loud, and one stock truth behind the storefront.",
+        "m1": "Catalogue items live",
+        "m2": "Order channels at Jireh",
+        "m3": "Back-office modules",
+        "hint": "Ring up a sale. Unmute the cashier voice."
+      },
+      "c02": {
+        "title": "Every garment",
+        "accent": "gets a ticket.",
+        "note": "An-Nur's laundry counter ran on paper slips and memory. Now each drop-off gets a code, moves through workstation stages, texts the customer when it is ready and closes with a scan.",
+        "m1": "Stages tracked per ticket",
+        "m2": "Scan to collect",
+        "m3": "Customer told when ready",
+        "hint": "Drag garments into the drum, then start the cycle."
+      },
+      "c03": {
+        "title": "Commerce that",
+        "accent": "dresses the part.",
+        "note": "Fashion brands selling African print to two markets. Prices are set per market instead of FX-converted, and the bag becomes a WhatsApp order, because that is where these customers already buy.",
+        "m1": "Markets, each priced on its own",
+        "m2": "Fashion storefronts live",
+        "m3": "Global rollout (Chale Socks)",
+        "hint": "Pick a silhouette and a print. Switch the market."
+      },
+      "c04": {
+        "title": "Models that",
+        "accent": "survive a bad year.",
+        "note": "Before writing software for finance teams I screened 50+ SMEs for investment. The models I ship carry that habit: show the downside first, then the base case, then what breaks the covenant.",
+        "m1": "SMEs screened for investment",
+        "m2": "Investment models (Lady Angel)",
+        "m3": "Decision tools at Ethika",
+        "hint": "Hit the shocks. Watch the covenant light."
+      },
+      "c05": {
+        "title": "Sell a dish,",
+        "accent": "the stock knows.",
+        "note": "Delish ran on a fragmented POS and spreadsheets that never reconciled. On Odoo 19 every dish explodes into its recipe, supplier packs convert to pieces, and counts reconcile with a formula an auditor can follow.",
+        "m1": "Menu items on POS",
+        "m2": "SKUs reconciled",
+        "m3": "Physical count sessions",
+        "hint": "Sell a plate. Then run a physical count."
+      },
+      "c06": {
+        "title": "Shots and donors,",
+        "accent": "one pipeline.",
+        "note": "I co-led turning an inactive court in Madina into a solar-powered hub, then built the platform that runs it: bookings, events, highlights and a transparency ledger for every cedi raised.",
+        "m1": "Raised for the court",
+        "m2": "Solar-powered court",
+        "m3": "Teams on the platform",
+        "hint": "Click the court to shoot. Then open Court ops."
+      },
+      "c07": {
+        "title": "Platforms people",
+        "accent": "learn and live on.",
+        "note": "Exam pathways for West African students in three languages, verified rentals, an online pharmacy, an export platform serving 40+ countries. Different users, the same habit: ship, measure, stay.",
+        "m1": "Exam pathways on Kōyi",
+        "m2": "Languages: EN, FR, AR",
+        "m3": "Countries served (Rockmotion)",
+        "hint": "Pick a programme to see the subjects it needs."
+      }
+    },
+    "buildDesk": {
+      "eyebrow": "Build desk",
+      "title": "Hire me, or",
+      "accent": "build with me.",
+      "note": "Flip the switch on the device. Build sizes a project in weeks, with no price tags. Hire sets up a role and checks our working-hours overlap. Both print a ticket with what you did on the kit and send it straight to me.",
+      "fallback": "Or just write to me"
+    }
   }
 }

@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import {
-  animate,
   motion,
-  useInView,
   useReducedMotion,
   useScroll,
   useTransform,
@@ -16,40 +14,9 @@ import BrowserMockup from "@/components/BrowserMockup";
 import PreviewRouter from "@/components/previews/PreviewRouter";
 import { useTranslations, useLocale } from "next-intl";
 import { drawLine, maskRise } from "@/lib/motion";
+import CountUp from "@/components/ui/CountUp";
 
 const FLAGSHIP_IDS = ["primehub", "alboyut", "jireh", "rockmotion"];
-
-/** Counts up the numeric part of values like "420+", "GHS 40K+", "3". */
-function StatValue({ value }: { value: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const reduce = useReducedMotion();
-  const [display, setDisplay] = useState(value);
-
-  useEffect(() => {
-    if (!inView || reduce) return;
-    const match = value.match(/(\d+(?:\.\d+)?)/);
-    if (!match) return;
-    const target = parseFloat(match[1]);
-    const controls = animate(Math.floor(target * 0.4), target, {
-      duration: 1.2,
-      ease: [0.16, 1, 0.3, 1],
-      onUpdate: (v) => {
-        const rendered = Number.isInteger(target)
-          ? Math.round(v).toString()
-          : v.toFixed(1);
-        setDisplay(value.replace(match[1], rendered));
-      },
-    });
-    return () => controls.stop();
-  }, [inView, reduce, value]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {display}
-    </span>
-  );
-}
 
 function FlagshipCard({
   project,
@@ -75,14 +42,15 @@ function FlagshipCard({
     offset: ["start start", "end start"],
   });
   const isLast = index === total - 1;
-  const scale = useTransform(scrollYProgress, [0, 1], [1, isLast ? 1 : 0.95]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, isLast ? 1 : 0.55]);
+  const settle = !isLast && !reduce;
+  const scale = useTransform(scrollYProgress, [0, 1], [1, settle ? 0.95 : 1]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, settle ? 0.55 : 1]);
 
   return (
     <div ref={wrapperRef} className="md:min-h-[110vh]">
       <motion.article
         className="md:sticky md:top-[8vh] rounded-3xl border border-[var(--line-strong)] bg-[var(--surface-2)] overflow-hidden"
-        style={reduce ? undefined : { scale, opacity }}
+        style={{ scale, opacity }}
       >
         <div className="grid md:grid-cols-[5fr_7fr]">
           {/* Left: story */}
@@ -122,7 +90,7 @@ function FlagshipCard({
                       className="font-display text-[1.4rem] md:text-[1.8rem]"
                       style={{ color: "var(--accent)" }}
                     >
-                      <StatValue value={o.value} />
+                      <CountUp value={o.value} />
                     </dd>
                     <dd className="mt-1 font-mono text-[10px] tracking-[0.14em] uppercase text-[var(--ink-3)] leading-snug">
                       {o.label}

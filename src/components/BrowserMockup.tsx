@@ -157,7 +157,7 @@ export default function BrowserMockup({
 
   return (
     <div
-      className="flex flex-col h-full w-full overflow-hidden"
+      className="theme-fixed flex flex-col h-full w-full overflow-hidden"
       style={{ background: "#050507" }}
     >
       {/* Chrome bar */}

@@ -93,7 +93,7 @@ export default function Range() {
                     type="button"
                     onClick={() => scrollToProject(v.projectId!)}
                     className={chipClasses}
-                    aria-label={`${v.label} — see ${v.projectName}`}
+                    aria-label={`${v.label}: see ${v.projectName}`}
                   >
                     {v.label}
                     <span className="text-[10px] tracking-[0.1em] text-[var(--ink-4)] group-hover:text-[var(--accent-2)] transition-colors">

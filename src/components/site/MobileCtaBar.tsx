@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { EASE_OUT } from "@/lib/motion";
 
 const WHATSAPP_URL =
-  "https://wa.me/233559602056?text=Hi%20Aadam%20%E2%80%94%20I%27d%20like%20to%20start%20a%20project.";
+  "https://wa.me/233559602056?text=Hi%20Aadam%2C%20I%27d%20like%20to%20start%20a%20project.";
 
 function subscribeScroll(cb: () => void) {
   window.addEventListener("scroll", cb, { passive: true });
@@ -21,7 +21,7 @@ function useShowBar() {
     subscribeScroll,
     () => {
       const past = window.scrollY > window.innerHeight * 1.5;
-      const contact = document.getElementById("contact");
+      const contact = document.getElementById("build") ?? document.getElementById("contact");
       const beforeContact =
         !contact || contact.getBoundingClientRect().top > window.innerHeight;
       return past && beforeContact;
@@ -49,16 +49,16 @@ export default function MobileCtaBar() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25d366] text-black font-medium text-[13px] py-3"
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25d366] text-[#06210f] font-medium text-[13px] py-3"
             >
               <MessageCircle className="w-4 h-4" />
               {t("whatsapp")}
             </a>
             <Link
-              href="/#contact"
+              href="/#build"
               className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-white text-black font-medium text-[13px] py-3"
             >
-              {t("startProject")}
+              {t("buildWithMe")}
               <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>

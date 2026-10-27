@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       from: process.env.INQUIRY_FROM ?? "Portfolio <onboarding@resend.dev>",
       to: [TO],
       reply_to: contact.includes("@") ? contact : undefined,
-      subject: `Project inquiry — ${name} (${budget})`,
+      subject: `Project inquiry: ${name} (${budget})`,
       text: `Name: ${name}\nContact: ${contact}\nBudget: ${budget}\n\n${message}`,
     }),
   });

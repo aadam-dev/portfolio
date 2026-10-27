@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "Aadam · Studio for product, data & engineering";
+export const alt = "Aadam · Forward deployed engineer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -18,7 +18,7 @@ export default function OG() {
           justifyContent: "space-between",
           padding: "72px",
           background:
-            "radial-gradient(ellipse 120% 80% at 50% -10%, rgba(232,178,58,0.35) 0%, rgba(11,10,8,1) 60%), #0B0A08",
+            "radial-gradient(ellipse 120% 80% at 50% -10%, rgba(255,91,31,0.32) 0%, rgba(11,10,8,1) 60%), #0B0A08",
           color: "#F2F2F5",
         }}
       >
@@ -58,21 +58,17 @@ export default function OG() {
             letterSpacing: "-0.035em",
           }}
         >
-          <div>An independent studio</div>
-          <div style={{ fontStyle: "italic", color: "rgba(242,242,245,0.7)" }}>
-            building the tools
-          </div>
+          <div>I ship the systems</div>
           <div>
-            businesses{" "}
             <span
               style={{
                 color: "transparent",
                 backgroundImage:
-                  "linear-gradient(135deg, #F2EEE6 0%, #F2CB6B 55%, #E8B23A 100%)",
+                  "linear-gradient(135deg, #FF8A5C 0%, #FF5B1F 100%)",
                 backgroundClip: "text",
               }}
             >
-              actually use.
+              people run on.
             </span>
           </div>
         </div>
@@ -89,8 +85,8 @@ export default function OG() {
             color: "rgba(242,242,245,0.55)",
           }}
         >
-          <span>20+ products · 50+ SMEs</span>
-          <span>Working globally</span>
+          <span>Forward deployed engineer · 20+ systems</span>
+          <span>Accra GMT+0 · Remote</span>
         </div>
       </div>
     ),

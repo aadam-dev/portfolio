@@ -52,7 +52,7 @@ function Landing() {
           <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, marginLeft: 4, fontFamily: "system-ui" }}>4.3 · 119 Reviews</span>
         </div>
         <h1 style={{ color: "#fff", fontSize: 52, fontWeight: 400, lineHeight: 1.1, margin: "0 0 20px", letterSpacing: "-0.01em" }}>
-          Where Accra's Finest<br />Come to Rest
+          Where Accra&apos;s Finest<br />Come to Rest
         </h1>
         <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 40 }}>
           {[1, 2, 3, 4].map(i => <div key={i} style={{ width: i === 1 ? 20 : 8, height: 2, background: i === 1 ? "#C9A96E" : "rgba(255,255,255,0.15)" }} />)}

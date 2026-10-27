@@ -27,7 +27,7 @@ function LandingScreen() {
 
       <div className="relative px-6 py-14 md:px-12 md:py-20 text-center border-b border-white/5"
         style={{ backgroundImage: "linear-gradient(rgba(7,11,18,0.62), rgba(7,11,18,0.82)), linear-gradient(135deg, #1c2a16, #0b1208)" }}>
-        <span className="inline-block text-lime-400 text-[10px] font-black tracking-[0.2em] mb-5 uppercase border border-lime-400/30 rounded-full px-3 py-1">Adenta's Natural Food Spot</span>
+        <span className="inline-block text-lime-400 text-[10px] font-black tracking-[0.2em] mb-5 uppercase border border-lime-400/30 rounded-full px-3 py-1">Adenta&apos;s Natural Food Spot</span>
         <div className="w-14 h-14 rounded-full bg-white/90 mx-auto mb-5 flex items-center justify-center text-2xl">🥗</div>
         <h1 className="text-4xl md:text-6xl font-black text-white mb-5 tracking-tight leading-[1.02]">Jireh Natural Foods</h1>
         <p className="text-white/70 text-sm md:text-lg max-w-xl mx-auto mb-9 font-medium">

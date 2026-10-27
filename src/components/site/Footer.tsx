@@ -60,7 +60,7 @@ export default function Footer() {
               <span className="font-serif-it lowercase text-[var(--ink-2)]">{t("headingAccent")}</span>
             </h2>
             <a
-              href="mailto:aadamsays@gmail.com?subject=Hi%20Aadam%20%E2%80%94%20Let%E2%80%99s%20Work%20Together"
+              href="mailto:aadamsays@gmail.com?subject=Hi%20Aadam%2C%20Let%E2%80%99s%20Work%20Together"
               className="group inline-flex items-center gap-3 mt-8 text-white"
             >
               <span className="font-display text-[22px] md:text-[26px]" style={{ letterSpacing: "-0.02em" }}>

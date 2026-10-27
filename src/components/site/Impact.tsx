@@ -141,7 +141,6 @@ function AnimatedValue({ value }: { value: string }) {
     const stepMs = 900 / steps;
     let current = 0;
 
-    setDisplay(`${prefix}0${suffix}`);
     const t = setInterval(() => {
       current += target / steps;
       if (current >= target) {

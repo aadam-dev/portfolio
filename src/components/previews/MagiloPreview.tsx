@@ -44,7 +44,7 @@ function Landing() {
             <span className="text-orange-500 italic">Print. Consult.</span>
           </h1>
           <p className="text-white/60 text-sm md:text-lg leading-relaxed max-w-xl mx-auto mb-12">
-            Adenta's creative hub since 1999. We started as an art school; today we design and print for hundreds of businesses across Accra.
+            Adenta&apos;s creative hub since 1999. We started as an art school; today we design and print for hundreds of businesses across Accra.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
             <button className="bg-orange-500 text-white px-8 py-4 rounded-2xl font-black text-sm">Order Printing</button>
@@ -110,7 +110,7 @@ function College() {
       <div className="bg-slate-900 px-6 py-12 md:px-12 md:py-20 text-center">
         <p className="text-orange-500 text-[10px] font-black tracking-widest mb-4 uppercase">Creative Education</p>
         <h2 className="text-3xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter leading-none">Learn where the<br />industry happens</h2>
-        <p className="text-white/40 text-sm md:text-lg max-w-xl mx-auto">Adenta's creative education hub since 1999. Real clients. Real machines.</p>
+        <p className="text-white/40 text-sm md:text-lg max-w-xl mx-auto">Adenta&apos;s creative education hub since 1999. Real clients. Real machines.</p>
       </div>
 
       <div className="p-8 md:p-12 max-w-6xl mx-auto">

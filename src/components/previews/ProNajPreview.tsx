@@ -150,7 +150,7 @@ function Contact() {
       <NavBar />
       <div className="px-8 py-16 md:px-16 md:py-24 max-w-6xl mx-auto">
         <p className="text-orange-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-4 font-mono">Contact</p>
-        <h2 className="text-4xl md:text-6xl font-black mb-16 tracking-tighter uppercase">Let's build together.</h2>
+        <h2 className="text-4xl md:text-6xl font-black mb-16 tracking-tighter uppercase">Let&apos;s build together.</h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           <div className="space-y-8">
