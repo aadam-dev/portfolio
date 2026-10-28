@@ -39,6 +39,12 @@ export const REPLICAS: Record<string, Replica> = {
     url: "primetijara.com/pos",
     Component: dynamic(() => import("./PrimeShift"), { ssr: false, loading: Loading }),
   },
+  rockmotion: {
+    label: "Try the calculator",
+    url: "rockmotion.vercel.app/shipping",
+    Component: dynamic(() => import("./Rockmotion"), { ssr: false, loading: Loading }),
+    native: [640, 400],
+  },
   alboyut: { label: "Try the register", url: "alboyut.com/pos/terminal", Component: mode("counter"), native: [640, 400] },
   "enterprise-erp": { label: "Try the back office", url: "delish-services.odoo.com", Component: mode("ledger"), native: [640, 400] },
   zainas: { label: "Try the shop", url: "temporaryzainascouturedomain.vercel.app/shop", Component: mode("atelier"), native: [640, 400] },

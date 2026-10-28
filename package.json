@@ -39,6 +39,7 @@
     "ua-parser-js": "^1.0.40"
   },
   "devDependencies": {
+    "@gltf-transform/cli": "^4.5.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/pg": "^8.15.6",
@@ -47,11 +48,14 @@
     "@types/react-dom": "^19",
     "@types/three": "^0.186.0",
     "@types/ua-parser-js": "^0.7.39",
+    "d3-geo": "^3.1.1",
     "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "husky": "^9.1.7",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "topojson-client": "^3.1.0",
+    "typescript": "^5",
+    "world-atlas": "^2.0.2"
   }
 }

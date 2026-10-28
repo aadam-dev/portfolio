@@ -84,6 +84,7 @@ Named by Aadam in review (URL to confirm, please fill in):
 | v3 | Studio front, person behind; About page in first person | Clients and academics both visit |
 | v3 | Mirepa may be named | It is on the CV |
 | v3 | Rockmotion car built in code from separate parts | Exact anatomy and explode view, no licence issues |
+| v3.1 review | Procedural car read as toyish and unrelated to Rockmotion; replaced by a realistic CC-BY car and Rockmotion's own buying flow (VIN, inspection, shipping, landed cost) | Realism, and the lab should show the client's problem |
 | v3 | Mockups auto-switch screens; "Try it" opens rebuilt working replicas (e.g. Jireh POS) | Real systems sit behind logins |
 | v3 | Back office on Neon + Vercel; forms email instantly, notable visits email instantly, daily digest for the rest, visitors visible only in /office, password login | Never miss a message; know who visits |
 | v3 | Finance tool is a generic three-statement model for a fictional company | Shows the analyst craft without client data |
@@ -94,7 +95,7 @@ Named by Aadam in review (URL to confirm, please fill in):
 |---|---|
 | `/` | Preloader → desk hero → what we do (4 practices) → work in motion → map of businesses → lab teaser → proof → build desk + contact |
 | `/work`, `/work/[slug]` | Full index and case studies |
-| `/lab`, `/lab/model`, `/lab/car` | Three-statement model, Rockmotion car (showroom, anatomy, race), full map |
+| `/lab`, `/lab/model`, `/lab/car` | Three-statement model, Rockmotion lab (VIN check, walkaround, shipping, landed cost), full map |
 | `/about` | Personal: profile, education, research, experience, leadership, skills, CV download |
 | `/office` | Back office (password): visitors, map, charts, inbox |
 | `/brief/[id]` | Shareable project brief from a Build desk ticket |
@@ -148,10 +149,20 @@ What emails you get: every message and Build desk brief at once (reply-to is the
 | v3-p1 | Brand moments, copy | Preloader back, rotating words, studio voice, CV numbers |
 | v3-p2 | Desk hero | three.js desk with live screens, ball, water, curtain, lamp; still poster fallback |
 | v3-p3 | Practices, map, background | Four practices with proof; MapLibre + OpenFreeMap map with a drawn fallback; template grid removed |
+| v3-p8 | Mockups that switch and work | Browser mockups auto-advance (4.2 s, pause on hover, focus, offscreen and reduced motion; stop once the visitor picks a screen). "Try it" opens a working replica: Jireh POS (real 11-item food menu and prices), PrimeTijara open shift + stock take, and the shared desk modes for Al Boyut, Delish, Zaina's, Muna Muse, Ethika, Madina and Kōyi. Anis has no POS capture, so no replica was built for it. |
+| v3-p6 | Back office | Neon + Drizzle schema (visitors, sessions, events, messages), `/api/track` (bots dropped, IP hashed, rate limited, Vercel only), stored and emailed inquiries with a confirmation to the sender, notable-visit alerts, daily digest cron, `/office` with password login (live count, 30-day chart, visitor map, breakdowns, inbox with Reply in Gmail and status, last 50 visits), `/privacy`. Tested end to end against a local Postgres and a mail catcher. |
+| v3-p4 | Lab | `/lab`, `/lab/model` (Harmattan Foods Ltd, illustrative: linked three statements, revolver, DSCR covenant, three shocks, CSV; balances in all shock combinations and 2,000 random input sets) and the first `/lab/car` (a procedural car; replaced in v3.1 C). |
+| v3.1 A | Facts | Three years of PE and VC analysis (2023 to 2025): Mirepa officially to Jun 2025, then ongoing work to Dec 2025. |
+| v3.1 B | One card system | `.card`, `.pill`, `.btn`, `.field`, `.seg` in `globals.css` (`@layer components`); every card on the site moved onto them; decorative stamps and mixed legends removed. |
+| v3.1 C | Rockmotion lab | `/lab/car` rebuilt around a real car model: VIN check (ISO 3779 check digit, maker, year, plant; full decode and model recalls from NHTSA through `/api/vin`), walkaround inspection (doors, bonnet, steering, lift; 20 checks; damage marking turns panels amber), shipping journey (Atlanta to Brunswick for RoRo or Savannah for containers, six destinations, typical ranges), landed cost (CIF, duty rate entered by the visitor, local currency). Also the Rockmotion "Try it" replica (shipping calculator and VIN check in Rockmotion's style). |
 
 Tags live in the local repo only (the sandbox can push the branch, not tags). Each phase is also a single commit on `prototype/field-kit-hero-1eqww3`, so `git revert <sha>` undoes it.
 
 Map notes: tiles come from OpenFreeMap (no key, attribution shown). Night mode inverts the day style in CSS. The MapLibre worker is copied to `public/maplibre/` by `predev`/`prebuild` (`scripts/copy-map-worker.mjs`).
-| v3-p8 | Mockups that switch and work | Browser mockups auto-advance (4.2 s, pause on hover, focus, offscreen and reduced motion; stop once the visitor picks a screen). "Try it" opens a working replica: Jireh POS (real 11-item food menu and prices), PrimeTijara open shift + stock take, and the shared desk modes for Al Boyut, Delish, Zaina's, Muna Muse, Ethika, Madina and Kōyi. Anis has no POS capture, so no replica was built for it. |
-| v3-p4 | Lab | `/lab`, `/lab/model` (Harmattan Foods Ltd, illustrative: linked three statements, revolver, DSCR covenant, three shocks, CSV; balances in all shock combinations and 2,000 random input sets) and `/lab/car` (a car built in code from separate parts: showroom with flip and paint, How it works with an explode slider and step-by-step lessons for eight systems, and a race on an oval with lap times and an engine note). |
-| v3-p6 | Back office | Neon + Drizzle schema (visitors, sessions, events, messages), `/api/track` (bots dropped, IP hashed, rate limited, Vercel only), stored and emailed inquiries with a confirmation to the sender, notable-visit alerts, daily digest cron, `/office` with password login (live count, 30-day chart, visitor map, breakdowns, inbox with Reply in Gmail and status, last 50 visits), `/privacy`. Tested end to end against a local Postgres and a mail catcher. |
+
+## 11. Asset credits
+
+- Car: [Car Concept](https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/CarConcept) by Eric Chadwick / Darmstadt Graphics Group, CC-BY 4.0, from a CC0 model by Unity Fan. The Khronos and 3D Commerce logos are excluded from that licence; `scripts/fetch-car.mjs` replaces the plate texture, paints the logo out of the tyre sidewalls (colour and normal maps) and removes the steering wheel emblem, then compresses to `public/lab/car.glb` (meshopt, WebP, 3.4 MB).
+- Atlantic dot map: Natural Earth land (public domain) via `world-atlas`, generated by `scripts/atlantic-dots.mjs`.
+- Vehicle data: NHTSA vPIC and recalls APIs (US government, public).
+- Rockmotion figures (transit days, freight, port charges, exchange rates) are labelled examples, to be confirmed with Rockmotion: their US port (the lab assumes Brunswick for RoRo, Savannah for containers) and destination list.

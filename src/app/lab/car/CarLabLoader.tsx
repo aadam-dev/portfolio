@@ -2,11 +2,11 @@
 
 import dynamic from "next/dynamic";
 
-const CarLab = dynamic(() => import("@/components/lab/car/CarLab"), {
+const RockmotionLab = dynamic(() => import("@/components/lab/rockmotion/RockmotionLab"), {
   ssr: false,
-  loading: () => <div className="theme-fixed h-[62svh] min-h-[440px] rounded-2xl bg-[#111214] grid place-items-center text-[13px] text-white/50">Loading the car…</div>,
+  loading: () => <div className="theme-fixed card !bg-[#0c0d0f] h-[70svh] min-h-[480px] grid place-items-center text-[13px] text-white/50">Loading the car</div>,
 });
 
 export default function CarLabLoader() {
-  return <CarLab />;
+  return <RockmotionLab />;
 }

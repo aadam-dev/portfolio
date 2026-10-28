@@ -30,7 +30,7 @@ export function parseUa(ua: string) {
 }
 
 /** Kit events that count as "played with the site". */
-const PLAYED = /^(court\.ball|kit\.car|finance\.|pos\.sale|laundry\.|atelier\.|ledger\.|class\.|build\.ticket)/;
+const PLAYED = /^(court\.ball|kit\.car|kit\.rockmotion|finance\.|pos\.sale|laundry\.|atelier\.|ledger\.|class\.|build\.ticket)/;
 
 const LABELS: [RegExp, string][] = [
   [/^pos\.sale\.completed/, "Rang up a sale"],
@@ -41,6 +41,12 @@ const LABELS: [RegExp, string][] = [
   [/^build\.item\./, "Built a project plan"],
   [/^court\.ball/, "Bounced the ball"],
   [/^court\.shot/, "Took a shot"],
+  [/^kit\.rockmotion\.vin/, "Checked a VIN"],
+  [/^kit\.rockmotion\.inspect/, "Inspected the car"],
+  [/^kit\.rockmotion\.damage/, "Marked damage on the car"],
+  [/^kit\.rockmotion\.route/, "Planned a shipment"],
+  [/^kit\.rockmotion\.cost/, "Costed a landed car"],
+  [/^kit\.rockmotion\./, "Used the Rockmotion lab"],
   [/^kit\.car\.race/, "Raced the car"],
   [/^kit\.car\./, "Took the car apart"],
   [/^ledger\./, "Counted stock"],

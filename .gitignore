@@ -43,3 +43,6 @@ next-env.d.ts
 
 # copied from node_modules at build time
 /public/maplibre/
+
+# downloaded source assets
+/.cache/

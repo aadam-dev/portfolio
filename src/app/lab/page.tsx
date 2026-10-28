@@ -7,7 +7,7 @@ import Footer from "@/components/site/Footer";
 
 export const metadata: Metadata = {
   title: "Lab",
-  description: "Working pieces from the studio: a three-statement model you can stress, a car you can take apart, and a map of where the work runs.",
+  description: "Working pieces from the studio: a three-statement model you can stress, a car you inspect, ship and cost the way Rockmotion's buyers do, and a map of where the work runs.",
 };
 
 const ITEMS = [
@@ -21,7 +21,7 @@ const ITEMS = [
     href: "/lab/car",
     title: "Buy a car you haven't seen",
     body: "Rockmotion's export flow on a real car: check the VIN, inspect it panel by panel, follow it to your port and add up the landed cost.",
-    image: "/previews/rockmotion/landing.webp",
+    image: "/lab/car-poster.webp",
   },
   {
     href: "/#map",

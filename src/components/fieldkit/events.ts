@@ -98,6 +98,11 @@ export function sessionSummary(): string[] {
   const shots = count("court.shot.made") + count("court.shot.missed");
   if (shots) out.push(`${count("court.shot.made")}/${shots} from the field`);
   if (count("court.ball.played")) out.push("bounced the ball on the desk");
+  const vins = count("kit.rockmotion.vin");
+  if (vins) out.push(`checked ${plural(vins, "VIN")}`);
+  const areas = count("kit.rockmotion.inspect");
+  if (areas) out.push(`inspected ${plural(areas, "part")} of the car`);
+  if (count("kit.rockmotion.route")) out.push("planned a shipment from Atlanta");
   const paths = count("class.pathway.picked");
   if (paths) out.push(`checked ${plural(paths, "exam pathway")}`);
   return out;
