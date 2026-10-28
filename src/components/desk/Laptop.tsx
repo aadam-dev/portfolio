@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -44,7 +44,9 @@ export function Screen({
   onFocus,
   children,
   label,
+  onMount,
 }: {
+  onMount?: (id: ScreenId, obj: THREE.Object3D) => void;
   id: ScreenId;
   width: number;
   height: number;
@@ -56,6 +58,9 @@ export function Screen({
 }) {
   const ref = useRef<THREE.Mesh>(null);
   const pxH = Math.round((px * height) / width);
+  useEffect(() => {
+    if (ref.current) onMount?.(id, ref.current);
+  }, [id, onMount]);
   return (
     <mesh ref={ref} position={[0, 0, 0.0012]}>
       <planeGeometry args={[width, height]} />
@@ -89,16 +94,16 @@ export function LaptopRig({
   screens,
   focused,
   onFocus,
+  onMount,
 }: {
+  onMount?: (id: ScreenId, obj: THREE.Object3D) => void;
   night: boolean;
   screens: { left: { node: ReactNode; label: string }; center: { node: ReactNode; label: string }; right: { node: ReactNode; label: string } };
   focused: ScreenId | null;
   onFocus: (id: ScreenId, obj: THREE.Object3D) => void;
 }) {
-  const alu = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: night ? "#5a5a60" : "#c9c7c2", metalness: 0.85, roughness: 0.32 }),
-    [night],
-  );
+  // bead-blasted aluminium: brushed highlights come from anisotropy, not colour
+  const alu = useMemo(() => new THREE.MeshPhysicalMaterial({ color: "#c6c7cb", metalness: 1, roughness: 0.36, anisotropy: 0.45, anisotropyRotation: Math.PI / 2 }), []);
   const bezel = useMemo(() => new THREE.MeshStandardMaterial({ color: "#0b0b0c", roughness: 0.4, metalness: 0.2 }), []);
   const keys = useMemo(() => new THREE.MeshStandardMaterial({ map: keyboardTexture(), roughness: 0.7 }), []);
 
@@ -119,7 +124,7 @@ export function LaptopRig({
       </mesh>
       <mesh position={[0, 0.0142, 0.072]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[0.11, 0.06]} />
-        <meshStandardMaterial color={night ? "#4d4d52" : "#bdbbb5"} metalness={0.6} roughness={0.25} />
+        <meshPhysicalMaterial color={night ? "#4d4d52" : "#b9b9bd"} metalness={0.9} roughness={0.22} />
       </mesh>
 
       {/* lid, hinged at the back edge */}
@@ -131,7 +136,7 @@ export function LaptopRig({
           <boxGeometry args={[W, LID_H, 0.0012]} />
         </mesh>
         <group position={[0, LID_H / 2 + 0.002, 0]}>
-          <Screen id="center" width={0.29} height={0.181} px={640} focused={focused === "center"} onFocus={onFocus} label={screens.center.label}>
+          <Screen id="center" width={0.29} height={0.181} px={640} focused={focused === "center"} onFocus={onFocus} onMount={onMount} label={screens.center.label}>
             {screens.center.node}
           </Screen>
         </group>

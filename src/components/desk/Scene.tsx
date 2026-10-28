@@ -1,13 +1,14 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
-import { ContactShadows, Environment, Html, Lightformer } from "@react-three/drei";
+import { ContactShadows, Html, useGLTF, useTexture } from "@react-three/drei";
 import { CuboidCollider, CylinderCollider, Physics, RigidBody } from "@react-three/rapier";
 import * as THREE from "three";
 import { active, kick } from "./activity";
 import { setCursor } from "./cursor";
-import { badgeTexture, kenteTexture, notebookTexture, phoneTexture, wallTexture, woodTexture } from "./textures";
+import { badgeTexture, kenteTexture, notebookTexture, phoneTexture, wallTexture } from "./textures";
+import { Lights, Post, SKY, type Phase } from "./Look";
 import Ball from "./Ball";
 import Curtain from "./Curtain";
 import Water, { Glass } from "./Water";
@@ -23,6 +24,10 @@ export interface DeskProps {
   paused?: boolean;
   tier: Tier;
   night: boolean;
+  /** Light by time of day in Accra ("night" when the dark theme is on). */
+  phase: Phase;
+  /** Scroll progress of the dive into the centre screen, 0 to 1 (written by the hero). */
+  dive: { current: number };
   wide: boolean;
   screens: { left: { node: ReactNode; label: string }; center: { node: ReactNode; label: string }; right: { node: ReactNode; label: string } };
   focused: ScreenId | null;
@@ -43,13 +48,36 @@ function Driver() {
       invalidate();
     };
     window.addEventListener("pointermove", move, { passive: true });
-    return () => window.removeEventListener("pointermove", move);
+    window.addEventListener("scroll", move, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("scroll", move);
+    };
   }, [invalidate]);
   return null;
 }
 
 /* ---------- camera ---------- */
-function CameraRig({ wide, focusObj }: { wide: boolean; focusObj: THREE.Object3D | null }) {
+/** Where the camera sits to frame a screen: "fit" shows it whole, "cover" fills the view with it. */
+function screenPose(obj: THREE.Object3D, cam: THREE.PerspectiveCamera, aspect: number, mode: "fit" | "cover", pos: THREE.Vector3, look: THREE.Vector3) {
+  const q = new THREE.Quaternion();
+  obj.getWorldPosition(look);
+  obj.getWorldQuaternion(q);
+  const n = new THREE.Vector3(0, 0, 1).applyQuaternion(q);
+  const halfH = Math.tan(THREE.MathUtils.degToRad(cam.fov / 2));
+  const d =
+    mode === "fit"
+      ? Math.max(0.095 / halfH / 0.86, 0.155 / (halfH * aspect) / 0.9)
+      : Math.min(0.0905 / halfH, 0.145 / (halfH * aspect));
+  pos.copy(look).addScaledVector(n, d);
+}
+
+const smooth = (a: number, b: number, x: number) => {
+  const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+  return t * t * (3 - 2 * t);
+};
+
+function CameraRig({ wide, focusObj, diveObj, dive }: { wide: boolean; focusObj: THREE.Object3D | null; diveObj: THREE.Object3D | null; dive: { current: number } }) {
   const { camera, pointer, size } = useThree();
   const pos = useRef(new THREE.Vector3());
   const look = useRef(new THREE.Vector3());
@@ -57,29 +85,30 @@ function CameraRig({ wide, focusObj }: { wide: boolean; focusObj: THREE.Object3D
 
   useFrame(() => {
     const cam = camera as THREE.PerspectiveCamera;
+    const aspect = size.width / size.height;
     const tPos = new THREE.Vector3();
     const tLook = new THREE.Vector3();
+    const e = smooth(0.04, 0.86, dive.current);
     if (focusObj) {
-      const c = new THREE.Vector3();
-      const q = new THREE.Quaternion();
-      focusObj.getWorldPosition(c);
-      focusObj.getWorldQuaternion(q);
-      const n = new THREE.Vector3(0, 0, 1).applyQuaternion(q);
-      const halfH = Math.tan(THREE.MathUtils.degToRad(cam.fov / 2));
-      const dH = 0.095 / halfH / 0.86;
-      const dW = 0.155 / (halfH * (size.width / size.height)) / 0.9;
-      tLook.copy(c);
-      tPos.copy(c).addScaledVector(n, Math.max(dH, dW));
+      screenPose(focusObj, cam, aspect, "fit", tPos, tLook);
     } else {
-      tLook.set(0.04 + pointer.x * 0.03, TOP + 0.08 + pointer.y * 0.015, -0.1);
-      tPos.set(0.08 + pointer.x * 0.08, wide ? 1.36 : 1.5, wide ? 1.42 : 1.62);
+      const still = 1 - e;
+      tLook.set(0.04 + pointer.x * 0.03 * still, TOP + 0.08 + pointer.y * 0.015 * still, -0.1);
+      tPos.set(0.08 + pointer.x * 0.08 * still, wide ? 1.36 : 1.5, wide ? 1.42 : 1.62);
+      if (diveObj && e > 0) {
+        const dp = new THREE.Vector3();
+        const dl = new THREE.Vector3();
+        screenPose(diveObj, cam, aspect, "cover", dp, dl);
+        tPos.lerp(dp, e);
+        tLook.lerp(dl, e);
+      }
     }
     if (!ready.current) {
       pos.current.copy(tPos);
       look.current.copy(tLook);
       ready.current = true;
     }
-    const k = focusObj ? 0.09 : 0.06;
+    const k = focusObj ? 0.09 : e > 0 ? 0.2 : 0.06;
     pos.current.lerp(tPos, k);
     look.current.lerp(tLook, k);
     cam.position.copy(pos.current);
@@ -117,7 +146,8 @@ function useHover() {
 }
 
 /* ---------- the room ---------- */
-function Room({ night, tier }: { night: boolean; tier: Tier }) {
+function Room({ phase, tier }: { phase: Phase; tier: Tier }) {
+  const night = phase === "night";
   const wall = useMemo(() => new THREE.MeshStandardMaterial({ map: wallTexture(), roughness: 0.95 }), []);
   const sky = useMemo(() => {
     const c = document.createElement("canvas");
@@ -125,14 +155,10 @@ function Room({ night, tier }: { night: boolean; tier: Tier }) {
     c.height = 512;
     const g = c.getContext("2d")!;
     const grd = g.createLinearGradient(0, 0, 0, 512);
-    if (night) {
-      grd.addColorStop(0, "#0a1024");
-      grd.addColorStop(1, "#24304f");
-    } else {
-      grd.addColorStop(0, "#9cc3e6");
-      grd.addColorStop(0.7, "#f3e3c2");
-      grd.addColorStop(1, "#f7d9a6");
-    }
+    const [a, b, c2] = SKY[phase];
+    grd.addColorStop(0, a);
+    grd.addColorStop(0.65, b);
+    grd.addColorStop(1, c2);
     g.fillStyle = grd;
     g.fillRect(0, 0, 256, 512);
     // the roofline across the street
@@ -150,7 +176,7 @@ function Room({ night, tier }: { night: boolean; tier: Tier }) {
     const t = new THREE.CanvasTexture(c);
     t.colorSpace = THREE.SRGBColorSpace;
     return t;
-  }, [night]);
+  }, [night, phase]);
   const WIN = { x: 0.62, y: 1.46, w: 0.74, h: 0.86 };
   const Z = -0.46;
   const L = WIN.x - WIN.w / 2;
@@ -163,16 +189,16 @@ function Room({ night, tier }: { night: boolean; tier: Tier }) {
         <meshStandardMaterial color={night ? "#3a2f27" : "#8d7560"} roughness={0.8} />
       </mesh>
       {/* back wall with a window opening */}
-      <mesh material={wall} position={[(L - 3) / 2, 1.5, Z]} receiveShadow>
+      <mesh material={wall} position={[(L - 3) / 2, 1.5, Z]} receiveShadow castShadow>
         <planeGeometry args={[L + 3, 3]} />
       </mesh>
-      <mesh material={wall} position={[(R + 3) / 2, 1.5, Z]} receiveShadow>
+      <mesh material={wall} position={[(R + 3) / 2, 1.5, Z]} receiveShadow castShadow>
         <planeGeometry args={[3 - R, 3]} />
       </mesh>
-      <mesh material={wall} position={[WIN.x, (WIN.y - WIN.h / 2) / 2, Z]} receiveShadow>
+      <mesh material={wall} position={[WIN.x, (WIN.y - WIN.h / 2) / 2, Z]} receiveShadow castShadow>
         <planeGeometry args={[WIN.w, WIN.y - WIN.h / 2]} />
       </mesh>
-      <mesh material={wall} position={[WIN.x, (3 + WIN.y + WIN.h / 2) / 2, Z]} receiveShadow>
+      <mesh material={wall} position={[WIN.x, (3 + WIN.y + WIN.h / 2) / 2, Z]} receiveShadow castShadow>
         <planeGeometry args={[WIN.w, 3 - (WIN.y + WIN.h / 2)]} />
       </mesh>
       {/* the view, a little behind the wall */}
@@ -180,18 +206,12 @@ function Room({ night, tier }: { night: boolean; tier: Tier }) {
         <planeGeometry args={[WIN.w + 0.4, WIN.h + 0.3]} />
         <meshBasicMaterial map={sky} toneMapped={false} />
       </mesh>
-      {!night && (
-        <mesh position={[WIN.x - 0.15, TOP + 0.02, -0.12]} rotation={[-Math.PI / 2, 0, 0.35]}>
-          <planeGeometry args={[0.9, 0.5]} />
-          <meshBasicMaterial color="#ffd9a0" transparent opacity={0.1} depthWrite={false} />
-        </mesh>
-      )}
       {/* frame and sill */}
       <mesh position={[WIN.x, WIN.y - WIN.h / 2 - 0.012, Z + 0.04]} castShadow receiveShadow>
         <boxGeometry args={[WIN.w + 0.08, 0.025, 0.1]} />
         <meshStandardMaterial color="#f4efe6" roughness={0.6} />
       </mesh>
-      <mesh position={[WIN.x, WIN.y, Z - 0.01]}>
+      <mesh position={[WIN.x, WIN.y, Z - 0.01]} castShadow>
         <boxGeometry args={[0.018, WIN.h, 0.02]} />
         <meshStandardMaterial color="#f4efe6" />
       </mesh>
@@ -213,12 +233,22 @@ function Room({ night, tier }: { night: boolean; tier: Tier }) {
 }
 
 /* ---------- the desk ---------- */
+const WOOD = ["/desk/tex/wood-color.webp", "/desk/tex/wood-bump.webp", "/desk/tex/wood-rough.webp"];
+
 function Desk() {
+  const [color, bump, rough] = useTexture(WOOD, (ts) => {
+    for (const t of ts) {
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(1.5, 0.68);
+      t.anisotropy = 8;
+    }
+    ts[0].colorSpace = THREE.SRGBColorSpace;
+  });
   const top = useMemo(() => {
-    const m = woodTexture();
-    return new THREE.MeshStandardMaterial({ map: m, roughness: 0.55 });
-  }, []);
-  const steel = useMemo(() => new THREE.MeshStandardMaterial({ color: "#2a2a2c", metalness: 0.7, roughness: 0.45 }), []);
+    // oiled oak: grain in the bump and roughness maps, a thin satin coat on top
+    return new THREE.MeshPhysicalMaterial({ map: color, color: "#c99b72", bumpMap: bump, bumpScale: 1.2, roughnessMap: rough, roughness: 0.9, clearcoat: 0.22, clearcoatRoughness: 0.42 });
+  }, [color, bump, rough]);
+  const steel = useMemo(() => new THREE.MeshStandardMaterial({ color: "#232326", metalness: 0.85, roughness: 0.38 }), []);
   return (
     <group>
       <mesh material={top} position={[0, TOP - 0.02, 0]} castShadow receiveShadow>
@@ -226,7 +256,7 @@ function Desk() {
       </mesh>
       {[-0.82, 0.82].map((x) => (
         <group key={x}>
-          <mesh material={steel} position={[x, (TOP - 0.04) / 2, -0.32]} castShadow>
+          <mesh material={steel} position={[x, (TOP - 0.04) / 2, -0.32]} castShadow receiveShadow>
             <boxGeometry args={[0.04, TOP - 0.04, 0.04]} />
           </mesh>
           <mesh material={steel} position={[x, (TOP - 0.04) / 2, 0.32]} castShadow>
@@ -243,10 +273,11 @@ function Desk() {
 
 /* ---------- props ---------- */
 function Lamp({ night, onToggle, bind, hover }: { night: boolean; onToggle: () => void; bind: ReturnType<typeof useHover>["bind"]; hover: string | null }) {
-  const metal = useMemo(() => new THREE.MeshStandardMaterial({ color: "#1c1c1e", metalness: 0.7, roughness: 0.35 }), []);
+  const metal = useMemo(() => new THREE.MeshPhysicalMaterial({ color: "#26262a", metalness: 0.9, roughness: 0.3, anisotropy: 0.6 }), []);
   const target = useMemo(() => {
     const o = new THREE.Object3D();
-    o.position.set(-0.32, TOP, 0.05);
+    // in the lamp's own (scaled) frame: a pool on the desk in front of it
+    o.position.set(0.5, 0, 0.45);
     return o;
   }, []);
   return (
@@ -274,7 +305,7 @@ function Lamp({ night, onToggle, bind, hover }: { night: boolean; onToggle: () =
         </mesh>
         <mesh position={[0.27, 0.315, 0.105]}>
           <sphereGeometry args={[0.022, 16, 16]} />
-          <meshStandardMaterial color="#fff6dd" emissive="#ffd99a" emissiveIntensity={night ? 4 : 0.2} toneMapped={false} />
+          <meshStandardMaterial color="#fff6dd" emissive="#ffd99a" emissiveIntensity={night ? 7 : 0.25} toneMapped={false} />
         </mesh>
       </group>
       {night && (
@@ -377,37 +408,29 @@ function Props({ tier, bind, hover, onNavigate }: { tier: Tier; bind: ReturnType
   );
 }
 
-/* ---------- lights ---------- */
-function Lights({ night, tier }: { night: boolean; tier: Tier }) {
-  const sun = useRef<THREE.DirectionalLight>(null);
-  return (
-    <>
-      <ambientLight intensity={night ? 0.06 : 0.35} color={night ? "#8ea2ff" : "#fff4e6"} />
-      <hemisphereLight intensity={night ? 0.08 : 0.45} color={night ? "#5266a8" : "#fff2dc"} groundColor="#5a4636" />
-      {!night && (
-        <directionalLight
-          ref={sun}
-          position={[1.6, 2.4, -1.2]}
-          intensity={3.2}
-          color="#ffdcae"
-          castShadow={tier === "high"}
-          shadow-mapSize={[2048, 2048]}
-          shadow-camera-left={-1.4}
-          shadow-camera-right={1.4}
-          shadow-camera-top={1.4}
-          shadow-camera-bottom={-1.4}
-          shadow-bias={-0.0004}
-        />
-      )}
-      {night && <pointLight position={[0.05, TOP + 0.2, 0.0]} intensity={0.6} distance={1.2} color="#9fc4ff" />}
-      <Environment resolution={128} frames={1}>
-        <Lightformer form="rect" intensity={night ? 0.4 : 2} position={[1.5, 2, -1]} scale={[3, 2, 1]} color={night ? "#33405f" : "#fff1dc"} />
-        <Lightformer form="rect" intensity={night ? 0.2 : 0.8} position={[-2, 1.5, 2]} scale={[2, 2, 1]} color="#ffffff" />
-      </Environment>
-    </>
-  );
+/* ---------- plant and cup (Khronos samples) ---------- */
+function shadowsOn(root: THREE.Object3D) {
+  root.traverse((o) => {
+    if ((o as THREE.Mesh).isMesh) {
+      o.castShadow = true;
+      o.receiveShadow = true;
+    }
+  });
 }
 
+function Plant() {
+  const { scene } = useGLTF("/desk/plant.glb");
+  useEffect(() => shadowsOn(scene), [scene]);
+  return <primitive object={scene} position={[0.76, TOP, -0.25]} rotation={[0, -0.6, 0]} scale={0.46} />;
+}
+
+function Cup() {
+  const { scene } = useGLTF("/desk/cup.glb");
+  useEffect(() => shadowsOn(scene), [scene]);
+  return <primitive object={scene} position={[-0.56, TOP, 0.16]} rotation={[0, 0.9, 0]} scale={0.95} />;
+}
+
+/* ---------- lights ---------- */
 /* ---------- physics boundaries ---------- */
 function Colliders() {
   return (
@@ -419,6 +442,8 @@ function Colliders() {
         <CuboidCollider args={[0.45, 0.1, 0.01]} position={[0, TOP + 0.1, -0.2]} />
         <CylinderCollider args={[0.06, 0.04]} position={[0.3, TOP + 0.06, 0.24]} />
         <CuboidCollider args={[0.06, 0.035, 0.07]} position={[-0.42, TOP + 0.035, -0.12]} />
+        <CylinderCollider args={[0.1, 0.07]} position={[0.76, TOP + 0.1, -0.25]} />
+        <CylinderCollider args={[0.03, 0.075]} position={[-0.56, TOP + 0.03, 0.16]} />
       </RigidBody>
       <RigidBody type="fixed" name="floor" colliders={false}>
         <CuboidCollider args={[4, 0.05, 4]} position={[0, -0.05, 0]} restitution={0.72} friction={0.9} />
@@ -436,6 +461,7 @@ function Colliders() {
 function Contents(props: DeskProps) {
   const { hover, bind } = useHover();
   const [focusObj, setFocusObj] = useState<THREE.Object3D | null>(null);
+  const [diveObj, setDiveObj] = useState<THREE.Object3D | null>(null);
   const invalidate = useThree((s) => s.invalidate);
   const frames = useRef(0);
 
@@ -445,6 +471,10 @@ function Contents(props: DeskProps) {
       if (frames.current === 3) reportProgress(1);
     }
   });
+
+  const onScreen = useCallback((id: ScreenId, obj: THREE.Object3D) => {
+    if (id === "center") setDiveObj(obj);
+  }, []);
 
   useEffect(() => {
     if (!props.focused) {
@@ -458,10 +488,12 @@ function Contents(props: DeskProps) {
   return (
     <>
       <Driver />
-      <CameraRig wide={props.wide} focusObj={focusObj} />
-      <Lights night={props.night} tier={props.tier} />
-      <Room night={props.night} tier={props.tier} />
+      <CameraRig wide={props.wide} focusObj={focusObj} diveObj={diveObj} dive={props.dive} />
+      <Lights phase={props.phase} tier={props.tier} top={TOP} />
+      <Room phase={props.phase} tier={props.tier} />
       <Desk />
+      <Plant />
+      <Cup />
       <Physics gravity={[0, -9.81, 0]}>
         <Colliders />
         <Ball start={[0.55, TOP + 0.125, -0.27]} />
@@ -471,6 +503,7 @@ function Contents(props: DeskProps) {
           night={props.night}
           screens={props.screens}
           focused={props.focused}
+          onMount={onScreen}
           onFocus={(id, obj) => {
             setFocusObj(obj);
             props.setFocused(id);
@@ -481,6 +514,7 @@ function Contents(props: DeskProps) {
       <Props tier={props.tier} bind={bind} hover={hover} onNavigate={props.onNavigate} />
       <ContactShadows position={[0, TOP + 0.0008, 0]} scale={[1.8, 0.82]} resolution={512} far={0.5} blur={2.4} opacity={props.night ? 0.55 : 0.42} color="#2a1608" />
       <Lamp night={props.night} onToggle={props.onToggleTheme} bind={bind} hover={hover} />
+      {props.tier === "high" && <Post focus={[0.02, TOP + 0.1, -0.16]} sharp={!!props.focused} />}
     </>
   );
 }
@@ -489,13 +523,16 @@ export default function DeskScene(props: DeskProps) {
   return (
     <Canvas
       frameloop={props.paused ? "never" : "demand"}
-      shadows={props.tier === "high" ? "soft" : false}
+      shadows={props.tier === "high" ? "soft" : true}
       dpr={props.tier === "high" ? [1, 1.5] : [1, 1]}
-      camera={{ fov: 36, near: 0.05, far: 20, position: [0, 1.5, 1.3] }}
-      gl={{ antialias: true, powerPreference: "high-performance" }}
-      onCreated={({ gl }) => {
-        gl.toneMapping = THREE.ACESFilmicToneMapping;
-        gl.toneMappingExposure = props.night ? 0.9 : 1.05;
+      camera={{ fov: 34, near: 0.05, far: 20, position: [0, 1.5, 1.3] }}
+      gl={{ antialias: props.tier !== "high", powerPreference: "high-performance" }}
+      onCreated={(state) => {
+        const { gl } = state;
+        if (process.env.NODE_ENV !== "production") (window as unknown as { __desk: unknown }).__desk = state;
+        // the high tier tone-maps in the post chain
+        gl.toneMapping = props.tier === "high" ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping;
+        gl.toneMappingExposure = 1;
         reportProgress(0.6);
         kick(2500);
       }}
@@ -506,3 +543,6 @@ export default function DeskScene(props: DeskProps) {
     </Canvas>
   );
 }
+
+useGLTF.preload("/desk/plant.glb");
+useGLTF.preload("/desk/cup.glb");

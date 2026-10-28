@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
 import { ArrowLeft, Volume2, VolumeX } from "lucide-react";
 import { useTranslations } from "next-intl";
 import HeroCopy from "@/components/home/HeroCopy";
@@ -12,6 +12,8 @@ import { useTheme } from "@/components/fieldkit/ThemeSwitch";
 import { useAccraClock } from "@/components/fieldkit/clock";
 import { detectTier, type Tier } from "./tier";
 import { useSound } from "./sound";
+import { kick } from "./activity";
+import { useAccraPhase, type Phase } from "./Look";
 import type { ScreenId } from "./Laptop";
 
 const DeskScene = dynamic(() => import("./Scene"), { ssr: false });
@@ -36,6 +38,26 @@ function useTier(): Tier | null {
   );
 }
 
+/** A fixed-size screen scaled to cover its box (the camera ends with the screen filling the view). */
+function Cover({ w, h, children }: { w: number; h: number; children: React.ReactNode }) {
+  const box = useRef<HTMLDivElement>(null);
+  const [k, setK] = useState(0);
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setK(Math.max(el.clientWidth / w, el.clientHeight / h)));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [w, h]);
+  return (
+    <div ref={box} className="theme-fixed absolute inset-0 grid place-items-center overflow-hidden bg-white">
+      <div style={{ width: w, height: h, transform: `scale(${k})` }} className="shrink-0 overflow-hidden bg-white">
+        {children}
+      </div>
+    </div>
+  );
+}
+
 /** The landing: the studio desk, live screens, a ball to play with. */
 export default function DeskHero() {
   const t = useTranslations("home.hero");
@@ -50,6 +72,17 @@ export default function DeskHero() {
   const [onScreen, setOnScreen] = useState(true);
   const sectionRef = useRef<HTMLElement>(null);
   const time = useAccraClock();
+  const reduce = useReducedMotion();
+  const accra = useAccraPhase();
+  const phase: Phase = theme === "dark" ? "night" : accra;
+
+  // the dive: scrolling the first screen pushes the camera into the laptop
+  const dive = useRef(0);
+  const [diving, setDiving] = useState(false);
+  const progress = useMotionValue(0);
+  const copyOpacity = useTransform(progress, [0, 0.14], [1, 0]);
+  const arrive = useTransform(progress, [0.8, 0.9], [0, 1]);
+  const [arrived, setArrived] = useState(false);
 
   // Mount the scene after first paint so the headline is never blocked.
   useEffect(() => {
@@ -85,12 +118,37 @@ export default function DeskHero() {
   };
 
   const live = mounted && tier && tier !== "still";
+  const canDive = !!(wide && live && !reduce);
+  // progress through the tall section, measured directly so a height change never leaves it stale
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const read = () => {
+      const r = el.getBoundingClientRect();
+      const span = r.height - window.innerHeight;
+      const v = canDive && span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 0;
+      progress.set(v);
+      dive.current = v;
+      setDiving(v > 0.02);
+      setArrived(v > 0.86);
+      kick(400);
+    };
+    read();
+    window.addEventListener("scroll", read, { passive: true });
+    window.addEventListener("resize", read);
+    return () => {
+      window.removeEventListener("scroll", read);
+      window.removeEventListener("resize", read);
+    };
+  }, [canDive, progress]);
 
   const scene = live ? (
     <DeskScene
       tier={tier}
       paused={!onScreen}
       night={theme === "dark"}
+      phase={phase}
+      dive={dive}
       wide={wide}
       screens={screens}
       focused={focused}
@@ -176,9 +234,10 @@ export default function DeskHero() {
   }
 
   return (
-    <section ref={sectionRef} id="top" aria-labelledby="hero-heading" className="relative h-[100svh] min-h-[640px] overflow-hidden bg-[#2a2119]">
+    <section ref={sectionRef} id="top" aria-labelledby="hero-heading" className={`relative ${canDive ? "h-[220svh]" : "h-[100svh]"} min-h-[640px]`}>
+      <div className="sticky top-0 h-[100svh] min-h-[640px] overflow-hidden bg-[#2a2119]">
       {/* the canvas is wider than the viewport and anchored so the desk sits right of the headline */}
-      <div className={`absolute inset-y-0 left-0 ${focused ? "w-full" : "w-[140%] translate-x-[5%]"} transition-[width,transform] duration-700`}>
+      <div className={`absolute inset-y-0 left-0 ${focused || diving ? "w-full" : "w-[140%] translate-x-[5%]"} transition-[width,transform] duration-700`}>
         {scene}
       </div>
       <AnimatePresence>
@@ -191,6 +250,7 @@ export default function DeskHero() {
             transition={{ duration: 0.35 }}
             className="pointer-events-none absolute inset-0 z-10"
           >
+            <motion.div className="absolute inset-0" style={{ opacity: canDive ? copyOpacity : 1 }}>
             <div
               className="absolute inset-0"
               style={{
@@ -199,15 +259,25 @@ export default function DeskHero() {
               }}
             />
             <div className="relative h-full max-w-[1440px] mx-auto px-4 md:px-6 flex flex-col justify-center">
-              <div className="pointer-events-auto max-w-[780px]">
+              <div className={`${diving ? "pointer-events-none" : "pointer-events-auto"} max-w-[780px]`}>
                 <HeroCopy delay={0.2} />
                 {meta}
               </div>
             </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-      {controls}
+      {!diving && controls}
+      {/* arrival: the same register, flat and sharp, filling the view and ready to use */}
+      {canDive && diving && (
+        <motion.div className={`absolute inset-0 z-20 ${arrived ? "" : "pointer-events-none"}`} style={{ opacity: arrive }} aria-hidden={!arrived}>
+          <Cover w={640} h={400}>
+            <ModeScreen mode="counter" />
+          </Cover>
+        </motion.div>
+      )}
+      </div>
     </section>
   );
 }

@@ -5,6 +5,9 @@ export type Tier = "high" | "low" | "still";
 /** Pick how much of the desk this device should run. */
 export function detectTier(): Tier {
   if (typeof window === "undefined") return "still";
+  // ?tier=high|low|still overrides the check, for testing
+  const forced = new URLSearchParams(window.location.search).get("tier");
+  if (forced === "high" || forced === "low" || forced === "still") return forced;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return "still";
   try {
     const c = document.createElement("canvas");
