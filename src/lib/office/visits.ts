@@ -4,7 +4,7 @@ import { and, asc, eq, sql } from "drizzle-orm";
 import UAParser from "ua-parser-js";
 import type { Db } from "@/db";
 import { events, sessions, visitors, type Session } from "@/db/schema";
-import { OWNER, layout, sendMail } from "./mail";
+import { esc, frame, line, send, telegramReady, VISIT_CAP, visitLinesLastHour } from "./telegram";
 
 const salt = () => process.env.TRACK_SALT ?? process.env.SESSION_SECRET ?? "aadam";
 
@@ -131,6 +131,7 @@ export async function record(
   const vid = visitorId({ vid: t.vid, ip: ctx.ip, ua: ctx.ua });
   const views = t.items.filter((i) => i.type === "view");
   const [existing] = await db.select().from(sessions).where(eq(sessions.id, t.sid)).limit(1);
+  let created: Session | undefined;
 
   if (!existing) {
     const [v] = await db
@@ -139,7 +140,7 @@ export async function record(
       .onConflictDoUpdate({ target: visitors.id, set: { lastSeen: sql`now()`, visits: sql`${visitors.visits} + 1` } })
       .returning();
     const ua = parseUa(ctx.ua);
-    await db
+    const rows = await db
       .insert(sessions)
       .values({
         id: t.sid,
@@ -157,7 +158,9 @@ export async function record(
         seconds: Math.max(0, Math.min(t.seconds ?? 0, 6 * 3600)),
         returning: v.visits > 1,
       })
-      .onConflictDoNothing();
+      .onConflictDoNothing()
+      .returning();
+    created = rows[0];
   } else {
     await db
       .update(sessions)
@@ -181,7 +184,20 @@ export async function record(
     );
   }
 
-  // instant email for a notable visit, once per session
+  const ready = await telegramReady();
+
+  // a quiet line for every new visit (capped per hour), kept so later updates can reply under it
+  let lineId = existing?.tgMsgId ?? null;
+  if (created && ready && (await visitLinesLastHour()) < VISIT_CAP) {
+    const r = await send(visitLine(created), { silent: true });
+    if (r.ok) {
+      lineId = r.messageId;
+      await db.update(sessions).set({ tgMsgId: r.messageId }).where(eq(sessions.id, t.sid));
+    }
+  }
+
+  // a notable visit gets one update with sound, once per session
+  if (!ready) return { alerted: false };
   const story = await sessionStory(db, t.sid);
   if (!story || story.s.alerted) return { alerted: false };
   const why = notable(story.s, story);
@@ -192,12 +208,20 @@ export async function record(
     .where(and(eq(sessions.id, t.sid), eq(sessions.alerted, false)))
     .returning({ id: sessions.id });
   if (!claimed.length) return { alerted: false };
-  const mail = layout({
-    title: `${flagEmoji(story.s.country)} Someone from ${place(story.s)} is on the site`,
-    intro: `This visit ${why.join(", ")}.`,
-    rows: sessionRows(story.s, story),
-    cta: { href: `${ctx.origin}/office`, label: "Open the back office" },
-  });
-  await sendMail({ to: OWNER, subject: `Visitor: ${place(story.s)}, ${why[0]}`, ...mail });
+  await send(
+    frame("notable", [`${flagEmoji(story.s.country)} <b>${esc(place(story.s))}</b>: this visit ${esc(why.join(", "))}.`, "", ...sessionRows(story.s, story).map(([k, v]) => line(k, v))]),
+    { replyTo: lineId, buttons: [[{ text: "Open the back office", url: `${ctx.origin}/office` }]] },
+  );
   return { alerted: true };
+}
+
+/** The one-glance line for a new visit. */
+export function visitLine(s: Session) {
+  const from = s.referrer ? s.referrer.replace(/^https?:\/\//, "").split("/")[0] : "Direct";
+  return frame("visit", [
+    `${flagEmoji(s.country)} <b>${esc(place(s))}</b>${s.returning ? " · came back" : ""}`,
+    esc([s.device, s.browser, s.os].filter(Boolean).join(", ")) || null,
+    line("From", from + (s.utm?.utm_source ? ` (${s.utm.utm_source}${s.utm.utm_campaign ? `, ${s.utm.utm_campaign}` : ""})` : "")),
+    line("Landed on", s.landing ?? "/"),
+  ]);
 }

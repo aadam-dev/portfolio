@@ -1,12 +1,14 @@
 import { redirect } from "next/navigation";
 import { and, desc, eq, gte, inArray, isNotNull, sql } from "drizzle-orm";
-import { db } from "@/db";
+import { db, dbUrl } from "@/db";
 import { events, messages, sessions } from "@/db/schema";
 import { officeConfigured, signedIn } from "@/lib/office/auth";
 import { mailConfigured } from "@/lib/office/mail";
+import { chatId, telegramConfigured } from "@/lib/office/telegram";
 import { perDay, stats } from "@/lib/office/stats";
 import { eventLabel, flagEmoji, place } from "@/lib/office/visits";
-import { logout, setStatus, testEmail } from "./actions";
+import { logout, setStatus, testTelegram } from "./actions";
+import TelegramPanel, { OwnerMark } from "./TelegramPanel";
 import OfficeMap from "./OfficeMap";
 
 export const dynamic = "force-dynamic";
@@ -49,13 +51,15 @@ function Breakdown({ rows, fmt = (k) => k ?? "Unknown" }: { rows: { key: string 
   );
 }
 
-function Setup({ tables = false }: { tables?: boolean }) {
+function Setup({ tables = false, chat }: { tables?: boolean; chat: boolean }) {
   const items = [
-    ["DATABASE_URL", !!process.env.DATABASE_URL, "Vercel → Storage → add Neon. This sets DATABASE_URL."],
-    ["Tables", tables, "Run npm run db:push once against that database."],
-    ["RESEND_API_KEY", mailConfigured(), "Resend → API keys. Verify aadambuilds.dev under Domains, then set INQUIRY_FROM."],
+    ["Supabase connection", !!dbUrl(), "Supabase → Connect → Transaction pooler URI, saved as DATABASE_URL in Vercel (the Supabase Vercel integration sets POSTGRES_URL, which also works)."],
+    ["Tables", tables, "Created automatically the first time the site uses the database."],
+    ["TELEGRAM_BOT_TOKEN", telegramConfigured(), "The token from @BotFather, in Vercel → Settings → Environment Variables. Never in the code."],
+    ["Telegram chat", chat, "Send the bot a message, then use Find my chat below (or set TELEGRAM_CHAT_ID)."],
     ["OFFICE_PASSWORD, SESSION_SECRET", officeConfigured(), "Set both in Vercel → Settings → Environment Variables."],
     ["CRON_SECRET", !!process.env.CRON_SECRET, "Any long random string. Vercel sends it with the daily digest."],
+    ["Confirmation emails (optional)", mailConfigured(), "RESEND_API_KEY and INQUIRY_FROM, to email senders a short confirmation."],
   ] as const;
   return (
     <Card title="Finish the setup">
@@ -73,10 +77,13 @@ function Setup({ tables = false }: { tables?: boolean }) {
   );
 }
 
-export default async function Office({ searchParams }: { searchParams: Promise<{ test?: string }> }) {
+export default async function Office({ searchParams }: { searchParams: Promise<{ test?: string; chat?: string }> }) {
   if (!(await signedIn())) redirect("/office/login");
-  const { test } = await searchParams;
+  const { test, chat: chatNote } = await searchParams;
   const store = await db();
+  const chat = telegramConfigured() ? await chatId() : null;
+  const fromEnv = !!process.env.TELEGRAM_CHAT_ID?.trim();
+  const telegram = <TelegramPanel token={telegramConfigured()} chat={chat} fromEnv={fromEnv} />;
 
   const header = (
     <header className="flex flex-wrap items-center gap-3 justify-between">
@@ -85,14 +92,16 @@ export default async function Office({ searchParams }: { searchParams: Promise<{
         <h1 className="font-display text-[34px] leading-none text-white">Back office</h1>
       </div>
       <div className="flex items-center gap-2">
-        {test && <span className="text-[13px] text-[var(--ink-2)]">{test === "sent" ? "Test email sent." : `Test email failed: ${test}`}</span>}
-        <form action={testEmail}>
-          <button className="btn btn-line">Send test email</button>
+        {test && <span className="text-[13px] text-[var(--ink-2)]">{test === "sent" ? "Test sent to Telegram." : `Telegram test failed: ${test}`}</span>}
+        {chatNote && <span className="text-[13px] text-[var(--ink-2)]">{chatNote === "saved" ? "Chat saved." : `Chat not saved: ${chatNote}`}</span>}
+        <form action={testTelegram}>
+          <button className="btn btn-line">Send test to Telegram</button>
         </form>
         <form action={logout}>
           <button className="btn btn-line">Sign out</button>
         </form>
       </div>
+      <OwnerMark />
     </header>
   );
 
@@ -100,7 +109,8 @@ export default async function Office({ searchParams }: { searchParams: Promise<{
     return (
       <main className="max-w-[1280px] mx-auto px-4 md:px-6 py-10 space-y-6">
         {header}
-        <Setup />
+        <Setup chat={!!chat} />
+        {telegram}
       </main>
     );
   }
@@ -138,10 +148,11 @@ export default async function Office({ searchParams }: { searchParams: Promise<{
     return (
       <main className="max-w-[1280px] mx-auto px-4 md:px-6 py-10 space-y-6">
         {header}
-        <Card title="The database is connected but the tables are missing">
-          <p className="text-[14px] text-[var(--ink-2)]">Run <code className="text-white">npm run db:push</code> with DATABASE_URL set, then reload.</p>
+        <Card title="The database is connected but could not be read">
+          <p className="text-[14px] text-[var(--ink-2)]">The tables are created automatically on first use. Check the Supabase connection string and the server logs, then reload.</p>
         </Card>
-        <Setup />
+        <Setup chat={!!chat} />
+        {telegram}
       </main>
     );
   }
@@ -157,7 +168,8 @@ export default async function Office({ searchParams }: { searchParams: Promise<{
   return (
     <main className="max-w-[1280px] mx-auto px-4 md:px-6 py-10 space-y-6">
       {header}
-      {(!mailConfigured() || !process.env.CRON_SECRET) && <Setup tables />}
+      {(!chat || !process.env.CRON_SECRET || !officeConfigured()) && <Setup tables chat={!!chat} />}
+      {telegram}
 
       <dl className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {[

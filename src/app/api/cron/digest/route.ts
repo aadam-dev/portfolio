@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
-import { OWNER, layout, sendMail } from "@/lib/office/mail";
+import { sql } from "drizzle-orm";
+import { sessions } from "@/db/schema";
+import { esc, frame, line, send } from "@/lib/office/telegram";
 import { stats } from "@/lib/office/stats";
 import { eventLabel } from "@/lib/office/visits";
 
@@ -22,22 +24,31 @@ export async function GET(request: Request) {
   const region = new Intl.DisplayNames(["en"], { type: "region" });
   const country = (cc: string) => (cc.length === 2 ? (region.of(cc) ?? cc) : cc);
   const origin = new URL(request.url).origin;
-  const mail = layout({
-    title: `Yesterday on aadambuilds.dev: ${s.totals.sessions} visit${s.totals.sessions === 1 ? "" : "s"}`,
-    intro: s.inbox.length ? `${s.inbox.length} new message${s.inbox.length === 1 ? "" : "s"} came in. Each one was also emailed to you when it arrived.` : "No new messages.",
-    rows: [
-      ["Visitors", `${s.totals.visitors} (${s.totals.returning} returning)`],
-      ["Average stay", `${Math.round(s.totals.seconds)}s`],
-      ["Countries", list(s.countries, country)],
-      ["Cities", list(s.cities, (c) => decodeURIComponent(c))],
-      ["Devices", list(s.devices)],
-      ["From", list(s.referrers, (r) => (r === "Unknown" ? "Direct" : r.replace(/^https?:\/\//, "").split("/")[0]))],
-      ["Top pages", list(s.pages)],
-      ["Played with", list(s.played, (k) => eventLabel(k))],
-      ...s.inbox.map((m): [string, string] => [`Message`, `${m.name} (${m.contact}): ${m.body.slice(0, 120)}`]),
-    ],
-    cta: { href: `${origin}/office`, label: "Open the back office" },
-  });
-  const sent = await sendMail({ to: OWNER, subject: `Daily digest: ${s.totals.sessions} visits, ${s.inbox.length} messages`, ...mail });
+  const [quiet] = await store
+    .select({ n: sql<number>`count(*)::int` })
+    .from(sessions)
+    .where(sql`${sessions.startedAt} > now() - interval '24 hours' and ${sessions.tgMsgId} is null`);
+  const n = s.totals.sessions;
+  const sent = await send(
+    frame(
+      "digest",
+      [
+        `<b>Last 24 hours: ${n} visit${n === 1 ? "" : "s"}, ${s.inbox.length} message${s.inbox.length === 1 ? "" : "s"}</b>`,
+        "",
+        line("Visitors", `${s.totals.visitors} (${s.totals.returning} returning)`),
+        line("Average stay", `${Math.round(s.totals.seconds)}s`),
+        line("Countries", list(s.countries, country)),
+        line("Cities", list(s.cities, (c) => decodeURIComponent(c))),
+        line("Devices", list(s.devices)),
+        line("From", list(s.referrers, (r) => (r === "Unknown" ? "Direct" : r.replace(/^https?:\/\//, "").split("/")[0]))),
+        line("Top pages", list(s.pages)),
+        line("Played with", list(s.played, (k) => eventLabel(k))),
+        quiet?.n ? `<i>${quiet.n} visit${quiet.n === 1 ? " was" : "s were"} only counted here, not announced (busy hours, or Telegram not set yet).</i>` : null,
+        ...(s.inbox.length ? ["", "<b>Messages</b>", ...s.inbox.map((m) => `• ${esc(m.name)} (${esc(m.contact)}): ${esc(m.body.slice(0, 120))}`)] : []),
+      ],
+      `📊 Daily digest`,
+    ),
+    { buttons: [[{ text: "Open the back office", url: `${origin}/office` }]] },
+  );
   return NextResponse.json({ ok: sent.ok, visits: s.totals.sessions });
 }

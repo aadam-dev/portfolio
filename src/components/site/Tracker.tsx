@@ -108,6 +108,10 @@ export default function Tracker() {
     if (!ON || beacon) return;
     const nav = navigator as Navigator & { globalPrivacyControl?: boolean };
     if (nav.doNotTrack === "1" || nav.globalPrivacyControl) return;
+    // the owner's own browser (marked on signing in to /office) is never tracked
+    try {
+      if (localStorage.getItem("visit-owner") === "1") return;
+    } catch {}
     const b = new Beacon();
     b.start();
     beacon = b;

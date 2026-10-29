@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { messages } from "@/db/schema";
 import { COOKIE, checkPassword, issue, officeConfigured, signedIn } from "@/lib/office/auth";
-import { OWNER, layout, sendMail } from "@/lib/office/mail";
+import { frame, line, recentChats, saveChat, send } from "@/lib/office/telegram";
 
 // slow down guessing: a pause on every wrong password
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -39,16 +39,31 @@ export async function setStatus(form: FormData) {
   revalidatePath("/office");
 }
 
-export async function testEmail() {
+export async function testTelegram() {
   if (!(await signedIn())) redirect("/office/login");
   const h = await headers();
   const origin = `${h.get("x-forwarded-proto") ?? "https"}://${h.get("host")}`;
-  const mail = layout({
-    title: "Test email from the back office",
-    intro: "If you can read this, form, ticket and visit emails will reach you.",
-    rows: [["Sent from", origin], ["At", new Date().toUTCString()]],
-    cta: { href: `${origin}/office`, label: "Back to the office" },
-  });
-  const r = await sendMail({ to: OWNER, subject: "Back office test email", ...mail });
-  redirect(`/office?test=${r.ok ? "sent" : r.error}`);
+  const r = await send(
+    frame("test", ["If you can read this, new visits, notable visits, messages and the daily digest will reach this chat.", "", line("Sent from", origin), line("At", new Date().toUTCString())], "🧪 Test from the back office"),
+    { buttons: [[{ text: "Open the back office", url: `${origin}/office` }]] },
+  );
+  redirect(`/office?test=${r.ok ? "sent" : encodeURIComponent(r.error)}`);
+}
+
+export type ChatList = { error?: string; chats?: { id: string; name: string; type: string }[] };
+
+/** List the chats that recently messaged the bot (works while the bot has no webhook). */
+export async function findChats(): Promise<ChatList> {
+  if (!(await signedIn())) redirect("/office/login");
+  const r = await recentChats();
+  if (!r.ok) return { error: r.error };
+  return { chats: r.chats };
+}
+
+export async function pickChat(form: FormData) {
+  if (!(await signedIn())) redirect("/office/login");
+  const id = String(form.get("id") ?? "");
+  if (!/^-?\d{3,20}$/.test(id)) redirect("/office?chat=invalid");
+  const ok = await saveChat(id);
+  redirect(`/office?chat=${ok ? "saved" : "no_database"}`);
 }

@@ -278,7 +278,7 @@
       "name": "Your name",
       "contact": "Email or WhatsApp",
       "invalid": "Add your name and a way to reach you.",
-      "sendHint": "It arrives by email straight away.",
+      "sendHint": "It reaches Aadam straight away.",
       "send": "Send",
       "sent": "Sent. We reply within one business day.",
       "fallback": "Couldn't send from here, so WhatsApp opened with your brief.",

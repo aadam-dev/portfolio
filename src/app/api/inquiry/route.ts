@@ -3,7 +3,8 @@ import { db } from "@/db";
 import { messages } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { OWNER, layout, mailConfigured, sendMail } from "@/lib/office/mail";
-import { sessionRows, sessionStory } from "@/lib/office/visits";
+import { esc, frame, line, send, telegramReady } from "@/lib/office/telegram";
+import { flagEmoji, place, sessionStory } from "@/lib/office/visits";
 
 export const runtime = "nodejs";
 
@@ -21,9 +22,9 @@ function limited(key: string) {
 type Body = { name?: string; contact?: string; budget?: string; message?: string; brief?: string; kind?: string; sid?: string };
 
 /**
- * Every form and Build desk ticket: stored (when the database is on),
- * emailed to the owner at once with the visit behind it, and confirmed
- * to the sender when they left an email address.
+ * Every form and Build desk ticket: stored (when the database is on), sent
+ * to the owner's Telegram at once with the visit behind it, and confirmed
+ * by email to the sender when they left an address and Resend is set up.
  */
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
@@ -58,30 +59,46 @@ export async function POST(request: Request) {
   }
 
   // nowhere to put it at all: tell the client to use the WhatsApp fallback
-  if (!mailConfigured() && id === undefined) {
+  const ready = await telegramReady();
+  if (!ready && id === undefined) {
     return NextResponse.json({ ok: false, error: "not_configured" }, { status: 503 });
   }
 
   const origin = new URL(request.url).origin;
   const story = store && sid ? await sessionStory(store, sid).catch(() => null) : null;
   const label = kind === "build" ? "Build brief" : kind === "hire" ? "Hire brief" : "Message";
-  const owner = layout({
-    title: `${label} from ${name}`,
-    intro: `Reply to this email to answer ${name} directly.`,
-    rows: [["Name", name], ["Contact", contact], ["Budget or scope", budget], ["Brief", brief ?? ""], ...(story ? sessionRows(story.s, story) : [])],
-    body: message,
-    cta: { href: `${origin}/office`, label: "Open the inbox" },
-  });
-  const sent = await sendMail({
-    to: OWNER,
-    subject: `${label}: ${name} (${budget})`,
-    replyTo: contact.includes("@") ? contact : undefined,
-    ...owner,
-  });
+  const digits = contact.replace(/[^\d+]/g, "");
+  const phone = !contact.includes("@") && digits.replace(/\D/g, "").length >= 8 ? digits.replace(/\D/g, "") : null;
+  const visit = story
+    ? `${flagEmoji(story.s.country)} ${place(story.s)}, ${story.pages.length} page${story.pages.length === 1 ? "" : "s"}, ${Math.round(story.s.seconds)}s on site${story.did.length ? `; ${story.did.slice(0, 4).join("; ")}` : ""}`
+    : "";
+  const sent = ready
+    ? await send(
+        frame(
+          "message",
+          [
+            `<b>${esc(name)}</b> · ${esc(contact)}`,
+            line("Budget or scope", budget),
+            line("Brief", brief),
+            "",
+            `<blockquote>${esc(message)}</blockquote>`,
+            "",
+            line("Visit", visit),
+          ],
+          `📩 ${label}`,
+        ),
+        {
+          buttons: [
+            [{ text: "Open the inbox", url: `${origin}/office` }, ...(brief ? [{ text: "Open the brief", url: brief }] : [])],
+            ...(phone ? [[{ text: `WhatsApp ${name.split(" ")[0]}`, url: `https://wa.me/${phone}` }]] : []),
+          ],
+        },
+      )
+    : ({ ok: false } as const);
   if (sent.ok && store && id !== undefined) await store.update(messages).set({ notified: true }).where(eq(messages.id, id)).catch(() => {});
 
-  // a copy for the sender
-  if (sent.ok && contact.includes("@")) {
+  // a copy for the sender, only when email is set up (optional)
+  if (mailConfigured() && contact.includes("@")) {
     const copy = layout({
       title: `Thanks. We have your ${label.toLowerCase()}.`,
       // fixed wording only: the form must not become a way to email someone else arbitrary text

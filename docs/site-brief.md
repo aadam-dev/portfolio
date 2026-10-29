@@ -87,6 +87,7 @@ Named by Aadam in review (URL to confirm, please fill in):
 | v3.1 review | Procedural car read as toyish and unrelated to Rockmotion; replaced by a realistic CC-BY car and Rockmotion's own buying flow (VIN, inspection, shipping, landed cost) | Realism, and the lab should show the client's problem |
 | v3 | Mockups auto-switch screens; "Try it" opens rebuilt working replicas (e.g. Jireh POS) | Real systems sit behind logins |
 | v3 | Back office on Neon + Vercel; forms email instantly, notable visits email instantly, daily digest for the rest, visitors visible only in /office, password login | Never miss a message; know who visits |
+| v3.2 | Back office moved to Supabase; owner updates go to a Telegram bot (every visit quietly, notable visits, messages, digest) instead of email; sender confirmations by email only if Resend is set | The owner linked Supabase and prefers Telegram; the bot is shared, so updates are framed and tagged |
 | v3 | Finance tool is a generic three-statement model for a fictional company | Shows the analyst craft without client data |
 
 ## 6. Site structure (v3)
@@ -121,18 +122,20 @@ Named by Aadam in review (URL to confirm, please fill in):
 
 Everything degrades gracefully until these are set: forms fall back to WhatsApp, tracking is skipped, `/office` shows what is missing.
 
-1. Vercel → project → Storage → add **Neon** (Postgres). This sets `DATABASE_URL` for production and previews.
-2. Create the tables once: `DATABASE_URL=… npm run db:push` (Drizzle; schema in `src/db/schema.ts`).
-3. Vercel → Settings → Environment Variables:
-   - `RESEND_API_KEY` (Resend → API keys)
-   - `INQUIRY_FROM`, e.g. `Aadam <hello@aadambuilds.dev>`, after verifying the domain in Resend → Domains (until then mail sends from `onboarding@resend.dev`, which only delivers to the Resend account owner)
-   - `OFFICE_PASSWORD` (long and unique), `SESSION_SECRET` (32+ random characters)
-   - `TRACK_SALT` (32+ random characters, hashes visitor ids)
-   - `CRON_SECRET` (any long random string; Vercel sends it with the daily digest)
-4. Redeploy. Open `/office`, sign in, press **Send test email**.
-5. The digest runs daily at 08:00 Accra (`vercel.json`). Tracking only runs on Vercel deployments and respects Do Not Track and Global Privacy Control. `/privacy` explains it to visitors.
+1. **Database (Supabase).** Supabase → project → Connect → *Transaction pooler* URI (port 6543). Save it in Vercel → Settings → Environment Variables as `DATABASE_URL` (Preview and Production). If the Supabase Vercel integration is installed it sets `POSTGRES_URL`, which also works.
+2. **Tables.** Nothing to run: the site creates any missing tables on first use (`src/db/sql.ts`, idempotent, row level security on every table so Supabase's public keys read nothing). The same SQL is in `supabase/migrations/` for the Supabase GitHub integration; after changing the schema run `npm run db:sql`.
+3. **Telegram.** `TELEGRAM_BOT_TOKEN` (from @BotFather; only ever in Vercel, never in the code). Send the bot any message, then in `/office` press **Find my chat** and **Use this chat**, or set `TELEGRAM_CHAT_ID`. The site only sends; it never sets a webhook or polls, so the bot stays free for other jobs.
+4. **Office and cron.** `OFFICE_PASSWORD` (long and unique), `SESSION_SECRET` (32+ random characters), `TRACK_SALT` (32+ random characters, hashes visitor ids), `CRON_SECRET` (any long random string; Vercel sends it with the daily digest).
+5. **Optional confirmations.** `RESEND_API_KEY` and `INQUIRY_FROM` (after verifying the domain in Resend) email senders a short confirmation. Without them, nothing is emailed.
+6. Redeploy, open `/office`, press **Send test to Telegram**. Signing in to `/office` also marks that browser as yours, so your own visits are not tracked.
 
-What emails you get: every message and Build desk brief at once (reply-to is the sender, with where they are, their device and what they did on the site), an instant alert for a notable visit (returned, stayed 60s+, opened a case study, or played with the desk or Lab; one per visit), and the morning digest.
+What reaches Telegram (every update opens with "🌐 aadambuilds.dev" and ends with `#site` plus a tag):
+- **👋 New visit** `#visit`, silent: place, device, where they came from, landing page. At most 30 an hour; the rest are only counted and noted in the digest.
+- **🔔 Notable visit** `#notable`, with sound, as a reply under that visit's line: returned, stayed 60s+, opened a case study, or played with the desk or Lab; once per visit, with pages and what they did.
+- **📩 Message / Build brief / Hire brief** `#message`: name, contact, budget, the message, the brief link and the visit behind it; buttons to the inbox, the brief and WhatsApp when the contact is a phone number.
+- **📊 Daily digest** `#digest` at 08:00 Accra (`vercel.json`).
+
+Tracking only runs on Vercel deployments and respects Do Not Track and Global Privacy Control. `/privacy` explains it to visitors.
 
 ## 9. Performance budget
 
@@ -156,6 +159,8 @@ What emails you get: every message and Build desk brief at once (reply-to is the
 | v3.1 B | One card system | `.card`, `.pill`, `.btn`, `.field`, `.seg` in `globals.css` (`@layer components`); every card on the site moved onto them; decorative stamps and mixed legends removed. |
 | v3.1 C | Rockmotion lab | `/lab/car` rebuilt around a real car model: VIN check (ISO 3779 check digit, maker, year, plant; full decode and model recalls from NHTSA through `/api/vin`), walkaround inspection (doors, bonnet, steering, lift; 20 checks; damage marking turns panels amber), shipping journey (Atlanta to Brunswick for RoRo or Savannah for containers, six destinations, typical ranges), landed cost (CIF, duty rate entered by the visitor, local currency). Also the Rockmotion "Try it" replica (shipping calculator and VIN check in Rockmotion's style). |
 | v3.1 D | Photoreal desk and the dive | Real oak (bump, roughness, satin coat), HDRI light (Poly Haven apartment and night via @pmndrs/assets), a sun that only enters through the window (walls cast shadows) with its angle and colour set by the time in Accra, the lamp aimed onto the desk, screen light at night, plant and teacup models, brushed aluminium. High tier adds PCSS soft shadows, N8AO, a shallow depth of field on the laptop, bloom on emissive parts, ACES, vignette and grain. Scrolling the first 120 vh pushes the camera into the centre screen, then hands over to a sharp, usable copy of the same Al Boyut register; reduced motion, phones and the still tier skip the dive. Posters regenerated. `?tier=high|low|still` forces a tier for testing. |
+| v3.2 E | Supabase | Schema as idempotent SQL created on first use, RLS on every table, `supabase/` folder with the same migration, `DATABASE_URL` or `POSTGRES_URL`, Neon removed. |
+| v3.2 F | Telegram | Owner updates through `src/lib/office/telegram.ts`: new visit (silent, capped 30/hour), notable visit (reply under it), messages with buttons, daily digest, test; chat picked in `/office` or `TELEGRAM_CHAT_ID`; owner's browser not tracked. |
 
 Tags live in the local repo only (the sandbox can push the branch, not tags). Each phase is also a single commit on `prototype/field-kit-hero-1eqww3`, so `git revert <sha>` undoes it.
 

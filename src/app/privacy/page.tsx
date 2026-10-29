@@ -11,8 +11,8 @@ const ITEMS: [string, string][] = [
   ["What we record about a visit", "The pages you open, what you play with on the site (for example ringing up a sale on a replica or stressing the model), how long the visit lasts, the site that sent you, your browser, operating system and device type, and an approximate place (city and country) worked out by our host, Vercel, from your connection."],
   ["What we do not record", "Your IP address is never stored. It is combined with a secret and hashed, so it cannot be read back. There are no advertising or third-party analytics scripts, and nothing is sold or shared."],
   ["How a visit is recognised", "Your browser keeps a random id in local storage so a second visit can be counted as a return. Clearing site data removes it. If your browser sends Do Not Track or Global Privacy Control, nothing is recorded at all."],
-  ["Messages and briefs", "When you send a message or a brief, we keep what you wrote and the contact details you gave, so we can reply. You get a short confirmation if you left an email address."],
-  ["Who sees it", "Only Aadam, in a password-protected back office, and by email."],
+  ["Messages and briefs", "When you send a message or a brief, we keep what you wrote and the contact details you gave, so we can reply. If you left an email address, you may get a short confirmation."],
+  ["Who sees it", "Only Aadam: in a password-protected back office, and as private notifications to his Telegram. Records are stored in a database hosted by Supabase."],
   ["How long it is kept", "Visit records are kept for up to 12 months. Messages are kept while we are working with you and deleted on request."],
   ["Your choices", "Email aadamsays@gmail.com to see or delete anything we hold about you."],
 ];
