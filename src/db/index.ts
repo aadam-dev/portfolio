@@ -53,3 +53,19 @@ export async function db(): Promise<Db | null> {
 }
 
 export { schema };
+
+/** For /api/health and the Office checklist: is the database reachable, and are the tables there? */
+export async function dbHealth(): Promise<{ configured: boolean; ok: boolean; tables?: number; problem?: string }> {
+  if (!connect()) return { configured: false, ok: false };
+  const schemaOk = await ready();
+  try {
+    const r = await (pool as Pool).query("select count(*)::int as n from information_schema.tables where table_schema = 'public'");
+    return { configured: true, ok: schemaOk, tables: r.rows[0]?.n ?? 0, problem: schemaOk ? undefined : "schema" };
+  } catch (e) {
+    const m = String((e as Error)?.message ?? e).toLowerCase();
+    // a category only: never the message itself, which can carry hosts or user names
+    const problem = m.includes("password") || m.includes("authentication") ? "auth" : m.includes("tenant") || m.includes("enotfound") || m.includes("getaddrinfo") ? "host" : m.includes("timeout") ? "timeout" : "error";
+    console.error("[db] health check failed:", problem);
+    return { configured: true, ok: false, problem };
+  }
+}
