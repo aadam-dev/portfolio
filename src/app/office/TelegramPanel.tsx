@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { CheckCircle2, CircleDashed, Search } from "lucide-react";
 import { findChats, pickChat, type ChatList } from "./actions";
+import { isIgnored, setIgnored } from "@/lib/ignore";
 
 const GOOD = "#0ca30c";
 const WARN = "#fab219";
@@ -73,12 +74,44 @@ export default function TelegramPanel({ token, chat, fromEnv }: { token: boolean
   );
 }
 
-/** Mark this browser as the owner's, so the tracker skips your own visits. */
+/** Signing in marks this browser as yours (scout-ignore), so your own visits never alert. */
 export function OwnerMark() {
-  useEffect(() => {
-    try {
-      localStorage.setItem("visit-owner", "1");
-    } catch {}
-  }, []);
+  useEffect(() => setIgnored(true), []);
   return null;
+}
+
+/** Whether this browser is counted, with a switch, and how to do the same on other devices. */
+export function ThisBrowser() {
+  const [ignored, setState] = useState<boolean | null>(null);
+  useEffect(() => {
+    const t = window.setTimeout(() => setState(isIgnored()), 0);
+    return () => window.clearTimeout(t);
+  }, []);
+  return (
+    <section className="card p-5 md:p-6">
+      <h2 className="text-[13px] font-medium text-[var(--ink-2)]">This browser</h2>
+      <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
+        <p className="inline-flex items-center gap-2 text-[15px] font-medium">
+          {ignored ? <CheckCircle2 className="w-4 h-4" style={{ color: GOOD }} /> : <CircleDashed className="w-4 h-4" style={{ color: WARN }} />}
+          {ignored == null ? "Checking" : ignored ? "Not counted" : "Counted as a visitor"}
+        </p>
+        {ignored != null && (
+          <button
+            type="button"
+            className="btn btn-line !h-8 !px-3 !text-[12.5px]"
+            onClick={() => {
+              setIgnored(!ignored);
+              setState(!ignored);
+            }}
+          >
+            {ignored ? "Count it again" : "Stop counting this browser"}
+          </button>
+        )}
+      </div>
+      <p className="mt-2 text-[12.5px] leading-relaxed text-[var(--ink-3)]">
+        On your other devices, open <code className="text-[var(--ink-2)]">aadambuilds.dev/?scout-ignore=1</code> once, or run{" "}
+        <code className="text-[var(--ink-2)]">localStorage.setItem(&quot;scout-ignore&quot;,&quot;1&quot;)</code> in the console. The same key silences the Scout tracker.
+      </p>
+    </section>
+  );
 }

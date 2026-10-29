@@ -8,7 +8,7 @@ import { chatId, telegramConfigured } from "@/lib/office/telegram";
 import { dashboard, RANGES, rangeOf, type Dashboard } from "@/lib/office/dash";
 import { eventLabel, flagEmoji, place } from "@/lib/office/visits";
 import { logout, setStatus, testTelegram } from "./actions";
-import TelegramPanel, { OwnerMark } from "./TelegramPanel";
+import TelegramPanel, { OwnerMark, ThisBrowser } from "./TelegramPanel";
 import OfficeMap from "./OfficeMap";
 import VisitsChart from "./ui/VisitsChart";
 import { BarList, Delta, Panel, Spark, STATUS } from "./ui/parts";
@@ -301,6 +301,7 @@ export default async function Office({ searchParams }: { searchParams: Promise<{
   const system = (
     <div id="system" className="space-y-4 md:space-y-5 scroll-mt-20">
       <TelegramPanel token={telegramConfigured()} chat={chat} fromEnv={fromEnv} />
+      <ThisBrowser />
       <Panel title="Setup">
         <Setup tables={!!d} chat={!!chat} />
       </Panel>

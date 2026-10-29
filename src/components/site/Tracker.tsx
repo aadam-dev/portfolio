@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { onEmit } from "@/components/fieldkit/events";
+import { IGNORE_KEY, isIgnored, setIgnored } from "@/lib/ignore";
 
 /**
  * First-party visit tracking for the back office: page views, what people
@@ -103,15 +104,30 @@ let beacon: Beacon | null = null;
 
 export default function Tracker() {
   const path = usePathname();
+  const [toast, setToast] = useState<string | null>(null);
+
+  // ?scout-ignore=1 (or 0) switches counting off (or on) for this browser: no console needed on a phone
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const v = url.searchParams.get(IGNORE_KEY);
+    if (v !== "1" && v !== "0") return;
+    setIgnored(v === "1");
+    url.searchParams.delete(IGNORE_KEY);
+    window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+    const show = window.setTimeout(() => setToast(v === "1" ? "This browser won't be counted" : "This browser is counted again"), 0);
+    const hide = window.setTimeout(() => setToast(null), 3600);
+    return () => {
+      window.clearTimeout(show);
+      window.clearTimeout(hide);
+    };
+  }, []);
 
   useEffect(() => {
     if (!ON || beacon) return;
     const nav = navigator as Navigator & { globalPrivacyControl?: boolean };
     if (nav.doNotTrack === "1" || nav.globalPrivacyControl) return;
-    // the owner's own browser (marked on signing in to /office) is never tracked
-    try {
-      if (localStorage.getItem("visit-owner") === "1") return;
-    } catch {}
+    // the owner's own devices (scout-ignore, also set on signing in to /office) are never tracked
+    if (isIgnored()) return;
     const b = new Beacon();
     b.start();
     beacon = b;
@@ -141,5 +157,10 @@ export default function Tracker() {
     return () => window.clearTimeout(t);
   }, [path]);
 
-  return null;
+  if (!toast) return null;
+  return (
+    <div role="status" className="theme-fixed fixed left-1/2 bottom-6 z-[100] -translate-x-1/2 rounded-full border border-[var(--line-strong)] bg-[#12100d]/95 px-4 py-2.5 text-[13px] text-[var(--foreground)] shadow-[0_12px_32px_rgba(0,0,0,0.4)] backdrop-blur">
+      {toast}
+    </div>
+  );
 }
