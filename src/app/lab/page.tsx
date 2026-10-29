@@ -26,7 +26,7 @@ const ITEMS = [
   {
     href: "/#map",
     title: "Where the work runs",
-    body: "Every shop, kitchen, court and college on the map, with what we built there.",
+    body: "Every shop, kitchen, court and college on the map, with what I built there.",
     image: "/previews/makossa/landing.webp",
   },
 ];
@@ -41,7 +41,7 @@ export default function LabPage() {
             Lab
           </h1>
           <p className="mt-4 max-w-[560px] text-[16px] leading-relaxed text-[var(--ink-2)]">
-            Working pieces that show how we think: models you can stress and machines you can take apart.
+            Working pieces that show how I think: models you can stress and machines you can take apart.
           </p>
           <ul className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
             {ITEMS.map((x) => (

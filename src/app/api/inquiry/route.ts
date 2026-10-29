@@ -100,12 +100,12 @@ export async function POST(request: Request) {
   // a copy for the sender, only when email is set up (optional)
   if (mailConfigured() && contact.includes("@")) {
     const copy = layout({
-      title: `Thanks. We have your ${label.toLowerCase()}.`,
+      title: `Thanks. I have your ${label.toLowerCase()}.`,
       // fixed wording only: the form must not become a way to email someone else arbitrary text
       intro: "Aadam reads every message and replies within one business day. If this wasn't you, ignore this email.",
       cta: brief?.startsWith(origin) ? { href: brief, label: "Open your brief" } : undefined,
     });
-    await sendMail({ to: contact, subject: `We have your ${label.toLowerCase()}`, replyTo: OWNER, ...copy });
+    await sendMail({ to: contact, subject: `I have your ${label.toLowerCase()}`, replyTo: OWNER, ...copy });
   }
 
   if (!sent.ok && id === undefined) return NextResponse.json({ ok: false, error: "send_failed" }, { status: 502 });

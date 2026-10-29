@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import Reveal from "@/components/ui/Reveal";
 
 const STATS: { value: string; label: string; note?: string }[] = [
-  { value: "17", label: "Businesses on our systems", note: "7 of them full operating systems" },
+  { value: "17", label: "Businesses on my systems", note: "7 of them full operating systems" },
   { value: "50+", label: "SMEs through the deal cycle", note: "Private equity and venture capital" },
   { value: "GHS 177K", label: "First month of trading", note: "PrimeTijara, team of five" },
   { value: "GHS 40K+", label: "Raised from 11 donors", note: "Madina basketball court" },
@@ -42,7 +42,7 @@ export default function Impact() {
             </h2>
           </div>
           <p className="md:col-span-5 text-[15px] md:text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty">
-            From the CV and the case studies: the businesses on our
+            From the CV and the case studies: the businesses on my
             systems, the deals evaluated as an analyst, one shop&apos;s first
             month and one court&apos;s fundraise.
           </p>

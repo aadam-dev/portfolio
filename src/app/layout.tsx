@@ -37,7 +37,7 @@ const SITE_URL = "https://aadambuilds.dev";
 
 const TITLE = "Aadam · Product, data and engineering studio";
 const DESCRIPTION =
-  "Aadam is a product, data and engineering studio in Accra. We build point of sale, ERP and storefronts, model the numbers, design the brand and put businesses on the map. 17 businesses run on our systems.";
+  "I am Aadam, working from Accra across product, data and engineering: point of sale, ERP and storefronts, financial models, brands, and putting businesses on the map. 17 businesses run on systems I built.";
 const SHORT =
   "Point of sale, ERP, storefronts, financial models and brands for businesses in Accra and beyond.";
 

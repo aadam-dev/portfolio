@@ -58,7 +58,7 @@ export default function OG() {
             letterSpacing: "-0.035em",
           }}
         >
-          <div>We help businesses</div>
+          <div>I help businesses</div>
           <div>
             <span
               style={{

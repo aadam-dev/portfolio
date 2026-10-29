@@ -25,7 +25,7 @@ export default function ModelPage() {
               <span className="block mt-2 text-[0.42em] tracking-normal font-sans font-normal text-[var(--ink-3)]">An illustrative company. Not a client, not real numbers.</span>
             </h1>
             <p className="md:col-span-5 text-[15px] leading-[1.65] text-[var(--ink-2)] text-pretty">
-              The kind of model we build for lenders and investors: five years of income statement, balance sheet and cash flow, linked so a change anywhere flows everywhere. Move an assumption or apply a shock and watch the covenant.
+              The kind of model I build for lenders and investors: five years of income statement, balance sheet and cash flow, linked so a change anywhere flows everywhere. Move an assumption or apply a shock and watch the covenant.
             </p>
           </div>
           <div className="mt-10">

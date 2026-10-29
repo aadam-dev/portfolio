@@ -6,7 +6,7 @@ import FlagshipWork from "@/components/site/FlagshipWork";
 
 export const metadata: Metadata = {
   title: "Work",
-  description: "Every system, storefront and site we have shipped, with case studies for the businesses that run on them.",
+  description: "Every system, storefront and site I have shipped, with case studies for the businesses that run on them.",
 };
 
 export default function WorkPage() {

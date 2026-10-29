@@ -52,12 +52,12 @@ function BuildBrief({ ids }: { ids: string[] }) {
         A {Number.isInteger(p.weeks) ? p.weeks : p.weeks.toFixed(1)}-week build
       </h1>
       <p className="mt-4 max-w-[620px] text-[16px] leading-relaxed text-[var(--ink-2)]">
-        Week one is discovery: we sit with the team and map how the business runs. Then the tracks below run side by side. One after another, the same work would take about {fmtW(p.serial)}.
+        Week one is discovery: I sit with your team and map how the business runs. Then the tracks below run side by side. One after another, the same work would take about {fmtW(p.serial)}.
       </p>
       <div className="theme-fixed card mt-8 p-5 md:p-6">
         <Gantt lanes={p.lanes} weeks={p.weeks} still />
       </div>
-      <h2 className="mt-12 font-display text-[26px] text-white">What is in it, and where we built it before</h2>
+      <h2 className="mt-12 font-display text-[26px] text-white">What is in it, and where I built it before</h2>
       <ul className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {p.chosen.map((s) => (
           <li key={s.id} className="card">

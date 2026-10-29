@@ -151,7 +151,7 @@ export default function FlagshipWork({ compact = false }: { compact?: boolean })
             </motion.h2>
           </div>
           <p className="mt-4 max-w-[560px] text-[15px] md:text-[16px] leading-relaxed text-[var(--ink-2)]">
-            Four systems we shipped. The screens step through on their own, and Try it opens a working copy where there is one.
+            Four systems I shipped. The screens step through on their own, and Try it opens a working copy where there is one.
           </p>
           <motion.div
             variants={drawLine}

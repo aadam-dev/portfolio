@@ -114,7 +114,7 @@ export default function AboutPage() {
                 I&apos;m a software engineer and analyst in Accra. I studied mathematics, spent three years evaluating businesses for investors, and now build the systems those businesses run on.
               </p>
               <p>
-                The studio is me and the people I bring in for a job. Clients get one person who can read the books, map the stockroom, write the code and stay for the stock count.
+                The studio is me. You work with one person who can read the books, map the stockroom, write the code and stay for the stock count.
               </p>
             </div>
             <dl className="md:col-span-4 md:col-start-9 grid grid-cols-2 md:grid-cols-1 gap-4 text-[14px]">

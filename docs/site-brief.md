@@ -17,7 +17,7 @@ Goals, in order: make a memorable first moment, prove range with things people c
 
 ## 2. Voice
 
-- **Studio front, person behind.** Home, services, work and the Build desk speak as the studio ("we build…"). The About page speaks in first person.
+- **First person singular, everywhere.** A personal studio: me and my projects. Home, services, work, the Build desk, the lab and the privacy page all say "I". "We" only ever means you and me ("What are we building?", "Let's build"). "Studio" stays as a brand label, never as a team. Client replicas, testimonials and the PrimeTijara team keep their own voice.
 - Plain verbs, sentence case, no filler. Say what something does, not that it is impressive.
 - No self-congratulation and no meta-claims ("real items", "actually shipped", "world-class").
 - No em-dashes. "Al Boyut" without a hyphen. An-Nur laundry is presented as An-Nur.
@@ -87,6 +87,7 @@ Named by Aadam in review (URL to confirm, please fill in):
 | v3.1 review | Procedural car read as toyish and unrelated to Rockmotion; replaced by a realistic CC-BY car and Rockmotion's own buying flow (VIN, inspection, shipping, landed cost) | Realism, and the lab should show the client's problem |
 | v3 | Mockups auto-switch screens; "Try it" opens rebuilt working replicas (e.g. Jireh POS) | Real systems sit behind logins |
 | v3 | Back office on Neon + Vercel; forms email instantly, notable visits email instantly, daily digest for the rest, visitors visible only in /office, password login | Never miss a message; know who visits |
+| v4 | First person singular across the site; "we" only for you and me | It is a personal studio about me and my projects, not a team |
 | v3.2 | Built-in Telegram updates replace the separate Scout tracker in this build; both honour `scout-ignore`. When this build replaces `main`, leave out `VisitTracker` (and `NEXT_PUBLIC_SCOUT_URL`), or every visit is announced twice | One tracker, one switch, no duplicate alerts |
 | v3.2 | Back office moved to Supabase; owner updates go to a Telegram bot (every visit quietly, notable visits, messages, digest) instead of email; sender confirmations by email only if Resend is set | The owner linked Supabase and prefers Telegram; the bot is shared, so updates are framed and tagged |
 | v3 | Finance tool is a generic three-statement model for a fictional company | Shows the analyst craft without client data |
@@ -166,6 +167,7 @@ Tracking only runs on Vercel deployments and respects Do Not Track and Global Pr
 | v3.2 G | Rockmotion data | The lab and replica now use Rockmotion's own data: Baltimore, New Jersey, New York, Houston and Los Angeles; their 12 destinations and port-to-port times; their RoRo and Container copy (+5 days loading); their 6 vehicle types; insurance included (all-risk, 100% of invoice); buyer handles customs. World dot map with sea lanes (Panama, Suez, the Cape, Malacca, the Pacific). The replica is now a faithful copy of their calculator. |
 | v3.2 H | Back office redesign | `/office` rebuilt as a dashboard following the dataviz method: one date-range filter row (24 hours, 7 days, 30 days) scoping everything, one hero number with its change against the previous period, stat tiles with deltas and sparklines, a two-series visits chart (validated colours, crosshair tooltip, arrow keys, table view), ranked bar lists, an inbox with replies and status, a visit feed with journeys, a Telegram panel and a setup checklist that collapses once everything is connected. New sign-in page. |
 | v3.2 I | One ignore switch | The tracker skips any browser with `scout-ignore` (old `visit-owner` still honoured); `?scout-ignore=1` / `=0` sets or clears it with a toast and a cleaned URL; signing in to `/office` sets it; System panel shows "This browser" with a switch. |
+| v4 L | First-person voice | Every team-voice line rewritten to "I" in en, fr and ar, plus case studies, privacy, lab, metadata, OG image, the brief page and the inquiry email. About now says "The studio is me." The English left in fr.json and ar.json (field kit and home) is translated. |
 
 Tags live in the local repo only (the sandbox can push the branch, not tags). Each phase is also a single commit on `prototype/field-kit-hero-1eqww3`, so `git revert <sha>` undoes it.
 

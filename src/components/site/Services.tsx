@@ -38,7 +38,7 @@ const SERVICES = [
   {
     icon: Database,
     title: "ERP & operations: Odoo or custom",
-    body: "Replace disconnected spreadsheets and failing POS systems with one source of truth. Odoo configuration, custom modules, data migration, training, or we build it from scratch.",
+    body: "Replace disconnected spreadsheets and failing POS systems with one source of truth. Odoo configuration, custom modules, data migration, training, or I build it from scratch.",
     meta: "Odoo · Custom ERP · Migration",
   },
 ];

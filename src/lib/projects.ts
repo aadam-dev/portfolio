@@ -162,7 +162,7 @@ export const projects: Project[] = [
       challenge:
         "Learners preparing for BECE, WASSCE, JAMB or a madrasah were piecing the next step together from scattered PDFs, WhatsApp forwards and school rumour. The routes exist. A single place that explains them, in the languages people actually study in, did not.",
       approach:
-        "We built the public layer around the decisions, not a course grid. The Knowledge Hub holds pathway guides (BECE, WASSCE, CSSPS placement, JAMB, BAC, university, career), a school explorer, and grade tools, each marked as planning information rather than official advice. Madrasah sits beside it: Quran, Arabic, Aqeedah, Fiqh and the rest of the subjects. The interface is English, French and Arabic.",
+        "I built the public layer around the decisions, not a course grid. The Knowledge Hub holds pathway guides (BECE, WASSCE, CSSPS placement, JAMB, BAC, university, career), a school explorer, and grade tools, each marked as planning information rather than official advice. Madrasah sits beside it: Quran, Arabic, Aqeedah, Fiqh and the rest of the subjects. The interface is English, French and Arabic.",
       result:
         "A live hub students can open before they pick a school or a subject: seven exam and career pathways, a filterable school explorer, grade tools, and a Madrasah with ten subjects. Course lessons sit behind sign-in and are still being filled in.",
     },
@@ -402,7 +402,7 @@ export const projects: Project[] = [
       challenge:
         "Ghanaian contractors and businesses buy building materials through scattered WhatsApp chats and paper proformas: no verified pricing, no approval trail, and counter sales that never reconcile with stock or cash. Owners couldn't tell whether they were actually making money.",
       approach:
-        "We modelled approval and proforma flows around how contractors work on site, then built an Odoo-style back office (orders, inventory, purchasing, accounting, payroll and POS shifts) wired to a storefront and courier settlement so every counter sale hits one source of stock and cash truth.",
+        "I modelled approval and proforma flows around how contractors work on site, then built an Odoo-style back office (orders, inventory, purchasing, accounting, payroll and POS shifts) wired to a storefront and courier settlement so every counter sale hits one source of stock and cash truth.",
       result:
         "One procurement OS replacing the WhatsApp-and-paper workflow: 20+ back-office modules, an in-house POS and a public storefront kept in sync, giving the business a single real-time view of stock, orders and cash.",
     },
@@ -483,9 +483,9 @@ export const projects: Project[] = [
       challenge:
         "Al Boyut sold pipes, cement, roofing and tools over a counter on Lakeside Estate with no logo, no website, and no Google Business Profile. Customers who searched for it found nothing on Maps, prices lived in WhatsApp threads, and sales at the counter never reconciled with stock. A salesperson would raise a ticket and then have to physically walk it to the cashier for collection.",
       approach:
-        "We started with the identity: a hexagonal AB mark, wordmark and lockups with reverse, mono and receipt variants, plus a written design system and brand voice. That identity carries a Next.js storefront (450+ item catalogue, search, 'Ask for price' on WhatsApp, counter pickup or Accra delivery) and the staff platform that actually runs the counter: a touch POS register, an orders workstation for POS and online sales, stock-controlled inventory with physical stock-takes, and analytics, all on one Drizzle/Postgres source of truth. The detail that makes the floor flow: when a salesperson sends a ticket to the cashier, the cashier's screen chimes and speaks the salesperson's name aloud, 'New order from Baria', so a ticket is claimed across a noisy shop floor without anyone leaving the till. We also created and verified the Google Business Profile, with categories and NAP held identical to the site.",
+        "I started with the identity: a hexagonal AB mark, wordmark and lockups with reverse, mono and receipt variants, plus a written design system and brand voice. That identity carries a Next.js storefront (450+ item catalogue, search, 'Ask for price' on WhatsApp, counter pickup or Accra delivery) and the staff platform that actually runs the counter: a touch POS register, an orders workstation for POS and online sales, stock-controlled inventory with physical stock-takes, and analytics, all on one Drizzle/Postgres source of truth. The detail that makes the floor flow: when a salesperson sends a ticket to the cashier, the cashier's screen chimes and speaks the salesperson's name aloud, 'New order from Baria', so a ticket is claimed across a noisy shop floor without anyone leaving the till. I also created and verified the Google Business Profile, with categories and NAP held identical to the site.",
       result:
-        "One brand and one system, counter to cash: a live site at alboyut.com; a POS register, orders, inventory and analytics on a single Postgres truth; branded receipts; and a verified Business Profile so people searching for building materials on Lakeside Estate find the shop. We stay on as ongoing support, including physical stock counts.",
+        "One brand and one system, counter to cash: a live site at alboyut.com; a POS register, orders, inventory and analytics on a single Postgres truth; branded receipts; and a verified Business Profile so people searching for building materials on Lakeside Estate find the shop. I stay on as ongoing support, including physical stock counts.",
       metrics: [
         { value: "450+", label: "Catalogue items live" },
         { value: "6", label: "Materials surfaces" },

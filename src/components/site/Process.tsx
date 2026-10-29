@@ -8,14 +8,14 @@ const STEPS = [
     n: "01",
     title: "Discover",
     tag: "Week 1 – 2",
-    body: "Deep dive with founders, operators and end users. We map the business, the numbers and the gnarly edges. Outcome: a one-page strategic brief everyone can point to.",
+    body: "Deep dive with founders, operators and end users. I map the business, the numbers and the gnarly edges. Outcome: a one-page strategic brief everyone can point to.",
     bullets: ["Stakeholder interviews", "Market & data review", "Risks & assumptions"],
   },
   {
     n: "02",
     title: "Design",
     tag: "Week 2 – 4",
-    body: "Product architecture, flows and interface, drawn as if we ship tomorrow. High-fidelity from day one. You see real screens, not mood boards.",
+    body: "Product architecture, flows and interface, drawn as if it ships tomorrow. High-fidelity from day one. You see real screens, not mood boards.",
     bullets: ["Information architecture", "Interface & motion", "Prototype"],
   },
   {
@@ -29,7 +29,7 @@ const STEPS = [
     n: "04",
     title: "Measure & Grow",
     tag: "Week 10+",
-    body: "We don't disappear at launch. Analytics, funnels, SEO, paid acquisition and content: growth is treated as part of the product, not a bolt-on. Your product keeps earning its keep months after we ship.",
+    body: "I don't disappear at launch. Analytics, funnels, SEO, paid acquisition and content: growth is treated as part of the product, not a bolt-on. Your product keeps earning its keep months after launch.",
     bullets: [
       "Analytics & funnels",
       "SEO & content",

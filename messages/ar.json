@@ -51,8 +51,8 @@
   },
   "process": {
     "eyebrow": "المنهجية · 10 أسابيع في المتوسط",
-    "heading": "كيف نعمل",
-    "headingAccent": "معًا."
+    "heading": "كيف أعمل",
+    "headingAccent": "معك."
   },
   "impact": {
     "eyebrow": "الأثر · 2022 إلى 2026",
@@ -81,7 +81,7 @@
     "phone": "الهاتف"
   },
   "footer": {
-    "eyebrow": "الاستوديو · آدم",
+    "eyebrow": "آدم، أكرا",
     "heading": "لنبنِ",
     "headingAccent": "شيئًا يستحق.",
     "navigate": "التنقل",
@@ -90,7 +90,7 @@
     "voices": "آراء",
     "availability": "متاح عالميًا · أي منطقة زمنية",
     "builtWith": "صُنع يدويًا، وسُلِّم بالذكاء الاصطناعي",
-    "privacy": "Privacy"
+    "privacy": "الخصوصية"
   },
   "common": {
     "skipToContent": "تخطَّ إلى المحتوى",
@@ -122,98 +122,98 @@
     "required": "يرجى إدخال الاسم ووسيلة التواصل والرسالة."
   },
   "fieldkit": {
-    "projectsIn": "Projects in this deployment",
+    "projectsIn": "المشاريع في هذا النشر",
     "hero": {
-      "hint": "Tap stock, send it to the cashier, then collect to print."
+      "hint": "اختر من المخزون، أرسله إلى الكاشير، ثم ادفع لطباعة الإيصال."
     },
     "chapters": {
       "c01": {
-        "title": "The counter",
-        "accent": "never guesses.",
-        "note": "Al Boyut sold over a counter, with prices in WhatsApp threads and stock that never matched the till. We built the register, a cashier queue that calls each order out loud, and one stock record behind both the shop and the website.",
-        "m1": "Catalogue items live",
-        "m2": "Order channels at Jireh",
-        "m3": "Full operating systems shipped",
-        "hint": "Tap stock, send it to the cashier, then collect to print."
+        "title": "الكاونتر",
+        "accent": "لا يخمّن بعد اليوم.",
+        "note": "كان Al Boyut يبيع من وراء الكاونتر، والأسعار في محادثات واتساب، والمخزون لا يطابق الصندوق أبدًا. بنيت نقطة البيع، وطابورًا للكاشير ينادي كل طلب بصوت عالٍ، وسجل مخزون واحدًا يخدم المتجر والموقع معًا.",
+        "m1": "منتجات في الكتالوج",
+        "m2": "قنوات الطلب في Jireh",
+        "m3": "أنظمة تشغيل كاملة مُسلَّمة",
+        "hint": "اختر من المخزون، أرسله إلى الكاشير، ثم ادفع لطباعة الإيصال."
       },
       "c02": {
-        "title": "Every garment",
-        "accent": "gets a ticket.",
-        "note": "An-Nur's counter ran on paper slips. Now each drop-off is counted garment by garment, moves through washing, drying, ironing and a quality check, texts the customer when it is ready and closes with a scan.",
-        "m1": "Stages on every ticket",
-        "m2": "Scan to collect",
-        "m3": "Customer told when ready",
-        "hint": "Count garments in, confirm, then move the ticket along."
+        "title": "كل قطعة ملابس",
+        "accent": "لها تذكرة.",
+        "note": "كان كاونتر An-Nur يعمل بقصاصات ورقية. الآن تُعدّ كل دفعة قطعةً قطعة، وتمر بالغسل والتجفيف والكي وفحص الجودة، ويصل العميلَ إشعارٌ نصي حين تجهز، وتُغلق بمسح الرمز.",
+        "m1": "مراحل في كل تذكرة",
+        "m2": "امسح للاستلام",
+        "m3": "إشعار العميل عند الجاهزية",
+        "hint": "عُدّ القطع، أكّد، ثم حرّك التذكرة للمرحلة التالية."
       },
       "c03": {
-        "title": "Commerce that",
-        "accent": "dresses the part.",
-        "note": "Fashion labels selling African print to two markets. Prices are set per market instead of converted, and the bag turns into a WhatsApp order, because that is where these customers already buy.",
-        "m1": "Markets, each priced on its own",
-        "m2": "Fashion storefronts live",
-        "m3": "Global rollout (Chale Socks)",
-        "hint": "Open a piece, add it to the bag, finish on WhatsApp."
+        "title": "تجارة",
+        "accent": "بأناقة تليق بها.",
+        "note": "علامات أزياء تبيع القماش الأفريقي المطبوع في سوقين. تُحدَّد الأسعار لكل سوق بدل تحويلها، وتتحول الحقيبة إلى طلب واتساب، لأن هذا هو المكان الذي يشتري منه هؤلاء العملاء أصلًا.",
+        "m1": "أسواق، لكل منها أسعاره",
+        "m2": "متاجر أزياء تعمل",
+        "m3": "إطلاق عالمي (Chale Socks)",
+        "hint": "افتح قطعة، أضفها إلى الحقيبة، وأكمل على واتساب."
       },
       "c04": {
-        "title": "Models that",
-        "accent": "survive a bad year.",
-        "note": "The studio started on the investment side: three years in Ghanaian private equity and venture capital, taking 50+ SMEs from sourcing to Investment Committee. The models we build still show the downside first.",
-        "m1": "SMEs taken through the deal cycle",
-        "m2": "Faster deal screening",
-        "m3": "Decision tools at Ethika",
-        "hint": "Hit the shocks. Watch the covenant light."
+        "title": "نماذج",
+        "accent": "تصمد في السنة السيئة.",
+        "note": "بدأت من جانب الاستثمار: ثلاث سنوات في الملكية الخاصة ورأس المال الجريء في غانا، أقود أكثر من 50 شركة صغيرة ومتوسطة من الاستقطاب حتى لجنة الاستثمار. النماذج التي أبنيها ما زالت تعرض أسوأ الاحتمالات أولًا.",
+        "m1": "شركات مرّت بدورة الصفقة",
+        "m2": "فرز أسرع للصفقات",
+        "m3": "أدوات قرار في Ethika",
+        "hint": "اضغط على الصدمات وراقب مؤشر التعهدات."
       },
       "c05": {
-        "title": "Sell a dish,",
-        "accent": "the stock knows.",
-        "note": "Delish ran on a POS and spreadsheets that never agreed. On Odoo 19, every dish deducts its recipe, supplier packs convert to pieces, and counts reconcile with workings an auditor can follow.",
-        "m1": "Menu items on POS",
-        "m2": "Ingredients mapped to recipes",
-        "m3": "Physical count sessions",
-        "hint": "Open Inventory, sell a plate, then count the shelf."
+        "title": "تبيع طبقًا،",
+        "accent": "فيعرف المخزون.",
+        "note": "كان Delish يعمل بنقطة بيع وجداول لا تتفق أبدًا. على Odoo 19 يخصم كل طبق وصفته، وتتحول عبوات الموردين إلى قطع، وتتطابق الجرود بحسابات يستطيع المدقق تتبّعها.",
+        "m1": "أطباق على نقطة البيع",
+        "m2": "مكونات مربوطة بالوصفات",
+        "m3": "جلسات جرد فعلي",
+        "hint": "افتح المخزون، بع طبقًا، ثم عُدّ الرف."
       },
       "c06": {
-        "title": "Shots and donors,",
-        "accent": "one pipeline.",
-        "note": "A public court in Madina had been unusable for years. We co-led its renovation, raised the money from local donors, then built the platform that runs bookings, events and an open ledger of every cedi.",
-        "m1": "Raised for the court",
-        "m2": "Donors",
-        "m3": "Solar-lit court",
-        "hint": "Tap the chart to shoot."
+        "title": "رميات ومتبرعون،",
+        "accent": "في مسار واحد.",
+        "note": "كان ملعب عام في مدينة Madina غير صالح للاستخدام منذ سنوات. شاركت في قيادة ترميمه، وجمعت المال من متبرعين محليين، ثم بنيت المنصة التي تدير الحجوزات والفعاليات وسجلًا مفتوحًا لكل سيدي.",
+        "m1": "جُمعت للملعب",
+        "m2": "متبرعون",
+        "m3": "ملعب مضاء بالطاقة الشمسية",
+        "hint": "المس الرسم البياني لترمي."
       },
       "c07": {
-        "title": "Platforms people",
-        "accent": "learn and live on.",
-        "note": "Exam pathways for West African students in three languages, verified rentals, an online pharmacy, and an export platform shipping cars to 40+ countries.",
-        "m1": "Exam pathways on Kōyi",
-        "m2": "Languages: EN, FR, AR",
-        "m3": "Countries served (Rockmotion)",
-        "hint": "Pick a programme to see the subjects it needs."
+        "title": "منصات",
+        "accent": "يتعلم الناس ويعيشون عليها.",
+        "note": "مسارات امتحانات لطلاب غرب أفريقيا بثلاث لغات، وإيجارات موثّقة، وصيدلية إلكترونية، ومنصة تصدير تشحن السيارات إلى أكثر من 40 دولة.",
+        "m1": "مسارات امتحان على Kōyi",
+        "m2": "اللغات: EN، FR، AR",
+        "m3": "دول مخدومة (Rockmotion)",
+        "hint": "اختر برنامجًا لترى المواد التي يتطلبها."
       }
     },
     "buildDesk": {
-      "eyebrow": "Build desk",
-      "title": "Hire me, or",
-      "accent": "build with me.",
-      "note": "Flip the switch on the device. Build sizes a project in weeks, with no price tags. Hire sets up a role and checks our working-hours overlap. Both print a ticket with what you did on the kit and send it straight to me.",
-      "fallback": "Or just write to me"
+      "eyebrow": "مكتب المشاريع",
+      "title": "وظّفني، أو",
+      "accent": "ابنِ معي.",
+      "note": "اقلب المفتاح على الجهاز. «ابنِ» يقدّر المشروع بالأسابيع دون أسعار. «وظّف» يحدد دورًا ويعرض تداخل ساعات عملنا. كلاهما يطبع تذكرة بما فعلته على الجهاز ويرسلها إليّ مباشرة.",
+      "fallback": "أو راسلني مباشرة"
     }
   },
   "home": {
     "hero": {
-      "lineA": "We help",
-      "lineB": "businesses",
+      "lineA": "أساعد",
+      "lineB": "الشركات على أن",
       "words": {
-        "sell": "sell.",
-        "count": "count.",
-        "decide": "decide.",
-        "showUp": "show up."
+        "sell": "تبيع.",
+        "count": "تحسب.",
+        "decide": "تقرّر.",
+        "showUp": "تظهر."
       },
-      "sub": "Aadam is a product, data and engineering studio in Accra. We build the point of sale, the ERP and the storefront, model the numbers, design the brand and put the business on the map.",
-      "seeWork": "See the work",
-      "startProject": "Start a project",
-      "open": "Open for projects",
-      "count": "17 businesses run on our systems"
+      "sub": "أنا آدم، أعمل من أكرا بين المنتج والبيانات والهندسة. أبني نقطة البيع ونظام ERP والمتجر الإلكتروني، وأنمذج الأرقام، وأصمم العلامة، وأضع النشاط التجاري على الخريطة.",
+      "seeWork": "شاهد الأعمال",
+      "startProject": "ابدأ مشروعًا",
+      "open": "متاح للمشاريع",
+      "count": "17 شركة تعمل على أنظمة بنيتها"
     },
     "desk": {
       "screens": {
@@ -229,69 +229,69 @@
       "posterAlt": "The studio desk: a laptop with two extender screens, a basketball, a glass of water, a notebook and a phone by a curtained window in Accra."
     },
     "practices": {
-      "heading": "What we do",
-      "sub": "Four practices under one roof. The team that models the numbers also builds the system and draws the brand, so nothing is lost in a handover.",
+      "heading": "ماذا أفعل",
+      "sub": "أربع ممارسات وشخص واحد. من ينمذج الأرقام هو نفسه من يبني النظام ويرسم العلامة، فلا يضيع شيء عند التسليم.",
       "analysis": {
-        "title": "Analysis and models",
-        "body": "Valuations, deal screens, three-statement models and due diligence, from three years of PE and VC analyst work.",
-        "proof": "50+ SMEs evaluated at Mirepa, evaluation time cut 40%"
+        "title": "التحليل والنماذج",
+        "body": "تقييمات وفرز صفقات ونماذج القوائم الثلاث والعناية الواجبة، من ثلاث سنوات من العمل التحليلي في الملكية الخاصة ورأس المال الجريء.",
+        "proof": "أكثر من 50 شركة قُيّمت في Mirepa، ووقت التقييم أقل بنسبة 40%"
       },
       "systems": {
-        "title": "Systems and software",
-        "body": "Point of sale, ERP, storefronts and back offices, built around the counter, the stockroom and the books.",
-        "proof": "17 businesses on our systems, 7 run end to end"
+        "title": "الأنظمة والبرمجيات",
+        "body": "نقاط البيع وأنظمة ERP والمتاجر ولوحات الإدارة، مبنية حول الكاونتر والمخزن والدفاتر.",
+        "proof": "17 شركة على أنظمتي، 7 منها بالكامل"
       },
       "brand": {
-        "title": "Brand and identity",
-        "body": "Marks, colour, receipts, packaging and signage, drawn as one system so the shop looks the same everywhere.",
-        "proof": "Identity systems for Al Boyut and An-Nur"
+        "title": "العلامة والهوية",
+        "body": "شعارات وألوان وإيصالات وتغليف ولافتات، مرسومة كنظام واحد ليبدو المتجر كما هو في كل مكان.",
+        "proof": "أنظمة هوية لـ Al Boyut وAn-Nur"
       },
       "map": {
-        "title": "On the map",
-        "body": "Google Business Profiles, listings and local search, so people nearby can find you, call you and get directions.",
-        "proof": "See where the work runs"
+        "title": "على الخريطة",
+        "body": "ملفات Google Business والأدلة والبحث المحلي، ليجدك الناس القريبون ويتصلوا بك ويعرفوا الطريق.",
+        "proof": "شاهد أين يعمل ما بنيته"
       }
     },
     "map": {
-      "heading": "Where the work runs",
-      "sub": "Shops, kitchens, a court and a college across Accra, and two clients in the US. Pick a pin to see what we built there.",
-      "accra": "Accra",
-      "world": "Beyond Accra",
-      "tour": "Fly the route",
-      "stop": "Stop the tour",
-      "caseStudy": "Case study",
-      "directions": "Find on Google Maps",
-      "close": "Close",
-      "approx": "Pins are placed by neighbourhood, not street address."
+      "heading": "أين يعمل ما بنيته",
+      "sub": "متاجر ومطابخ وملعب وكلية في أكرا، وعميلان في الولايات المتحدة. اختر دبوسًا لترى ما بنيته هناك.",
+      "accra": "أكرا",
+      "world": "خارج أكرا",
+      "tour": "حلّق على المسار",
+      "stop": "أوقف الجولة",
+      "caseStudy": "دراسة حالة",
+      "directions": "اعرض على خرائط Google",
+      "close": "إغلاق",
+      "approx": "الدبابيس موضوعة حسب الحي، لا حسب العنوان الدقيق."
     },
     "build": {
-      "title": "Build with us, or hire Aadam",
-      "sub": "Pick what the business needs and the board lays out the weeks. Or set up a role and see how our working hours line up. Either way you get a brief to share and we get it by email.",
-      "switch": "Build or hire",
-      "build": "Build a project",
-      "hire": "Hire Aadam",
-      "catalogue": "What we build",
-      "board": "Project board",
-      "parallel": "Tracks run side by side. One after another it would be ~{serial}.",
-      "pick": "Pick what the business needs.",
-      "print": "Print the brief",
-      "name": "Your name",
-      "contact": "Email or WhatsApp",
-      "invalid": "Add your name and a way to reach you.",
-      "sendHint": "It reaches Aadam straight away.",
-      "send": "Send",
-      "sent": "Sent. We reply within one business day.",
-      "fallback": "Couldn't send from here, so WhatsApp opened with your brief.",
-      "again": "New brief",
-      "edit": "Change the brief",
-      "pass": "Boarding pass",
-      "overlap": "overlap a day",
-      "you": "You, {city}",
-      "role": "Role",
-      "departs": "Starts",
-      "stack": "Stack",
-      "stub": "Your brief",
-      "overlapLabel": "Overlap"
+      "title": "ابنِ معي، أو وظّفني",
+      "sub": "اختر ما يحتاجه النشاط التجاري ويرتب اللوح الأسابيع. أو حدّد دورًا وشاهد كيف تتداخل ساعات عملنا. في الحالتين تحصل على ملخص تشاركه، ويصلني بالبريد الإلكتروني.",
+      "switch": "ابنِ أو وظّف",
+      "build": "ابنِ مشروعًا",
+      "hire": "وظّفني",
+      "catalogue": "ماذا أبني",
+      "board": "لوح المشروع",
+      "parallel": "المسارات تسير جنبًا إلى جنب. واحدًا تلو الآخر ستستغرق ~{serial}.",
+      "pick": "اختر ما يحتاجه النشاط التجاري.",
+      "print": "اطبع الملخص",
+      "name": "اسمك",
+      "contact": "البريد الإلكتروني أو واتساب",
+      "invalid": "أضف اسمك ووسيلة للتواصل معك.",
+      "sendHint": "يصلني فورًا.",
+      "send": "أرسل",
+      "sent": "تم الإرسال. أرد خلال يوم عمل واحد.",
+      "fallback": "تعذّر الإرسال من هنا، ففُتح واتساب مع ملخصك.",
+      "again": "ملخص جديد",
+      "edit": "عدّل الملخص",
+      "pass": "بطاقة الصعود",
+      "overlap": "تداخل يوميًا",
+      "you": "أنت، {city}",
+      "role": "الدور",
+      "departs": "البداية",
+      "stack": "التقنيات",
+      "stub": "ملخصك",
+      "overlapLabel": "التداخل"
     }
   }
 }

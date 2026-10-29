@@ -100,7 +100,7 @@ export function decode(input: string): VinResult {
     valid: expected === vin[8],
     expected,
     found: vin[8],
-    maker: WMI[vin.slice(0, 3)] ?? "Maker not in our short list",
+    maker: WMI[vin.slice(0, 3)] ?? "Maker not in my short list",
     country: country(vin),
     year: modelYear(vin),
     plant: vin[10],
