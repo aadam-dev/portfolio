@@ -23,14 +23,14 @@ export default function CarPage() {
               Buy a car you haven&apos;t seen
             </h1>
             <p className="md:col-span-5 text-[15px] leading-[1.65] text-[var(--ink-2)] text-pretty">
-              <Link href="/work/rockmotion" className="underline underline-offset-4">Rockmotion</Link> sells American cars to buyers in Accra, Lagos and Rotterdam who never stand next to them. These are the four steps between a listing and a car at your port.
+              <Link href="/work/rockmotion" className="underline underline-offset-4">Rockmotion</Link> sources American cars and ships them from five US ports to buyers in Tema, Lagos, Dubai and 40+ countries who never stand next to them. These are the four steps between a listing and a car at your port, on Rockmotion&apos;s own ports, routes and transit times.
             </p>
           </div>
           <div className="mt-10">
             <CarLabLoader />
           </div>
           <p className="mt-4 text-[12px] text-[var(--ink-3)]">
-            Car: <a className="underline underline-offset-2" href="https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/CarConcept" target="_blank" rel="noreferrer">Car Concept</a> by Eric Chadwick / DGG, CC-BY 4.0, from a CC0 model by Unity Fan; logos removed. Map: Natural Earth. Vehicle data: NHTSA vPIC.
+            Car: <a className="underline underline-offset-2" href="https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/CarConcept" target="_blank" rel="noreferrer">Car Concept</a> by Eric Chadwick / DGG, CC-BY 4.0, from a CC0 model by Unity Fan; logos removed. Map: Natural Earth. Vehicle data: NHTSA vPIC. Ports, transit times, methods and terms: Rockmotion.
           </p>
         </div>
       </main>

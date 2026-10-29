@@ -1,13 +1,12 @@
 "use client";
 
 import { ArrowUpRight } from "lucide-react";
-import { landedCost, money, usd, type CostInput, type Destination } from "@/lib/rockmotion";
+import { INSURANCE, landedCost, money, usd, type CostInput, type Destination } from "@/lib/rockmotion";
 
 export const SEG_COLORS: Record<string, string> = {
   car: "#2f6bff",
   inland: "#8fb0ff",
-  freight: "#5fd0c5",
-  insurance: "#b9a6ff",
+  shipping: "#5fd0c5",
   duty: "#e8a13a",
   port: "#f07a6a",
 };
@@ -44,16 +43,15 @@ export default function LandedCost({ f, set, dest, freightHint }: { f: CostField
         <div className="col-span-2">
           <Num label="Car price" prefix="$" value={f.price} step={100} onChange={(price) => set({ price })} />
         </div>
-        <Num label="Truck to port" prefix="$" value={f.inland} step={10} onChange={(inland) => set({ inland })} hint="example" />
-        <Num label="Ocean freight" prefix="$" value={f.freight} step={10} onChange={(freight) => set({ freight })} hint={freightHint} />
-        <Num label="Marine insurance" suffix="%" value={f.insurance} step={0.1} onChange={(insurance) => set({ insurance })} hint="of car and freight" />
-        <Num label="Port and clearing" prefix="$" value={f.port} step={10} onChange={(port) => set({ port })} hint={`example, at ${dest.port}`} />
-        <Num label="Duty and taxes" suffix="%" value={f.duty} step={1} onChange={(duty) => set({ duty })} hint="of CIF (car, freight, insurance); use your agent's rate" />
+        <Num label="Truck to the US port" prefix="$" value={f.inland} step={10} onChange={(inland) => set({ inland })} hint="example" />
+        <Num label="Shipping, insurance included" prefix="$" value={f.shipping} step={10} onChange={(shipping) => set({ shipping })} hint={freightHint} />
+        <Num label="Duty and taxes" suffix="%" value={f.duty} step={1} onChange={(duty) => set({ duty })} hint="of CIF (car, trucking, shipping); your agent's rate" />
+        <Num label="Port handling and clearing" prefix="$" value={f.port} step={10} onChange={(port) => set({ port })} hint={`example, at ${dest.port.replace(/^Port of /, "")}`} />
         <Num label={`${dest.currency} per USD`} value={f.rate} step={dest.rate > 100 ? 5 : 0.01} onChange={(rate) => set({ rate })} hint="set today's rate" />
       </div>
 
       <div className="mt-6 pt-5 border-t border-[var(--line)]" aria-live="polite">
-        <p className="stat-label">Landed in {dest.port}</p>
+        <p className="stat-label">Landed at {dest.port.replace(/^Port of /, "")}</p>
         <p className="stat-value !text-[32px]">{usd(c.total)}</p>
         <p className="mt-0.5 text-[14px] text-[var(--ink-2)] tabular-nums">{money(c.total * f.rate, dest.currency)}</p>
         <div className="mt-4 flex h-3 rounded-full overflow-hidden bg-[var(--tint)]" role="img" aria-label="Cost breakdown">
@@ -72,7 +70,7 @@ export default function LandedCost({ f, set, dest, freightHint }: { f: CostField
           ))}
         </ul>
         <p className="mt-3 text-[12px] leading-relaxed text-[var(--ink-3)]">
-          Every figure is an example you can change. Duty, levies and port charges depend on the country, the car&apos;s age and engine, so the clearing agent&apos;s quote is the one to trust.
+          Every figure is an example you can change. Rockmotion includes marine insurance ({INSURANCE.replace(/, included in every shipment$/, "").toLowerCase()}). Under their terms the buyer handles customs, duties, port handling and inland delivery, which depend on the country and the car, so your clearing agent&apos;s quote is the one to trust.
         </p>
         <a href="https://rockmotion.vercel.app/shipping" target="_blank" rel="noreferrer" className="btn btn-solid mt-5 w-full">
           Get a real quote from Rockmotion <ArrowUpRight className="w-4 h-4" />

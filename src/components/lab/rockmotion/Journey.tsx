@@ -2,19 +2,35 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { Play, RotateCcw } from "lucide-react";
-import { ATLANTIC, LAND_DOTS } from "@/lib/atlantic";
-import { BODIES, DESTINATIONS, LOT, US_PORT, project, routePath, seaRoute, timeline, totalDays, type Body, type Destination, type Shipping } from "@/lib/rockmotion";
+import { LAND_DOTS, WORLD } from "@/lib/worldmap";
+import {
+  DESTINATIONS,
+  HQ,
+  METHODS,
+  US_PORTS,
+  VEHICLES,
+  project,
+  roadRoute,
+  routePath,
+  seaRoute,
+  timeline,
+  totalDays,
+  type Destination,
+  type Method,
+  type UsPort,
+  type Vehicle,
+} from "@/lib/rockmotion";
 
 const BLUE = "#2f6bff";
 const pct = (lat: number, lon: number) => {
   const [x, y] = project(lat, lon);
-  return { left: `${(x / ATLANTIC.w) * 100}%`, top: `${(y / ATLANTIC.h) * 100}%` };
+  return { left: `${(x / WORLD.w) * 100}%`, top: `${(y / WORLD.h) * 100}%` };
 };
 
 /** Where each stage starts and ends, as a share of the whole trip (midpoint days). */
-function spans(d: Destination) {
-  const t = timeline(d);
-  const mids = t.map((s) => (s.days[0] + s.days[1]) / 2);
+function spans(d: Destination, p: UsPort, m: Method) {
+  const t = timeline(d, p, m);
+  const mids = t.map((s) => Math.max(0.5, (s.days[0] + s.days[1]) / 2));
   const sum = mids.reduce((a, b) => a + b, 0);
   let at = 0;
   return t.map((s, i) => {
@@ -26,54 +42,69 @@ function spans(d: Destination) {
 
 export function RouteMap({
   dest,
-  shipping,
+  port,
+  method,
   run,
   reduce,
   onStage,
   onPick,
 }: {
   dest: Destination;
-  shipping: Shipping;
+  port: UsPort;
+  method: Method;
   /** Bumped to play the trip from the start. */
   run: number;
   reduce: boolean;
   onStage: (i: number) => void;
   onPick: (id: string) => void;
 }) {
-  const port = US_PORT[shipping];
-  const truck = useMemo(() => routePath([[LOT.lat, LOT.lon], [32.9, -83.2], [port.lat, port.lon]]), [port]);
-  const sea = useMemo(() => routePath(seaRoute(dest, shipping)), [dest, shipping]);
-  const truckRef = useRef<SVGPathElement>(null);
-  const seaRef = useRef<SVGPathElement>(null);
-  const seaDone = useRef<SVGPathElement>(null);
-  const truckDone = useRef<SVGPathElement>(null);
+  const road = useMemo(() => routePath(roadRoute(port)), [port]);
+  // one path, or two when the route crosses the Pacific off the map's edge
+  const sea = useMemo(() => seaRoute(port, dest).map((seg) => routePath(seg)), [port, dest]);
+  const roadRef = useRef<SVGPathElement>(null);
+  const roadDone = useRef<SVGPathElement>(null);
+  const seaRefs = useRef<(SVGPathElement | null)[]>([]);
+  const seaDone = useRef<(SVGPathElement | null)[]>([]);
   const ship = useRef<SVGGElement>(null);
   const day = useRef<HTMLSpanElement>(null);
-  const stages = useMemo(() => spans(dest), [dest]);
-  const days = totalDays(dest);
+  const stages = useMemo(() => spans(dest, port, method), [dest, port, method]);
+  const days = useMemo(() => totalDays(dest, port, method), [dest, port, method]);
   const onStageRef = useRef(onStage);
   useEffect(() => {
     onStageRef.current = onStage;
   });
 
   useEffect(() => {
-    const tp = truckRef.current;
-    const sp = seaRef.current;
-    if (!tp || !sp || !ship.current || !seaDone.current || !truckDone.current) return;
-    const tl = tp.getTotalLength();
-    const sl = sp.getTotalLength();
-    truckDone.current.style.strokeDasharray = `${tl}`;
-    seaDone.current.style.strokeDasharray = `${sl}`;
-    const truckStage = stages[1];
+    const rp = roadRef.current;
+    const paths = seaRefs.current.slice(0, sea.length);
+    if (!rp || !ship.current || !roadDone.current || paths.some((p) => !p)) return;
+    const rl = rp.getTotalLength();
+    const lens = paths.map((p) => p!.getTotalLength());
+    const sl = lens.reduce((a, b) => a + b, 0);
+    roadDone.current.style.strokeDasharray = `${rl}`;
+    seaDone.current.slice(0, sea.length).forEach((p, i) => p && (p.style.strokeDasharray = `${lens[i]}`));
+    const roadStage = stages[1];
     const seaStage = stages[4];
     let last = -1;
     const draw = (t: number) => {
-      const tt = Math.min(1, Math.max(0, (t - truckStage.from) / (truckStage.to - truckStage.from)));
+      const rt = Math.min(1, Math.max(0, (t - roadStage.from) / (roadStage.to - roadStage.from)));
       const st = Math.min(1, Math.max(0, (t - seaStage.from) / (seaStage.to - seaStage.from)));
-      const p = t < seaStage.from ? tp.getPointAtLength(tt * tl) : sp.getPointAtLength(st * sl);
-      ship.current!.setAttribute("transform", `translate(${p.x} ${p.y})`);
-      truckDone.current!.style.strokeDashoffset = `${tl * (1 - tt)}`;
-      seaDone.current!.style.strokeDashoffset = `${sl * (1 - st)}`;
+      let pt: DOMPoint;
+      if (t < seaStage.from) pt = rp.getPointAtLength(rt * rl);
+      else {
+        let left = st * sl;
+        let i = 0;
+        while (i < lens.length - 1 && left > lens[i]) left -= lens[i++];
+        pt = paths[i]!.getPointAtLength(Math.min(left, lens[i]));
+      }
+      ship.current!.setAttribute("transform", `translate(${pt.x} ${pt.y})`);
+      roadDone.current!.style.strokeDashoffset = `${rl * (1 - rt)}`;
+      let done = st * sl;
+      seaDone.current.slice(0, sea.length).forEach((p, i) => {
+        const here = Math.min(lens[i], Math.max(0, done));
+        done -= lens[i];
+        if (p) p.style.strokeDashoffset = `${lens[i] - here}`;
+      });
       const i = Math.max(0, stages.findIndex((s) => t >= s.from && t < s.to));
       const idx = t >= 1 ? stages.length - 1 : i;
       if (day.current) day.current.textContent = String(Math.round(t * ((days[0] + days[1]) / 2)));
@@ -89,61 +120,66 @@ export function RouteMap({
     const start = performance.now();
     let raf = 0;
     const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / 9000);
+      const t = Math.min(1, (now - start) / 10000);
       draw(t);
       if (t < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [run, reduce, stages, days, truck, sea]);
+  }, [run, reduce, stages, days, road, sea]);
 
+  const [dx, dy] = project(dest.lat, dest.lon);
   return (
-    <div className="relative w-full" style={{ aspectRatio: `${ATLANTIC.w} / ${ATLANTIC.h}` }}>
-      <svg viewBox={`0 0 ${ATLANTIC.w} ${ATLANTIC.h}`} className="absolute inset-0 w-full h-full" aria-hidden>
-        <path d={LAND_DOTS} stroke="rgba(255,255,255,0.22)" strokeWidth={3.6} strokeLinecap="round" fill="none" />
-        <path ref={truckRef} d={truck} stroke="rgba(255,255,255,0.35)" strokeWidth={2} strokeDasharray="4 5" fill="none" />
-        <path ref={truckDone} d={truck} stroke="#fff" strokeWidth={2.4} fill="none" />
-        <path ref={seaRef} d={sea} stroke={BLUE} strokeOpacity={0.35} strokeWidth={2} strokeDasharray="2 6" strokeLinecap="round" fill="none" />
-        <path ref={seaDone} d={sea} stroke={BLUE} strokeWidth={3} strokeLinecap="round" fill="none" />
+    <div className="relative w-full" style={{ aspectRatio: `${WORLD.w} / ${WORLD.h}` }}>
+      <svg viewBox={`0 0 ${WORLD.w} ${WORLD.h}`} className="absolute inset-0 w-full h-full" aria-hidden>
+        <path d={LAND_DOTS} stroke="rgba(255,255,255,0.2)" strokeWidth={3} strokeLinecap="round" fill="none" />
+        <path ref={roadRef} d={road} stroke="rgba(255,255,255,0.35)" strokeWidth={1.6} strokeDasharray="3 4" fill="none" />
+        <path ref={roadDone} d={road} stroke="#fff" strokeWidth={2} fill="none" />
+        {sea.map((d, i) => (
+          <g key={`${i}${d.length}`}>
+            <path ref={(el) => void (seaRefs.current[i] = el)} d={d} stroke={BLUE} strokeOpacity={0.4} strokeWidth={1.6} strokeDasharray="2 5" strokeLinecap="round" fill="none" />
+            <path ref={(el) => void (seaDone.current[i] = el)} d={d} stroke={BLUE} strokeWidth={2.4} strokeLinecap="round" fill="none" />
+          </g>
+        ))}
         {DESTINATIONS.map((d) => {
           const [x, y] = project(d.lat, d.lon);
-          return <circle key={d.id} cx={x} cy={y} r={d.id === dest.id ? 6 : 3.5} fill={d.id === dest.id ? BLUE : "rgba(255,255,255,0.5)"} />;
+          return <circle key={d.id} cx={x} cy={y} r={d.id === dest.id ? 5 : 3} fill={d.id === dest.id ? BLUE : "rgba(255,255,255,0.55)"} />;
         })}
-        {[LOT, port].map((p) => {
+        {US_PORTS.map((p) => {
           const [x, y] = project(p.lat, p.lon);
-          return <circle key={p.name} cx={x} cy={y} r={5} fill="#fff" />;
+          return <circle key={p.id} cx={x} cy={y} r={p.id === port.id ? 4.5 : 2.5} fill={p.id === port.id ? "#fff" : "rgba(255,255,255,0.45)"} />;
         })}
+        <circle cx={project(HQ.lat, HQ.lon)[0]} cy={project(HQ.lat, HQ.lon)[1]} r={3.5} fill="#fff" />
         <g ref={ship}>
-          <circle r={14} fill={BLUE} opacity={0.22} />
-          <circle r={6.5} fill="#fff" stroke={BLUE} strokeWidth={3} />
+          <circle r={11} fill={BLUE} opacity={0.22} />
+          <circle r={5} fill="#fff" stroke={BLUE} strokeWidth={2.5} />
         </g>
       </svg>
-      {/* labels as HTML so they stay readable at any size */}
-      {[
-        { ...LOT, label: "Atlanta lot", dx: "-12%", dy: "-170%" },
-        { ...port, label: port.name.replace(", GA", ""), dx: "14px", dy: "-50%" },
-      ].map((l) => (
-        <span key={l.label} className="absolute text-[11.5px] md:text-[12.5px] text-white/85 whitespace-nowrap" style={{ ...pct(l.lat, l.lon), transform: `translate(${l.dx}, ${l.dy})` }}>
-          {l.label}
-        </span>
-      ))}
+      {/* every destination is a hit target; only the chosen one is labelled */}
       {DESTINATIONS.map((d) => (
         <button
           key={d.id}
           type="button"
           onClick={() => onPick(d.id)}
-          className={`absolute whitespace-nowrap text-[11.5px] md:text-[12.5px] ${d.id === dest.id ? "text-white font-semibold" : "hidden md:block text-white/55 hover:text-white"}`}
-          style={{ ...pct(d.lat, d.lon), transform: d.id === "rotterdam" ? "translate(12px, -50%)" : d.id === "abidjan" ? "translate(-50%, 9px)" : d.id === "tema" ? "translate(-50%, 9px)" : d.id === "lome" ? "translate(-50%, -175%)" : d.id === "cotonou" ? "translate(-30%, -310%)" : "translate(-10%, 9px)" }}
-        >
-          {d.port}
-        </button>
+          title={`${d.port}, ${d.country}`}
+          aria-label={`Ship to ${d.port}, ${d.country}`}
+          aria-pressed={d.id === dest.id}
+          className="absolute w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={pct(d.lat, d.lon)}
+        />
       ))}
-      <div className="absolute left-3 bottom-3 md:left-5 md:bottom-5 rounded-xl bg-black/55 backdrop-blur px-3.5 py-2.5">
-        <p className="font-mono tabular-nums text-[22px] md:text-[26px] leading-none text-white">
+      <span className="pointer-events-none absolute whitespace-nowrap text-[11.5px] md:text-[12.5px] font-semibold text-white" style={{ left: `${(dx / WORLD.w) * 100}%`, top: `${(dy / WORLD.h) * 100}%`, transform: dx > WORLD.w * 0.8 ? "translate(calc(-100% - 10px), -50%)" : "translate(10px, -50%)" }}>
+        {dest.flag} {dest.port}
+      </span>
+      <span className="pointer-events-none absolute whitespace-nowrap text-[11px] md:text-[12px] text-white/80" style={{ ...pct(port.lat, port.lon), transform: port.id === "losangeles" ? "translate(-15%, 8px)" : "translate(8px, -120%)" }}>
+        {port.short}
+      </span>
+      <div className="absolute left-1.5 bottom-1 md:left-4 md:bottom-4 rounded-lg md:rounded-xl bg-black/55 backdrop-blur px-2 py-1 md:px-3 md:py-2 flex items-baseline gap-2 md:block">
+        <p className="font-mono tabular-nums text-[13px] md:text-[24px] leading-none text-white">
           Day <span ref={day}>0</span>
         </p>
-        <p className="mt-1 text-[11.5px] text-white/60">
-          typical total {days[0]} to {days[1]} days
+        <p className="md:mt-1 text-[10px] md:text-[11px] text-white/60">
+          of {days[0]} to {days[1]}
         </p>
       </div>
     </div>
@@ -153,62 +189,83 @@ export function RouteMap({
 export default function Journey({
   dest,
   setDest,
-  shipping,
-  setShipping,
-  body,
-  setBody,
+  port,
+  setPort,
+  method,
+  setMethod,
+  vehicle,
+  setVehicle,
   stage,
   play,
 }: {
   dest: Destination;
   setDest: (id: string) => void;
-  shipping: Shipping;
-  setShipping: (s: Shipping) => void;
-  body: Body;
-  setBody: (b: Body) => void;
+  port: UsPort;
+  setPort: (id: string) => void;
+  method: Method;
+  setMethod: (m: Method) => void;
+  vehicle: Vehicle;
+  setVehicle: (v: Vehicle) => void;
   stage: number;
   play: () => void;
 }) {
-  const t = timeline(dest);
-  const [lo, hi] = totalDays(dest);
+  const t = timeline(dest, port, method);
+  const [lo, hi] = totalDays(dest, port, method);
+  const m = METHODS[method];
   return (
     <div>
-      <p className="label">Shipping</p>
+      <p className="label">Method</p>
       <div className="seg mt-1.5 w-full" role="tablist" aria-label="Shipping method">
         {(["roro", "container"] as const).map((s) => (
-          <button key={s} type="button" role="tab" aria-selected={shipping === s} onClick={() => setShipping(s)} className="seg-item flex-1">
-            {s === "roro" ? "RoRo" : "Container"}
+          <button key={s} type="button" role="tab" aria-selected={method === s} onClick={() => setMethod(s)} className="seg-item flex-1">
+            {METHODS[s].short}
           </button>
         ))}
       </div>
       <p className="mt-2 text-[12.5px] leading-relaxed text-[var(--ink-3)]">
-        {shipping === "roro"
-          ? "Roll-on roll-off: the car is driven onto a car carrier at Brunswick. Usually the cheaper way for a car that runs."
-          : "Loaded at Savannah, blocked and strapped, often sharing the box with two or three other cars. Suits cars that don't run."}
+        {m.copy} <span className="text-[var(--ink-2)]">Best for: {m.best}. {m.tag}.</span>
       </p>
 
-      <p className="label mt-5">To</p>
+      <p className="label mt-5">From</p>
       <div className="mt-1.5 flex flex-wrap gap-1.5">
-        {DESTINATIONS.map((d) => (
-          <button key={d.id} type="button" className="pill !h-8 !text-[12.5px]" aria-pressed={dest.id === d.id} onClick={() => setDest(d.id)}>
-            {d.port}
+        {US_PORTS.map((p) => (
+          <button key={p.id} type="button" className="pill !h-8 !text-[12.5px]" aria-pressed={port.id === p.id} onClick={() => setPort(p.id)}>
+            {p.short}
           </button>
         ))}
       </div>
-      <p className="label mt-4">Vehicle</p>
-      <div className="mt-1.5 flex flex-wrap gap-1.5">
-        {BODIES.map((b) => (
-          <button key={b.id} type="button" className="pill !h-8 !text-[12.5px]" aria-pressed={body === b.id} onClick={() => setBody(b.id)}>
-            {b.label}
-          </button>
-        ))}
-      </div>
+
+      <label className="block mt-4">
+        <span className="label">To</span>
+        <select className="field mt-1.5" value={dest.id} onChange={(e) => setDest(e.target.value)}>
+          {DESTINATIONS.map((d) => (
+            <option key={d.id} value={d.id}>
+              {d.flag} {d.country} ({d.port})
+            </option>
+          ))}
+        </select>
+      </label>
+      <label className="block mt-4">
+        <span className="label">Vehicle type</span>
+        <select className="field mt-1.5" value={vehicle} onChange={(e) => setVehicle(e.target.value as Vehicle)}>
+          {VEHICLES.map((v) => (
+            <option key={v.id} value={v.id}>
+              {v.label}
+            </option>
+          ))}
+        </select>
+      </label>
 
       <div className="mt-6 flex items-end justify-between gap-3">
         <div>
-          <p className="stat-label">Atlanta to {dest.port}, typical</p>
+          <p className="stat-label">
+            {port.short} to {dest.port.replace(/^Port of /, "")}, port to port
+          </p>
           <p className="stat-value">
-            {lo} to {hi} days
+            {dest.days[0] + m.loading} to {dest.days[1] + m.loading} days
+          </p>
+          <p className="mt-1 text-[12px] text-[var(--ink-3)] tabular-nums">
+            {lo} to {hi} days from purchase to your port
           </p>
         </div>
         <button type="button" onClick={play} className="btn btn-solid !h-10 !px-4 !text-[13px]">
@@ -232,7 +289,9 @@ export default function Journey({
           </li>
         ))}
       </ol>
-      <p className="mt-4 text-[12px] leading-relaxed text-[var(--ink-3)]">Typical ranges for a direct sailing. The real dates follow the vessel schedule Rockmotion books.</p>
+      <p className="mt-4 text-[12px] leading-relaxed text-[var(--ink-3)]">
+        Port-to-port times are Rockmotion&apos;s; customs clearance and inland delivery may add time. The other steps are typical ranges.
+      </p>
     </div>
   );
 }

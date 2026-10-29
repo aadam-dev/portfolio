@@ -10,7 +10,7 @@ import Journey, { RouteMap } from "./Journey";
 import LandedCost, { type CostFields } from "./LandedCost";
 import type { View } from "./Stage";
 import type { HingeId } from "./CarModel";
-import { AREAS, BODIES, DESTINATIONS, SAMPLE_VINS, freightFor, inlandFor, type AreaId, type Body, type Shipping } from "@/lib/rockmotion";
+import { AREAS, DESTINATIONS, METHODS, SAMPLE_VINS, US_PORTS, VEHICLES, shippingFor, truckingFor, type AreaId, type Method, type Vehicle } from "@/lib/rockmotion";
 import { clean } from "@/lib/vin";
 import { emit, emitOnce } from "@/components/fieldkit/events";
 import { detectTier } from "@/components/desk/tier";
@@ -63,19 +63,20 @@ export default function RockmotionLab() {
   const [area, setAreaState] = useState<AreaId | null>(null);
   const [checks, setChecks] = useState<Set<string>>(() => new Set());
   const [damaged, setDamaged] = useState<Set<string>>(() => new Set());
-  const [shipping, setShippingState] = useState<Shipping>("roro");
-  const [body, setBodyState] = useState<Body>("sedan");
+  const [method, setMethodState] = useState<Method>("roro");
+  const [vehicle, setVehicleState] = useState<Vehicle>("sedan");
+  const [portId, setPortId] = useState("baltimore");
   const [destId, setDestId] = useState("tema");
   const [run, setRun] = useState(0);
   const [stage, setStageIdx] = useState(0);
   const [edits, setEdits] = useState<Partial<CostFields>>({});
   const dest = DESTINATIONS.find((d) => d.id === destId) ?? DESTINATIONS[0];
+  const port = US_PORTS.find((p) => p.id === portId) ?? US_PORTS[0];
 
   const cost: CostFields = {
     price: 18500,
-    inland: inlandFor(shipping),
-    freight: freightFor(dest, shipping, body),
-    insurance: 1.5,
+    inland: truckingFor(port),
+    shipping: shippingFor(dest, method, vehicle),
     duty: 30,
     port: 900,
     rate: dest.rate,
@@ -85,7 +86,7 @@ export default function RockmotionLab() {
   const resetRoute = () =>
     setEdits((e) => {
       const n = { ...e };
-      delete n.freight;
+      delete n.shipping;
       delete n.inland;
       delete n.rate;
       return n;
@@ -125,7 +126,7 @@ export default function RockmotionLab() {
   const i = STEPS.findIndex((s) => s.id === step);
   const next = STEPS[i + 1];
   const plate = clean(vin);
-  const freightHint = `example, ${BODIES.find((b) => b.id === body)?.label.toLowerCase()} by ${shipping === "roro" ? "RoRo" : "container"}`;
+  const freightHint = `example, ${VEHICLES.find((v) => v.id === vehicle)?.label.toLowerCase()} by ${METHODS[method].short}`;
 
   return (
     <div className="theme-fixed card !bg-[#0c0d0f]">
@@ -188,7 +189,8 @@ export default function RockmotionLab() {
             <div className="w-full p-2 md:p-6">
               <RouteMap
                 dest={dest}
-                shipping={shipping}
+                port={port}
+                method={method}
                 run={run}
                 reduce={reduce}
                 onStage={setStageIdx}
@@ -239,14 +241,19 @@ export default function RockmotionLab() {
                   resetRoute();
                   emit("kit", "rockmotion.route", id);
                 }}
-                shipping={shipping}
-                setShipping={(s) => {
-                  setShippingState(s);
+                port={port}
+                setPort={(id) => {
+                  setPortId(id);
                   resetRoute();
                 }}
-                body={body}
-                setBody={(b) => {
-                  setBodyState(b);
+                method={method}
+                setMethod={(m) => {
+                  setMethodState(m);
+                  resetRoute();
+                }}
+                vehicle={vehicle}
+                setVehicle={(v) => {
+                  setVehicleState(v);
                   resetRoute();
                 }}
                 stage={run ? stage : -1}
