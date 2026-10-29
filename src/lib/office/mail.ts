@@ -1,8 +1,8 @@
 import "server-only";
 
-/** The owner's inbox. Every form, ticket and notable visit lands here. */
-export const OWNER = "aadamsays@gmail.com";
-const FROM = () => process.env.INQUIRY_FROM ?? "Aadam <onboarding@resend.dev>";
+/** My inbox: the reply-to on every confirmation. Owner notifications go to Telegram. */
+export const OWNER = "adam@aadambuilds.dev";
+const FROM = () => process.env.INQUIRY_FROM ?? "Aadam <onboarding@resend.dev>" /* set INQUIRY_FROM="Aadam <adam@aadambuilds.dev>" once the domain is verified (docs/resend.md) */;
 
 export function mailConfigured() {
   return !!process.env.RESEND_API_KEY;

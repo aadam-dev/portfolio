@@ -28,6 +28,7 @@ create table if not exists sessions (
   city text,
   lat double precision,
   lng double precision,
+  ip text,
   device text,
   browser text,
   os text,
@@ -39,6 +40,7 @@ create table if not exists sessions (
   tg_msg_id bigint
 );
 alter table sessions add column if not exists tg_msg_id bigint;
+alter table sessions add column if not exists ip text;
 create index if not exists sessions_started_idx on sessions (started_at);
 
 create table if not exists events (

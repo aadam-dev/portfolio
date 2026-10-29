@@ -129,7 +129,7 @@ export default function AboutPage() {
               <div>
                 <dt className="text-[var(--ink-3)]">Email</dt>
                 <dd>
-                  <a href="mailto:aadamsays@gmail.com" className="text-white underline underline-offset-4">aadamsays@gmail.com</a>
+                  <a href="mailto:adam@aadambuilds.dev" className="text-white underline underline-offset-4">adam@aadambuilds.dev</a>
                 </dd>
               </div>
               <div>
@@ -239,7 +239,7 @@ export default function AboutPage() {
               <p className="mt-1 text-[15px] text-[var(--ink-2)]">I send the CV on request, usually the same day.</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <a href="mailto:aadamsays@gmail.com?subject=CV%20request" className="btn btn-solid">
+              <a href="mailto:adam@aadambuilds.dev?subject=CV%20request" className="btn btn-solid">
                 Ask for the CV
               </a>
               <Link href="/#build" className="btn btn-line">

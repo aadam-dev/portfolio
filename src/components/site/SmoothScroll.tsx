@@ -9,7 +9,8 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     const coarse = window.matchMedia("(pointer: coarse)").matches;
     if (reduce || coarse) return;
 
-    const lenis = new Lenis({ lerp: 0.1 });
+    // nested scrollers (replica screens, the office, menus) keep their own wheel scrolling
+    const lenis = new Lenis({ lerp: 0.1, allowNestedScroll: true });
     (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
     let raf = 0;
     const loop = (time: number) => {

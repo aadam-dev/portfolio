@@ -16,7 +16,7 @@ const QUICK_LINKS = [
 const SOCIAL = [
   { label: "GitHub", href: "https://github.com/aadam-dev" },
   { label: "LinkedIn", href: "https://linkedin.com/in/aadamsays" },
-  { label: "Email", href: "mailto:aadamsays@gmail.com" },
+  { label: "Email", href: "mailto:adam@aadambuilds.dev" },
 ];
 
 export default function Footer() {
@@ -59,11 +59,11 @@ export default function Footer() {
               <span className="font-serif-it lowercase text-[var(--ink-2)]">{t("headingAccent")}</span>
             </h2>
             <a
-              href="mailto:aadamsays@gmail.com?subject=Hi%20Aadam%2C%20Let%E2%80%99s%20Work%20Together"
+              href="mailto:adam@aadambuilds.dev?subject=Hi%20Aadam%2C%20Let%E2%80%99s%20Work%20Together"
               className="group inline-flex items-center gap-3 mt-8 text-white"
             >
               <span className="font-display text-[22px] md:text-[26px]" style={{ letterSpacing: "-0.02em" }}>
-                aadamsays@gmail.com
+                adam@aadambuilds.dev
               </span>
               <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>

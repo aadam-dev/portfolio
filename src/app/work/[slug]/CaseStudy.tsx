@@ -24,9 +24,13 @@ interface Props {
   next: Project;
 }
 
+/** Staff, admin and API routes of a client's live system are never embedded, whatever the config says. */
+const PRIVATE_PATH = /^\/?(?:[a-z]{2}\/)?(admin|pos|backoffice|back-office|dashboard|office|staff|api|login|account)(\/|$|\?)/i;
+
 function buildLiveUrl(project: Project, screenId: string): string {
   const base = project.liveBaseUrl?.replace(/\/$/, "") ?? "";
-  const path = project.liveScreenPaths?.[screenId] ?? "/";
+  const raw = project.liveScreenPaths?.[screenId] ?? "/";
+  const path = PRIVATE_PATH.test(raw) ? "/" : raw;
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
@@ -189,6 +193,7 @@ export default function CaseStudy({ project, next }: Props) {
                         activeScreen={screen}
                         onScreenChange={setScreen}
                         compact
+                        liveUrl={buildLiveUrl(project, screen)}
                       >
                         <ScaledIframe
                           src={buildLiveUrl(project, screen)}

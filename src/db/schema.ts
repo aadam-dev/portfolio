@@ -3,12 +3,12 @@ import { bigint, boolean, doublePrecision, index, integer, jsonb, pgTable, seria
 /**
  * Keep in step with ./sql.ts, which creates these tables on Supabase.
  *
- * Visitors are identified by a salted hash of IP, user agent and day, so no
- * raw IP is stored and the id rotates daily. Sessions carry the place and
+ * Visitors are identified by the browser's own random id (or, without one, a
+ * hash of IP, user agent and day). Sessions carry the IP address, place and
  * device; events record page views and what people did on the site.
  */
 export const visitors = pgTable("visitors", {
-  id: text("id").primaryKey(), // sha256(salt + ip + ua + day)
+  id: text("id").primaryKey(), // hash of the browser id, or of ip + ua + day
   firstSeen: timestamp("first_seen", { withTimezone: true }).defaultNow().notNull(),
   lastSeen: timestamp("last_seen", { withTimezone: true }).defaultNow().notNull(),
   visits: integer("visits").default(1).notNull(),
@@ -28,6 +28,7 @@ export const sessions = pgTable(
     city: text("city"),
     lat: doublePrecision("lat"),
     lng: doublePrecision("lng"),
+    ip: text("ip"),
     device: text("device"), // desktop, mobile, tablet
     browser: text("browser"),
     os: text("os"),

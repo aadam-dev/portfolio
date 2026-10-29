@@ -21,6 +21,8 @@ interface BrowserMockupProps {
   activeScreen: string;
   onScreenChange: (screen: string) => void;
   children: React.ReactNode;
+  /** The page actually loaded in live mode, shown in the address bar as it is. */
+  liveUrl?: string;
   /** Hide the simulated address bar for a tighter live-site framing. */
   compact?: boolean;
   /** Step through the screens on its own until the visitor takes over. */
@@ -151,13 +153,14 @@ export default function BrowserMockup({
   onScreenChange,
   children,
   compact,
+  liveUrl,
   autoplay = true,
 }: BrowserMockupProps) {
   const screens = project.screens;
   const currentIndex = screens.findIndex((s) => s.id === activeScreen);
   const replica = REPLICAS[project.id];
   const [trying, setTrying] = useState(false);
-  const url = trying && replica ? replica.url : urlMap[project.id]?.[activeScreen] ?? `${project.id}.com`;
+  const url = liveUrl ? liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, "") : trying && replica ? replica.url : urlMap[project.id]?.[activeScreen] ?? `${project.id}.com`;
 
   // Auto-advance: pauses on hover, focus, touch, offscreen and reduced
   // motion; stops for good once the visitor picks a screen themselves.
@@ -338,14 +341,16 @@ export default function BrowserMockup({
       {/* Content */}
       {trying && replica ? (
         replica.native ? (
-          <div className="relative flex-1 bg-[#050505] aspect-[16/10]">
+          <div className="relative flex-1 bg-[#050505] aspect-[16/10]" data-lenis-prevent>
             <Fit w={replica.native[0]} h={replica.native[1]}>
               <replica.Component />
             </Fit>
           </div>
         ) : (
-          <div className="relative flex-1 bg-[#050505] aspect-[4/5] sm:aspect-[16/11] min-h-[440px] max-h-[760px]">
-            <replica.Component />
+          <div className="relative flex-1 bg-[#050505] aspect-[4/5] sm:aspect-[16/11] min-h-[440px] max-h-[760px]" data-lenis-prevent>
+            <div className="absolute inset-0">
+              <replica.Component />
+            </div>
           </div>
         )
       ) : (

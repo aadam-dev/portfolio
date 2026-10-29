@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { EASE_IN_OUT, EASE_OUT } from "@/lib/motion";
 import InquiryForm from "./InquiryForm";
 
-const EMAIL = "aadamsays@gmail.com";
+const EMAIL = "adam@aadambuilds.dev";
 const MAILTO = `mailto:${EMAIL}?subject=Hi%20Aadam%2C%20Let%E2%80%99s%20Work%20Together`;
 
 const LINKS = [

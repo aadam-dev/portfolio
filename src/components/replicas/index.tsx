@@ -38,6 +38,7 @@ export const REPLICAS: Record<string, Replica> = {
     label: "Open a shift",
     url: "primetijara.com/pos",
     Component: dynamic(() => import("./PrimeShift"), { ssr: false, loading: Loading }),
+    native: [640, 400],
   },
   rockmotion: {
     label: "Try the calculator",
@@ -67,8 +68,11 @@ export function Fit({ w, h, children }: { w: number; h: number; children: React.
   }, [w, h]);
   return (
     <div ref={box} className="absolute inset-0 grid place-items-center overflow-hidden">
-      <div style={{ width: w, height: h, transform: `scale(${k})`, opacity: k ? 1 : 0 }} className="shrink-0 overflow-hidden bg-white">
-        {children}
+      {/* a box the size of the scaled screen, so centring works at any width */}
+      <div style={{ width: w * k, height: h * k, opacity: k ? 1 : 0 }} className="relative shrink-0 overflow-hidden bg-white">
+        <div style={{ width: w, height: h, transform: `scale(${k})`, transformOrigin: "0 0" }} className="absolute left-0 top-0">
+          {children}
+        </div>
       </div>
     </div>
   );

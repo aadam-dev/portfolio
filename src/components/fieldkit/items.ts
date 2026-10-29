@@ -7,30 +7,31 @@
 
 const img = (name: string) => `/fieldkit/${name}.webp`;
 
-/* Al Boyut POS register (alboyut/pos.webp) */
+/* Al Boyut POS register, rebuilt on the current light register. Public catalogue names, prices and units only;
+   the salesperson and session are sample values, never a real member of staff. */
 export const ALBOYUT = {
   logo: img("logo-alboyut"),
-  branch: "Lakeside/00006",
-  salesperson: "Baria",
-  /** Category counts from the live register sidebar. */
+  session: "Demo/00001",
+  salesperson: "Ama",
+  /** Category counts from the live catalogue. */
   categories: [
-    { id: "all", label: "All", count: 881 },
+    { id: "all", label: "All", count: 1087 },
     { id: "cement", label: "Cement & Concrete", count: 12 },
-    { id: "pipes", label: "Pipes", count: 38 },
-    { id: "fittings", label: "Plumbing Fittings", count: 278 },
-    { id: "hardware", label: "Hardware & Fasteners", count: 123 },
+    { id: "pipes", label: "Plumbing Pipes", count: 40 },
+    { id: "fittings", label: "Plumbing Fittings", count: 287 },
+    { id: "hardware", label: "Hardware & Fasteners", count: 131 },
   ],
-  /** Alert threshold used across the real inventory ("Alert at 10"). */
+  /** Below this the card shows "Low stock", as on the register. */
   alertAt: 10,
   items: [
-    { id: "empire325", name: "Empire Cement 32.5R", price: 72, cat: "cement", img: img("pos-empire-325"), stock: 14 },
-    { id: "dzata", name: "Dzata Cement", price: 106, cat: "cement", img: img("pos-dzata"), stock: 11 },
-    { id: "bend34", name: '3/4" PVC Bend', price: 3, cat: "fittings", img: img("pos-pvc-bend-34"), stock: 96 },
-    { id: "dovepop", name: "Dove POP", price: 78, cat: "cement", img: img("pos-dove-pop"), stock: 23 },
-    { id: "nail3", name: 'Wall Nail 3" (box)', price: 20, cat: "hardware", img: img("pos-wall-nail"), stock: 40 },
-    { id: "pipe12", name: 'Interplast 1/2" Pipe', price: 39, cat: "pipes", img: img("pos-interplast-12"), stock: 31 },
-    { id: "empire425", name: "Empire Cement 42.5R", price: 94, cat: "cement", img: img("pos-empire-425"), stock: 12 },
-    { id: "bend12", name: '1/2" PVC Bend', price: 2, cat: "fittings", img: img("pos-pvc-bend-12"), stock: 120 },
+    { id: "empire325", name: "Empire Cement 32.5R", price: 84, unit: "bag", cat: "cement", img: img("pos-empire-325"), stock: 14 },
+    { id: "dzata", name: "Dzata Cement", price: 106, unit: "bag", cat: "cement", img: img("pos-dzata"), stock: 11 },
+    { id: "bend34", name: '3/4" PVC Bend', price: 3, unit: "pc", cat: "fittings", img: img("pos-pvc-bend-34"), stock: 96 },
+    { id: "dovepop", name: "Dove POP", price: 78, unit: "bag", cat: "cement", img: img("pos-dove-pop"), stock: 8 },
+    { id: "nail3", name: 'Wall Nail 3" (box)', price: 20, unit: "box", cat: "hardware", img: img("pos-wall-nail"), stock: 40 },
+    { id: "pipe12", name: 'Interplast 1/2" Pipe', price: 39, unit: "length", cat: "pipes", img: img("pos-interplast-12"), stock: 31 },
+    { id: "empire425", name: "Empire Cement 42.5R", price: 106, unit: "bag", cat: "cement", img: img("pos-empire-425"), stock: 12 },
+    { id: "bend12", name: '1/2" PVC Bend', price: 2, unit: "pc", cat: "fittings", img: img("pos-pvc-bend-12"), stock: 120 },
   ],
 } as const;
 

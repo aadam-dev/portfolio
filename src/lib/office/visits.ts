@@ -10,8 +10,8 @@ const salt = () => process.env.TRACK_SALT ?? process.env.SESSION_SECRET ?? "aada
 
 /**
  * A visitor id: the browser's own random id when it keeps one, otherwise
- * IP + user agent + day. Either way it is hashed with a secret salt, so the
- * raw values never reach the database.
+ * IP + user agent + day, hashed into a short stable key. The IP itself is
+ * stored on the session.
  */
 export function visitorId(o: { vid?: string; ip?: string; ua: string }) {
   const day = new Date().toISOString().slice(0, 10);
@@ -97,6 +97,7 @@ export function sessionRows(s: Session, story: { pages: string[]; did: string[] 
   return [
     ["Where", `${flagEmoji(s.country)} ${place(s)}`.trim()],
     ["Device", [s.device, s.browser, s.os].filter(Boolean).join(", ")],
+    ["IP", s.ip ?? ""],
     ["Arrived from", s.referrer || "Direct"],
     ["Campaign", s.utm ? Object.entries(s.utm).map(([k, v]) => `${k}=${v}`).join(", ") : ""],
     ["Landed on", s.landing ?? ""],
@@ -150,6 +151,7 @@ export async function record(
         city: ctx.geo.city ?? null,
         lat: ctx.geo.latitude ? Number(ctx.geo.latitude) : null,
         lng: ctx.geo.longitude ? Number(ctx.geo.longitude) : null,
+        ip: ctx.ip ?? null,
         ...ua,
         referrer: t.ref ? t.ref.slice(0, 300) : null,
         utm: t.utm && Object.keys(t.utm).length ? t.utm : null,
@@ -223,5 +225,6 @@ export function visitLine(s: Session) {
     esc([s.device, s.browser, s.os].filter(Boolean).join(", ")) || null,
     line("From", from + (s.utm?.utm_source ? ` (${s.utm.utm_source}${s.utm.utm_campaign ? `, ${s.utm.utm_campaign}` : ""})` : "")),
     line("Landed on", s.landing ?? "/"),
+    line("IP", s.ip),
   ]);
 }

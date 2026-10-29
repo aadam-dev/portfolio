@@ -56,7 +56,7 @@ export default function ScaledIframe({
         title={title}
         src={src}
         loading="lazy"
-        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        sandbox="allow-scripts allow-same-origin allow-popups"
         referrerPolicy="no-referrer"
         style={{
           width: designWidth,

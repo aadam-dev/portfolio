@@ -217,7 +217,7 @@ export default function Nav() {
                     </a>
                   ))}
                   <a
-                    href="mailto:aadamsays@gmail.com"
+                    href="mailto:adam@aadambuilds.dev"
                     className="hit hover:text-white transition-colors"
                   >
                     {t("email")}

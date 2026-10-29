@@ -269,6 +269,7 @@ function VisitRows({ d, rows }: { d: Dashboard; rows: Dashboard["recent"] }) {
                 <DeviceIcon d={s.device} /> {s.browser?.split(" ")[0] ?? ""}
               </p>
               <p className="md:w-[110px] truncate">{host(s.referrer)}</p>
+              {s.ip && <p className="md:w-[120px] truncate font-mono text-[11px]" title="IP address">{s.ip}</p>}
               <p className="md:w-[56px] tabular-nums text-[var(--ink-2)]">{dur(s.seconds)}</p>
             </div>
           </li>

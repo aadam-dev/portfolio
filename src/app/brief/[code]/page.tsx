@@ -33,7 +33,7 @@ export default async function BriefPage({ params }: { params: Promise<{ code: st
             <Link href="/#build" className="btn btn-solid">
               Change this brief <ArrowUpRight className="w-4 h-4" />
             </Link>
-            <a href={`mailto:aadamsays@gmail.com?subject=${encodeURIComponent("About a brief")}&body=${encodeURIComponent(`Brief: https://aadambuilds.dev/brief/${code}`)}`} className="btn btn-line">
+            <a href={`mailto:adam@aadambuilds.dev?subject=${encodeURIComponent("About a brief")}&body=${encodeURIComponent(`Brief: https://aadambuilds.dev/brief/${code}`)}`} className="btn btn-line">
               Email Aadam about it
             </a>
           </div>
