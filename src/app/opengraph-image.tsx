@@ -17,8 +17,8 @@ export default function OG() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px",
-          background:
-            "radial-gradient(ellipse 120% 80% at 50% -10%, rgba(255,91,31,0.32) 0%, rgba(11,10,8,1) 60%), #0B0A08",
+          backgroundColor: "#0B0A08",
+          backgroundImage: "radial-gradient(ellipse 120% 80% at 50% -10%, rgba(255,91,31,0.32) 0%, rgba(11,10,8,1) 60%)",
           color: "#F2F2F5",
         }}
       >
@@ -58,8 +58,8 @@ export default function OG() {
             letterSpacing: "-0.035em",
           }}
         >
-          <div>I help businesses</div>
-          <div>
+          <div style={{ display: "flex" }}>I help businesses</div>
+          <div style={{ display: "flex" }}>
             <span
               style={{
                 color: "transparent",
