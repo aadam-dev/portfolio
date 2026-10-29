@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import "./globals.css";
 import SmoothScroll from "@/components/site/SmoothScroll";
+import VisitTracker from "@/components/site/VisitTracker";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -109,6 +110,7 @@ export default async function RootLayout({
           </a>
           <SmoothScroll>{children}</SmoothScroll>
         </NextIntlClientProvider>
+        <VisitTracker />
       </body>
     </html>
   );
