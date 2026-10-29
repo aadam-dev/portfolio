@@ -66,18 +66,54 @@ create table if not exists settings (
   updated_at timestamptz not null default now()
 );
 
+-- the Office: projects, tasks, leads, outreach, reading, workouts, grad school, notes
+create table if not exists items (
+  id serial primary key,
+  kind text not null,
+  title text not null,
+  status text not null default '',
+  priority integer not null default 0,
+  due date,
+  project_id integer,
+  data jsonb not null default '{}'::jsonb,
+  sort double precision not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists items_kind_idx on items (kind, status);
+create index if not exists items_due_idx on items (due);
+
+create table if not exists item_events (
+  id serial primary key,
+  item_id integer not null,
+  at timestamptz not null default now(),
+  text text not null
+);
+create index if not exists item_events_item_idx on item_events (item_id, at);
+
+create table if not exists login_attempts (
+  id serial primary key,
+  ip text,
+  at timestamptz not null default now(),
+  ok boolean not null default false
+);
+create index if not exists login_attempts_at_idx on login_attempts (at);
+
 alter table visitors enable row level security;
 alter table sessions enable row level security;
 alter table events enable row level security;
 alter table messages enable row level security;
 alter table settings enable row level security;
+alter table items enable row level security;
+alter table item_events enable row level security;
+alter table login_attempts enable row level security;
 
 do $$
 begin
   if exists (select 1 from pg_roles where rolname = 'anon') then
-    revoke all on visitors, sessions, events, messages, settings from anon;
+    revoke all on visitors, sessions, events, messages, settings, items, item_events, login_attempts from anon;
   end if;
   if exists (select 1 from pg_roles where rolname = 'authenticated') then
-    revoke all on visitors, sessions, events, messages, settings from authenticated;
+    revoke all on visitors, sessions, events, messages, settings, items, item_events, login_attempts from authenticated;
   end if;
 end $$;

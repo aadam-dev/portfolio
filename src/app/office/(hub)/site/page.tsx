@@ -1,17 +1,14 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Bell, CheckCircle2, CircleDashed, Inbox as InboxIcon, LogOut, Monitor, RotateCcw, Send, Smartphone, Tablet } from "lucide-react";
-import { db, dbUrl } from "@/db";
-import { officeConfigured, signedIn } from "@/lib/office/auth";
-import { mailConfigured } from "@/lib/office/mail";
-import { chatId, telegramConfigured } from "@/lib/office/telegram";
+import { Bell, Inbox as InboxIcon, Monitor, RotateCcw, Smartphone, Tablet } from "lucide-react";
+import { db } from "@/db";
+import { signedIn } from "@/lib/office/auth";
 import { dashboard, RANGES, rangeOf, type Dashboard } from "@/lib/office/dash";
 import { eventLabel, flagEmoji, place } from "@/lib/office/visits";
-import { logout, setStatus, testTelegram } from "./actions";
-import TelegramPanel, { OwnerMark, ThisBrowser } from "./TelegramPanel";
-import OfficeMap from "./OfficeMap";
-import VisitsChart from "./ui/VisitsChart";
-import { BarList, Delta, Panel, Spark, STATUS } from "./ui/parts";
+import { setStatus } from "../../actions";
+import OfficeMap from "../../OfficeMap";
+import VisitsChart from "../../ui/VisitsChart";
+import { BarList, Delta, Panel, Spark } from "../../ui/parts";
 
 export const dynamic = "force-dynamic";
 
@@ -32,49 +29,6 @@ const dur = (s: number) => {
   return `${Math.floor(v / 3600)}h ${Math.round((v % 3600) / 60)}m`;
 };
 const fmtN = (n: number) => n.toLocaleString("en-US");
-
-function Setup({ tables, chat }: { tables: boolean; chat: boolean }) {
-  const items: [string, boolean, string, boolean?][] = [
-    ["Supabase", !!dbUrl(), "Connect → Transaction pooler URI, as DATABASE_URL in Vercel (or POSTGRES_URL from the Supabase integration)."],
-    ["Tables", tables, "Created automatically the first time the site uses the database."],
-    ["Telegram bot", telegramConfigured(), "TELEGRAM_BOT_TOKEN from @BotFather, in Vercel only."],
-    ["Telegram chat", chat, "Message the bot, then use Find my chat, or set TELEGRAM_CHAT_ID."],
-    ["Office sign-in", officeConfigured(), "OFFICE_PASSWORD and SESSION_SECRET in Vercel."],
-    ["Daily digest", !!process.env.CRON_SECRET, "CRON_SECRET: any long random string."],
-    ["Visitor confirmations", mailConfigured(), "Optional: RESEND_API_KEY and INQUIRY_FROM.", true],
-  ];
-  const list = (
-    <ul className="divide-y divide-[var(--line)]">
-      {items.map(([k, ok, how, optional]) => (
-        <li key={k} className="flex gap-3 py-2.5 first:pt-0 last:pb-0">
-          {ok ? (
-            <CheckCircle2 className="mt-0.5 w-4 h-4 shrink-0" style={{ color: STATUS.good }} aria-hidden />
-          ) : (
-            <CircleDashed className="mt-0.5 w-4 h-4 shrink-0" style={{ color: optional ? "var(--ink-4)" : STATUS.warning }} aria-hidden />
-          )}
-          <div className="min-w-0">
-            <p className="text-[13px] text-[var(--foreground)]">
-              {k} <span className="text-[var(--ink-3)]">{ok ? "Ready" : optional ? "Optional" : "To do"}</span>
-            </p>
-            {!ok && <p className="mt-0.5 text-[12px] leading-snug text-[var(--ink-3)]">{how}</p>}
-          </div>
-        </li>
-      ))}
-    </ul>
-  );
-  const missing = items.filter(([, ok, , optional]) => !ok && !optional).length;
-  if (missing) return list;
-  return (
-    <details className="group">
-      <summary className="cursor-pointer list-none flex items-center gap-2 text-[13.5px]">
-        <CheckCircle2 className="w-4 h-4" style={{ color: STATUS.good }} aria-hidden />
-        Everything is connected
-        <span className="ml-auto text-[12px] text-[var(--ink-3)] group-open:hidden">Details</span>
-      </summary>
-      <div className="mt-4">{list}</div>
-    </details>
-  );
-}
 
 function DeviceIcon({ d }: { d: string | null }) {
   const I = d === "mobile" ? Smartphone : d === "tablet" ? Tablet : Monitor;
@@ -279,13 +233,11 @@ function VisitRows({ d, rows }: { d: Dashboard; rows: Dashboard["recent"] }) {
   );
 }
 
-export default async function Office({ searchParams }: { searchParams: Promise<{ test?: string; chat?: string; range?: string }> }) {
+export default async function SitePage({ searchParams }: { searchParams: Promise<{ test?: string; chat?: string; range?: string }> }) {
   if (!(await signedIn())) redirect("/office/login");
   const { test, chat: chatNote, range } = await searchParams;
   const r = rangeOf(range);
   const store = await db();
-  const chat = telegramConfigured() ? await chatId() : null;
-  const fromEnv = !!process.env.TELEGRAM_CHAT_ID?.trim();
 
   let d: Dashboard | null = null;
   let failed = false;
@@ -300,70 +252,27 @@ export default async function Office({ searchParams }: { searchParams: Promise<{
 
   const note = test ? (test === "sent" ? "Test sent to Telegram." : `Telegram test failed: ${test}`) : chatNote ? (chatNote === "saved" ? "Chat saved. Updates will go there." : `Chat not saved: ${chatNote}`) : null;
   const system = (
-    <div id="system" className="space-y-4 md:space-y-5 scroll-mt-20">
-      <TelegramPanel token={telegramConfigured()} chat={chat} fromEnv={fromEnv} />
-      <ThisBrowser />
-      <Panel title="Setup">
-        <Setup tables={!!d} chat={!!chat} />
-      </Panel>
-    </div>
+    <Panel title="Setup and Telegram">
+      <p className="text-[13px] text-[var(--ink-3)]">
+        Telegram, sign-in code, this browser and the setup checklist live in{" "}
+        <Link href="/office/settings" className="text-[var(--foreground)] underline underline-offset-4">
+          Settings
+        </Link>
+        .
+      </p>
+    </Panel>
   );
 
   return (
-    <div className="theme-fixed min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-      <OwnerMark />
-      <header className="sticky top-0 z-30 border-b border-[var(--line)] bg-[#0b0a08]/80 backdrop-blur-xl">
-        <div className="max-w-[1320px] mx-auto px-4 md:px-6 h-14 flex items-center gap-4">
-          <Link href="/" className="flex items-center gap-2 text-[15px] font-semibold whitespace-nowrap">
-            <span className="w-2 h-2 rounded-full bg-[var(--accent)]" /> Aadam
-            <span className="text-[var(--ink-4)] font-normal">/</span>
-            <span className="font-normal text-[var(--ink-2)]">Back office</span>
-          </Link>
-          <nav className="hidden md:flex items-center gap-1 ml-4 text-[13px] text-[var(--ink-3)]">
-            {[
-              ["#overview", "Overview"],
-              ["#inbox", "Inbox"],
-              ["#visits", "Visits"],
-              ["#system", "System"],
-            ].map(([h, l]) => (
-              <a key={h} href={h} className="px-3 h-8 inline-flex items-center gap-1.5 rounded-full hover:bg-[var(--tint)] hover:text-[var(--foreground)]">
-                {l}
-                {l === "Inbox" && d && d.unread > 0 && <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-[var(--accent)] text-[10.5px] font-semibold text-[var(--on-accent)] grid place-items-center">{d.unread}</span>}
-              </a>
-            ))}
-          </nav>
-          <div className="ml-auto flex items-center gap-2">
-            {d && (
-              <span className="hidden sm:inline-flex items-center gap-2 h-8 px-3 rounded-full border border-[var(--line)] text-[12.5px] text-[var(--ink-2)]">
-                <span className="relative flex w-2 h-2">
-                  {d.live > 0 && <span className="absolute inset-0 rounded-full animate-ping" style={{ background: STATUS.good, opacity: 0.6 }} />}
-                  <span className="relative w-2 h-2 rounded-full" style={{ background: d.live ? STATUS.good : "var(--ink-4)" }} />
-                </span>
-                {d.live} on the site now
-              </span>
-            )}
-            <form action={testTelegram}>
-              <button className="inline-flex items-center gap-1.5 h-8 px-3 rounded-full border border-[var(--line)] text-[12.5px] text-[var(--ink-2)] hover:border-[var(--line-strong)] hover:text-[var(--foreground)]" title="Send a test update to Telegram">
-                <Send className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Test Telegram</span>
-              </button>
-            </form>
-            <form action={logout}>
-              <button className="grid place-items-center w-8 h-8 rounded-full border border-[var(--line)] text-[var(--ink-2)] hover:text-[var(--foreground)]" aria-label="Sign out" title="Sign out">
-                <LogOut className="w-3.5 h-3.5" />
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-[1320px] mx-auto px-4 md:px-6 pt-6 md:pt-8 pb-24 space-y-4 md:space-y-5">
+    <>
+      <main className="space-y-4 md:space-y-5">
         {note && <p className="rounded-xl border border-[var(--line)] bg-[var(--surface)] px-4 py-2.5 text-[13px] text-[var(--ink-2)]">{note}</p>}
 
         {/* one filter row above everything it scopes */}
         <div id="overview" className="flex flex-wrap items-center justify-between gap-3 scroll-mt-20">
           <div className="seg" role="tablist" aria-label="Date range">
             {RANGES.map((x) => (
-              <Link key={x.id} href={`/office?range=${x.id}`} role="tab" aria-selected={x.id === r.id} className="seg-item inline-flex items-center">
+              <Link key={x.id} href={`/office/site?range=${x.id}`} role="tab" aria-selected={x.id === r.id} className="seg-item inline-flex items-center">
                 {x.label}
               </Link>
             ))}
@@ -430,6 +339,6 @@ export default async function Office({ searchParams }: { searchParams: Promise<{
           </div>
         )}
       </main>
-    </div>
+    </>
   );
 }

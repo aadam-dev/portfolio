@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
+import { leadFromMessage } from "@/lib/office/seed";
 import { messages } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { OWNER, layout, mailConfigured, sendMail } from "@/lib/office/mail";
@@ -53,6 +54,8 @@ export async function POST(request: Request) {
     try {
       const [row] = await store.insert(messages).values({ kind, name, contact, budget, body: message, brief, sessionId: sid }).returning({ id: messages.id });
       id = row.id;
+      // straight into the Office's Leads board
+      await leadFromMessage(store, { id: row.id, name, contact, kind, brief, body: message, budget }).catch((e) => console.error("lead create failed", e));
     } catch (e) {
       console.error("message store failed", e);
     }

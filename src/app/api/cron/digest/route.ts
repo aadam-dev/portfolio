@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
+import { today } from "@/lib/office/items";
 import { sql } from "drizzle-orm";
 import { sessions } from "@/db/schema";
 import { esc, frame, line, send } from "@/lib/office/telegram";
@@ -29,6 +30,8 @@ export async function GET(request: Request) {
     .from(sessions)
     .where(sql`${sessions.startedAt} > now() - interval '24 hours' and ${sessions.tgMsgId} is null`);
   const n = s.totals.sessions;
+  // what the Office says needs me today
+  const plan = await today(store).catch(() => null);
   const sent = await send(
     frame(
       "digest",
@@ -45,10 +48,11 @@ export async function GET(request: Request) {
         line("Played with", list(s.played, (k) => eventLabel(k))),
         quiet?.n ? `<i>${quiet.n} visit${quiet.n === 1 ? " was" : "s were"} only counted here, not announced (busy hours, or Telegram not set yet).</i>` : null,
         ...(s.inbox.length ? ["", "<b>Messages</b>", ...s.inbox.map((m) => `• ${esc(m.name)} (${esc(m.contact)}): ${esc(m.body.slice(0, 120))}`)] : []),
+        ...(plan && plan.due.length ? ["", `<b>Due today in the Office (${plan.due.length})</b>`, ...plan.due.slice(0, 10).map((d) => `• ${esc(d.title)}${d.due && d.due < plan.day ? " (late)" : ""}`)] : []),
       ],
       `📊 Daily digest`,
     ),
-    { buttons: [[{ text: "Open the back office", url: `${origin}/office` }]] },
+    { buttons: [[{ text: "Open the Office", url: `${origin}/office` }]] },
   );
   return NextResponse.json({ ok: sent.ok, visits: s.totals.sessions });
 }

@@ -24,11 +24,11 @@ export default async function Login() {
           <span className="grid place-items-center w-10 h-10 rounded-full border border-[var(--line-strong)] text-[var(--ink-2)]">
             <Lock className="w-4 h-4" />
           </span>
-          <h1 className="mt-4 text-[24px] font-semibold tracking-[-0.02em]">Back office</h1>
-          <p className="mt-1 text-[13.5px] text-[var(--ink-3)]">Visits, messages and the Telegram updates.</p>
+          <h1 className="mt-4 text-[24px] font-semibold tracking-[-0.02em]">Office</h1>
+          <p className="mt-1 text-[13.5px] text-[var(--ink-3)]">Projects, leads, outreach, plans and the site. Enter your code.</p>
           <LoginForm />
         </div>
-        <p className="mt-5 text-center text-[12px] text-[var(--ink-4)]">Private. Signing in also stops this browser from being counted as a visitor.</p>
+        <p className="mt-5 text-center text-[12px] text-[var(--ink-4)]">Private. Five wrong codes lock sign-in for 15 minutes. Signing in also stops this browser from being counted as a visitor.</p>
       </div>
     </main>
   );

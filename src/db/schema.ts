@@ -1,4 +1,4 @@
-import { bigint, boolean, doublePrecision, index, integer, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { bigint, boolean, date, doublePrecision, index, integer, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 /**
  * Keep in step with ./sql.ts, which creates these tables on Supabase.
@@ -82,5 +82,50 @@ export const settings = pgTable("settings", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
+/** Everything planned in the Office: one table, told apart by kind; per-kind fields live in data. */
+export const items = pgTable(
+  "items",
+  {
+    id: serial("id").primaryKey(),
+    kind: text("kind").notNull(),
+    title: text("title").notNull(),
+    status: text("status").default("").notNull(),
+    priority: integer("priority").default(0).notNull(),
+    due: date("due", { mode: "string" }),
+    projectId: integer("project_id"),
+    data: jsonb("data").$type<Record<string, unknown>>().default({}).notNull(),
+    sort: doublePrecision("sort").default(0).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index("items_kind_idx").on(t.kind, t.status), index("items_due_idx").on(t.due)],
+);
+
+/** A dated line in an item's history: touches, stage moves, notes. */
+export const itemEvents = pgTable(
+  "item_events",
+  {
+    id: serial("id").primaryKey(),
+    itemId: integer("item_id").notNull(),
+    at: timestamp("at", { withTimezone: true }).defaultNow().notNull(),
+    text: text("text").notNull(),
+  },
+  (t) => [index("item_events_item_idx").on(t.itemId, t.at)],
+);
+
+/** Office sign-in attempts, for the lockout. */
+export const loginAttempts = pgTable(
+  "login_attempts",
+  {
+    id: serial("id").primaryKey(),
+    ip: text("ip"),
+    at: timestamp("at", { withTimezone: true }).defaultNow().notNull(),
+    ok: boolean("ok").default(false).notNull(),
+  },
+  (t) => [index("login_attempts_at_idx").on(t.at)],
+);
+
+export type Item = typeof items.$inferSelect;
+export type ItemEvent = typeof itemEvents.$inferSelect;
 export type Session = typeof sessions.$inferSelect;
 export type Message = typeof messages.$inferSelect;
