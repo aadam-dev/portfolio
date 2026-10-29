@@ -189,3 +189,24 @@ def art_print(out):
     d.text((w * 0.1, h * 0.92), "ACCRA, 5.6037\u00b0 N", font=font("sans", 26), fill=(60, 56, 50))
     img = cloth(img, None, amount=4)
     img.save(out)
+
+
+def basketball(out, w=2048, h=1024):
+    """Equirectangular basketball skin: orange leather, black seams (equator, a meridian, two curved panels)."""
+    import math
+    img = Image.new("RGB", (w, h), (196, 92, 34))
+    d = ImageDraw.Draw(img)
+    ink = (26, 18, 14)
+    lw = max(6, w // 220)
+    d.line([(0, h / 2), (w, h / 2)], fill=ink, width=lw)
+    for u in (0, w / 2, w - 1):
+        d.line([(u, 0), (u, h)], fill=ink, width=lw)
+    # the two curved seams, each a circle around the ball tilted off the poles
+    for c in (0.25, 0.75):
+        pts = []
+        for i in range(0, h + 1, 4):
+            v = i / h
+            u = c + 0.11 * math.sin(2 * math.pi * v) * (1 if c < 0.5 else -1)
+            pts.append((u * w, i))
+        d.line(pts, fill=ink, width=lw)
+    img.save(out)

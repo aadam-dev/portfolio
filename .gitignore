@@ -46,3 +46,6 @@ next-env.d.ts
 
 # downloaded source assets
 /.cache/
+
+# python
+__pycache__/

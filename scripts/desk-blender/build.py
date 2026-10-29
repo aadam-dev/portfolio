@@ -30,6 +30,9 @@ sys.path.insert(0, HERE)
 import textures  # noqa: E402
 
 TOP = 0.75
+CHAIR_AT = (-0.36, -0.78, 0.0)
+BALL_AT = (0.52, 0.27, 0.12)
+CHAIR_TURN = -28  # degrees; negative turns the seat toward the desk centre
 BOOK_DIMS = {"laws": (0.24, 0.162, 0.05), "mastery": (0.235, 0.156, 0.036), "quiet": (0.212, 0.142, 0.027)}
 
 ap = argparse.ArgumentParser()
@@ -40,6 +43,7 @@ ap.add_argument("--samples", type=int, default=384)
 ap.add_argument("--out", default=None)
 ap.add_argument("--screens", default=os.path.join(CACHE, "screens"), help="folder with left/center/right.png")
 ap.add_argument("--blend", default=None, help="also save the .blend here")
+ap.add_argument("--no-render", action="store_true", help="build the scene and stop (bake.py uses this)")
 args = ap.parse_args(sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else sys.argv[1:])
 
 NIGHT = args.phase == "night"
@@ -225,7 +229,8 @@ def cyl(name, r, h, loc=(0, 0, 0), rot=(0, 0, 0), mat=None, segs=64, r2=None, ca
 
 def sphere(name, r, loc=(0, 0, 0), scale=(1, 1, 1), mat=None, parent=None):
     bm = bmesh.new()
-    bmesh.ops.create_uvsphere(bm, u_segments=48, v_segments=24, radius=r)
+    bm.loops.layers.uv.verify()
+    bmesh.ops.create_uvsphere(bm, u_segments=48, v_segments=24, radius=r, calc_uvs=True)
     ob = from_bm(name, bm, [mat] if mat else [], smooth=True, loc=loc, parent=parent)
     ob.scale = scale
     return ob
@@ -758,6 +763,66 @@ box("frame_mat", (0.38, 0.002, 0.5), loc=(0, -0.0125, 0), mat=M["mat_board"], pa
 art = textured("art", os.path.join(tex_dir, "print.png"), rough=0.85)
 quad("art", [(-0.13, -0.0142, 0.18), (0.13, -0.0142, 0.18), (0.13, -0.0142, -0.18), (-0.13, -0.0142, -0.18)], art, parent=fr)
 
+# ---------------------------------------------------------------- ergonomic chair (in front, turned toward the desk)
+
+M["knit"] = bumpy("knit", "#26272a", 0.92, scale=900, strength=0.25, Sheen_Weight=0.4)
+M["mesh_back"] = bumpy("mesh_back", "#1c1d20", 0.85, scale=1400, strength=0.4)
+M["chrome"] = principled("chrome", "#d8d9dc", 0.18, metal=1.0)
+chair = empty("chair", loc=CHAIR_AT, rot=(0, 0, math.radians(CHAIR_TURN)))
+# five-star base with casters
+for i in range(5):
+    a = math.radians(90 + i * 72)
+    leg = empty(f"chair_leg{i}", loc=(0, 0, 0.085), rot=(0, 0, a), parent=chair)
+    box(f"chair_spoke{i}", (0.31, 0.045, 0.028), loc=(0.165, 0, 0), rot=(0, math.radians(6), 0), mat=M["chrome"], bev=0.01, segs=3, parent=leg)
+    cyl(f"chair_caster{i}", 0.026, 0.03, loc=(0.31, 0, -0.058), rot=(math.pi / 2, 0, 0), mat=M["plastic_black"], parent=leg, segs=24)
+    cyl(f"chair_fork{i}", 0.01, 0.03, loc=(0.31, 0, -0.025), mat=M["plastic_black"], parent=leg, segs=12)
+cyl("chair_hub", 0.045, 0.06, loc=(0, 0, 0.065), mat=M["chrome"], base=True, parent=chair)
+cyl("chair_lift", 0.022, 0.3, loc=(0, 0, 0.12), mat=M["chrome"], base=True, parent=chair)
+cyl("chair_sleeve", 0.03, 0.12, loc=(0, 0, 0.12), mat=M["plastic_black"], base=True, parent=chair)
+box("chair_mech", (0.2, 0.22, 0.045), loc=(0, 0.01, 0.43), mat=M["plastic_black"], bev=0.008, parent=chair)
+seat = box("chair_seat", (0.5, 0.48, 0.075), loc=(0, 0.02, 0.49), mat=M["knit"], bev=0.03, segs=5, parent=chair)
+box("chair_seat_shell", (0.48, 0.46, 0.02), loc=(0, 0.02, 0.45), mat=M["plastic_black"], bev=0.008, parent=chair)
+# spine and a curved mesh back, leaning back a touch
+box("chair_spine", (0.06, 0.03, 0.34), loc=(0, -0.24, 0.6), rot=(math.radians(-8), 0, 0), mat=M["plastic_black"], bev=0.008, parent=chair)
+back = empty("chair_back", loc=(0, -0.27, 0.88), rot=(math.radians(-12), 0, 0), parent=chair)
+bm = bmesh.new()
+bmesh.ops.create_grid(bm, x_segments=16, y_segments=12, size=0.5)
+for v in bm.verts:
+    x, z = v.co.x * 0.46, v.co.y * 0.58  # grid is in XY: map to width and height
+    curve = 0.06 * (x / 0.23) ** 2 - 0.025 * math.exp(-((z + 0.1) / 0.12) ** 2)  # wraps round, lumbar bulge
+    w = 1 - 0.12 * max(0.0, z / 0.29)  # narrows to the shoulders
+    v.co = Vector((x * w, -curve, z))
+box_uv(bm)
+mesh_panel = from_bm("chair_mesh", bm, [M["mesh_back"]], smooth=True, parent=back)
+sol = mesh_panel.modifiers.new("solid", "SOLIDIFY")
+sol.thickness = 0.012
+tube("chair_frame", [(-0.215, -0.055, -0.29), (-0.23, -0.06, 0.0), (-0.2, -0.05, 0.29), (0.0, -0.0, 0.31), (0.2, -0.05, 0.29), (0.23, -0.06, 0.0), (0.215, -0.055, -0.29), (0.0, 0.0, -0.31), (-0.215, -0.055, -0.29)], 0.012, M["plastic_black"], parent=back)
+box("chair_lumbar", (0.3, 0.03, 0.07), loc=(0, 0.01, -0.1), mat=M["plastic_black"], bev=0.012, parent=back)
+box("chair_head", (0.3, 0.06, 0.13), loc=(0, -0.02, 0.42), rot=(math.radians(-6), 0, 0), mat=M["knit"], bev=0.025, segs=4, parent=back)
+box("chair_head_post", (0.04, 0.02, 0.12), loc=(0, 0.02, 0.33), mat=M["plastic_black"], parent=back)
+for sx in (-1, 1):
+    box(f"chair_arm_post{sx}", (0.035, 0.07, 0.2), loc=(sx * 0.265, -0.02, 0.58), mat=M["plastic_black"], bev=0.008, parent=chair)
+    box(f"chair_arm_pad{sx}", (0.08, 0.27, 0.032), loc=(sx * 0.265, 0.0, 0.69), mat=M["knit"], bev=0.014, segs=4, parent=chair)
+HS["chair"] = (chair, Vector((0, 0, 0.75)))
+
+# ---------------------------------------------------------------- basketball (on the floor, under the desk front)
+
+textures.basketball(os.path.join(tex_dir, "basketball.png"))
+M["ball"] = textured("ball", os.path.join(tex_dir, "basketball.png"), rough=0.62)
+_bnt = M["ball"].node_tree
+_bnz = _bnt.nodes.new("ShaderNodeTexNoise")
+_bnz.inputs["Scale"].default_value = 900
+_bnz.inputs["Detail"].default_value = 2
+_bbp = _bnt.nodes.new("ShaderNodeBump")
+_bbp.inputs["Strength"].default_value = 0.35
+_bbp.inputs["Distance"].default_value = 0.0006
+_bnt.links.new(_bnz.outputs["Fac"], _bbp.inputs["Height"])
+_bnt.links.new(_bbp.outputs["Normal"], bsdf_of(M["ball"]).inputs["Normal"])
+BALL_R = 0.12
+ball = sphere("ball", BALL_R, loc=BALL_AT, mat=M["ball"])
+ball.rotation_euler = (math.radians(18), math.radians(-10), math.radians(35))
+HS["ball"] = (ball, Vector((0, 0, 0)))
+
 # ---------------------------------------------------------------- cables
 
 tube("cable_mon", [(0.03, 0.29, TOP + 0.3), (0.05, 0.36, TOP + 0.05), (0.15, 0.39, TOP + 0.002), (0.4, 0.4, TOP - 0.2)], 0.0026, M["cable"])
@@ -910,6 +975,10 @@ for look in ("AgX - Medium High Contrast", "Medium High Contrast"):
     except Exception:
         pass
 vs.exposure = 0.35 if NIGHT else 0.0
+
+if args.no_render:
+    bpy.context.view_layer.update()
+    raise SystemExit(0)
 
 # ---------------------------------------------------------------- projections
 
