@@ -39,7 +39,7 @@ function Card({ place, onClose }: { place: Place; onClose: () => void }) {
           type="button"
           onClick={onClose}
           aria-label={t("close")}
-          className="on-media absolute top-2 right-2 !w-8 !h-8 !p-0 justify-center"
+          className="on-media absolute top-2 right-2 !w-10 !h-10 md:!w-8 md:!h-8 !p-0 justify-center"
         >
           <X className="w-4 h-4" />
         </button>
@@ -51,14 +51,14 @@ function Card({ place, onClose }: { place: Place; onClose: () => void }) {
         <h3 className="mt-1 card-title">{place.name}</h3>
         <p className="card-text !mt-1.5 !text-[13.5px]">{place.shipped}</p>
         <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[13px]">
-          <Link href={placeHref(place)} className="inline-flex items-center gap-1 text-white underline-offset-4 hover:underline">
+          <Link href={placeHref(place)} className="hit inline-flex items-center gap-1 text-white underline-offset-4 hover:underline">
             {t("caseStudy")} <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
           <a
             href={mapsSearch(place)}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1 text-[var(--ink-2)] underline-offset-4 hover:underline"
+            className="hit inline-flex items-center gap-1 text-[var(--ink-2)] underline-offset-4 hover:underline"
           >
             {t("directions")} <ArrowUpRight className="w-3.5 h-3.5" />
           </a>
@@ -211,7 +211,7 @@ export default function WorkMap() {
                     type="button"
                     onClick={() => pick(p.id)}
                     aria-pressed={selected === p.id}
-                    className={`card card-link w-full px-3.5 py-2.5 lg:py-2 !bg-[var(--background)] ${selected === p.id ? "card-on" : ""}`}
+                    className={`card card-link w-full px-3.5 py-2.5 lg:py-2 min-h-11 lg:min-h-0 !bg-[var(--background)] ${selected === p.id ? "card-on" : ""}`}
                   >
                     <span className="block text-[14px] leading-tight font-medium whitespace-nowrap">{p.name}</span>
                     <span className="block card-meta mt-0.5 whitespace-nowrap">{p.area}</span>

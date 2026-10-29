@@ -14,7 +14,7 @@ export default function LabTeaser() {
           <h2 id="lab-heading" className="font-display text-white" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", lineHeight: 1, letterSpacing: "-0.03em" }}>
             From the Lab
           </h2>
-          <Link href="/lab" className="mt-4 inline-flex items-center gap-1 text-[14px] text-[var(--ink-2)] hover:text-white">
+          <Link href="/lab" className="hit mt-4 inline-flex items-center gap-1 text-[14px] text-[var(--ink-2)] hover:text-white">
             Everything in the Lab <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>

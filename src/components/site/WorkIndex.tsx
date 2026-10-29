@@ -139,7 +139,7 @@ export default function WorkIndex({ asPage = false }: { asPage?: boolean }) {
                 type="button"
                 onClick={() => setActive(f.value)}
                 aria-pressed={active === f.value}
-                className={`font-mono text-[11px] tracking-[0.16em] uppercase transition-colors duration-300 ${
+                className={`hit py-2 font-mono text-[11.5px] tracking-[0.16em] uppercase transition-colors duration-300 ${
                   active === f.value
                     ? "text-[var(--accent)]"
                     : "text-[var(--ink-4)] hover:text-[var(--ink-2)]"

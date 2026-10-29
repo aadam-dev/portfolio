@@ -64,11 +64,11 @@ export default function CaseStudy({ project, next }: Props) {
             <nav aria-label="Breadcrumb" className="mb-8 md:mb-10 text-[13px] text-[var(--ink-3)]">
               <ol className="flex items-center gap-2">
                 <li>
-                  <Link href="/" className="hover:text-white transition-colors">Aadam</Link>
+                  <Link href="/" className="hit hover:text-white transition-colors">Aadam</Link>
                 </li>
                 <li aria-hidden="true">/</li>
                 <li>
-                  <Link href="/work" className="inline-flex items-center gap-1.5 hover:text-white transition-colors">
+                  <Link href="/work" className="hit inline-flex items-center gap-1.5 hover:text-white transition-colors">
                     <ArrowLeft className="w-3.5 h-3.5" /> Work
                   </Link>
                 </li>
@@ -519,7 +519,7 @@ function ToggleBtn({
       onClick={onClick}
       role="tab"
       aria-selected={active}
-      className="px-4 py-1.5 rounded-full text-[12px] font-mono uppercase tracking-[0.14em] transition-colors"
+      className="px-4 py-2.5 md:py-1.5 rounded-full text-[12px] font-mono uppercase tracking-[0.14em] transition-colors"
       style={{
         background: active ? "var(--foreground)" : "transparent",
         color: active ? "var(--background)" : "var(--ink-3)",

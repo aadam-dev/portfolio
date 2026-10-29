@@ -28,7 +28,7 @@ function SoundToggle() {
       aria-pressed={on}
       aria-label={on ? t("soundOff") : t("soundOn")}
       title={on ? t("soundOff") : t("soundOn")}
-      className="w-9 h-9 grid place-items-center rounded-full border border-[var(--line-strong)] text-white hover:bg-white/5"
+      className="w-11 h-11 md:w-9 md:h-9 grid place-items-center rounded-full border border-[var(--line-strong)] text-white hover:bg-white/5"
     >
       {on ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
     </button>
@@ -82,7 +82,7 @@ export default function Nav() {
         <div className="max-w-[1280px] mx-auto flex items-center justify-between">
           <Link
             href="/"
-            className="group inline-flex items-center gap-2"
+            className="hit group inline-flex items-center gap-2 py-2"
             aria-label="Aadam · home"
           >
             <span className="relative inline-flex w-2 h-2">
@@ -144,7 +144,7 @@ export default function Nav() {
             type="button"
             onClick={() => setOpen(true)}
             aria-label={t("openMenu")}
-            className="md:hidden p-2 rounded-full border border-[var(--line-strong)] text-white hover:bg-white/5"
+            className="md:hidden grid place-items-center w-11 h-11 rounded-full border border-[var(--line-strong)] text-white hover:bg-white/5"
           >
             <Menu className="w-4 h-4" />
           </button>
@@ -196,7 +196,7 @@ export default function Nav() {
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label={t("closeMenu")}
-                  className="p-2 rounded-full border border-[var(--line-strong)] text-white"
+                  className="grid place-items-center w-11 h-11 rounded-full border border-[var(--line-strong)] text-white"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -232,14 +232,14 @@ export default function Nav() {
                       href={s.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="hover:text-white transition-colors"
+                      className="hit hover:text-white transition-colors"
                     >
                       {s.label}
                     </a>
                   ))}
                   <a
                     href="mailto:aadamsays@gmail.com"
-                    className="hover:text-white transition-colors"
+                    className="hit hover:text-white transition-colors"
                   >
                     {t("email")}
                   </a>

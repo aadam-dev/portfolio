@@ -77,7 +77,7 @@ export default function Contact({ compact = false }: { compact?: boolean }) {
               whileInView={{ y: 0 }}
               viewport={{ once: true, amount: 0.6 }}
               transition={{ duration: 1.0, ease: EASE_OUT }}
-              className="group relative block font-display lowercase break-all"
+              className="group relative block py-2 font-display lowercase break-all"
               style={{
                 fontSize: compact ? "clamp(1.6rem, 4.4vw, 4rem)" : "clamp(1.8rem, 6.5vw, 6.2rem)",
                 lineHeight: 1.05,
@@ -96,7 +96,7 @@ export default function Contact({ compact = false }: { compact?: boolean }) {
             type="button"
             onClick={copyEmail}
             aria-label={copied ? t("copiedAria") : t("copyAria")}
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] px-4 py-2 font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--ink-2)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
+            className="inline-flex items-center gap-2 min-h-11 md:min-h-0 rounded-full border border-[var(--line-strong)] px-4 py-2 font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--ink-2)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
           >
             <span className="relative inline-grid overflow-hidden">
               <AnimatePresence mode="popLayout" initial={false}>
@@ -147,7 +147,7 @@ export default function Contact({ compact = false }: { compact?: boolean }) {
               href={l.href}
               target={l.href.startsWith("http") ? "_blank" : undefined}
               rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="font-mono text-[12px] tracking-[0.16em] uppercase text-[var(--ink-3)] hover:text-[var(--accent)] transition-colors"
+              className="hit py-1 font-mono text-[12px] tracking-[0.16em] uppercase text-[var(--ink-3)] hover:text-[var(--accent)] transition-colors"
             >
               {t(l.key)} ↗
             </a>

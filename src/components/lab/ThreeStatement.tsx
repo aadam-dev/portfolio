@@ -163,7 +163,7 @@ export default function ThreeStatement() {
       <aside className="lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto card p-5">
         <div className="flex items-center justify-between">
           <p className="font-medium text-white">Assumptions</p>
-          <button type="button" onClick={() => { setInputs(DEFAULTS); setShocks(NO_SHOCKS); }} className="inline-flex items-center gap-1.5 text-[12.5px] text-[var(--ink-3)] hover:text-white">
+          <button type="button" onClick={() => { setInputs(DEFAULTS); setShocks(NO_SHOCKS); }} className="hit inline-flex items-center gap-1.5 text-[12.5px] text-[var(--ink-3)] hover:text-white">
             <RotateCcw className="w-3.5 h-3.5" /> Reset
           </button>
         </div>
@@ -184,7 +184,7 @@ export default function ThreeStatement() {
                     step={f.step}
                     value={inputs[f.key]}
                     onChange={(e) => setInputs((x) => ({ ...x, [f.key]: Number(e.target.value) }))}
-                    className="mt-1 w-full accent-[var(--accent)]"
+                    className="mt-1 w-full h-8 md:h-auto accent-[var(--accent)]"
                   />
                 </label>
               ))}

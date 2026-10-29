@@ -70,7 +70,7 @@ function RisingDevice({
 // Each chapter enters differently from the last.
 const ENTRANCES: Variants[] = [
   { hidden: { clipPath: "inset(0 0 100% 0)", y: 30 }, show: { clipPath: "inset(0 0 0% 0)", y: 0 } },
-  { hidden: { opacity: 0, x: -40 }, show: { opacity: 1, x: 0 } },
+  { hidden: { opacity: 0, filter: "blur(8px)" }, show: { opacity: 1, filter: "blur(0px)" } },
   { hidden: { clipPath: "inset(0 100% 0 0)" }, show: { clipPath: "inset(0 0% 0 0)" } },
   { hidden: { opacity: 0, scale: 0.92, y: 20 }, show: { opacity: 1, scale: 1, y: 0 } },
 ];
@@ -159,7 +159,7 @@ function ChapterBlock({
                 <li key={p.href}>
                   <Link
                     href={p.href}
-                    className="group inline-flex items-center gap-1.5 rounded-full border border-[var(--line-strong)] px-3 py-1.5 text-[12.5px] text-[var(--ink-2)] hover:text-[var(--foreground)] hover:border-[var(--foreground)] transition-colors"
+                    className="group inline-flex items-center gap-1.5 rounded-full border border-[var(--line-strong)] px-3.5 py-2.5 md:px-3 md:py-1.5 text-[13px] md:text-[12.5px] text-[var(--ink-2)] hover:text-[var(--foreground)] hover:border-[var(--foreground)] transition-colors"
                   >
                     <span className="w-1.5 h-1.5 rounded-full" style={{ background: p.accent }} />
                     {p.name}
@@ -215,7 +215,7 @@ export default function FieldKit() {
   };
 
   return (
-    <section id="work-in-motion" aria-label="Work in motion" className="relative">
+    <section id="work-in-motion" aria-label="Work in motion" className="relative [overflow-x:clip]">
       <div
         aria-hidden="true"
         className="absolute top-0 right-0 pointer-events-none"

@@ -76,7 +76,7 @@ export default function Footer() {
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="text-[15px] text-[var(--ink-2)] hover:text-white transition-colors"
+                    className="hit inline-block py-1 text-[15px] text-[var(--ink-2)] hover:text-white transition-colors"
                   >
                     {l.ns === "nav" ? tNav(l.key) : t(l.key)}
                   </Link>
@@ -94,7 +94,7 @@ export default function Footer() {
                     href={s.href}
                     target={s.href.startsWith("http") ? "_blank" : undefined}
                     rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="group inline-flex items-center gap-1 text-[15px] text-[var(--ink-2)] hover:text-white transition-colors"
+                    className="hit group inline-flex items-center gap-1 py-1 text-[15px] text-[var(--ink-2)] hover:text-white transition-colors"
                   >
                     {s.label}
                     <ArrowUpRight className="w-3.5 h-3.5 opacity-60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -111,13 +111,13 @@ export default function Footer() {
               <span className="ping-soft absolute inline-flex w-full h-full rounded-full bg-[var(--success)]" />
               <span className="relative inline-flex w-2 h-2 rounded-full bg-[var(--success)]" />
             </span>
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--ink-3)]">
+            <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--ink-3)]">
               {t("availability")}
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--ink-3)]">
-            <a href="tel:+233559602056" className="hover:text-white transition-colors">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--ink-3)]">
+            <a href="tel:+233559602056" className="hit hover:text-white transition-colors">
               +233 559 602 056
             </a>
             <span className="hidden md:inline-block w-1 h-1 rounded-full bg-[var(--ink-4)]" aria-hidden="true" />

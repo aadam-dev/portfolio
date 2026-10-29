@@ -76,7 +76,7 @@ export function NavThemeToggle({ className = "" }: { className?: string }) {
       type="button"
       onClick={(e) => set(next, e.currentTarget)}
       aria-label={next === "dark" ? "Switch to night mode" : "Switch to day mode"}
-      className={`relative inline-grid place-items-center w-9 h-9 rounded-full border border-[var(--line-strong)] text-[var(--ink-2)] hover:text-[var(--foreground)] transition-colors ${className}`}
+      className={`relative inline-grid place-items-center w-11 h-11 md:w-9 md:h-9 rounded-full border border-[var(--line-strong)] text-[var(--ink-2)] hover:text-[var(--foreground)] transition-colors ${className}`}
     >
       <span suppressHydrationWarning className="inline-grid place-items-center">
         {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}

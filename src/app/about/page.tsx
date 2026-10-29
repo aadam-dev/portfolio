@@ -135,8 +135,8 @@ export default function AboutPage() {
               <div>
                 <dt className="text-[var(--ink-3)]">Elsewhere</dt>
                 <dd className="flex gap-3">
-                  <a href="https://linkedin.com/in/aadamsays" target="_blank" rel="noreferrer" className="text-white underline underline-offset-4">LinkedIn</a>
-                  <a href="https://github.com/aadam-dev" target="_blank" rel="noreferrer" className="text-white underline underline-offset-4">GitHub</a>
+                  <a href="https://linkedin.com/in/aadamsays" target="_blank" rel="noreferrer" className="hit text-white underline underline-offset-4">LinkedIn</a>
+                  <a href="https://github.com/aadam-dev" target="_blank" rel="noreferrer" className="hit text-white underline underline-offset-4">GitHub</a>
                 </dd>
               </div>
             </dl>
@@ -167,7 +167,7 @@ export default function AboutPage() {
                   <p className="text-[14.5px] text-[var(--ink-2)]">{x.org}</p>
                   {x.body && <p className="mt-2 max-w-[680px] text-[15px] leading-relaxed text-[var(--ink-2)] text-pretty">{x.body}</p>}
                   {x.link && (
-                    <Link href={x.link.href} className="mt-2 inline-flex items-center gap-1 text-[14px] text-white underline-offset-4 hover:underline">
+                    <Link href={x.link.href} className="hit mt-2 inline-flex items-center gap-1 text-[14px] text-white underline-offset-4 hover:underline">
                       {x.link.label} <ArrowUpRight className="w-3.5 h-3.5" />
                     </Link>
                   )}

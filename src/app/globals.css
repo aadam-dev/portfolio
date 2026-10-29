@@ -816,3 +816,37 @@ html.pl-seen .preloader {
   color: #121110;
 }
 }
+
+/* ------------------------------------------------------------------ touch */
+/* .hit gives a small inline link or button a 44px touch area without moving the layout */
+@media (pointer: coarse) {
+  .hit {
+    position: relative;
+  }
+  .hit::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+}
+/* iOS zooms into any field under 16px */
+@media (max-width: 767px) {
+  :is(input, select, textarea) {
+    font-size: 16px !important;
+  }
+}
+@media (pointer: coarse) {
+  .pill {
+    height: 42px;
+  }
+  .seg-item {
+    height: 40px;
+  }
+  .on-media {
+    height: 40px;
+  }
+}

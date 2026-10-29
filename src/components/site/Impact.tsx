@@ -64,7 +64,7 @@ export default function Impact() {
               <AnimatedValue value={s.value} />
               <p className="mt-2 text-[13px] md:text-[14px] text-white">{s.label}</p>
               {s.note && (
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--ink-4)]">
+                <p className="mt-1 font-mono text-[11.5px] uppercase tracking-[0.16em] text-[var(--ink-4)]">
                   {s.note}
                 </p>
               )}

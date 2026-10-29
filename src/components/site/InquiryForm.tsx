@@ -150,7 +150,7 @@ export default function InquiryForm() {
           href={whatsappUrl()}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--ink-3)] hover:text-[#25d366] transition-colors"
+          className="hit font-mono text-[12px] tracking-[0.14em] uppercase text-[var(--ink-3)] hover:text-[#25d366] transition-colors"
         >
           {t("whatsappInstead")} ↗
         </a>

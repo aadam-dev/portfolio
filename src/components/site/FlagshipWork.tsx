@@ -97,14 +97,14 @@ function FlagshipCard({
                 {project.walkthroughs && project.walkthroughs.length > 0 && (
                   <Link
                     href={`/work/${projectSlug(project)}#walkthrough`}
-                    className="text-[13px] text-[var(--ink-2)] hover:text-[var(--foreground)] transition-colors whitespace-nowrap"
+                    className="hit text-[13px] text-[var(--ink-2)] hover:text-[var(--foreground)] transition-colors whitespace-nowrap"
                   >
                     Watch walkthrough
                   </Link>
                 )}
                 <Link
                   href={`/work/${projectSlug(project)}`}
-                  className="card-link inline-flex items-center gap-1.5 text-[13px] text-[var(--foreground)] whitespace-nowrap"
+                  className="hit card-link inline-flex items-center gap-1.5 text-[13px] text-[var(--foreground)] whitespace-nowrap"
                 >
                   {t("caseStudy")}
                   <ArrowUpRight className="card-arrow" />

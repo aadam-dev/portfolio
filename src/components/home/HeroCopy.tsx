@@ -72,7 +72,7 @@ function Line({ children, delay }: { children: React.ReactNode; delay: number })
   );
 }
 
-/** The landing headline: studio voice, one rotating verb per practice. */
+/** The landing headline: first person, one rotating verb per practice. */
 export default function HeroCopy({ delay = 0 }: { delay?: number }) {
   const t = useTranslations("home.hero");
   return (
@@ -84,7 +84,8 @@ export default function HeroCopy({ delay = 0 }: { delay?: number }) {
       >
         <Line delay={delay + 0.1}>{t("lineA")}</Line>
         <Line delay={delay + 0.22}>
-          <span className="whitespace-nowrap">
+          {/* one line where it fits; long translations wrap instead of being cut */}
+          <span className="text-balance">
             {t("lineB")} <CyclingWord />
           </span>
         </Line>
