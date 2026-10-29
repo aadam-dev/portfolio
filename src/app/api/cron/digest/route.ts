@@ -16,7 +16,7 @@ export async function GET(request: Request) {
   if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
-  const store = db();
+  const store = await db();
   if (!store) return NextResponse.json({ ok: false, error: "no_database" }, { status: 503 });
   const s = await stats(store, 24);
   const region = new Intl.DisplayNames(["en"], { type: "region" });

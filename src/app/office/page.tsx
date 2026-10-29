@@ -76,7 +76,7 @@ function Setup({ tables = false }: { tables?: boolean }) {
 export default async function Office({ searchParams }: { searchParams: Promise<{ test?: string }> }) {
   if (!(await signedIn())) redirect("/office/login");
   const { test } = await searchParams;
-  const store = db();
+  const store = await db();
 
   const header = (
     <header className="flex flex-wrap items-center gap-3 justify-between">

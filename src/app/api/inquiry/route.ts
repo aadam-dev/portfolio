@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "missing_fields" }, { status: 400 });
   }
 
-  const store = db();
+  const store = await db();
   let id: number | undefined;
   if (store) {
     try {
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
     replyTo: contact.includes("@") ? contact : undefined,
     ...owner,
   });
-  if (sent.ok && store && id !== undefined) await store.update(messages).set({ emailed: true }).where(eq(messages.id, id)).catch(() => {});
+  if (sent.ok && store && id !== undefined) await store.update(messages).set({ notified: true }).where(eq(messages.id, id)).catch(() => {});
 
   // a copy for the sender
   if (sent.ok && contact.includes("@")) {

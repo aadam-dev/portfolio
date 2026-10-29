@@ -25,7 +25,7 @@ const ok = () => new NextResponse(null, { status: 204 });
 /** Visitor beacons. Stored only on Vercel deployments (or with TRACK_LOCAL=1 for testing). */
 export async function POST(request: Request) {
   if (!process.env.VERCEL && process.env.TRACK_LOCAL !== "1") return ok();
-  const store = db();
+  const store = await db();
   if (!store) return ok();
   const ua = request.headers.get("user-agent") ?? "";
   if (!ua || isbot(ua)) return ok();

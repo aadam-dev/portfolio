@@ -33,7 +33,7 @@ export async function setStatus(form: FormData) {
   if (!(await signedIn())) redirect("/office/login");
   const id = Number(form.get("id"));
   const status = String(form.get("status"));
-  const store = db();
+  const store = await db();
   if (!store || !Number.isInteger(id) || !["new", "replied", "archived"].includes(status)) return;
   await store.update(messages).set({ status }).where(eq(messages.id, id));
   revalidatePath("/office");

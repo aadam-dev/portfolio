@@ -1,6 +1,8 @@
-import { boolean, doublePrecision, index, integer, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { bigint, boolean, doublePrecision, index, integer, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 /**
+ * Keep in step with ./sql.ts, which creates these tables on Supabase.
+ *
  * Visitors are identified by a salted hash of IP, user agent and day, so no
  * raw IP is stored and the id rotates daily. Sessions carry the place and
  * device; events record page views and what people did on the site.
@@ -34,6 +36,8 @@ export const sessions = pgTable(
     landing: text("landing"),
     returning: boolean("returning").default(false).notNull(),
     alerted: boolean("alerted").default(false).notNull(),
+    /** The Telegram "new visit" message, so the notable alert can reply under it. */
+    tgMsgId: bigint("tg_msg_id", { mode: "number" }),
   },
   (t) => [index("sessions_started_idx").on(t.startedAt)],
 );
@@ -65,10 +69,17 @@ export const messages = pgTable(
     brief: text("brief"),
     sessionId: text("session_id"),
     status: text("status").default("new").notNull(), // new | replied | archived
-    emailed: boolean("emailed").default(false).notNull(),
+    notified: boolean("notified").default(false).notNull(),
   },
   (t) => [index("messages_at_idx").on(t.at)],
 );
+
+/** Small key/value store, e.g. the Telegram chat picked in /office. */
+export const settings = pgTable("settings", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
 
 export type Session = typeof sessions.$inferSelect;
 export type Message = typeof messages.$inferSelect;

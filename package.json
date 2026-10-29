@@ -10,11 +10,10 @@
     "prepare": "husky",
     "predev": "node scripts/copy-map-worker.mjs",
     "prebuild": "node scripts/copy-map-worker.mjs",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:sql": "node scripts/db-sql.mjs"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.2.0",
     "@react-three/drei": "^10.7.9",
     "@react-three/fiber": "^9.8.2",
     "@react-three/postprocessing": "^3.2.2",
