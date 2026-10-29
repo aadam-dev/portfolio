@@ -217,16 +217,27 @@
     },
     "desk": {
       "screens": {
-        "left": "Delish inventory on Odoo",
-        "center": "Al Boyut register",
-        "right": "Deal screen"
+        "left": "مخزون Delish على Odoo",
+        "center": "نقطة بيع Al Boyut",
+        "right": "شاشة الصفقة"
       },
-      "back": "Back to the desk",
-      "hint": "Grab the ball, touch the water, brush the curtain, open a screen. The lamp switches the lights.",
-      "hintStill": "Open a screen below to try the systems.",
-      "soundOn": "Sound on",
-      "soundOff": "Sound off",
-      "posterAlt": "The studio desk: a laptop with two extender screens, a basketball, a glass of water, a notebook and a phone by a curtained window in Accra."
+      "open": "افتح",
+      "back": "العودة إلى المكتب",
+      "close": "إغلاق",
+      "hint": "افتح أي شاشة لتجرّب النظام. المصباح يبدّل الإضاءة.",
+      "hintTouch": "المس شاشة لفتحها.",
+      "viewerHint": "هذه نسخة عاملة. يمكنك العودة إلى المكتب في أي وقت.",
+      "rotate": "أدر هاتفك أفقيًا لشاشة أكبر.",
+      "lamp": "الإضاءة",
+      "lampOn": "أشعل الضوء",
+      "lampOff": "أطفئ الضوء",
+      "books": "على مكتبي",
+      "booksCard": "على مكتبي الآن:",
+      "phone": "العمل أثناء التشغيل",
+      "notebook": "البحث",
+      "arrived": "نقطة بيع Al Boyut تعمل",
+      "scrollUp": "العودة إلى المكتب",
+      "posterAlt": "مكتبي في أكرا: شاشة تعرض نقطة بيع Al Boyut، وحاسوب محمول عليه Odoo، وجهاز لوحي عليه شاشة صفقة، ولوحة مفاتيح، وكوب قهوة، وثلاثة كتب، ونبتة، ومصباح، ودفتر، وهاتف."
     },
     "practices": {
       "heading": "ماذا أفعل",

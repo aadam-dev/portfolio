@@ -81,6 +81,8 @@ Named by Aadam in review (URL to confirm, please fill in):
 | v2 prototype | Field Kit: one invented gadget, then real hardware (POS, phone, laptop, tablet) with real items | Make the work touchable; v1 was generic |
 | v2 review | Invented gadget read as toyish; laptop/phone/POS with real catalogues kept | Realism |
 | v3 | Desk hero in 3D (three.js, react-three-fiber, drei, Rapier), lazy-loaded with a 2D fallback | A creative landing moment; basketball, water, curtain references |
+| v4 | Desk hero is a Blender render with live screens laid on it, replacing the real-time 3D desk | Looks like a real developer's desk on every device; no GPU needed; about 1.5 MB less to load |
+| v4 | Opening a desk screen opens a full-screen viewer with six ways out (Back button, close, Esc, tap outside, the phone's Back gesture, swipe down) | A visitor got stuck in the Odoo screen; the zoomed camera had one small way back |
 | v3 | Studio front, person behind; About page in first person | Clients and academics both visit |
 | v3 | Mirepa may be named | It is on the CV |
 | v3 | Rockmotion car built in code from separate parts | Exact anatomy and explode view, no licence issues |
@@ -96,7 +98,7 @@ Named by Aadam in review (URL to confirm, please fill in):
 
 | Route | Content |
 |---|---|
-| `/` | Preloader → desk hero → what we do (4 practices) → work in motion → map of businesses → lab teaser → proof → build desk + contact |
+| `/` | Preloader → desk hero → what I do (4 practices) → work in motion → map of businesses → lab teaser → proof → build desk + contact |
 | `/work`, `/work/[slug]` | Full index and case studies |
 | `/lab`, `/lab/model`, `/lab/car` | Three-statement model, Rockmotion lab (VIN check, walkaround, shipping, landed cost), full map |
 | `/about` | Personal: profile, education, research, experience, leadership, skills, CV download |
@@ -143,7 +145,7 @@ Tracking only runs on Vercel deployments and respects Do Not Track and Global Pr
 ## 9. Performance budget
 
 - Below the hero: at 4× CPU throttle, under 3% of frames over 33 ms and no long task over 100 ms during scroll (v2 harness).
-- Hero: steady 60 fps on an unthrottled desktop; 30 fps or better on the mobile tier; still poster for reduced motion and no WebGL.
+- Hero: a rendered image (no WebGL), LCP plate under 400 KB; the only live part is the register on the monitor, mounted when the browser is idle.
 - 3D and map code load after first paint and never block it.
 
 ## 10. Phase log
@@ -168,6 +170,8 @@ Tracking only runs on Vercel deployments and respects Do Not Track and Global Pr
 | v3.2 H | Back office redesign | `/office` rebuilt as a dashboard following the dataviz method: one date-range filter row (24 hours, 7 days, 30 days) scoping everything, one hero number with its change against the previous period, stat tiles with deltas and sparklines, a two-series visits chart (validated colours, crosshair tooltip, arrow keys, table view), ranked bar lists, an inbox with replies and status, a visit feed with journeys, a Telegram panel and a setup checklist that collapses once everything is connected. New sign-in page. |
 | v3.2 I | One ignore switch | The tracker skips any browser with `scout-ignore` (old `visit-owner` still honoured); `?scout-ignore=1` / `=0` sets or clears it with a toast and a cleaned URL; signing in to `/office` sets it; System panel shows "This browser" with a switch. |
 | v4 L | First-person voice | Every team-voice line rewritten to "I" in en, fr and ar, plus case studies, privacy, lab, metadata, OG image, the brief page and the inquiry email. About now says "The studio is me." The English left in fr.json and ar.json (field kit and home) is translated. |
+| v4 J | Blender desk | `scripts/desk-blender/`: oak desk, monitor (Al Boyut register), laptop on a stand (Delish on Odoo), tablet (deal screen), keyboard, mouse, felt mat, *The Laws of Human Nature*, *Mastery* and *Quiet* stacked with readable spines, a mug of coffee with steam, plant, lamp, pen cup, notebook, phone, a print on the wall; daylight through a window, night by lamp and screen light. Desktop and phone cameras, day and night, encoded to AVIF and WebP. The render writes each screen's corners and each object's position, so the live register sits on the monitor through a CSS homography and the hotspots (lamp, books, phone, notebook) line up at any size. Scroll dive kept (CSS, desktop). New `ScreenViewer`. three.js desk, Rapier and postprocessing removed; nav sound toggle removed with it. |
+| v4 M | Mobile pass | Audited every route at 360, 390 and 430 px in English, French and Arabic: no sideways scroll anywhere (Arabic headline and a slide-in were pushing the page), 44 px touch areas (`.hit` for inline links, bigger nav buttons, chips, pills and segments on touch screens), 16 px fields so iOS never zooms, small labels raised to 12 px. Hero stacks below 1200 px; tablets get the wide camera in a 16:9 frame, phones their own camera. |
 
 Tags live in the local repo only (the sandbox can push the branch, not tags). Each phase is also a single commit on `prototype/field-kit-hero-1eqww3`, so `git revert <sha>` undoes it.
 
@@ -176,7 +180,7 @@ Map notes: tiles come from OpenFreeMap (no key, attribution shown). Night mode i
 ## 11. Asset credits
 
 - Car: [Car Concept](https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/CarConcept) by Eric Chadwick / Darmstadt Graphics Group, CC-BY 4.0, from a CC0 model by Unity Fan. The Khronos and 3D Commerce logos are excluded from that licence; `scripts/fetch-car.mjs` replaces the plate texture, paints the logo out of the tyre sidewalls (colour and normal maps) and removes the steering wheel emblem, then compresses to `public/lab/car.glb` (meshopt, WebP, 3.4 MB).
-- Desk: oak maps from the three.js examples ("hardwood2", MIT); Diffuse Transmission Plant (CC-BY 4.0 / CC0) and Teacup (CC0) from the Khronos glTF sample assets; HDRIs from Poly Haven (CC0) as packed by @pmndrs/assets. All fetched and compressed by `scripts/fetch-desk.mjs` (about 2.1 MB, loaded with the scene).
+- Desk: built and rendered in Blender 5.2 (Cycles) by `scripts/desk-blender/build.py`, entirely in code. Inputs fetched by `scripts/desk-blender/fetch.mjs` into `.cache/desk/`: the three.js "hardwood2" floor texture (MIT), the Khronos Diffuse Transmission Plant (CC0), and Poly Haven HDRIs (CC0) as packed by @pmndrs/assets. Book jackets, the lock screen and the print are drawn by `textures.py` (titles and authors only, no publisher art). Only the encoded plates ship.
 - Atlantic dot map: Natural Earth land (public domain) via `world-atlas`, generated by `scripts/atlantic-dots.mjs`.
 - Vehicle data: NHTSA vPIC and recalls APIs (US government, public).
 - Rockmotion data (5 US ports, 12 destinations with port-to-port transit times, RoRo and Container copy, vehicle types, insurance and buyer terms) comes from their site's source (github.com/aadam-dev/rockmotion). Freight, trucking, port charges and exchange rates are labelled examples: Rockmotion quotes prices one by one.

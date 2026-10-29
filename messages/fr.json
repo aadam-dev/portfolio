@@ -217,16 +217,27 @@
     },
     "desk": {
       "screens": {
-        "left": "Delish inventory on Odoo",
-        "center": "Al Boyut register",
-        "right": "Deal screen"
+        "left": "Inventaire Delish sur Odoo",
+        "center": "Caisse Al Boyut",
+        "right": "Analyse de dossier"
       },
-      "back": "Back to the desk",
-      "hint": "Grab the ball, touch the water, brush the curtain, open a screen. The lamp switches the lights.",
-      "hintStill": "Open a screen below to try the systems.",
-      "soundOn": "Sound on",
-      "soundOff": "Sound off",
-      "posterAlt": "The studio desk: a laptop with two extender screens, a basketball, a glass of water, a notebook and a phone by a curtained window in Accra."
+      "open": "Ouvrir",
+      "back": "Retour au bureau",
+      "close": "Fermer",
+      "hint": "Ouvrez un écran pour essayer le système. La lampe allume les lumières.",
+      "hintTouch": "Touchez un écran pour l'ouvrir.",
+      "viewerHint": "C'est une copie fonctionnelle. Retour au bureau quand vous voulez.",
+      "rotate": "Tournez votre téléphone pour un écran plus grand.",
+      "lamp": "Lumières",
+      "lampOn": "Allumer",
+      "lampOff": "Éteindre",
+      "books": "Sur mon bureau",
+      "booksCard": "Sur mon bureau en ce moment :",
+      "phone": "Le travail en mouvement",
+      "notebook": "Recherche",
+      "arrived": "La caisse Al Boyut, en marche",
+      "scrollUp": "Retour au bureau",
+      "posterAlt": "Mon bureau à Accra : un écran avec la caisse Al Boyut, un portable avec Odoo, une tablette avec une analyse de dossier, un clavier, une tasse de café, trois livres, une plante, une lampe, un carnet et un téléphone."
     },
     "practices": {
       "heading": "Ce que je fais",

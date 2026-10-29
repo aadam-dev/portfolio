@@ -13,7 +13,7 @@ import type { HingeId } from "./CarModel";
 import { AREAS, DESTINATIONS, METHODS, SAMPLE_VINS, US_PORTS, VEHICLES, shippingFor, truckingFor, type AreaId, type Method, type Vehicle } from "@/lib/rockmotion";
 import { clean } from "@/lib/vin";
 import { emit, emitOnce } from "@/components/fieldkit/events";
-import { detectTier } from "@/components/desk/tier";
+import { detectTier } from "@/lib/tier";
 
 const Stage = dynamic(() => import("./Stage"), { ssr: false });
 

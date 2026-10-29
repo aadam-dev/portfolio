@@ -221,12 +221,23 @@
         "center": "Al Boyut register",
         "right": "Deal screen"
       },
+      "open": "Open",
       "back": "Back to the desk",
-      "hint": "Grab the ball, touch the water, brush the curtain, open a screen. The lamp switches the lights.",
-      "hintStill": "Open a screen below to try the systems.",
-      "soundOn": "Sound on",
-      "soundOff": "Sound off",
-      "posterAlt": "The studio desk: a laptop with two extender screens, a basketball, a glass of water, a notebook and a phone by a curtained window in Accra."
+      "close": "Close",
+      "hint": "Open any screen to try the system. The lamp switches the lights.",
+      "hintTouch": "Tap a screen to open it.",
+      "viewerHint": "This is a working copy. Back to the desk any time.",
+      "rotate": "Turn your phone sideways for a bigger screen.",
+      "lamp": "Lights",
+      "lampOn": "Lights on",
+      "lampOff": "Lights off",
+      "books": "On my desk",
+      "booksCard": "On my desk right now:",
+      "phone": "Work in motion",
+      "notebook": "Research",
+      "arrived": "The Al Boyut register, working",
+      "scrollUp": "Back to the desk",
+      "posterAlt": "My desk in Accra: a monitor showing the Al Boyut register, a laptop with Odoo, a tablet with a deal screen, a keyboard, a mug of coffee, three books, a plant, a lamp, a notebook and a phone."
     },
     "practices": {
       "heading": "What I do",

@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { Menu, X, ArrowUpRight, Volume2, VolumeX } from "lucide-react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSound } from "@/components/desk/sound";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { NavThemeToggle } from "@/components/fieldkit/ThemeSwitch";
@@ -16,24 +15,6 @@ const LINKS = [
   { key: "about", href: "/about" },
   { key: "contact", href: "/#contact" },
 ] as const;
-
-/** Sound for the desk and the car, off until asked for. */
-function SoundToggle() {
-  const t = useTranslations("nav");
-  const [on, set] = useSound();
-  return (
-    <button
-      type="button"
-      onClick={() => set(!on)}
-      aria-pressed={on}
-      aria-label={on ? t("soundOff") : t("soundOn")}
-      title={on ? t("soundOff") : t("soundOn")}
-      className="w-11 h-11 md:w-9 md:h-9 grid place-items-center rounded-full border border-[var(--line-strong)] text-white hover:bg-white/5"
-    >
-      {on ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-    </button>
-  );
-}
 
 const SOCIALS = [
   { label: "GitHub", href: "https://github.com/aadam-dev" },
@@ -126,7 +107,6 @@ export default function Nav() {
               </a>
             ))}
             <LanguageSwitcher />
-            <SoundToggle />
             <NavThemeToggle />
             <Link
               href="/#build"
@@ -138,7 +118,6 @@ export default function Nav() {
           </div>
 
           <div className="md:hidden flex items-center gap-2">
-          <SoundToggle />
           <NavThemeToggle />
           <button
             type="button"
