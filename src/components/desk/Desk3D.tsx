@@ -319,6 +319,8 @@ function Scene({ view, night, focused, onFocus, onLamp, onSpot, screens, dive, l
   };
 
   useFrame((_, dt) => {
+    // in development, browser tests read the live camera from here
+    if (process.env.NODE_ENV === "development") (window as unknown as { __desk: unknown }).__desk = { camera, size, gl };
     const d = Math.min(dt, 1 / 20);
     light.step(d);
     toys.step(d);
