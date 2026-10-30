@@ -34,6 +34,9 @@ os.makedirs(CACHE, exist_ok=True)
 argv = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else sys.argv[1:]
 SAMPLES = int(argv[argv.index("--samples") + 1]) if "--samples" in argv else 192
 QUICK = "--quick" in argv  # small textures and few samples, for checking the pipeline
+# --light decor,chair re-bakes the lightmaps of only those groups and keeps the rest from the last bake
+# (lightmap UVs come from the same geometry each run); albedos are always re-baked, they take seconds
+LIGHT_ONLY = set(argv[argv.index("--light") + 1].split(",")) if "--light" in argv else None
 
 # ---------------------------------------------------------------- build the scene (day)
 g = {"__name__": "__desk_build__", "__file__": os.path.join(HERE, "build.py")}
@@ -136,6 +139,15 @@ for gname, roots in GROUPS.items():
     bpy.ops.object.make_single_user(type="SELECTED_OBJECTS", object=True, obdata=True)
     bpy.ops.object.convert(target="MESH")  # applies bevels, solidify, curves
     meshes = [o for o in vl.objects if o.select_get()]
+    # a join merges UV layers by name, and the textures read layer 0: give every part one layer, "UVMap",
+    # or a part whose layer is named differently (the wall print) loses its texture coordinates
+    for o in meshes:
+        uvs = o.data.uv_layers
+        if not uvs:
+            uvs.new(name="UVMap")
+        uvs[0].name = "UVMap"
+        while len(uvs) > 1:
+            uvs.remove(uvs[1])
     # unparent, keeping transforms, so the join keeps world positions
     for o in meshes:
         mw = o.matrix_world.copy()
@@ -288,10 +300,14 @@ out = {}
 for gname in joined:
     a = bake(gname, "albedo", ALBEDO[gname], 4, {"COLOR"})
     save_albedo(a, os.path.join(CACHE, f"{gname}-albedo.png"))
+    if LIGHT_ONLY is not None and gname not in LIGHT_ONLY:
+        continue
     lt = bake(gname, "day", LIGHT[gname], SAMPLES, {"DIRECT", "INDIRECT"})
     save_light(lt, os.path.join(CACHE, f"{gname}-day.png"))
 set_evening()
 for gname in joined:
+    if LIGHT_ONLY is not None and gname not in LIGHT_ONLY:
+        continue
     lt = bake(gname, "evening", LIGHT[gname], SAMPLES, {"DIRECT", "INDIRECT"})
     save_light(lt, os.path.join(CACHE, f"{gname}-evening.png"))
 
