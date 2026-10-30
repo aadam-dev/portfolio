@@ -68,12 +68,16 @@ export default function Contact() {
 
         {/* Giant mailto */}
         <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-          <div className="overflow-hidden">
+          {/* Trigger on the unclipped wrapper: the link starts outside it and would never report as in view. */}
+          <motion.div
+            className="overflow-hidden"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+          >
             <motion.a
               href={MAILTO}
-              initial={{ y: "110%" }}
-              whileInView={{ y: 0 }}
-              viewport={{ once: true, amount: 0.6 }}
+              variants={{ hidden: { y: "110%" }, visible: { y: 0 } }}
               transition={{ duration: 1.0, ease: EASE_OUT }}
               className="group relative block font-display lowercase break-all"
               style={{
@@ -88,7 +92,7 @@ export default function Contact() {
                 className="absolute left-0 -bottom-1 md:-bottom-2 h-[3px] w-full bg-[var(--accent)] origin-left scale-x-0 transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-x-100"
               />
             </motion.a>
-          </div>
+          </motion.div>
 
           <button
             type="button"

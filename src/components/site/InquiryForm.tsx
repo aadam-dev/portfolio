@@ -133,7 +133,7 @@ export default function InquiryForm() {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="inline-flex items-center gap-2 rounded-full bg-white text-black px-7 py-3.5 text-sm font-medium disabled:opacity-60 hover:bg-[var(--accent)] transition-colors"
+          className="inline-flex items-center gap-2 rounded-full bg-white text-black px-7 py-3.5 text-sm font-medium disabled:opacity-60 hover:bg-[var(--accent)] hover:text-[var(--accent-ink)] transition-colors"
         >
           {status === "sending" ? (
             <>

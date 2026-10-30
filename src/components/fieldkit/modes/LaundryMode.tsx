@@ -57,8 +57,9 @@ function Drum({ stage, reduce }: { stage: Stage | null; reduce: boolean }) {
           <motion.div className="absolute inset-0" animate={rotate} transition={transition}>
             {GARMENTS.map((g, i) => {
               const r = settled ? 0 : 34;
-              const x = settled ? (i - 2) * 14 : Math.cos((g.a * Math.PI) / 180) * r;
-              const y = settled ? 40 - (i % 2) * 6 : Math.sin((g.a * Math.PI) / 180) * r;
+              // Rounded so the server and browser render identical transforms (no hydration mismatch).
+              const x = settled ? (i - 2) * 14 : Math.round(Math.cos((g.a * Math.PI) / 180) * r * 100) / 100;
+              const y = settled ? 40 - (i % 2) * 6 : Math.round(Math.sin((g.a * Math.PI) / 180) * r * 100) / 100;
               return (
                 <motion.span
                   key={i}
@@ -146,8 +147,9 @@ export default function LaundryMode() {
   const idx = stage ? STAGES.indexOf(stage) : -1;
 
   return (
-    <div className="flex h-full gap-4 items-stretch">
-      <div className="flex flex-col items-center justify-center gap-3 w-[160px] shrink-0">
+    <div className="@container h-full">
+    <div className="flex flex-col gap-3 h-full @sm:flex-row @sm:gap-4 @sm:items-stretch">
+      <div className="flex flex-row @sm:flex-col items-center justify-center gap-3 @sm:w-[160px] shrink-0">
         <Drum stage={stage} reduce={reduce} />
         <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-white/45">
           {stage ? code : "Machine 02 · idle"}
@@ -165,14 +167,13 @@ export default function LaundryMode() {
                 <span className="relative w-3.5 h-3.5 shrink-0 rounded-full border border-white/20 grid place-items-center">
                   {(done || active) && (
                     <motion.span
-                      layoutId={undefined}
                       initial={reduce ? false : { scale: 0 }}
                       animate={{ scale: 1 }}
-                      className={`w-2 h-2 rounded-full ${active && s !== "Ready" ? "bg-[#E8B23A]" : "bg-[#4ADE80]"}`}
+                      className={`w-2 h-2 rounded-full ${active && s !== "Ready" ? "bg-[var(--accent)]" : "bg-[#4ADE80]"}`}
                     />
                   )}
                   {active && running && !reduce && (
-                    <span className="absolute inset-0 rounded-full border border-[#E8B23A] animate-ping" />
+                    <span className="absolute inset-0 rounded-full border border-[var(--accent)] animate-ping" />
                   )}
                 </span>
                 <span className={done ? "text-white/45" : active ? "text-[#F2EEE6]" : "text-white/30"}>{s}</span>
@@ -181,7 +182,7 @@ export default function LaundryMode() {
           })}
         </ol>
 
-        <div className="mt-auto">
+        <div className="mt-3 @sm:mt-auto">
           <AnimatePresence>
             {sms && (
               <motion.div
@@ -200,12 +201,13 @@ export default function LaundryMode() {
             type="button"
             onClick={primary}
             disabled={running}
-            className="w-full h-9 rounded-[8px] bg-[#E8B23A] text-[#14100A] text-[12px] font-semibold tracking-wide disabled:bg-white/[0.07] disabled:text-white/45 transition-colors"
+            className="w-full h-9 rounded-[8px] bg-[var(--accent)] text-[#14100A] text-[12px] font-semibold tracking-wide disabled:bg-white/[0.07] disabled:text-white/45 transition-colors"
           >
             {label}
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }

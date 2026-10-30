@@ -49,7 +49,7 @@ export default function MobileCtaBar() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25d366] text-black font-medium text-[13px] py-3"
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25d366] text-[#06140b] font-medium text-[13px] py-3"
             >
               <MessageCircle className="w-4 h-4" />
               {t("whatsapp")}

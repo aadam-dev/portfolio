@@ -91,8 +91,8 @@ export default function Services() {
                   <span
                     className="inline-flex items-center justify-center w-10 h-10 rounded-xl"
                     style={{
-                      background: "rgba(255,255,255,0.035)",
-                      border: "1px solid rgba(255,255,255,0.1)",
+                      background: "color-mix(in srgb, var(--foreground) 3.5%, transparent)",
+                      border: "1px solid var(--line-strong)",
                     }}
                     aria-hidden="true"
                   >

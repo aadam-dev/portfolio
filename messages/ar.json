@@ -7,7 +7,9 @@
     "startProject": "ابدأ مشروعًا",
     "email": "البريد الإلكتروني",
     "openMenu": "فتح القائمة",
-    "closeMenu": "إغلاق القائمة"
+    "closeMenu": "إغلاق القائمة",
+    "deployments": "Deployments",
+    "build": "Build"
   },
   "hero": {
     "eyebrow": "آدم — استوديو تطوير متكامل، أكرا ← حول العالم",
@@ -109,5 +111,57 @@
     "error": "تعذّر الإرسال — سيتم فتح واتساب بدلًا من ذلك.",
     "whatsappInstead": "تفضّل واتساب؟ أرسلها هناك",
     "required": "يرجى إدخال الاسم ووسيلة التواصل والرسالة."
+  },
+  "fieldkit": {
+    "hero": {
+      "eyebrow": "Aadam · Forward deployed engineer · Accra GMT+0, overlaps EU and US East",
+      "line1": "I ship the systems",
+      "accent": "people run on.",
+      "sub": "I embed with operators, analysts and coaches, build the system their day runs on, and stay until the numbers move.",
+      "play": "Play with the kit",
+      "build": "Build with me",
+      "available": "Open to remote roles",
+      "shipped": "20+ systems in production"
+    },
+    "device": {
+      "label": "Field Kit · FDE-01",
+      "booting": "Booting",
+      "log": "Event log",
+      "logEmpty": "Waiting for the first event",
+      "tear": "Tear off receipt",
+      "modes": "Deployment modes",
+      "dial": "Next mode"
+    },
+    "chapter": {
+      "of": "of",
+      "tryIt": "Try it",
+      "shipped": "Shipped for"
+    },
+    "chapters": {
+      "counter": {
+        "name": "Counter",
+        "kind": "POS and operations",
+        "title": "The counter",
+        "accent": "that keeps count.",
+        "note": "Builders' merchants and kitchens were running on paper chits and memory. I shipped POS registers, stock-controlled inventory and back offices that share one source of truth.",
+        "hint": "Tap stock to ring it up, then charge and print."
+      },
+      "laundry": {
+        "name": "Laundry",
+        "kind": "Service workflow",
+        "title": "Every garment,",
+        "accent": "tracked to the door.",
+        "note": "Tickets at An-Nur's laundry counter went missing between washing and pressing. Now every order gets a code, moves through workstation stages and is scanned out at collection.",
+        "hint": "Drop off the bag, start the cycle, then tell the customer."
+      },
+      "analyst": {
+        "name": "Analyst desk",
+        "kind": "Finance models",
+        "title": "Run the numbers",
+        "accent": "before the money moves.",
+        "note": "I have evaluated 50+ SMEs for investment and built decision tools for Islamic finance and women-led capital. A model has to survive a bad year, not just look good in a good one.",
+        "hint": "Pick a tenor, then push rates up after month 6."
+      }
+    }
   }
 }

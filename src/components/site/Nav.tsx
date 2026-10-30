@@ -6,11 +6,12 @@ import { Menu, X, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { NavThemeToggle } from "@/components/fieldkit/ThemeSwitch";
 
 const LINKS = [
-  { key: "services", href: "/#services" },
+  { key: "deployments", href: "/#deployments" },
   { key: "work", href: "/#work" },
-  { key: "process", href: "/#process" },
+  { key: "services", href: "/#services" },
   { key: "contact", href: "/#contact" },
 ] as const;
 
@@ -51,8 +52,8 @@ export default function Nav() {
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         style={{
           background: condensed
-            ? "rgba(8, 8, 12, 0.72)"
-            : "rgba(8, 8, 12, 0.35)",
+            ? "var(--veil)"
+            : "var(--veil-soft)",
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",
           borderBottom: condensed ? "1px solid var(--line)" : "1px solid transparent",
@@ -104,6 +105,7 @@ export default function Nav() {
                 {s.label}
               </a>
             ))}
+            <NavThemeToggle />
             <LanguageSwitcher />
             <a
               href="#contact"
@@ -114,6 +116,8 @@ export default function Nav() {
             </a>
           </div>
 
+          <div className="md:hidden flex items-center gap-2">
+          <NavThemeToggle />
           <button
             type="button"
             onClick={() => setOpen(true)}
@@ -122,6 +126,7 @@ export default function Nav() {
           >
             <Menu className="w-4 h-4" />
           </button>
+          </div>
         </div>
       </motion.header>
 
@@ -144,7 +149,7 @@ export default function Nav() {
               exit={{ opacity: 0 }}
               className="absolute inset-0"
               style={{
-                background: "rgba(8,8,12,0.85)",
+                background: "var(--veil)",
                 backdropFilter: "blur(16px)",
                 WebkitBackdropFilter: "blur(16px)",
               }}

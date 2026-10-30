@@ -2,6 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import Lenis from "lenis";
+import { registerLenis } from "@/lib/scroll";
 
 export default function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
@@ -10,6 +11,7 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     if (reduce || coarse) return;
 
     const lenis = new Lenis({ lerp: 0.1 });
+    registerLenis(lenis);
     let raf = 0;
     const loop = (time: number) => {
       lenis.raf(time);
@@ -19,6 +21,7 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
 
     return () => {
       cancelAnimationFrame(raf);
+      registerLenis(null);
       lenis.destroy();
     };
   }, []);

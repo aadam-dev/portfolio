@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import {
-  animate,
   motion,
-  useInView,
   useReducedMotion,
   useScroll,
   useTransform,
@@ -13,6 +11,7 @@ import {
 import { ArrowUpRight } from "lucide-react";
 import { projects, projectSlug, localizedProject, type Project } from "@/lib/projects";
 import BrowserMockup from "@/components/BrowserMockup";
+import CountUp from "@/components/ui/CountUp";
 import PreviewRouter from "@/components/previews/PreviewRouter";
 import { useTranslations, useLocale } from "next-intl";
 import { drawLine, maskRise } from "@/lib/motion";
@@ -20,37 +19,6 @@ import { drawLine, maskRise } from "@/lib/motion";
 const FLAGSHIP_IDS = ["primehub", "alboyut", "jireh", "rockmotion"];
 
 /** Counts up the numeric part of values like "420+", "GHS 40K+", "3". */
-function StatValue({ value }: { value: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const reduce = useReducedMotion();
-  const [display, setDisplay] = useState(value);
-
-  useEffect(() => {
-    if (!inView || reduce) return;
-    const match = value.match(/(\d+(?:\.\d+)?)/);
-    if (!match) return;
-    const target = parseFloat(match[1]);
-    const controls = animate(Math.floor(target * 0.4), target, {
-      duration: 1.2,
-      ease: [0.16, 1, 0.3, 1],
-      onUpdate: (v) => {
-        const rendered = Number.isInteger(target)
-          ? Math.round(v).toString()
-          : v.toFixed(1);
-        setDisplay(value.replace(match[1], rendered));
-      },
-    });
-    return () => controls.stop();
-  }, [inView, reduce, value]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {display}
-    </span>
-  );
-}
-
 function FlagshipCard({
   project,
   index,
@@ -122,7 +90,7 @@ function FlagshipCard({
                       className="font-display text-[1.4rem] md:text-[1.8rem]"
                       style={{ color: "var(--accent)" }}
                     >
-                      <StatValue value={o.value} />
+                      <CountUp value={o.value} />
                     </dd>
                     <dd className="mt-1 font-mono text-[10px] tracking-[0.14em] uppercase text-[var(--ink-3)] leading-snug">
                       {o.label}
@@ -190,18 +158,21 @@ export default function FlagshipWork() {
       <div className="max-w-[1440px] mx-auto">
         <header className="mb-14 md:mb-20">
           <p className="eyebrow mb-5">{t("eyebrow", { count: flagships.length })}</p>
-          <div className="overflow-hidden">
+          {/* The trigger sits on the unclipped wrapper: a child hidden by overflow never reports as in view. */}
+          <motion.div
+            className="overflow-hidden"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.6 }}
+          >
             <motion.h2
               variants={maskRise}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.6 }}
               className="font-display"
               style={{ fontSize: "clamp(2.4rem, 5.5vw, 4.5rem)", lineHeight: 1 }}
             >
               Built to <span className="font-serif-it text-[var(--accent)] lowercase">perform</span>
             </motion.h2>
-          </div>
+          </motion.div>
           <motion.div
             variants={drawLine}
             initial="hidden"

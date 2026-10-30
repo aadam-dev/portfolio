@@ -129,7 +129,7 @@ export default function CaseStudy({ project, next }: Props) {
               {canEmbedLive ? (
                 <div
                   className="inline-flex p-1 rounded-full border border-[var(--line)]"
-                  style={{ background: "rgba(255,255,255,0.02)" }}
+                  style={{ background: "color-mix(in srgb, var(--foreground) 2.5%, transparent)" }}
                   role="tablist"
                   aria-label="Preview mode"
                 >
@@ -253,7 +253,7 @@ export default function CaseStudy({ project, next }: Props) {
                   {project.mobileShowcase.map((m) => (
                     <figure key={m.src} className="shrink-0 w-[180px] md:w-[208px]">
                       <div className="rounded-[2rem] border border-[var(--line)] bg-[var(--surface-2)] p-2 shadow-2xl">
-                        <div className="relative overflow-hidden rounded-[1.6rem] aspect-[9/19.5] bg-black">
+                        <div className="theme-fixed relative overflow-hidden rounded-[1.6rem] aspect-[9/19.5] bg-black">
                           <Image
                             src={m.src}
                             alt={`${project.name} — ${m.label} on mobile`}
@@ -360,7 +360,7 @@ export default function CaseStudy({ project, next }: Props) {
                       <div
                         key={o.label}
                         className="rounded-xl p-4 border border-[var(--line)]"
-                        style={{ background: "rgba(255,255,255,0.015)" }}
+                        style={{ background: "color-mix(in srgb, var(--foreground) 2%, transparent)" }}
                       >
                         <dt className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--ink-4)]">
                           {o.label}
@@ -514,8 +514,8 @@ function ToggleBtn({
       aria-selected={active}
       className="px-4 py-1.5 rounded-full text-[12px] font-mono uppercase tracking-[0.14em] transition-colors"
       style={{
-        background: active ? "#fff" : "transparent",
-        color: active ? "#000" : "var(--ink-3)",
+        background: active ? "var(--foreground)" : "transparent",
+        color: active ? "var(--background)" : "var(--ink-3)",
       }}
     >
       {children}

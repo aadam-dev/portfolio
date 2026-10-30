@@ -39,7 +39,7 @@ export default function ProjectCard({ project, index, feature, priority }: Props
       >
         {/* Image / preview */}
         <div
-          className="relative overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface)] transition-colors duration-500 group-hover:[border-color:color-mix(in_srgb,var(--card-accent)_45%,transparent)]"
+          className="theme-fixed relative overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface)] transition-colors duration-500 group-hover:[border-color:color-mix(in_srgb,var(--card-accent)_45%,transparent)]"
           style={{
             aspectRatio: feature ? "16 / 9" : "4 / 3",
           }}

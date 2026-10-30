@@ -10,13 +10,16 @@
 }
 
 :root {
-  /* Surfaces — warm charcoal */
+  /* Night (dark) is the base so the site never renders unstyled; Day overrides below. */
+  color-scheme: dark;
+
+  /* Surfaces: warm charcoal */
   --background: #0b0a08;
   --surface: #12100d;
   --surface-2: #181511;
   --surface-3: #201c16;
 
-  /* Ink — warm off-white */
+  /* Ink: warm off-white */
   --foreground: #f2eee6;
   --ink-2: rgba(242, 238, 230, 0.72);
   --ink-3: rgba(242, 238, 230, 0.48);
@@ -27,10 +30,11 @@
   --line: rgba(242, 238, 230, 0.07);
   --line-strong: rgba(242, 238, 230, 0.14);
 
-  /* Accent — gold, single signature */
-  --accent: #e8b23a;
-  --accent-2: #f2cb6b;
-  --accent-glow: rgba(232, 178, 58, 0.14);
+  /* Accent: signal orange, one identity across both themes */
+  --accent: #ff5b1f;
+  --accent-2: #ff8a5c;
+  --accent-glow: rgba(255, 91, 31, 0.14);
+  --accent-ink: #14100a;
 
   /* Deep secondaries for large tinted bands */
   --ember: #b33a2b;
@@ -39,9 +43,69 @@
   /* Semantic */
   --success: #4ade80;
 
+  /* Field Kit device: warm aluminium shell on the night page */
+  --shell: #d3cec4;
+  --shell-2: #b1aa9e;
+  --shell-ink: rgba(18, 17, 16, 0.62);
+  --shell-line: rgba(18, 17, 16, 0.14);
+  --shell-key: #e4e0d7;
+
+  /* Translucent page chrome (nav, drawers) */
+  --veil: rgba(11, 10, 8, 0.72);
+  --veil-soft: rgba(11, 10, 8, 0.35);
+  --grid-line: rgba(242, 238, 230, 0.02);
+
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Day: paper and ink. Tailwind's white/black utilities follow the theme so
+   the many text-white / bg-white/5 usages flip without touching each file. */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --background: #ece8df;
+  --surface: #e3ded3;
+  --surface-2: #d9d3c6;
+  --surface-3: #cfc8ba;
+
+  --foreground: #121110;
+  --ink-2: rgba(18, 17, 16, 0.74);
+  --ink-3: rgba(18, 17, 16, 0.56);
+  --ink-4: rgba(18, 17, 16, 0.34);
+  --ink-5: rgba(18, 17, 16, 0.12);
+
+  --line: rgba(18, 17, 16, 0.09);
+  --line-strong: rgba(18, 17, 16, 0.18);
+
+  /* A touch deeper so orange text holds 3:1 on paper */
+  --accent: #e2480f;
+  --accent-2: #ff5b1f;
+  --accent-glow: rgba(226, 72, 15, 0.12);
+
+  --success: #15803d;
+
+  /* Graphite shell on the day page */
+  --shell: #2b2926;
+  --shell-2: #1c1b19;
+  --shell-ink: rgba(242, 238, 230, 0.55);
+  --shell-line: rgba(242, 238, 230, 0.1);
+  --shell-key: #3a3733;
+
+  --veil: rgba(236, 232, 223, 0.78);
+  --veil-soft: rgba(236, 232, 223, 0.45);
+  --grid-line: rgba(18, 17, 16, 0.035);
+
+  --color-white: #121110;
+  --color-black: #ece8df;
+}
+
+/* Artifacts (screenshots, browser frames, the device screen) keep real white/black. */
+.theme-fixed {
+  --color-white: #fff;
+  --color-black: #000;
+  color-scheme: dark;
 }
 
 * {
@@ -95,8 +159,8 @@ body::after {
   pointer-events: none;
   z-index: 0;
   background-image:
-    linear-gradient(to right, rgba(242, 238, 230, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(242, 238, 230, 0.02) 1px, transparent 1px);
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 96px 96px;
   mask-image: radial-gradient(ellipse at 50% 20%, black 0%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse at 50% 20%, black 0%, transparent 75%);
@@ -121,7 +185,7 @@ body::after {
 /* Selection */
 ::selection {
   background: var(--accent);
-  color: #14100a;
+  color: var(--accent-ink);
 }
 
 /* Focus */
@@ -196,9 +260,9 @@ a:focus-visible {
   color: transparent;
 }
 
-/* Signature text gradient — gold, used sparingly */
+/* Signature text gradient, used sparingly */
 .text-gradient {
-  background: linear-gradient(135deg, #f2eee6 0%, #f2cb6b 55%, #e8b23a 100%);
+  background: linear-gradient(135deg, var(--foreground) 0%, var(--accent-2) 55%, var(--accent) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -296,8 +360,122 @@ a:focus-visible {
   width: 4px;
 }
 .preview-scroll::-webkit-scrollbar-thumb {
-  background: rgba(242, 238, 230, 0.1);
+  background: var(--ink-5);
   border-radius: 2px;
+}
+
+/* Theme switch: circle wipe from the switch (View Transitions) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ---------- Field Kit ---------- */
+.fk-shell {
+  background:
+    radial-gradient(120% 80% at 30% 0%, rgba(255, 255, 255, 0.16), transparent 55%),
+    linear-gradient(160deg, var(--shell) 0%, var(--shell-2) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.18),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 24px 48px -18px rgba(0, 0, 0, 0.45),
+    0 60px 120px -40px rgba(0, 0, 0, 0.35);
+}
+.fk-screen {
+  background: #0e0d0b;
+  box-shadow:
+    inset 0 2px 10px rgba(0, 0, 0, 0.75),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 1px 0 rgba(255, 255, 255, 0.18);
+}
+.fk-key {
+  background: linear-gradient(180deg, var(--shell-key), color-mix(in srgb, var(--shell-key) 80%, #000));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 2px 0 color-mix(in srgb, var(--shell-2) 60%, #000),
+    0 3px 6px rgba(0, 0, 0, 0.25);
+  transition: transform 0.12s var(--ease-out), box-shadow 0.12s var(--ease-out);
+}
+.fk-key:active,
+.fk-key[aria-pressed="true"] {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 0 color-mix(in srgb, var(--shell-2) 60%, #000),
+    0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.fk-grille {
+  background-image: radial-gradient(circle, var(--shell-line) 1.2px, transparent 1.6px);
+  background-size: 6px 6px;
+}
+.fk-dial {
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.35), transparent 50%),
+    repeating-conic-gradient(from 0deg, rgba(0, 0, 0, 0.22) 0deg 4deg, rgba(255, 255, 255, 0.08) 4deg 8deg),
+    linear-gradient(160deg, var(--shell-key), var(--shell-2));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 3px 0 color-mix(in srgb, var(--shell-2) 55%, #000),
+    0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.fk-paper {
+  background: #f7f4ec;
+  color: #1b1a17;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  /* perforated top edge */
+  -webkit-mask:
+    radial-gradient(circle 3px at 6px 0, transparent 98%, #000) top left / 12px 100% repeat-x;
+  mask:
+    radial-gradient(circle 3px at 6px 0, transparent 98%, #000) top left / 12px 100% repeat-x;
+}
+
+/* Range input used on the device screen */
+.fk-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 18px;
+  background: transparent;
+  cursor: pointer;
+}
+.fk-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.fk-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.fk-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: #f2eee6;
+  border: 3px solid var(--accent);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.fk-range::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f2eee6;
+  border: 3px solid var(--accent);
+}
+.fk-range:focus-visible {
+  outline-offset: 2px;
+}
+
+@keyframes fk-flicker {
+  0%, 100% { opacity: 1; }
+  10% { opacity: 0.4; }
+  20% { opacity: 0.9; }
+  32% { opacity: 0.2; }
+  45% { opacity: 1; }
 }
 
 /* Reduced motion */

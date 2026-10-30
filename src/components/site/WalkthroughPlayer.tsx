@@ -81,7 +81,7 @@ export default function WalkthroughPlayer({ walkthroughs, accentColor }: Props) 
         )}
 
         <Reveal delay={0.05}>
-          <div className="rounded-2xl overflow-hidden border border-[var(--line)] bg-black">
+          <div className="theme-fixed rounded-2xl overflow-hidden border border-[var(--line)] bg-black">
             <video
               key={active.src}
               controls

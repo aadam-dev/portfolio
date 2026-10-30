@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import "./globals.css";
 import SmoothScroll from "@/components/site/SmoothScroll";
+import { themeInitScript } from "@/components/fieldkit/useTheme";
 import VisitTracker from "@/components/site/VisitTracker";
 
 const inter = Inter({
@@ -38,13 +39,13 @@ const SITE_URL = "https://aadambuilds.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Aadam · Studio for product, data & engineering",
+    default: "Aadam · Forward deployed engineer",
     template: "%s · Aadam",
   },
   description:
-    "Independent studio designing and shipping premium digital products across EdTech, FinTech, PropTech, e-commerce and enterprise ERP. 20+ production apps. 50+ SMEs evaluated. Available globally.",
+    "Forward deployed engineer in Accra. I embed with operators, analysts and coaches, ship the systems they run on, and stay until the numbers move. 20+ systems in production across POS, ERP, commerce and finance.",
   keywords: [
-    "product studio",
+    "forward deployed engineer",
     "full-stack developer",
     "investment analysis",
     "business analysis",
@@ -65,15 +66,15 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE_URL,
     siteName: "Aadam",
-    title: "Aadam · Studio for product, data & engineering",
+    title: "Aadam · Forward deployed engineer",
     description:
-      "20+ production apps. 50+ SMEs evaluated. Independent studio building premium digital products.",
+      "I embed with operators, analysts and coaches and ship the systems they run on. 20+ systems in production.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Aadam · Studio for product, data & engineering",
+    title: "Aadam · Forward deployed engineer",
     description:
-      "20+ production apps. 50+ SMEs evaluated. Independent studio building premium digital products.",
+      "I embed with operators, analysts and coaches and ship the systems they run on. 20+ systems in production.",
   },
   robots: {
     index: true,
@@ -82,11 +83,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0B0A08",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ECE8DF" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B0A08" },
+  ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  colorScheme: "dark",
+  colorScheme: "light dark",
 };
 
 export default async function RootLayout({
@@ -102,7 +106,13 @@ export default async function RootLayout({
       lang={locale}
       dir={locale === "ar" ? "rtl" : "ltr"}
       className={`${inter.variable} ${instrumentSerif.variable} ${jetBrainsMono.variable} ${archivo.variable}`}
+      data-theme="light"
+      suppressHydrationWarning
     >
+      <head>
+        {/* Applies the saved day/night choice before first paint. */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <a href="#main" className="skip-link">

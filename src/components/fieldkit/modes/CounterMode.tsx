@@ -41,7 +41,7 @@ export default function CounterMode({ onPrint }: { onPrint: (r: Receipt) => void
   const add = (id: ItemId) => {
     const inBasket = basket[id] ?? 0;
     if (inBasket >= stock[id]) return;
-    setBasket((b) => ({ ...b, [id]: inBasket + 1 }));
+    setBasket((b) => ({ ...b, [id]: Math.min((b[id] ?? 0) + 1, stock[id]) }));
     const item = CATALOGUE.find((c) => c.id === id)!;
     emit("pos", "basket.add", `${item.name} × ${inBasket + 1}`);
   };
@@ -62,9 +62,10 @@ export default function CounterMode({ onPrint }: { onPrint: (r: Receipt) => void
   };
 
   return (
-    <div className="grid grid-cols-[1.35fr_1fr] gap-3 h-full">
+    <div className="@container h-full">
+    <div className="grid gap-2.5 h-full @sm:grid-cols-[1.35fr_1fr] @sm:gap-3">
       {/* Catalogue */}
-      <div className="grid grid-cols-2 gap-2 content-start">
+      <div className="grid grid-cols-3 gap-1.5 @sm:grid-cols-2 @sm:gap-2 content-start">
         {CATALOGUE.map((c) => {
           const left = stock[c.id] - (basket[c.id] ?? 0);
           return (
@@ -74,24 +75,24 @@ export default function CounterMode({ onPrint }: { onPrint: (r: Receipt) => void
               onClick={() => add(c.id)}
               whileTap={reduce ? undefined : { scale: 0.95 }}
               disabled={left <= 0}
-              className="group relative text-left rounded-[10px] bg-[#1A1814] hover:bg-[#221F1A] border border-white/[0.06] p-2.5 transition-colors disabled:opacity-35"
+              className="group relative text-left rounded-[10px] bg-[#1A1814] hover:bg-[#221F1A] border border-white/[0.06] p-2 @sm:p-2.5 transition-colors disabled:opacity-35"
             >
               <span
-                className="block w-5 h-5 rounded-[5px] mb-2"
+                className="block w-4 h-4 @sm:w-5 @sm:h-5 rounded-[5px] mb-1.5 @sm:mb-2"
                 style={{ background: c.tone }}
                 aria-hidden="true"
               />
-              <span className="block text-[11.5px] leading-tight text-[#F2EEE6]">{c.name}</span>
-              <span className="mt-1 flex items-baseline justify-between font-mono text-[10px] text-white/45 tabular-nums">
+              <span className="block text-[11px] @sm:text-[11.5px] leading-tight text-[#F2EEE6]">{c.name}</span>
+              <span className="mt-1 flex flex-col @sm:flex-row @sm:items-baseline @sm:justify-between font-mono text-[10px] text-white/45 tabular-nums">
                 <span>{c.price}.00</span>
-                <span className={left <= 3 ? "text-[#E8B23A]" : ""}>{left} left</span>
+                <span className={left <= 3 ? "text-[var(--accent)]" : ""}>{left} left</span>
               </span>
               {basket[c.id] ? (
                 <motion.span
                   key={basket[c.id]}
                   initial={reduce ? false : { scale: 0.4, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="absolute top-2 right-2 min-w-5 h-5 px-1 rounded-full bg-[#E8B23A] text-[#14100A] font-mono text-[10px] font-semibold grid place-items-center"
+                  className="absolute top-2 right-2 min-w-5 h-5 px-1 rounded-full bg-[var(--accent)] text-[#14100A] font-mono text-[10px] font-semibold grid place-items-center"
                 >
                   {basket[c.id]}
                 </motion.span>
@@ -102,7 +103,7 @@ export default function CounterMode({ onPrint }: { onPrint: (r: Receipt) => void
       </div>
 
       {/* Basket */}
-      <div className="flex flex-col rounded-[10px] bg-[#13120F] border border-white/[0.06] p-3 min-h-0">
+      <div className="flex flex-col rounded-[10px] bg-[#13120F] border border-white/[0.06] p-3 min-h-[150px] @sm:min-h-0">
         <div className="flex items-center justify-between font-mono text-[9.5px] uppercase tracking-[0.14em] text-white/40">
           <span>Basket</span>
           <span>#{String(receiptNo + 1).padStart(4, "0")}</span>
@@ -135,19 +136,20 @@ export default function CounterMode({ onPrint }: { onPrint: (r: Receipt) => void
             </ul>
           )}
         </div>
-        <div className="pt-2 mt-2 border-t border-dashed border-white/10 flex items-baseline justify-between">
+        <div className="pt-2 mt-2 border-t border-dashed border-white/10 flex items-baseline justify-between gap-2">
           <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-white/40">Total</span>
-          <span className="font-mono text-[15px] text-[#F2EEE6] tabular-nums">{cedi(total)}</span>
+          <span className="font-mono text-[15px] text-[#F2EEE6] tabular-nums whitespace-nowrap">{cedi(total)}</span>
         </div>
         <button
           type="button"
           onClick={charge}
           disabled={!lines.length}
-          className="mt-2.5 h-9 rounded-[8px] bg-[#E8B23A] text-[#14100A] text-[12px] font-semibold tracking-wide disabled:bg-white/[0.07] disabled:text-white/30 transition-colors"
+          className="mt-2.5 h-9 rounded-[8px] bg-[var(--accent)] text-[#14100A] text-[12px] font-semibold tracking-wide disabled:bg-white/[0.07] disabled:text-white/30 transition-colors"
         >
           Charge &amp; print
         </button>
       </div>
+    </div>
     </div>
   );
 }

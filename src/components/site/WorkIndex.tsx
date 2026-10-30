@@ -182,7 +182,7 @@ export default function WorkIndex() {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="relative w-[440px] h-[300px] rounded-xl overflow-hidden border border-[var(--line-strong)] shadow-2xl bg-[var(--surface-2)]">
+            <div className="theme-fixed relative w-[440px] h-[300px] rounded-xl overflow-hidden border border-[var(--line-strong)] shadow-2xl bg-[var(--surface-2)]">
               <Image
                 src={hoveredProject.imagePath}
                 alt=""

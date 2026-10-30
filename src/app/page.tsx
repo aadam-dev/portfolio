@@ -1,9 +1,7 @@
 import Nav from "@/components/site/Nav";
-import Hero from "@/components/site/Hero";
-import TickerBand from "@/components/site/TickerBand";
+import FieldKit from "@/components/fieldkit/FieldKit";
 import FlagshipWork from "@/components/site/FlagshipWork";
 import WorkIndex from "@/components/site/WorkIndex";
-import Range from "@/components/site/Range";
 import Services from "@/components/site/Services";
 import Process from "@/components/site/Process";
 import Impact from "@/components/site/Impact";
@@ -23,11 +21,9 @@ export default function Home() {
       <Cursor />
       <Nav />
       <main id="main" className="relative">
-        <Hero />
-        <TickerBand />
+        <FieldKit />
         <FlagshipWork />
         <WorkIndex />
-        <Range />
         <Services />
         <Process />
         <Impact />
