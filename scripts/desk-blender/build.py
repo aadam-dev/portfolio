@@ -239,11 +239,14 @@ def sphere(name, r, loc=(0, 0, 0), scale=(1, 1, 1), mat=None, parent=None):
 def quad(name, corners, mat, parent=None):
     """A plane from four corners TL, TR, BR, BL with UVs matching an upright image."""
     bm = bmesh.new()
-    vs = [bm.verts.new(c) for c in corners]
-    f = bm.faces.new(vs)
+    vs = [bm.verts.new(c) for c in corners]  # vertex order stays TL, TR, BR, BL (the site reads screen corners from it)
+    # wound BL, BR, TR, TL so the face looks back at the viewer: three.js culls back faces
+    # and a light bake shoots its rays along the normal
+    f = bm.faces.new(vs[::-1])
     uv = bm.loops.layers.uv.verify()
-    for l, (u, v) in zip(f.loops, [(0, 1), (1, 1), (1, 0), (0, 0)]):
-        l[uv].uv = (u, v)
+    at = dict(zip(vs, [(0, 1), (1, 1), (1, 0), (0, 0)]))
+    for l in f.loops:
+        l[uv].uv = at[l.vert]
     ob = from_bm(name, bm, [mat], parent=parent)
     return ob
 

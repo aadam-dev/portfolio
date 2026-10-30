@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
-import { ArrowUp, MousePointerClick } from "lucide-react";
+import dynamic from "next/dynamic";
+import { ArrowLeft, ArrowUp, MousePointerClick } from "lucide-react";
 import { useTranslations } from "next-intl";
 import HeroCopy from "@/components/home/HeroCopy";
 import ModeScreen from "@/components/fieldkit/ModeScreen";
@@ -13,6 +14,17 @@ import Plate, { type Spot } from "./Plate";
 import ScreenViewer from "./ScreenViewer";
 import { onIdle } from "@/lib/idle";
 import type { ScreenId } from "./plates";
+import { detectTier, type Tier } from "@/lib/tier";
+
+const Desk3D = dynamic(() => import("./Desk3D"), { ssr: false });
+
+function useTier(): Tier | null {
+  return useSyncExternalStore(
+    () => () => {},
+    () => detectTier(),
+    () => null,
+  );
+}
 
 const MODE: Record<ScreenId, "ledger" | "counter" | "analyst"> = { left: "ledger", center: "counter", right: "analyst" };
 const BOOKS = [
@@ -53,7 +65,11 @@ function Cover({ w, h, children }: { w: number; h: number; children: React.React
   );
 }
 
-/** The landing: my desk, rendered in Blender, with screens you can open and leave. */
+/**
+ * The landing: my desk. A live 3D scene baked in Blender where WebGL runs
+ * (use the screens, drag the mouse, spin the chair, switch the lamp), and
+ * the rendered photograph while it loads or for reduced motion.
+ */
 export default function DeskHero() {
   const t = useTranslations("home.hero");
   const td = useTranslations("home.desk");
@@ -64,6 +80,11 @@ export default function DeskHero() {
   const [theme, setTheme] = useTheme();
   const night = theme === "dark";
   const [open, setOpen] = useState<ScreenId | null>(null);
+  const [focused, setFocused] = useState<ScreenId | null>(null);
+  const [onScreen, setOnScreen] = useState(true);
+  const tier = useTier();
+  const three = tier !== null && tier !== "still";
+  const dive = useRef(0);
   const [live, setLive] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const time = useAccraClock();
@@ -90,6 +111,7 @@ export default function DeskHero() {
       const span = r.height - window.innerHeight;
       const v = canDive && span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 0;
       progress.set(v);
+      dive.current = v;
       setDiving(v > 0.02);
       setArrived(v > 0.86);
     };
@@ -101,6 +123,42 @@ export default function DeskHero() {
       window.removeEventListener("resize", read);
     };
   }, [canDive, progress]);
+
+  // a focused screen: Esc, the Back button, a click on the room, the browser's Back, or scrolling all return to the desk
+  const pushed = useRef(false);
+  const leave = () => {
+    if (pushed.current) history.back();
+    else setFocused(null);
+  };
+  useEffect(() => {
+    if (!focused) return;
+    if (!pushed.current) {
+      history.pushState({ ...(history.state ?? {}), deskFocus: true }, "");
+      pushed.current = true;
+    }
+    const y = window.scrollY;
+    const pop = () => {
+      pushed.current = false;
+      setFocused(null);
+    };
+    const key = (e: KeyboardEvent) => e.key === "Escape" && leave();
+    const scroll = () => Math.abs(window.scrollY - y) > 80 && leave();
+    window.addEventListener("popstate", pop);
+    window.addEventListener("keydown", key);
+    window.addEventListener("scroll", scroll, { passive: true });
+    return () => {
+      window.removeEventListener("popstate", pop);
+      window.removeEventListener("keydown", key);
+      window.removeEventListener("scroll", scroll);
+    };
+  }, [focused]);
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting), { rootMargin: "120px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [wide]);
 
   const go = (href: string) => {
     if (href.startsWith("#")) document.querySelector(href)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
@@ -133,6 +191,38 @@ export default function DeskHero() {
     { id: "phone", label: td("phone"), onClick: () => go("#work-in-motion") },
     { id: "notebook", label: td("notebook"), onClick: () => go("/about#research") },
   ];
+
+  // the wide layout runs the apps on the screens; phones and tablets show pictures and open the app full screen
+  const live3d = (view: "desktop" | "phone", live: boolean) =>
+    three ? (
+      <Desk3D
+        view={view}
+        live={live}
+        night={night}
+        focused={focused}
+        paused={!onScreen || !!open}
+        onFocus={(id) => (live ? setFocused(id) : setOpen(id))}
+        onUnfocus={leave}
+        onLamp={() => setTheme(night ? "light" : "dark")}
+        onSpot={(id) => go(id === "phone" ? "#work-in-motion" : "/about#research")}
+        dive={dive}
+        screens={{
+          left: { node: <ModeScreen mode="ledger" />, label: screens.left.label },
+          center: { node: <ModeScreen mode="counter" />, label: screens.center.label },
+          right: { node: <ModeScreen mode="analyst" />, label: screens.right.label },
+        }}
+      />
+    ) : null;
+
+  const backButton = focused && (
+    <button
+      type="button"
+      onClick={leave}
+      className="theme-fixed absolute z-30 left-4 md:left-6 top-[84px] inline-flex items-center gap-2 h-12 pl-4 pr-5 rounded-full bg-white text-[#14120f] text-[14.5px] font-medium shadow-[0_10px_30px_rgba(0,0,0,0.35)] hover:bg-white/90"
+    >
+      <ArrowLeft className="w-4 h-4" aria-hidden /> {td("back")}
+    </button>
+  );
 
   const plate = (view: "desktop" | "phone") => (
     <Plate
@@ -178,6 +268,8 @@ export default function DeskHero() {
           aria-label={td("posterAlt")}
         >
           {plate(tablet ? "desktop" : "phone")}
+          {live3d(tablet ? "desktop" : "phone", false)}
+          {backButton}
         </div>
         <p className="px-4 pt-3 pb-2 flex items-center justify-center gap-2 text-[12.5px] text-[var(--ink-3)]">
           <MousePointerClick className="w-3.5 h-3.5" aria-hidden /> {tablet ? td("hint") : td("hintTouch")}
@@ -191,20 +283,23 @@ export default function DeskHero() {
     <section ref={sectionRef} id="top" aria-labelledby="hero-heading" className={`relative ${canDive ? "h-[200svh]" : "h-[100svh]"} min-h-[640px]`}>
       <div className="sticky top-0 h-[100svh] min-h-[640px] overflow-hidden" role="group" aria-label={td("posterAlt")}>
         {plate("desktop")}
-        <motion.div className="pointer-events-none absolute inset-0 z-10" style={{ opacity: canDive ? copyOpacity : 1 }}>
+        {live3d("desktop", true)}
+        {backButton}
+        <motion.div className={`pointer-events-none absolute inset-0 z-10 transition-opacity duration-300 ${focused ? "!opacity-0" : ""}`} style={{ opacity: canDive ? copyOpacity : 1 }}>
           <div
             className="absolute inset-0"
             style={{ background: "linear-gradient(90deg, var(--background) 0%, color-mix(in srgb, var(--background) 86%, transparent) 30%, transparent 56%)" }}
           />
           <div className="relative h-full max-w-[1440px] mx-auto px-4 md:px-6 flex flex-col justify-center">
-            <div className={`${diving ? "pointer-events-none" : "pointer-events-auto"} max-w-[780px]`}>
+            {/* clicks pass through the text to the lamp and laptop behind it; only links and buttons take them */}
+            <div className={`pointer-events-none max-w-[780px] ${diving || focused ? "" : "[&_a]:pointer-events-auto [&_button]:pointer-events-auto"}`}>
               <HeroCopy delay={0.2} />
               {meta}
             </div>
           </div>
         </motion.div>
         <AnimatePresence>
-          {!diving && (
+          {!diving && !focused && (
             <motion.p
               key="hint"
               initial={{ opacity: 0 }}

@@ -144,11 +144,12 @@ for gname, roots in GROUPS.items():
     select_only(meshes, meshes[0])
     bpy.ops.object.join()
     ob = vl.objects.active
-    ob.name = gname
-    # drop the now-empty helper empties of this group
+    # drop the now-empty helper empties of this group first, so the joined mesh can take
+    # the group's name (an empty called "chair" would otherwise turn it into "chair.001")
     for n in empties:
-        if n in bpy.data.objects:
+        if n in bpy.data.objects and bpy.data.objects[n] is not ob:
             bpy.data.objects.remove(bpy.data.objects[n], do_unlink=True)
+    ob.name = gname
     # lightmap UVs: a new layer, active for baking; the original stays for the textures
     me = ob.data
     if not me.uv_layers:
