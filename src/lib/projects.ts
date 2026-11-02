@@ -468,6 +468,7 @@ export const projects: Project[] = [
     id: "bloomboba",
     slug: "bloom-boba",
     name: "Bloom Boba",
+    imagePath: "/previews/bloomboba/landing.webp",
     tagline: "A concept bubble-tea brand, built to feel photographed",
     year: "2026",
     location: "Concept · Motion study",

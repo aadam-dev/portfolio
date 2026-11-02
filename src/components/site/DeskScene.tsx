@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { quadMatrix } from "@/components/desk/quad";
 
 export type Quad = [[number, number], [number, number], [number, number], [number, number]]; // TL, TR, BR, BL (fractions of the photo)
 
@@ -20,42 +21,6 @@ export interface DeskSceneProps {
   href?: string;
   hrefLabel?: string;
   liveUrl?: string;
-}
-
-/** Solve the projective transform that maps the rect (0,0,w,h) onto the quad, as a CSS matrix3d. */
-function quadMatrix(w: number, h: number, dst: [number, number][]) {
-  const src: [number, number][] = [
-    [0, 0],
-    [w, 0],
-    [w, h],
-    [0, h],
-  ];
-  const A: number[][] = [];
-  const b: number[] = [];
-  for (let i = 0; i < 4; i++) {
-    const [x, y] = src[i];
-    const [u, v] = dst[i];
-    A.push([x, y, 1, 0, 0, 0, -u * x, -u * y]);
-    b.push(u);
-    A.push([0, 0, 0, x, y, 1, -v * x, -v * y]);
-    b.push(v);
-  }
-  // Gaussian elimination
-  const n = 8;
-  for (let c = 0; c < n; c++) {
-    let p = c;
-    for (let r = c + 1; r < n; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
-    [A[c], A[p]] = [A[p], A[c]];
-    [b[c], b[p]] = [b[p], b[c]];
-    for (let r = 0; r < n; r++) {
-      if (r === c) continue;
-      const f = A[r][c] / A[c][c];
-      for (let k = c; k < n; k++) A[r][k] -= f * A[c][k];
-      b[r] -= f * b[c];
-    }
-  }
-  const [a, bb, c, d, e, f, g, hh] = b.map((v, i) => v / A[i][i]);
-  return `matrix3d(${a},${d},0,${g},${bb},${e},0,${hh},0,0,1,0,${c},${f},0,1)`;
 }
 
 /**

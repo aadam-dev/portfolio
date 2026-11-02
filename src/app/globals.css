@@ -495,3 +495,15 @@ a:focus-visible {
     animation: none !important;
   }
 }
+
+/* Aadam OS window open */
+@keyframes aos-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

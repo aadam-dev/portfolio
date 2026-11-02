@@ -2,8 +2,7 @@ import Nav from "@/components/site/Nav";
 import FieldKit from "@/components/fieldkit/FieldKit";
 import FlagshipWork from "@/components/site/FlagshipWork";
 import WorkIndex from "@/components/site/WorkIndex";
-import DeskScene from "@/components/site/DeskScene";
-import { findProject } from "@/lib/projects";
+import DeskStage from "@/components/desk/DeskStage";
 import Services from "@/components/site/Services";
 import Process from "@/components/site/Process";
 import Impact from "@/components/site/Impact";
@@ -25,19 +24,7 @@ export default function Home() {
       <main id="main" className="relative">
         <FieldKit />
         <FlagshipWork />
-        {(() => {
-          const boba = findProject("bloom-boba");
-          return boba?.deskScene ? (
-            <DeskScene
-              {...boba.deskScene}
-              kicker="Lab · Motion study"
-              title={boba.name}
-              line="A concept drinks brand built to feel photographed, not coded. Scroll to play it."
-              href="/work/bloom-boba"
-              liveUrl={boba.liveBaseUrl}
-            />
-          ) : null;
-        })()}
+        <DeskStage />
         <WorkIndex />
         <Services />
         <Process />
