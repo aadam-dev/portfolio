@@ -11,9 +11,7 @@
     "predev": "node scripts/copy-map-worker.mjs",
     "prebuild": "node scripts/copy-map-worker.mjs",
     "db:studio": "drizzle-kit studio",
-    "db:sql": "node scripts/db-sql.mjs",
-    "desk:fetch": "node scripts/desk-blender/fetch.mjs",
-    "desk:render": "scripts/desk-blender/render-all.sh"
+    "db:sql": "node scripts/db-sql.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

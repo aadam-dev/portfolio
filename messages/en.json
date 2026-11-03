@@ -265,30 +265,6 @@
       "open": "Open for projects",
       "count": "17 businesses run on systems I built"
     },
-    "desk": {
-      "screens": {
-        "left": "Delish inventory on Odoo",
-        "center": "Al Boyut register",
-        "right": "Deal screen"
-      },
-      "open": "Open",
-      "back": "Back to the desk",
-      "close": "Close",
-      "hint": "Click a screen to use it. Drag the mouse, spin the chair; the lamp switches the lights.",
-      "hintTouch": "Tap a screen to open it. Spin the chair, bounce the ball, tap the lamp.",
-      "viewerHint": "This is a working copy. Back to the desk any time.",
-      "rotate": "Turn your phone sideways for a bigger screen.",
-      "lamp": "Lights",
-      "lampOn": "Lights on",
-      "lampOff": "Lights off",
-      "books": "On my desk",
-      "booksCard": "On my desk right now:",
-      "phone": "Work in motion",
-      "notebook": "Research",
-      "arrived": "The Al Boyut register, working",
-      "scrollUp": "Back to the desk",
-      "posterAlt": "My desk in Accra: a monitor showing the Al Boyut register, a laptop with Odoo, a tablet with a deal screen, a keyboard, a mug of coffee, three books, a plant, a lamp, a notebook and a phone."
-    },
     "practices": {
       "heading": "What I do",
       "sub": "Four practices, one person. The one who models the numbers also builds the system and draws the brand, so nothing is lost in a handover.",
