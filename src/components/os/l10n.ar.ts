@@ -8,6 +8,7 @@ export const ar: OsText = {
     putDown: "ضعه جانبًا",
     page: (n: number) => `الصفحة ${n}`,
     swipeMore: "اسحب لمزيد من التطبيقات",
+    disciplines: "تقنية المعلومات · الحلول · الأعمال · المالية",
     scrollCue: "مرّر لرؤية الأعمال",
     heroHint: "هذا هاتفي، وكل ما فيه يعمل. التقط صورة سيلفي لجداري، أو احجز مكالمة، أو اترك ملاحظة، أو جرّب الأنظمة التي بنيتها.",
     apps: {
@@ -137,7 +138,7 @@ export const ar: OsText = {
     based: "المقر",
     hours: "ساعات العمل",
     site: "الموقع",
-    role: "مهندس ميداني",
+    role: "مهندس ومحلل",
   },
   clock: {
     world: "الساعة العالمية",
@@ -260,7 +261,7 @@ export const ar: OsText = {
   },
   preview: { markup: "تعليقات" },
   numbers: { company: "Harmattan Foods Ltd (مثال توضيحي) · GHS", balances: "الميزانية متوازنة", out: "الميزانية غير متوازنة", download: "تنزيل ‎.xlsx" },
-  about: { role: "مهندس ميداني · أكرا", experience: "الخبرة", research: "البحث", education: "التعليم", leadership: "القيادة والبرامج", skills: "المهارات" },
+  about: { role: "مهندس ومحلل · أكرا", experience: "الخبرة", research: "البحث", education: "التعليم", leadership: "القيادة والبرامج", skills: "المهارات" },
   deploy: {
     nav: "الأنظمة",
     later: "تعمل عندما تكون على المكتب.",

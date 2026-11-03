@@ -1,31 +1,88 @@
 {
   "name": "Aadam",
-  "title": "Forward deployed engineer, Accra",
-  "short": "Aadam is a forward deployed engineer in Accra. He embeds with operators, analysts and coaches and ships the systems they run on: 20+ in production for 17 businesses, from point of sale and ERP to investment models and brands.",
-  "long": "Aadam is a software engineer and analyst based in Accra, Ghana. He studied mathematics at the University of Mines and Technology and information technology at the International Open University, then spent three years in Ghanaian private equity and venture capital, taking 50+ SMEs from sourcing to Investment Committee. He now works forward deployed: he sits in with a business, studies how money, stock and people really move, and builds the system it runs on. His work includes the Al Boyut point of sale and storefront, PrimeTijara's supply desk (GHS 177K in its first month), Delish on Odoo, the Bloom Boba brand and the Madina Basketball court platform, for which he also co-led a GHS 40,000+ community renovation. He works remotely across European and US hours.",
+  "title": "Engineer and analyst, Accra",
+  "short": "Aadam is an engineer and analyst in Accra. He reads the numbers, then builds the systems businesses run on: 20+ in production for 17 businesses, from point of sale and ERP to investment models and brands, after three years analysing 50+ SMEs for investors.",
+  "long": "Aadam is a software engineer and analyst based in Accra, Ghana. He studied mathematics at the University of Mines and Technology and information technology at the International Open University, then spent three years in Ghanaian private equity and venture capital, taking 50+ SMEs from sourcing to Investment Committee. He now works across IT, solutions, business and finance: he sits in with a business, studies how money, stock and people really move, and builds the system it runs on. His work includes the Al Boyut point of sale and storefront, PrimeTijara's supply desk (GHS 177K in its first month), Delish on Odoo, the Bloom Boba brand and the Madina Basketball court platform, for which he also co-led a GHS 40,000+ community renovation. He works remotely across European and US hours.",
   "facts": [
-    ["Based in", "Accra, Ghana (GMT+0)"],
-    ["Systems in production", "20+ for 17 businesses"],
-    ["Before", "3 years in PE and VC, 50+ SMEs"],
-    ["Languages", "English, French, Arabic"],
-    ["Email", "adam@aadambuilds.dev"],
-    ["Site", "aadambuilds.dev"]
+    [
+      "Based in",
+      "Accra, Ghana (GMT+0)"
+    ],
+    [
+      "Systems in production",
+      "20+ for 17 businesses"
+    ],
+    [
+      "Before",
+      "3 years in PE and VC, 50+ SMEs"
+    ],
+    [
+      "Languages",
+      "English, French, Arabic"
+    ],
+    [
+      "Email",
+      "adam@aadambuilds.dev"
+    ],
+    [
+      "Site",
+      "aadambuilds.dev"
+    ]
   ],
   "colours": [
-    ["Signal orange", "#ff5b1f"],
-    ["Deep orange", "#e2480f"],
-    ["Ink", "#121110"],
-    ["Paper", "#ece8df"],
-    ["Charcoal", "#0b0a08"],
-    ["Live green", "#4ade80"],
-    ["Ember", "#b33a2b"],
-    ["Forest", "#1e3b2e"]
+    [
+      "Signal orange",
+      "#ff5b1f"
+    ],
+    [
+      "Deep orange",
+      "#e2480f"
+    ],
+    [
+      "Ink",
+      "#121110"
+    ],
+    [
+      "Paper",
+      "#ece8df"
+    ],
+    [
+      "Charcoal",
+      "#0b0a08"
+    ],
+    [
+      "Live green",
+      "#4ade80"
+    ],
+    [
+      "Ember",
+      "#b33a2b"
+    ],
+    [
+      "Forest",
+      "#1e3b2e"
+    ]
   ],
   "work": [
-    ["Al Boyut", "Point of sale, storefront and back office for a builders' merchant"],
-    ["PrimeTijara", "Supply desk, POS and procurement for builders"],
-    ["Delish on Odoo", "Recipes, inventory and stock counts for a restaurant"],
-    ["Bloom Boba", "A drinks brand: art direction, scroll film and builder"],
-    ["Madina Basketball", "A renovated public court and the platform that runs it"]
+    [
+      "Al Boyut",
+      "Point of sale, storefront and back office for a builders' merchant"
+    ],
+    [
+      "PrimeTijara",
+      "Supply desk, POS and procurement for builders"
+    ],
+    [
+      "Delish on Odoo",
+      "Recipes, inventory and stock counts for a restaurant"
+    ],
+    [
+      "Bloom Boba",
+      "A drinks brand: art direction, scroll film and builder"
+    ],
+    [
+      "Madina Basketball",
+      "A renovated public court and the platform that runs it"
+    ]
   ]
 }

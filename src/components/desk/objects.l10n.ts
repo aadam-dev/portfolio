@@ -5,7 +5,7 @@ type StopCopy = { label: string; eyebrow: string; title: string; body: string; a
 type Ui = { lampOn: string; lampOff: string; phone: string; desktop: string; openOS: string; scrollHint: string; reading: string; next: string; deskAlt: string };
 
 const FR: Record<string, StopCopy> = {
-  desk: { label: "Bureau", eyebrow: "Aadam · Ingénieur déployé sur le terrain", title: "Je rejoins votre équipe et je livre le système sur lequel vous tournez.", body: "Produit, design, ingénierie, données et marque depuis un bureau à Accra, pour des équipes partout. Faites défiler le bureau." },
+  desk: { label: "Bureau", eyebrow: "Aadam · Ingénieur et analyste", title: "Je lis les chiffres, puis je construis le système sur lequel vous tournez.", body: "Informatique, solutions, gestion et finance depuis un bureau à Accra : plus de 20 systèmes en production, plus de 50 PME analysées. Faites défiler le bureau." },
   lamp: { label: "À distance", eyebrow: "À distance · GMT+0", title: "Journée à Accra, matinée à New York.", body: "GMT+0 couvre toute la journée de travail européenne et les matinées de la côte Est. Spécifications écrites, démos hebdomadaires, asynchrone par défaut. Allumez la lampe pour le mode nuit." },
   notebook: { label: "Notes de terrain", eyebrow: "Sur le terrain", title: "Je m'installe. J'observe le travail. Je l'écris.", body: "Avant tout code : suivre le terrain, cartographier comment l'argent et le stock circulent vraiment, et le documenter pour que votre équipe en reste maître après mon départ.", action: "Lire mes notes de recherche" },
   books: { label: "Livres", eyebrow: "Ma façon de penser", title: "Lire large. Livrer précis.", body: "Produit, systèmes, sport et histoire sur cette étagère." },
@@ -17,7 +17,7 @@ const FR: Record<string, StopCopy> = {
 };
 
 const AR: Record<string, StopCopy> = {
-  desk: { label: "المكتب", eyebrow: "آدم · مهندس ميداني", title: "أنضمّ إلى فريقك وأُسلّم النظام الذي تعمل عليه.", body: "منتج وتصميم وهندسة وبيانات وهوية من مكتب واحد في أكرا، لفرق في كل مكان. مرّر لتتجوّل في المكتب." },
+  desk: { label: "المكتب", eyebrow: "آدم · مهندس ومحلل", title: "أقرأ الأرقام، ثم أبني النظام الذي تعمل عليه.", body: "تقنية المعلومات والحلول والأعمال والمالية من مكتب واحد في أكرا: أكثر من 20 نظامًا قيد التشغيل وأكثر من 50 شركة صغيرة ومتوسطة حلّلتها. مرّر لتتجوّل في المكتب." },
   lamp: { label: "عن بُعد", eyebrow: "عن بُعد · GMT+0", title: "نهار في أكرا، صباح في نيويورك.", body: "توقيت GMT+0 يغطي يوم العمل الأوروبي كاملاً وصباح الساحل الشرقي الأمريكي. مواصفات مكتوبة وعروض أسبوعية، والعمل غير متزامن افتراضياً. أشعل المصباح للوضع الليلي." },
   notebook: { label: "ملاحظات ميدانية", eyebrow: "في الميدان", title: "أجلس معكم. أراقب العمل. أدوّنه.", body: "قبل أي سطر برمجي: أرافق العمل في الميدان، وأرسم كيف تتحرك الأموال والمخزون فعلاً، وأوثّق ذلك ليبقى فريقك صاحب القرار بعد مغادرتي.", action: "اقرأ ملاحظاتي البحثية" },
   books: { label: "الكتب", eyebrow: "طريقة تفكيري", title: "اقرأ على نطاق واسع. أنجز بدقة.", body: "المنتج والأنظمة والرياضة والتاريخ على هذا الرف." },

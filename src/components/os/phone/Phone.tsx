@@ -241,6 +241,7 @@ function Home({ t, headline, page, setPage, launch, hidden }: { t: OsText; headl
               <h1 className="mt-1.5 font-display text-[clamp(22px,6.4vw,30px)] leading-[1.05] text-white" style={{ letterSpacing: "-0.02em" }}>
                 {headline.title}
               </h1>
+              <p className="mt-2 font-mono text-[9.5px] uppercase tracking-[0.14em] text-white/60">{t.phone.disciplines}</p>
             </div>
           )}
           <div className="grid grid-cols-2 gap-3 [@media(max-height:740px)]:hidden">

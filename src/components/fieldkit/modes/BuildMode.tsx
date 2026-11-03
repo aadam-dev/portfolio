@@ -137,7 +137,7 @@ export default function BuildMode() {
           ];
     const total =
       mode === "build" ? { l: "Estimate", r: `~${fmtW(totalWeeks)}` } : { l: "Timezone", r: `${tzName} (GMT${off >= 0 ? "+" : ""}${off})` };
-    const foot = [did.length ? `On the kit you ${did.join(", ")}.` : "You went straight to the build desk.", "Aadam · forward deployed engineer"];
+    const foot = [did.length ? `On the kit you ${did.join(", ")}.` : "You went straight to the build desk.", "Aadam · engineer and analyst"];
     print({
       head: mode === "build" ? "Build ticket" : "Hire ticket",
       sub: `${new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })} · FDE-08`,

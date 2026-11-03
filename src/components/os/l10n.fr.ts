@@ -8,6 +8,7 @@ export const fr: OsText = {
     putDown: "Le reposer",
     page: (n: number) => `Page ${n}`,
     swipeMore: "Balayez pour voir plus d'apps",
+    disciplines: "Informatique · Solutions · Gestion · Finance",
     scrollCue: "Faites défiler pour voir le travail",
     heroHint: "Voici mon téléphone, et tout y fonctionne. Prenez un selfie pour mon mur, réservez un appel, laissez un mot ou essayez les systèmes que j'ai construits.",
     apps: {
@@ -137,7 +138,7 @@ export const fr: OsText = {
     based: "Basé à",
     hours: "Horaires",
     site: "Site",
-    role: "Ingénieur déployé sur le terrain",
+    role: "Ingénieur et analyste",
   },
   clock: {
     world: "Horloges",
@@ -260,7 +261,7 @@ export const fr: OsText = {
   },
   preview: { markup: "Annoter" },
   numbers: { company: "Harmattan Foods Ltd (fictif) · GHS", balances: "Le bilan est équilibré", out: "Bilan déséquilibré", download: "Télécharger le .xlsx" },
-  about: { role: "Ingénieur déployé sur le terrain · Accra", experience: "Expérience", research: "Recherche", education: "Formation", leadership: "Engagements et programmes", skills: "Compétences" },
+  about: { role: "Ingénieur et analyste · Accra", experience: "Expérience", research: "Recherche", education: "Formation", leadership: "Engagements et programmes", skills: "Compétences" },
   deploy: {
     nav: "Systèmes",
     later: "Ils tournent une fois que vous êtes au bureau.",

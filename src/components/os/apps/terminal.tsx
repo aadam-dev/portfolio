@@ -21,7 +21,7 @@ export default function TerminalApp({ openProject }: { openProject: (slug: strin
     const out: string[] = [];
     if (!c) return;
     if (c === "help") out.push("whoami · ls projects · open <name> · services · contact · clear");
-    else if (c === "whoami") out.push("Aadam. Forward deployed engineer in Accra, GMT+0. I embed with your team and ship the system you run on.");
+    else if (c === "whoami") out.push("Aadam. Engineer and analyst in Accra, GMT+0. I read the numbers, then build the system you run on.");
     else if (c === "ls") out.push(...projects.map((p) => `${projectSlug(p).padEnd(22)} ${p.categoryLabel}`));
     else if (c === "services") out.push(...SERVICES.map((s) => `${s.n} ${s.title}`));
     else if (c === "contact") out.push("adam@aadambuilds.dev · WhatsApp +233 55 960 2056 · or open Mail on the desktop");

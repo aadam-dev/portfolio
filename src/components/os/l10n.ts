@@ -14,6 +14,7 @@ const en = {
     putDown: "Put it down",
     page: (n: number) => `Page ${n}`,
     swipeMore: "Swipe for more apps",
+    disciplines: "IT · Solutions · Business · Finance",
     scrollCue: "Scroll for the work",
     heroHint: "This is my phone, and everything on it works. Take a selfie for my wall, book a call, leave a note or play with the systems I have built.",
     apps: {
@@ -143,7 +144,7 @@ const en = {
     based: "Based in",
     hours: "Hours",
     site: "Site",
-    role: "Forward deployed engineer",
+    role: "Engineer and analyst",
   },
   clock: {
     world: "World clock",
@@ -266,7 +267,7 @@ const en = {
   },
   preview: { markup: "Markup" },
   numbers: { company: "Harmattan Foods Ltd (illustrative) · GHS", balances: "Balance sheet balances", out: "Out of balance", download: "Download .xlsx" },
-  about: { role: "Forward deployed engineer · Accra", experience: "Experience", research: "Research", education: "Education", leadership: "Leadership and programmes", skills: "Skills" },
+  about: { role: "Engineer and analyst · Accra", experience: "Experience", research: "Research", education: "Education", leadership: "Leadership and programmes", skills: "Skills" },
   deploy: {
     nav: "Systems",
     later: "These run once you are at the desk.",

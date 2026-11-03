@@ -36,10 +36,10 @@ const jetBrainsMono = JetBrains_Mono({
 
 const SITE_URL = "https://aadambuilds.dev";
 
-const TITLE = "Aadam · Forward deployed engineer";
+const TITLE = "Aadam · Engineer and analyst";
 const DESCRIPTION =
-  "Forward deployed engineer in Accra. I embed with operators, analysts and coaches, ship the systems they run on, and stay until the numbers move. 20+ systems in production across POS, ERP, commerce and finance.";
-const SHORT = "I embed with operators, analysts and coaches and ship the systems they run on. 20+ systems in production.";
+  "Engineer and analyst in Accra. I read the numbers, then build the system you run on: IT, solutions, business and finance. 20+ systems in production and 50+ SMEs analysed, across POS, ERP, commerce and investment.";
+const SHORT = "I read the numbers, then build the system you run on. 20+ systems in production, 50+ SMEs analysed.";
 
 /** Runs before paint so the saved theme never flashes. Day is the default. */
 const THEME_SCRIPT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("fk-theme");if(t!=="light"&&t!=="dark")t="light";d.dataset.theme=t;}catch(e){d.dataset.theme="light";}try{if(sessionStorage.getItem("preloader-seen")==="1"||matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("pl-seen");}catch(e){}})();`;
@@ -54,6 +54,10 @@ export const metadata: Metadata = {
   keywords: [
     "product studio Accra",
     "software engineer Ghana",
+    "engineer and analyst",
+    "business analyst",
+    "IT consultant",
+    "solutions engineer",
     "forward deployed engineer",
     "full-stack engineer",
     "Odoo ERP",

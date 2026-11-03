@@ -468,7 +468,8 @@ function Stacked() {
               <h1 className="mt-3 font-display text-[clamp(32px,4.6vw,52px)] leading-[1.03] text-white text-balance" style={{ letterSpacing: "-0.03em" }}>
                 {headline.title}
               </h1>
-              <p className="mt-4 text-[16px] leading-relaxed text-white/70">{t.phone.heroHint}</p>
+              <p className="mt-4 font-mono text-[11.5px] uppercase tracking-[0.16em] text-[var(--accent-2)]">{t.phone.disciplines}</p>
+              <p className="mt-3 text-[16px] leading-relaxed text-white/70">{t.phone.heroHint}</p>
               <button onClick={next} className="mt-6 inline-flex items-center gap-2 text-[13px] text-white/60 hover:text-white">
                 {t.phone.scrollCue} <span aria-hidden>↓</span>
               </button>
