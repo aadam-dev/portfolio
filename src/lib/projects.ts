@@ -115,6 +115,14 @@ export interface Project {
   liveEmbeddable?: boolean;
   /** Silent live walkthroughs of the real system, shown on the case study. */
   walkthroughs?: ProjectWalkthrough[];
+  /** Photographed desk with the recording mapped onto the laptop screen (scroll-scrubbed). */
+  deskScene?: {
+    image: string;
+    video: string;
+    poster?: string;
+    /** Screen corners as fractions of the photo: TL, TR, BR, BL. */
+    screen: [[number, number], [number, number], [number, number], [number, number]];
+  };
 }
 
 export function projectSlug(p: Project): string {
@@ -455,6 +463,81 @@ export const projects: Project[] = [
         duration: "2:45",
       },
     ],
+  },
+  {
+    id: "bloomboba",
+    slug: "bloom-boba",
+    name: "Bloom Boba",
+    imagePath: "/previews/bloomboba/landing.webp",
+    tagline: "A concept bubble-tea brand, built to feel photographed",
+    year: "2026",
+    location: "Concept · Motion study",
+    services: ["Art direction", "AI photography pipeline", "Scroll choreography", "Interactive 3D"],
+    description:
+      "A concept drinks brand and motion study: a photoreal scroll film that builds a cup from tea to straw, full-screen flavour fields, and a make-your-own builder with a three.js cup you can shake.",
+    study: {
+      challenge:
+        "Food and drink sites live or die on appetite appeal, but most small brands ship templates with a hero photo and a menu grid. We wanted to show what a premium, photo-led, interactive drinks site can feel like without a studio shoot or a render farm.",
+      approach:
+        "Art-directed photoreal stills on one consistent dark set, aligned frame to frame and scrubbed by scroll so the cup is built in front of you. Flavours become stacked colour fields, and an 18-photo builder lets you compose a drink, then shake it in a lazy-loaded three.js cup with physics pearls.",
+      result:
+        "A site that reads like a drinks campaign: nine-beat scroll film, scroll-fill promise type, six flavour spreads and a builder with a 3D layer, all under 150 KB of first-load JavaScript.",
+      metrics: [
+        { value: "9", label: "Film beats" },
+        { value: "18", label: "Builder photos" },
+        { value: "144 KB", label: "First-load JS" },
+      ],
+    },
+    role: "Art direction, design & front-end engineering",
+    impact: [
+      "Built a repeatable AI photography pipeline with one locked set, lens and light across 40+ images.",
+      "Aligned every film frame on the cup so crossfades read as one continuous shot.",
+      "Kept 3D optional and lazy so the photo experience stays fast on any device.",
+    ],
+    category: "restaurant",
+    categoryLabel: "Concept · Food & drink",
+    stack: ["Next.js", "GSAP", "Lenis", "three.js", "R3F", "Rapier", "Tailwind"],
+    accentColor: "#FF7A5C",
+    accentGlow: "rgba(255, 122, 92, 0.15)",
+    featured: true,
+    defaultScreen: "landing",
+    screens: [
+      { id: "landing", label: "Film" },
+      { id: "film", label: "Pearls" },
+      { id: "flavours", label: "Flavours" },
+      { id: "builder", label: "Make yours" },
+      { id: "menu", label: "Menu" },
+    ],
+    screenImages: {
+      landing: "/previews/bloomboba/landing.webp",
+      film: "/previews/bloomboba/film.webp",
+      flavours: "/previews/bloomboba/flavours.webp",
+      builder: "/previews/bloomboba/builder.webp",
+      menu: "/previews/bloomboba/menu.webp",
+    },
+    liveBaseUrl: "https://bloom-boba.vercel.app",
+    liveScreenPaths: { landing: "/", flavours: "/#flavours", builder: "/#make", menu: "/#menu" },
+    walkthroughs: [
+      {
+        id: "bloom-boba-site",
+        title: "Scroll film, flavours and the builder",
+        caption: "Live recording: the cup built on scroll, the flavour fields, building a drink and shaking it in 3D.",
+        src: "/walkthroughs/bloom-boba.mp4",
+        poster: "/previews/bloomboba/landing.webp",
+        duration: "2:16",
+      },
+    ],
+    deskScene: {
+      image: "/desk/bloom-boba-desk.webp",
+      video: "/desk/bloom-boba-scrub.mp4",
+      poster: "/previews/bloomboba/landing.webp",
+      screen: [
+        [0.2253, 0.1516],
+        [0.7174, 0.1516],
+        [0.7259, 0.6944],
+        [0.2122, 0.6944],
+      ],
+    },
   },
   {
     id: "alboyut",

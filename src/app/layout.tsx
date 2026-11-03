@@ -5,6 +5,7 @@ import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import "./globals.css";
 import SmoothScroll from "@/components/site/SmoothScroll";
 import Tracker from "@/components/site/Tracker";
+import VisitTracker from "@/components/site/VisitTracker";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,11 +36,10 @@ const jetBrainsMono = JetBrains_Mono({
 
 const SITE_URL = "https://aadambuilds.dev";
 
-const TITLE = "Aadam · Product, data and engineering studio";
+const TITLE = "Aadam · Forward deployed engineer";
 const DESCRIPTION =
-  "I am Aadam, working from Accra across product, data and engineering: point of sale, ERP and storefronts, financial models, brands, and putting businesses on the map. 17 businesses run on systems I built.";
-const SHORT =
-  "Point of sale, ERP, storefronts, financial models and brands for businesses in Accra and beyond.";
+  "Forward deployed engineer in Accra. I embed with operators, analysts and coaches, ship the systems they run on, and stay until the numbers move. 20+ systems in production across POS, ERP, commerce and finance.";
+const SHORT = "I embed with operators, analysts and coaches and ship the systems they run on. 20+ systems in production.";
 
 /** Runs before paint so the saved theme never flashes. Day is the default. */
 const THEME_SCRIPT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("fk-theme");if(t!=="light"&&t!=="dark")t="light";d.dataset.theme=t;}catch(e){d.dataset.theme="light";}try{if(sessionStorage.getItem("preloader-seen")==="1"||matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("pl-seen");}catch(e){}})();`;
@@ -129,6 +129,7 @@ export default async function RootLayout({
           </a>
           <SmoothScroll>{children}</SmoothScroll>
           <Tracker />
+          <VisitTracker />
         </NextIntlClientProvider>
       </body>
     </html>

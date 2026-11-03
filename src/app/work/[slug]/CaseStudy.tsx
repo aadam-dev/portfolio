@@ -16,6 +16,7 @@ import ScaledIframe from "@/components/ui/ScaledIframe";
 import Reveal from "@/components/ui/Reveal";
 import MagneticButton from "@/components/ui/MagneticButton";
 import WalkthroughPlayer from "@/components/site/WalkthroughPlayer";
+import DeskScene from "@/components/site/DeskScene";
 
 type Mode = "simulated" | "live";
 
@@ -131,6 +132,17 @@ export default function CaseStudy({ project, next }: Props) {
             </p>
           </div>
         </section>
+
+        {/* ── Desk scene ──────────────────────────────────── */}
+        {project.deskScene && (
+          <DeskScene
+            {...project.deskScene}
+            kicker={project.categoryLabel}
+            title={project.name}
+            line={project.tagline}
+            liveUrl={project.liveBaseUrl}
+          />
+        )}
 
         {/* ── Preview ─────────────────────────────────────── */}
         <section className="relative px-4 md:px-6" aria-label="Project preview">

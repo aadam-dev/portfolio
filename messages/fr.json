@@ -1,5 +1,7 @@
 {
   "nav": {
+    "desk": "Bureau",
+    "studio": "Studio",
     "services": "Services",
     "work": "Projets",
     "process": "Méthode",
@@ -47,7 +49,7 @@
   "services": {
     "eyebrow": "Services · De bout en bout",
     "heading": "Une pratique,",
-    "headingAccent": "cinq disciplines."
+    "headingAccent": "six disciplines."
   },
   "process": {
     "eyebrow": "Méthode · 10 semaines en moyenne",
@@ -122,6 +124,12 @@
     "required": "Merci d'indiquer votre nom, un contact et un message."
   },
   "fieldkit": {
+    "header": {
+      "eyebrow": "Déploiements · Jouables",
+      "title": "Des systèmes en service sur le terrain.",
+      "accent": "Essayez-les.",
+      "note": "L'appareil du bureau, allumé : le comptoir d'un négociant en matériaux, une chaîne de blanchisserie, une table de marque au bord du terrain, un bureau d'analyste et plus encore, chacun avec le même type de système que le personnel utilise chaque jour."
+    },
     "projectsIn": "Projets dans ce déploiement",
     "hero": {
       "hint": "Touchez le stock, envoyez à la caisse, puis encaissez pour imprimer."

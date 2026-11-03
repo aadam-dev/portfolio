@@ -32,7 +32,7 @@ interface Props {
 function RealShot({ src, alt }: { src: string; alt: string }) {
   return (
     <div
-      className="relative w-full h-full overflow-y-auto preview-scroll"
+      className="theme-fixed relative w-full h-full overflow-y-auto preview-scroll"
       style={{ background: "#0A0A0F" }}
     >
       <Image

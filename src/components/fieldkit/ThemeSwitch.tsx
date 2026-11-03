@@ -22,7 +22,7 @@ type VTDocument = Document & {
 };
 
 /** Apply a theme, wiping it in as a circle from the control that changed it. */
-export function setTheme(next: Theme, origin?: HTMLElement | null) {
+export function setTheme(next: Theme, origin?: HTMLElement | { x: number; y: number } | null) {
   const root = document.documentElement;
   if (read() === next) return;
   try {
@@ -37,9 +37,11 @@ export function setTheme(next: Theme, origin?: HTMLElement | null) {
   const doc = document as VTDocument;
 
   if (!reduce && doc.startViewTransition) {
-    const r = origin?.getBoundingClientRect();
-    const x = r ? r.left + r.width / 2 : window.innerWidth / 2;
-    const y = r ? r.top + r.height / 2 : 0;
+    // the wipe starts at the control (an element) or at a point (a click on the desk)
+    const r = origin && "getBoundingClientRect" in origin ? origin.getBoundingClientRect() : null;
+    const pt = origin && !("getBoundingClientRect" in origin) ? origin : null;
+    const x = r ? r.left + r.width / 2 : pt ? pt.x : window.innerWidth / 2;
+    const y = r ? r.top + r.height / 2 : pt ? pt.y : 0;
     const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
     const vt = doc.startViewTransition(apply);
     vt.ready
@@ -62,7 +64,7 @@ export function setTheme(next: Theme, origin?: HTMLElement | null) {
   window.setTimeout(() => root.classList.remove("theme-fade"), 450);
 }
 
-export function useTheme(): [Theme, (t: Theme, origin?: HTMLElement | null) => void] {
+export function useTheme(): [Theme, typeof setTheme] {
   const theme = useSyncExternalStore(subscribe, read, () => "light" as Theme);
   return [theme, setTheme];
 }

@@ -1,13 +1,13 @@
 import Nav from "@/components/site/Nav";
-import DeskHero from "@/components/desk/DeskHero";
 import FieldKit from "@/components/fieldkit/FieldKit";
 import BuildDesk from "@/components/build/BuildDesk";
 import FlagshipWork from "@/components/site/FlagshipWork";
-import Practices from "@/components/site/Practices";
-import WorkMap from "@/components/map/WorkMap";
-import LabTeaser from "@/components/site/LabTeaser";
+import WorkIndex from "@/components/site/WorkIndex";
+import WorkspaceHero from "@/components/desk/WorkspaceHero";
+import Studio from "@/components/site/Studio";
+import Services from "@/components/site/Services";
+import Process from "@/components/site/Process";
 import Impact from "@/components/site/Impact";
-import Voices from "@/components/site/Voices";
 import Contact from "@/components/site/Contact";
 import Footer from "@/components/site/Footer";
 import Cursor from "@/components/site/Cursor";
@@ -23,17 +23,16 @@ export default function Home() {
       <Cursor />
       <Nav />
       <main id="main" className="relative">
-        <DeskHero />
-        <Practices />
-        <div id="deployments" />
+        <WorkspaceHero />
         <FieldKit />
-        <WorkMap />
-        <FlagshipWork />
-        <LabTeaser />
-        <Impact />
-        <Voices />
         <BuildDesk />
-        <Contact compact />
+        <FlagshipWork />
+        <Studio />
+        <WorkIndex />
+        <Services />
+        <Process />
+        <Impact />
+        <Contact />
       </main>
       <Footer />
       <MobileCtaBar />

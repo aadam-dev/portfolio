@@ -2,6 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import Lenis from "lenis";
+import { registerLenis } from "@/lib/scroll";
 
 export default function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
@@ -12,6 +13,7 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     // nested scrollers (replica screens, the office, menus) keep their own wheel scrolling
     const lenis = new Lenis({ lerp: 0.1, allowNestedScroll: true });
     (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+    registerLenis(lenis);
     let raf = 0;
     const loop = (time: number) => {
       lenis.raf(time);
@@ -21,6 +23,7 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
 
     return () => {
       cancelAnimationFrame(raf);
+      registerLenis(null);
       lenis.destroy();
       delete (window as unknown as { __lenis?: Lenis }).__lenis;
     };

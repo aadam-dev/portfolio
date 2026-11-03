@@ -18,17 +18,8 @@ import { CHAPTERS, MODES, chapterProjects, modeIndex, type Chapter, type ModeId 
 
 /* ---------- helpers ---------- */
 
-export function useMediaQuery(q: string): boolean | null {
-  return useSyncExternalStore(
-    (cb) => {
-      const mq = window.matchMedia(q);
-      mq.addEventListener("change", cb);
-      return () => mq.removeEventListener("change", cb);
-    },
-    () => window.matchMedia(q).matches,
-    () => null,
-  );
-}
+export { useMediaQuery } from "@/lib/useMediaQuery";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 
 type LenisLike = { scrollTo: (t: HTMLElement | number, o?: { offset?: number; duration?: number }) => void };
 
@@ -215,7 +206,8 @@ export default function FieldKit() {
   };
 
   return (
-    <section id="work-in-motion" aria-label="Work in motion" className="relative [overflow-x:clip]">
+    <section id="deployments" aria-labelledby="deployments-heading" className="relative [overflow-x:clip]">
+      <span id="work-in-motion" className="absolute top-0" aria-hidden />
       <div
         aria-hidden="true"
         className="absolute top-0 right-0 pointer-events-none"
@@ -227,6 +219,13 @@ export default function FieldKit() {
       />
       <div className="relative max-w-[1440px] mx-auto px-4 md:px-6 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,600px)] lg:gap-12 xl:gap-20">
         <div>
+          <header className="pt-24 lg:pt-32">
+            <p className="eyebrow">{t("header.eyebrow")}</p>
+            <h2 id="deployments-heading" className="mt-5 font-display text-[clamp(36px,4.2vw,64px)] leading-[0.98] text-balance">
+              {t("header.title")} <span className="font-serif-it text-[var(--accent)]">{t("header.accent")}</span>
+            </h2>
+            <p className="mt-5 max-w-[46ch] text-[16px] leading-relaxed text-[var(--ink-2)]">{t("header.note")}</p>
+          </header>
           {/* Chapters 01-07 */}
           <div ref={chaptersRef}>
             {CHAPTERS.map((c, i) => (

@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 const ITEMS: [string, string][] = [
   ["What I record about a visit", "The pages you open, what you play with on the site (for example ringing up a sale on a replica or stressing the model), how long the visit lasts, the site that sent you, your browser, operating system and device type, and an approximate place (city and country) worked out by my host, Vercel, from your connection."],
   ["Your IP address", "I store the IP address your visit came from, with the visit record, so I can tell visits apart and spot abuse. Only I can see it, and it is deleted with the visit record."],
+  ["A second copy for me", "Page views are also sent to Scout, a small visit log I run myself: the page path (without its query string), the site that sent you, your browser language, time zone, screen size and campaign tags, under a random id that lasts one browser session. It skips visits that send Do Not Track or Global Privacy Control."],
   ["What I do not record", "There are no advertising or third-party analytics scripts, no fingerprinting, and nothing is sold or shared."],
   ["How a visit is recognised", "Your browser keeps a random id in local storage so a second visit can be counted as a return. Clearing site data removes it. If your browser sends Do Not Track or Global Privacy Control, nothing is recorded at all."],
   ["Messages and briefs", "When you send a message or a brief, I keep what you wrote and the contact details you gave, so I can reply. If you left an email address, you may get a short confirmation."],

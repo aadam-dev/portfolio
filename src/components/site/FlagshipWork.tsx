@@ -11,10 +11,10 @@ import {
 import { ArrowUpRight } from "lucide-react";
 import { projects, projectSlug, localizedProject, visibleProjects, type Project } from "@/lib/projects";
 import BrowserMockup from "@/components/BrowserMockup";
+import CountUp from "@/components/ui/CountUp";
 import PreviewRouter from "@/components/previews/PreviewRouter";
 import { useTranslations, useLocale } from "next-intl";
 import { drawLine, maskRise } from "@/lib/motion";
-import CountUp from "@/components/ui/CountUp";
 
 const FLAGSHIP_IDS = ["primehub", "alboyut", "jireh", "rockmotion"];
 
@@ -141,9 +141,6 @@ export default function FlagshipWork({ compact = false }: { compact?: boolean })
           <div className="overflow-hidden">
             <motion.h2
               variants={maskRise}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.6 }}
               className="font-display"
               style={{ fontSize: "clamp(2.4rem, 5.5vw, 4.5rem)", lineHeight: 1 }}
             >

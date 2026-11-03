@@ -10,7 +10,10 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { NavThemeToggle } from "@/components/fieldkit/ThemeSwitch";
 
 const LINKS = [
-  { key: "work", href: "/work" },
+  { key: "desk", href: "/#desk" },
+  { key: "work", href: "/#work" },
+  { key: "studio", href: "/#studio" },
+  { key: "services", href: "/#services" },
   { key: "lab", href: "/lab" },
   { key: "about", href: "/about" },
   { key: "contact", href: "/#contact" },
@@ -106,6 +109,7 @@ export default function Nav() {
                 {s.label}
               </a>
             ))}
+            <NavThemeToggle />
             <LanguageSwitcher />
             <NavThemeToggle />
             <Link
