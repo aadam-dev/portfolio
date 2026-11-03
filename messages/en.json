@@ -205,6 +205,48 @@
       "accent": "build with me.",
       "note": "Flip the switch on the device. Build sizes a project in weeks, with no price tags. Hire sets up a role and checks how our working hours overlap. Both print a ticket with what you did on the kit and send it straight to me.",
       "fallback": "Or just write to me"
+    },
+    "modes": {
+      "counter": {
+        "label": "Counter",
+        "sub": "Point of sale & ops"
+      },
+      "laundry": {
+        "label": "Laundry",
+        "sub": "Service workflow"
+      },
+      "atelier": {
+        "label": "Atelier",
+        "sub": "Fashion commerce"
+      },
+      "analyst": {
+        "label": "Analyst desk",
+        "sub": "Finance models"
+      },
+      "ledger": {
+        "label": "Ledger",
+        "sub": "ERP, Odoo & data"
+      },
+      "court": {
+        "label": "Court",
+        "sub": "Sports & community data"
+      },
+      "classroom": {
+        "label": "Classroom",
+        "sub": "Edtech & platforms"
+      },
+      "build": {
+        "label": "Build desk",
+        "sub": "Hire or build"
+      }
+    },
+    "device": {
+      "day": "Day",
+      "night": "Night",
+      "nightMode": "Night mode",
+      "waiting": "waiting for input…",
+      "log": "Device event log",
+      "deployments": "Deployments"
     }
   },
   "home": {

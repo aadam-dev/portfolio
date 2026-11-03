@@ -108,8 +108,8 @@ function ChapterBlock({
         >
           <span className="text-[var(--accent)]">{chapter.n}</span>
           <span className="h-px w-8 bg-[var(--line-strong)]" />
-          <span>{meta.label}</span>
-          <span className="text-[var(--ink-4)]">· {meta.sub}</span>
+          <span>{t(`modes.${meta.id}.label`)}</span>
+          <span className="text-[var(--ink-4)]">· {t(`modes.${meta.id}.sub`)}</span>
         </motion.div>
 
         <motion.h2

@@ -27,7 +27,7 @@ export default function PosTerminal({
 
   return (
     <PrinterContext.Provider value={print}>
-      <div className="@container/pos relative w-full">
+      <div dir="ltr" className="@container/pos relative w-full">
         <div className="relative flex flex-col @[560px]/pos:flex-row @[560px]/pos:items-end gap-3">
           {/* Terminal */}
           <div className="relative flex-1 min-w-0">

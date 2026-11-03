@@ -34,6 +34,7 @@ export default function Phone({ children, dark = false }: { children: ReactNode;
   return (
     <NotifyContext.Provider value={notify}>
       <div
+        dir="ltr"
         className="relative mx-auto w-[min(304px,86vw)] h-[620px] rounded-[52px] p-[3px]"
         style={{
           background: "linear-gradient(135deg, var(--hw-rail-hi) 0%, var(--hw-rail) 30%, var(--hw-rail-lo) 70%, var(--hw-rail-hi) 100%)",

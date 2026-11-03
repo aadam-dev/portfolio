@@ -109,7 +109,6 @@ export default function Nav() {
                 {s.label}
               </a>
             ))}
-            <NavThemeToggle />
             <LanguageSwitcher />
             <NavThemeToggle />
             <Link

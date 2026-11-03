@@ -3,6 +3,7 @@
 import { useSyncExternalStore } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export type Theme = "light" | "dark";
 const KEY = "fk-theme";
@@ -89,6 +90,7 @@ export function NavThemeToggle({ className = "" }: { className?: string }) {
 
 /** The physical slide switch engraved on the device. */
 export function DeviceThemeSwitch() {
+  const t = useTranslations("fieldkit.device");
   const [theme, set] = useTheme();
   const reduce = useReducedMotion();
   const night = theme === "dark";
@@ -97,11 +99,11 @@ export function DeviceThemeSwitch() {
       type="button"
       role="switch"
       aria-checked={night}
-      aria-label="Night mode"
+      aria-label={t("nightMode")}
       onClick={(e) => set(night ? "light" : "dark", e.currentTarget)}
       className="group inline-flex items-center gap-2 font-mono text-[9.5px] tracking-[0.14em] uppercase text-[var(--ink-3)]"
     >
-      <span className={night ? "opacity-50" : ""}>Day</span>
+      <span className={night ? "opacity-50" : ""}>{t("day")}</span>
       <span
         className="relative w-[34px] h-[16px] rounded-full"
         style={{
@@ -120,7 +122,7 @@ export function DeviceThemeSwitch() {
           transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 600, damping: 32 }}
         />
       </span>
-      <span className={night ? "" : "opacity-50"}>Night</span>
+      <span className={night ? "" : "opacity-50"}>{t("night")}</span>
     </button>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useSyncExternalStore, type ReactNode } from "react";
 import { AnimatePresence, motion, useInView, useReducedMotion, type MotionValue } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { MODES, modeIndex, type ModeId } from "./chapters";
 import ModeScreen, { warmModes } from "./ModeScreen";
 import { ALBOYUT, ANNUR, DELISH, MADINA, MUNAMUSE, ZAINAS } from "./items";
@@ -90,15 +91,17 @@ export function Hardware({ mode, children, narrow = false }: { mode: ModeId; chi
 
 function Rail({ mode, onSelect, progress }: { mode: ModeId; onSelect: (m: ModeId) => void; progress?: MotionValue<number> }) {
   const idx = modeIndex(mode);
+  const t = useTranslations("fieldkit");
   return (
     <div className="relative">
       <div className="flex items-center justify-between gap-3">
-        <div role="group" aria-label="Deployments" className="flex flex-wrap gap-x-3 gap-y-1">
+        <div role="group" aria-label={t("device.deployments")} className="flex flex-wrap gap-x-3 gap-y-1">
           {MODES.map((m, i) => (
             <button
               key={m.id}
               type="button"
               onClick={() => onSelect(m.id)}
+              aria-label={t(`modes.${m.id}.label`)}
               aria-current={i === idx ? "step" : undefined}
               className={`font-mono text-[10px] tracking-[0.12em] uppercase transition-colors ${
                 i === idx ? "text-[var(--foreground)]" : "text-[var(--ink-4)] hover:text-[var(--ink-2)]"

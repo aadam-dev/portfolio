@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useLocale } from "next-intl";
 import type { ModeId } from "./chapters";
 
 const Loading = () => (
@@ -53,7 +54,18 @@ export function warmModes(images: string[]) {
   idle(step);
 }
 
+/** The device screens are replicas of real products, which run left to right in every language. */
 export default function ModeScreen({ mode }: { mode: ModeId }) {
+  // the Build desk is my own form and follows the page's language and direction
+  const locale = useLocale();
+  return (
+    <div dir={mode === "build" && locale === "ar" ? "rtl" : "ltr"} className="contents">
+      <Screen mode={mode} />
+    </div>
+  );
+}
+
+function Screen({ mode }: { mode: ModeId }) {
   switch (mode) {
     case "counter":
       return <Counter />;

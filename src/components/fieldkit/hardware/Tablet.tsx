@@ -11,7 +11,7 @@ export default function Tablet({
   screenClass?: string;
 }) {
   return (
-    <div className="@container/tab relative w-full">
+    <div dir="ltr" className="@container/tab relative w-full">
       <div
         className="relative rounded-[30px] p-[2px]"
         style={{

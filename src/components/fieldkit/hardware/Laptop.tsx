@@ -13,7 +13,7 @@ export default function Laptop({
   screenClass?: string;
 }) {
   return (
-    <div className="@container/lap relative w-full">
+    <div dir="ltr" className="@container/lap relative w-full">
       <div className="relative mx-auto w-[94%]">
         <div
           className="relative rounded-t-[16px] rounded-b-[4px] p-[11px] pb-[13px]"

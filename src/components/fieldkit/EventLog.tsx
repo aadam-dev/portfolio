@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { clock, useKitEvents, type KitSource } from "./events";
 import { EASE_OUT } from "@/lib/motion";
+import { useTranslations } from "next-intl";
 
 const TONE: Record<KitSource, string> = {
   kit: "#8a857b",
@@ -19,16 +20,17 @@ const TONE: Record<KitSource, string> = {
 export default function EventLog({ lines = 3 }: { lines?: number }) {
   const events = useKitEvents().slice(0, lines);
   const reduce = useReducedMotion();
+  const t = useTranslations("fieldkit.device");
 
   return (
     <div
       className="relative font-mono text-[9.5px] leading-[15px] text-white/55 overflow-hidden"
       style={{ height: lines * 15 }}
       aria-live="polite"
-      aria-label="Device event log"
+      aria-label={t("log")}
       role="log"
     >
-      {events.length === 0 && <div className="text-white/25">waiting for input…</div>}
+      {events.length === 0 && <div className="text-white/25">{t("waiting")}</div>}
       <AnimatePresence initial={false}>
         {events.map((e, i) => (
           <motion.div

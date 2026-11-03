@@ -205,6 +205,48 @@
       "accent": "construisez avec moi.",
       "note": "Basculez l'interrupteur de l'appareil. Construire estime un projet en semaines, sans prix affiché. Engager définit un poste et montre comment nos horaires se recoupent. Les deux impriment un ticket avec ce que vous avez fait sur le kit et me l'envoient directement.",
       "fallback": "Ou écrivez-moi simplement"
+    },
+    "modes": {
+      "counter": {
+        "label": "Comptoir",
+        "sub": "Point de vente et opérations"
+      },
+      "laundry": {
+        "label": "Blanchisserie",
+        "sub": "Flux de service"
+      },
+      "atelier": {
+        "label": "Atelier",
+        "sub": "Commerce de mode"
+      },
+      "analyst": {
+        "label": "Bureau d'analyste",
+        "sub": "Modèles financiers"
+      },
+      "ledger": {
+        "label": "Grand livre",
+        "sub": "ERP, Odoo et données"
+      },
+      "court": {
+        "label": "Terrain",
+        "sub": "Sport et données communautaires"
+      },
+      "classroom": {
+        "label": "Salle de classe",
+        "sub": "Edtech et plateformes"
+      },
+      "build": {
+        "label": "Atelier de projet",
+        "sub": "Recruter ou construire"
+      }
+    },
+    "device": {
+      "day": "Jour",
+      "night": "Nuit",
+      "nightMode": "Mode nuit",
+      "waiting": "en attente d'une action…",
+      "log": "Journal de l'appareil",
+      "deployments": "Déploiements"
     }
   },
   "home": {
