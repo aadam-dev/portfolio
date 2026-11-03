@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { Compass, Code2, LineChart, Megaphone, Database, Clapperboard, ArrowUpRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Reveal from "@/components/ui/Reveal";
-import { METHOD, REMOTE, SERVICES, type Service } from "@/lib/services";
+import { localServices, type Service } from "@/lib/services";
 import { EASE_OUT } from "@/lib/motion";
 
 const ICONS: Record<Service["key"], typeof Compass> = {
@@ -20,6 +20,7 @@ const ICONS: Record<Service["key"], typeof Compass> = {
 export default function Services() {
   const t = useTranslations("services");
   const reduce = useReducedMotion();
+  const { services: SERVICES, method: METHOD, remote: REMOTE, copy } = localServices(useLocale());
   return (
     <section id="services" aria-labelledby="services-heading" className="relative px-4 md:px-6 py-24 md:py-32 border-t border-[var(--line)]">
       <div className="max-w-[1280px] mx-auto">
@@ -31,9 +32,7 @@ export default function Services() {
             </h2>
           </div>
           <p className="md:col-span-5 md:col-start-8 text-[15px] md:text-[16px] leading-[1.65] text-[var(--ink-2)] text-pretty">
-            Most teams hand you off between strategy, design, engineering, data, brand and marketing. I work forward deployed: I sit in with
-            your team, study how the work really happens, write it down, build the system, then watch it until the numbers move. One person
-            from the business case to the code to the launch film. Fewer seams, faster decisions, better work.
+            {copy.intro}
           </p>
         </div>
 
@@ -73,7 +72,7 @@ export default function Services() {
                     <h3 className="font-display text-white" style={{ fontSize: "clamp(1.5rem, 2.6vw, 2rem)", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
                       {s.title}
                       {s.key === "brand" && (
-                        <span className="ml-3 align-middle rounded-full bg-[var(--accent)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-black">New</span>
+                        <span className="ml-3 align-middle rounded-full bg-[var(--accent)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-black">{copy.isNew}</span>
                       )}
                     </h3>
                     <p className="mt-3 text-[15px] md:text-[16px] text-[var(--ink-2)] leading-relaxed text-pretty">{s.body}</p>
@@ -82,7 +81,7 @@ export default function Services() {
                     <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--ink-3)]">{s.meta}</p>
                     {s.proof && (
                       <Link href={s.proof.href} className="group mt-3 inline-flex items-center gap-1 text-[13px] text-[var(--ink-2)] hover:text-white">
-                        See {s.proof.label} <ArrowUpRight className="h-3 w-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                        {copy.see} {s.proof.label} <ArrowUpRight className="h-3 w-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                       </Link>
                     )}
                   </div>
@@ -95,9 +94,9 @@ export default function Services() {
         {/* remote, worldwide */}
         <div className="mt-14 grid gap-6 md:grid-cols-12 md:items-end">
           <div className="md:col-span-4">
-            <p className="eyebrow mb-3">Remote, worldwide</p>
+            <p className="eyebrow mb-3">{copy.remoteEyebrow}</p>
             <p className="font-display text-[clamp(1.6rem,2.6vw,2.2rem)] leading-[1.05] text-white" style={{ letterSpacing: "-0.02em" }}>
-              Accra is GMT+0. <span className="font-serif-it text-[var(--accent)]">Your morning is my morning.</span>
+              {copy.remoteTitle} <span className="font-serif-it text-[var(--accent)]">{copy.remoteAccent}</span>
             </p>
           </div>
           <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--line)] md:col-span-8 lg:grid-cols-4">

@@ -1,13 +1,15 @@
 "use client";
 
 import { useMediaQuery } from "@/lib/useMediaQuery";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
 import AadamOS, { type Win } from "./AadamOS";
 import PhoneOS from "./PhoneOS";
 import type { Quad } from "./quad";
 import { PLATE, STOPS, type Stop } from "./objects";
+import { deskUi, localStops } from "./objects.l10n";
+import { useLocale } from "next-intl";
 import type { DeskRig } from "./PhotoDesk";
 import dynamic from "next/dynamic";
 
@@ -35,8 +37,15 @@ export default function WorkspaceHero() {
   return immersive ? <Tour /> : <Stacked />;
 }
 
+/** The tour's stops and labels in the visitor's language. */
+function useStops() {
+  const locale = useLocale();
+  return useMemo(() => ({ stops: localStops(STOPS, locale), ui: deskUi(locale) }), [locale]);
+}
+
 /** Server render and first paint: the desk and the headline, so the h1 exists before scripts run. */
 function Poster() {
+  const { stops } = useStops();
   return (
     <section id="desk" aria-label="Aadam's workspace" className="relative h-[100svh] overflow-hidden bg-[#1a120b]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -44,9 +53,9 @@ function Poster() {
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent lg:bg-gradient-to-r lg:from-black/55 lg:via-black/10" />
       <div className="theme-fixed absolute inset-x-0 bottom-0 mx-auto max-w-[1280px] px-5 pb-10 lg:inset-y-0 lg:flex lg:items-center lg:px-6 lg:pb-0">
         <div className="max-w-[540px]">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent-2)]">{STOPS[0].eyebrow}</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent-2)]">{stops[0].eyebrow}</p>
           <h1 className="mt-3 font-display text-[clamp(30px,3.6vw,56px)] leading-[1.02] text-white text-balance" style={{ letterSpacing: "-0.03em" }}>
-            {STOPS[0].title}
+            {stops[0].title}
           </h1>
         </div>
       </div>
@@ -57,6 +66,7 @@ function Poster() {
 /* ================================================================== tour */
 
 function Tour() {
+  const { stops, ui } = useStops();
   const track = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const spot = useRef<HTMLDivElement>(null);
@@ -173,18 +183,18 @@ function Tour() {
   const openPhone = useCallback(() => setPhone(true), []);
 
   const night = theme === "dark";
-  const stops = STOPS.map((st) => ({ id: st.id, side: st.copy }));
+  const deskStops = useMemo(() => stops.map((st) => ({ id: st.id, side: st.copy })), [stops]);
 
   return (
     <section ref={track} id="desk" className="relative" style={{ height: "560vh" }} aria-label="Aadam's workspace">
-      <div ref={stage} className="sticky top-0 h-[100svh] w-full overflow-hidden bg-[#1a120b]" style={{ zIndex: landed ? 50 : undefined }}>
+      <div ref={stage} dir="ltr" className="sticky top-0 h-[100svh] w-full overflow-hidden bg-[#1a120b]" style={{ zIndex: landed ? 50 : undefined }}>
         {/* the photo shows until the 3D desk is ready (and stays for anyone without WebGL) */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={PLATE.src} alt="Aadam's desk: a laptop with two screen extenders, keyboard, lamp, books, notebook, phone, a bubble tea and a basketball" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={PLATE.src} alt={ui.deskAlt} className="absolute inset-0 h-full w-full object-cover" />
         <PhotoDesk
           active={inView && !phone}
           rig={rig}
-          stops={stops}
+          stops={deskStops}
           land={LAND}
           landed={landed}
           night={night}
@@ -208,7 +218,7 @@ function Tour() {
 
         {/* spotlight + close-up inserts */}
         <div ref={spot} aria-hidden className="pointer-events-none absolute inset-0 z-[4] opacity-0" />
-        {STOPS.map((st, k) =>
+        {stops.map((st, k) =>
           st.insert ? (
             <div key={st.id} ref={(el) => { inserts.current[k] = el; }} aria-hidden className="pointer-events-none absolute inset-0 z-[5] opacity-0 will-change-[opacity,transform]">
               {/* each close-up loads once its chapter is next, not with the page */}
@@ -225,8 +235,8 @@ function Tour() {
 
         {/* copy */}
         {!landed &&
-          STOPS.map((st, k) => (
-            <ChapterCard key={st.id} st={st} k={k} on={active === k} onAction={(e) => run(st, e)} night={night} />
+          stops.map((st, k) => (
+            <ChapterCard key={st.id} st={st} k={k} on={active === k} onAction={(e) => run(st, e)} night={night} ui={ui} />
           ))}
 
         {/* rail */}
@@ -236,7 +246,7 @@ function Tour() {
               <div className="absolute left-0 top-0 h-px w-full origin-left bg-[var(--accent)]" style={{ transform: "scaleX(var(--p))" }} />
             </div>
             <ol className="flex justify-between gap-2">
-              {STOPS.map((st, k) => (
+              {stops.map((st, k) => (
                 <li key={st.id}>
                   <button onClick={() => goTo(k)} aria-label={`${String(k).padStart(2, "0")} ${st.label}`} aria-current={active === k ? "step" : undefined} className="font-mono text-[10.5px] uppercase tracking-[0.16em] transition-colors" style={{ color: active === k ? "#fff" : "rgba(255,255,255,.45)" }}>
                     <span className="text-[var(--accent)]">{String(k).padStart(2, "0")}</span> <span className="hidden xl:inline">{st.label}</span>
@@ -253,6 +263,7 @@ function Tour() {
 }
 
 function Hotspots({ fit, onPick }: { fit: () => { W: number; H: number; pw: number; ph: number; pl: number; pt: number }; onPick: (i: number) => void }) {
+  const { stops } = useStops();
   const [g, setG] = useState<ReturnType<typeof fit> | null>(null);
   // measured after layout, and again whenever the window changes size
   useEffect(() => {
@@ -271,7 +282,7 @@ function Hotspots({ fit, onPick }: { fit: () => { W: number; H: number; pw: numb
   if (!g) return null;
   return (
     <div className="pointer-events-none absolute inset-0 z-[6]">
-      {STOPS.map((st, k) => {
+      {stops.map((st, k) => {
         if (!st.box) return null;
         const [x0, y0, x1, y1] = st.box;
         return (
@@ -293,11 +304,11 @@ function Hotspots({ fit, onPick }: { fit: () => { W: number; H: number; pw: numb
   );
 }
 
-function ChapterCard({ st, k, on, onAction, night }: { st: Stop; k: number; on: boolean; onAction: (e: React.MouseEvent) => void; night: boolean }) {
+function ChapterCard({ st, k, on, onAction, night, ui }: { st: Stop; k: number; on: boolean; onAction: (e: React.MouseEvent) => void; night: boolean; ui: ReturnType<typeof deskUi> }) {
   const right = st.copy === "right";
   const a = st.action;
   const label =
-    a?.kind === "theme" ? (night ? "Switch the lamp off" : "Switch the lamp on") : a?.kind === "phone" ? "Pick up the phone" : a?.kind === "desktop" ? "Jump into the desktop" : a && "label" in a ? a.label : "";
+    a?.kind === "theme" ? (night ? ui.lampOff : ui.lampOn) : a?.kind === "phone" ? ui.phone : a?.kind === "desktop" ? ui.desktop : a && "label" in a ? a.label : "";
   const wide = k === 0;
   const Heading = wide ? "h1" : "h2";
   return (
@@ -308,6 +319,7 @@ function ChapterCard({ st, k, on, onAction, night }: { st: Stop; k: number; on: 
       inert={!on}
     >
       <div
+        dir="auto"
         className={`max-w-[540px] rounded-2xl border border-white/10 bg-black/40 p-7 backdrop-blur-md transition-[opacity,transform,filter] duration-700`}
         style={{
           opacity: on ? 1 : 0,
@@ -325,7 +337,7 @@ function ChapterCard({ st, k, on, onAction, night }: { st: Stop; k: number; on: 
           {st.title}
         </Heading>
         <p className="mt-4 text-[15.5px] leading-relaxed text-white/80 [text-shadow:0_1px_12px_rgba(0,0,0,.5)]">{st.body}</p>
-        {st.id === "books" && <ReadingList className="mt-3 text-white/80" />}
+        {st.id === "books" && <ReadingList className="mt-3 text-white/80" labels={[ui.reading, ui.next]} />}
         {a &&
           (a.kind === "link" ? (
             <Link href={a.href} className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-[13px] font-semibold text-black">
@@ -336,7 +348,7 @@ function ChapterCard({ st, k, on, onAction, night }: { st: Stop; k: number; on: 
               {label} <span aria-hidden>{a.kind === "scroll" || a.kind === "desktop" ? "↓" : "→"}</span>
             </button>
           ))}
-        {wide && <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">Scroll · or tap anything on the desk</p>}
+        {wide && <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">{ui.scrollHint}</p>}
       </div>
     </div>
   );
@@ -346,7 +358,7 @@ type Book = { title: string; author: string };
 let readingCache: Promise<{ reading: Book[]; next: Book[] }> | null = null;
 
 /** What I'm reading now and next, live from the Office's reading board. */
-function ReadingList({ className = "" }: { className?: string }) {
+function ReadingList({ className = "", labels = ["Reading", "Next"] }: { className?: string; labels?: [string, string] }) {
   const [list, setList] = useState<{ reading: Book[]; next: Book[] } | null>(null);
   useEffect(() => {
     readingCache ??= fetch("/api/reading")
@@ -364,13 +376,13 @@ function ReadingList({ className = "" }: { className?: string }) {
     <dl className={`grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[13.5px] leading-snug ${className}`}>
       {list.reading.length > 0 && (
         <>
-          <dt className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-[var(--accent-2)] pt-0.5">Reading</dt>
+          <dt className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-[var(--accent-2)] pt-0.5">{labels[0]}</dt>
           <dd>{list.reading.map(line).join(" · ")}</dd>
         </>
       )}
       {list.next.length > 0 && (
         <>
-          <dt className="font-mono text-[10.5px] uppercase tracking-[0.16em] opacity-60 pt-0.5">Next</dt>
+          <dt className="font-mono text-[10.5px] uppercase tracking-[0.16em] opacity-60 pt-0.5">{labels[1]}</dt>
           <dd>{list.next.slice(0, 3).map(line).join(" · ")}</dd>
         </>
       )}
@@ -419,6 +431,7 @@ function CodeScreen() {
 /* ================================================================== touch / reduced motion */
 
 function Stacked() {
+  const { stops, ui } = useStops();
   const theme = useTheme();
   const [phone, setPhone] = useState(false);
   const [os, setOs] = useState(false);
@@ -444,14 +457,14 @@ function Stacked() {
         <img src={PLATE.src} alt="Aadam's desk" className="absolute inset-0 h-full w-full object-cover object-[50%_40%]" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         <div className="theme-fixed absolute inset-x-0 bottom-0 px-5 pb-7">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent-2)]">{STOPS[0].eyebrow}</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent-2)]">{stops[0].eyebrow}</p>
           <h1 className="mt-3 font-display text-[clamp(30px,8vw,48px)] leading-[1.02] text-white" style={{ letterSpacing: "-0.03em" }}>
-            {STOPS[0].title}
+            {stops[0].title}
           </h1>
         </div>
       </div>
       <div className="mx-auto max-w-[720px] space-y-10 px-5 pt-10">
-        {STOPS.slice(1).map((st, k) => (
+        {stops.slice(1).map((st, k) => (
           <article key={st.id} className="overflow-hidden rounded-2xl border border-[var(--line)]">
             {st.insert && (
               // eslint-disable-next-line @next/next/no-img-element
@@ -465,7 +478,7 @@ function Stacked() {
                 {st.title}
               </h2>
               <p className="mt-2 text-[15px] leading-relaxed text-[var(--ink-2)]">{st.body}</p>
-              {st.id === "books" && <ReadingList className="mt-2 text-[var(--ink-2)]" />}
+              {st.id === "books" && <ReadingList className="mt-2 text-[var(--ink-2)]" labels={[ui.reading, ui.next]} />}
               {st.action &&
                 (st.action.kind === "link" ? (
                   <Link href={st.action.href} className="mt-4 inline-flex rounded-full bg-[var(--accent)] px-4 py-2.5 text-[13px] font-semibold text-black">
@@ -473,7 +486,7 @@ function Stacked() {
                   </Link>
                 ) : (
                   <button onClick={(e) => act(st, e)} className="mt-4 inline-flex rounded-full bg-[var(--accent)] px-4 py-2.5 text-[13px] font-semibold text-black">
-                    {st.action.kind === "theme" ? (theme === "dark" ? "Switch the lamp off" : "Switch the lamp on") : st.action.kind === "phone" ? "Pick up the phone" : st.action.kind === "desktop" ? "Open Aadam OS" : st.action.label}
+                    {st.action.kind === "theme" ? (theme === "dark" ? ui.lampOff : ui.lampOn) : st.action.kind === "phone" ? ui.phone : st.action.kind === "desktop" ? ui.openOS : st.action.label}
                   </button>
                 ))}
             </div>

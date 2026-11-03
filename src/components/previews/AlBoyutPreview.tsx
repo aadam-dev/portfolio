@@ -34,7 +34,7 @@ function Landing() {
           Cement, iron rods &<br />
           <span style={{ color: LATERITE }}>everything the site needs.</span>
         </h1>
-        <p className="text-[#5c554b] max-w-md mb-8">Counter pickup or delivery across Accra. Message us your list — we quote, you confirm, we deliver.</p>
+        <p className="text-[#5c554b] max-w-md mb-8">Counter pickup or delivery across Accra. Message us your list: we quote, you confirm, we deliver.</p>
         <div className="flex gap-3">
           <button className="px-8 py-4 rounded-md text-white text-xs font-black uppercase tracking-widest" style={{ background: LATERITE }}>Browse materials</button>
           <button className="px-8 py-4 rounded-md text-xs font-black uppercase tracking-widest border border-[#211d18]/20 bg-white">Laundry counter</button>
@@ -81,7 +81,7 @@ function Admin() {
       </div>
       <div className="bg-white rounded-md border border-[#ddd] p-4">
         <p className="text-[10px] font-black uppercase tracking-widest mb-3 text-[#6f6656]">Recent orders</p>
-        {[["#1042", "K. Mensah", "40 bags cement", "Delivery", "GH₵ 3,400"], ["#1041", "Site — East Legon", "Iron rods 16mm ×60", "Pickup", "GH₵ 5,160"], ["#1040", "A. Owusu", "Laundry · 12 items", "Counter", "GH₵ 180"]].map(([id, c, items, ch, amt]) => (
+        {[["#1042", "K. Mensah", "40 bags cement", "Delivery", "GH₵ 3,400"], ["#1041", "Site, East Legon", "Iron rods 16mm ×60", "Pickup", "GH₵ 5,160"], ["#1040", "A. Owusu", "Laundry · 12 items", "Counter", "GH₵ 180"]].map(([id, c, items, ch, amt]) => (
           <div key={id} className="flex items-center justify-between py-2.5 border-b border-[#eee] last:border-0 text-xs">
             <span className="font-mono text-[#6f6656]">{id}</span>
             <span className="font-bold flex-1 px-3">{c}</span>

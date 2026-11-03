@@ -52,7 +52,7 @@ export default function PreviewRouter({ projectId, screen }: Props) {
   const project = projects.find((p) => p.id === projectId);
   const shot = project?.screenImages?.[screen];
   if (shot) {
-    return <RealShot src={shot} alt={`${project?.name} — ${screen} (actual product)`} />;
+    return <RealShot src={shot} alt={`${project?.name}, ${screen} (actual product)`} />;
   }
 
   switch (projectId) {

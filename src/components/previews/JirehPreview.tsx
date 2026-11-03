@@ -186,7 +186,7 @@ function Reports() {
       </div>
 
       <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-5">
-        <p className="text-white/40 text-[10px] font-bold tracking-[0.14em] mb-4">PROFIT &amp; LOSS STATEMENT — JUNE 2026</p>
+        <p className="text-white/40 text-[10px] font-bold tracking-[0.14em] mb-4">PROFIT &amp; LOSS STATEMENT · JUNE 2026</p>
         {pl.map(([label, value, neg], i) => {
           const strong = !neg;
           return (

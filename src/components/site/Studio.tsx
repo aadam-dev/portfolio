@@ -2,6 +2,7 @@
 
 import InViewVideo from "@/components/ui/InViewVideo";
 import Link from "next/link";
+import { useLocale } from "next-intl";
 import { ArrowUpRight } from "lucide-react";
 
 /**
@@ -51,7 +52,7 @@ const CARDS = [
     id: "copy",
     kicker: "04 · Copywriting",
     title: "Words that do the selling",
-    line: "The generic line, and the one we wrote instead.",
+    line: "The generic line, and the one I wrote instead.",
     pairs: [
       ["Bubble tea, smoothies & more", "Built from the bottom up."],
       ["Our tapioca is made fresh daily", "The pearl is the point."],
@@ -64,25 +65,58 @@ const CARDS = [
   },
 ] as const;
 
+type CardCopy = { kicker: string; line: string; body?: string; steps: string[]; links?: string[] };
+const L10N: Record<string, { eyebrow: string; title: string; accent: string; intro: string; cards: Record<string, CardCopy> }> = {
+  fr: {
+    eyebrow: "Studio · Marque, produit et motion",
+    title: "Au-delà du code\u00a0:",
+    accent: "des marques qu'on a envie de photographier.",
+    intro: "La personne qui construit le système peut aussi diriger la marque, écrire les textes et monter le film de lancement. Moins de passages de relais, et un produit aussi beau qu'efficace.",
+    cards: {
+      bloom: { kicker: "01 · Livré · Marque concept", line: "Une marque de boissons pensée pour sembler photographiée, pas codée.", body: "Direction artistique sur un seul décor sombre, une chaîne de photographie par IA (plus de 40 images assorties), un film au défilement en neuf temps, un configurateur avec shaker en 3D, et les textes qui la vendent.", steps: ["Brief", "Direction artistique", "Photo IA", "Film au défilement", "Configurateur + 3D", "Rédaction"], links: ["Étude de cas", "Site en ligne"] },
+      yeskoko: { kicker: "02 · En cours · Emballage", line: "Des fruits séchés du Ghana, emballés pour se démarquer dans un rayon étranger.", body: "Un système d'emballage pensé pour l'export et un film produit de l'arbre au croquant pour la marque de snacks d'Edis Mart : une étiquette claire par fruit, un même langage visuel du sachet à la boutique.", steps: ["Audit des rayons", "Système d'emballage", "Film produit", "Boutique en ligne"] },
+      motion: { kicker: "03 · Motion", line: "Films au défilement, vidéos produit et démonstrations.", body: "Chaque projet sort avec du mouvement : une démonstration enregistrée, un film au défilement ou une courte vidéo de lancement pour les réseaux. Muet par défaut, net à toutes les tailles.", steps: ["Films au défilement", "Vidéo produit", "Démonstrations", "Formats réseaux"], links: ["Voir le film boba"] },
+      copy: { kicker: "04 · Rédaction", line: "La phrase générique, et celle que j'ai écrite à la place.", steps: ["Positionnement", "Titres", "Textes produit", "Microcopie"] },
+    },
+  },
+  ar: {
+    eyebrow: "الاستوديو · هوية ومنتج وحركة",
+    title: "ما بعد الشيفرة:",
+    accent: "علامات يرغب الناس في تصويرها.",
+    intro: "الشخص الذي يبني النظام يستطيع أيضاً إدارة الهوية فنياً وكتابة النصوص ومونتاج فيلم الإطلاق. انتقالات أقل بين الأيدي، ومنتج يبدو جميلاً بقدر ما يعمل جيداً.",
+    cards: {
+      bloom: { kicker: "01 · منجز · علامة تجريبية", line: "علامة مشروبات مصمَّمة لتبدو مصوَّرة لا مبرمجة.", body: "إدارة فنية على ديكور داكن واحد، وسلسلة تصوير بالذكاء الاصطناعي (أكثر من 40 صورة متناسقة)، وفيلم تمرير من تسعة مشاهد، ومُنشئ مشروبات مع رجّ ثلاثي الأبعاد، والنصوص التي تبيعها.", steps: ["الموجز", "الإدارة الفنية", "تصوير بالذكاء الاصطناعي", "فيلم التمرير", "المُنشئ + ثلاثي الأبعاد", "الكتابة"], links: ["دراسة الحالة", "الموقع المباشر"] },
+      yeskoko: { kicker: "02 · قيد العمل · تغليف", line: "فواكه مجففة من غانا، مغلّفة لتلفت النظر على رف أجنبي.", body: "نظام تغليف موجّه للتصدير وفيلم منتج من الشجرة إلى القرمشة لعلامة الوجبات الخفيفة لدى Edis Mart: ملصق واضح لكل فاكهة، ولغة بصرية واحدة من العبوة إلى المتجر.", steps: ["تدقيق الرفوف", "نظام التغليف", "فيلم المنتج", "المتجر الإلكتروني"] },
+      motion: { kicker: "03 · الحركة", line: "أفلام التمرير وفيديوهات المنتج وعروض الاستخدام.", body: "كل مشروع يُطلق ومعه حركة: عرض استخدام مسجّل، أو فيلم تمرير، أو مقطع إطلاق قصير لوسائل التواصل. صامت افتراضياً، وحادّ بأي حجم.", steps: ["أفلام التمرير", "فيديو المنتج", "عروض الاستخدام", "مقاطع التواصل"], links: ["شاهد فيلم البوبا"] },
+      copy: { kicker: "04 · الكتابة الإعلانية", line: "الجملة العامة، والجملة التي كتبتها بدلاً منها.", steps: ["التموضع", "العناوين", "نصوص المنتج", "النصوص الدقيقة"] },
+    },
+  },
+};
+
 export default function Studio() {
+  const l = L10N[useLocale()];
+  const card = (c: (typeof CARDS)[number]) => {
+    const t = l?.cards[c.id];
+    if (!t) return c;
+    return { ...c, kicker: t.kicker, line: t.line, ...(t.body && "body" in c ? { body: t.body } : {}), steps: t.steps, links: c.links.map((k, i) => ({ ...k, label: t.links?.[i] ?? k.label })) };
+  };
   return (
     <section id="studio" aria-labelledby="studio-heading" className="relative border-t border-[var(--line)] px-4 py-24 md:px-6 md:py-32">
       <div className="mx-auto max-w-[1280px]">
         <div className="mb-12 grid gap-8 md:mb-16 md:grid-cols-12">
           <div className="md:col-span-7">
-            <p className="eyebrow mb-5">Studio · Brand, product & motion</p>
+            <p className="eyebrow mb-5">{l?.eyebrow ?? "Studio · Brand, product & motion"}</p>
             <h2 id="studio-heading" className="font-display text-white text-balance" style={{ fontSize: "clamp(2.25rem, 6vw, 4.5rem)", lineHeight: 0.98, letterSpacing: "-0.03em" }}>
-              Beyond the code: <span className="font-serif-it text-[var(--ink-2)]">brands people want to photograph.</span>
+              {l?.title ?? "Beyond the code:"} <span className="font-serif-it text-[var(--ink-2)]">{l?.accent ?? "brands people want to photograph."}</span>
             </h2>
           </div>
           <p className="text-[15px] leading-[1.65] text-[var(--ink-2)] md:col-span-4 md:col-start-9 md:self-end md:text-[16px]">
-            The same person who builds the system can art-direct the brand, write the words and cut the launch film. That&apos;s fewer handoffs
-            and a product that looks as good as it works.
+            {l?.intro ?? "The same person who builds the system can art-direct the brand, write the words and cut the launch film. That's fewer handoffs and a product that looks as good as it works."}
           </p>
         </div>
 
         <div className="space-y-6">
-          {CARDS.map((c, i) => (
+          {CARDS.map(card).map((c, i) => (
             <article
               key={c.id}
               className="theme-fixed sticky overflow-hidden rounded-[28px] border border-white/10 text-white shadow-[0_30px_80px_rgba(0,0,0,0.35)]"

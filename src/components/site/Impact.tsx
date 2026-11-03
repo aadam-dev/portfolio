@@ -2,15 +2,34 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Reveal from "@/components/ui/Reveal";
 
 const STATS: { value: string; label: string; note?: string }[] = [
-  { value: "17", label: "Businesses on my systems", note: "7 of them full operating systems" },
+  { value: "20+", label: "Systems in production", note: "For 17 businesses, 7 of them full operating systems" },
   { value: "50+", label: "SMEs through the deal cycle", note: "Private equity and venture capital" },
   { value: "GHS 177K", label: "First month of trading", note: "PrimeTijara, team of five" },
   { value: "GHS 40K+", label: "Raised from 11 donors", note: "Madina basketball court" },
 ];
+
+const STATS_L10N: Record<string, { label: string; note?: string }[]> = {
+  fr: [
+    { label: "Systèmes en production", note: "Pour 17 entreprises, dont 7 systèmes d'exploitation complets" },
+    { label: "PME menées à travers le cycle d'investissement", note: "Capital-investissement et capital-risque" },
+    { label: "Premier mois d'activité", note: "PrimeTijara, équipe de cinq" },
+    { label: "Collectés auprès de 11 donateurs", note: "Terrain de basket de Madina" },
+  ],
+  ar: [
+    { label: "أنظمة قيد التشغيل", note: "لـ 17 شركة، منها 7 أنظمة تشغيل كاملة" },
+    { label: "شركة صغيرة ومتوسطة عبر دورة الاستثمار", note: "الأسهم الخاصة ورأس المال المخاطر" },
+    { label: "الشهر الأول من التداول", note: "PrimeTijara، فريق من خمسة" },
+    { label: "جُمعت من 11 متبرعاً", note: "ملعب كرة السلة في مدينة" },
+  ],
+};
+const ORG_L10N: Record<string, string[]> = {
+  fr: ["Dirigé par des enseignants de Harvard, promotion 4", "Aspire Institute", "1 sur 10 sélectionnés par VCTF, le ministère des Finances et la Banque mondiale"],
+  ar: ["بإشراف أعضاء هيئة تدريس من هارفارد، الدفعة الرابعة", "Aspire Institute", "واحد من 10 اختارهم VCTF ووزارة المالية والبنك الدولي"],
+};
 
 const FELLOWSHIPS: { title: string; org: string; year: string }[] = [
   { title: "Aspire Leadership Programme", org: "Harvard faculty-led, Cohort 4", year: "2025" },
@@ -20,6 +39,9 @@ const FELLOWSHIPS: { title: string; org: string; year: string }[] = [
 
 export default function Impact() {
   const t = useTranslations("impact");
+  const locale = useLocale();
+  const stats = STATS.map((x, i) => ({ ...x, ...(STATS_L10N[locale]?.[i] ?? {}) }));
+  const fellowships = FELLOWSHIPS.map((f, i) => ({ ...f, org: ORG_L10N[locale]?.[i] ?? f.org }));
   return (
     <section
       id="impact"
@@ -49,7 +71,7 @@ export default function Impact() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-0 border-y border-[var(--line)]">
-          {STATS.map((s, i) => (
+          {stats.map((s, i) => (
             <Reveal
               key={s.label}
               delay={i * 0.08}
@@ -89,7 +111,7 @@ export default function Impact() {
           </div>
           <div className="md:col-span-8">
             <ul className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
-              {FELLOWSHIPS.map((f) => (
+              {fellowships.map((f) => (
                 <li
                   key={f.title}
                   className="flex items-center justify-between gap-6 py-5 md:py-6"
