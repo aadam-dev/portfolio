@@ -6,23 +6,21 @@ import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
 import AadamOS, { type Win } from "./AadamOS";
 import PhoneOS from "./PhoneOS";
-import { quadMatrix, type Quad } from "./quad";
-import { PLATE, SCREENS, STOPS, type Stop } from "./objects";
+import type { Quad } from "./quad";
+import { PLATE, STOPS, type Stop } from "./objects";
+import type { DeskRig } from "./PhotoDesk";
+import dynamic from "next/dynamic";
+
+const PhotoDesk = dynamic(() => import("./PhotoDesk"), { ssr: false });
 import { setTheme, useTheme } from "@/components/fieldkit/useTheme";
 import { scrollToElement, scrollToY } from "@/lib/scroll";
 import { useDialog } from "@/lib/useDialog";
 
-const OS_W = 1600;
-const OS_H = 1000;
-const SIDE_W = 1200;
-const SIDE_H = 780;
 const N = STOPS.length;
 const LAND = 0.9; // progress where the camera has landed in the laptop
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const stopAt = (i: number) => (i / (N - 1)) * LAND;
-
-type Cam = { s: number; tx: number; ty: number };
 
 /**
  * Aadam's workspace: the portfolio hero. A pinned, photographed dev desk; scrolling tours each
@@ -61,21 +59,22 @@ function Poster() {
 function Tour() {
   const track = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const plate = useRef<HTMLDivElement>(null);
   const spot = useRef<HTMLDivElement>(null);
-  const screens = useRef<Record<string, HTMLDivElement | null>>({});
   const inserts = useRef<(HTMLDivElement | null)[]>([]);
   const knob = useRef<HTMLDivElement>(null);
+  // the 3D desk reads the scroll and pointer from here every frame, without re-rendering React
+  const rig = useRef<DeskRig>({ p: 0, px: 0, py: 0 });
   const [active, setActive] = useState(0);
   // furthest chapter reached, so a close-up stays loaded once fetched
   const [seen, setSeen] = useState(0);
   const [landed, setLanded] = useState(false);
   const [phone, setPhone] = useState(false);
+  const [inView, setInView] = useState(true);
   const theme = useTheme();
   const [windows, setWindows] = useState<Win[]>([{ id: "p:bloom-boba", kind: "project", slug: "bloom-boba", x: 22, y: 8, z: 10, tab: "overview" }]);
   const setW = useCallback((fn: (w: Win[]) => Win[]) => setWindows(fn), []);
 
-  /** plate cover-fit inside the stage */
+  /** plate cover-fit inside the stage (for the keyboard hotspots on the opening shot) */
   const fit = useCallback(() => {
     const el = stage.current!;
     const W = el.clientWidth;
@@ -89,100 +88,31 @@ function Tour() {
     return { W, H, pw, ph, pl: (W - pw) / 2, pt: (H - ph) / 2 };
   }, []);
 
-  /** camera that frames stop i */
-  const camFor = useCallback(
-    (st: Stop, i: number): Cam => {
-      const g = fit();
-      if (i === N - 1) {
-        // fill the viewport with the laptop screen
-        const q = SCREENS.center.map(([x, y]) => [g.pl + x * g.pw, g.pt + y * g.ph]);
-        const cx = (q[0][0] + q[2][0]) / 2;
-        const cy = (q[0][1] + q[2][1]) / 2;
-        const sw = q[1][0] - q[0][0];
-        const sh = q[3][1] - q[0][1];
-        const s = Math.max(g.W / sw, g.H / sh) * 1.02;
-        return { s, tx: g.W / 2 - cx * s, ty: g.H / 2 - cy * s };
-      }
-      if (!st.box) return { s: 1, tx: 0, ty: 0 };
-      const [x0, y0, x1, y1] = st.box;
-      const bw = (x1 - x0) * g.pw;
-      const bh = (y1 - y0) * g.ph;
-      const cx = g.pl + ((x0 + x1) / 2) * g.pw;
-      const cy = g.pt + ((y0 + y1) / 2) * g.ph;
-      // the plate is 1536 px wide: past about 2x it goes soft, so closer looks cut to the insert photos
-      const s = clamp(Math.min((g.H * 0.5) / bh, (g.W * 0.36) / bw), 1.2, 2.1);
-      const targetX = st.copy === "left" ? g.W * 0.68 : g.W * 0.32;
-      return { s, tx: targetX - cx * s, ty: g.H * 0.52 - cy * s };
-    },
-    [fit],
-  );
+  const render = useCallback((p: number) => {
+    rig.current.p = p;
+    // which segment, hold first then travel
+    const raw = clamp(p / LAND) * (N - 1);
+    const i = Math.min(N - 2, Math.floor(raw));
+    const f = raw - i;
+    const travel = ease(clamp((f - 0.42) / 0.58));
+    const done = p >= LAND;
+    // the chapter on screen = the stop we're holding at (or arriving at)
+    const cur = done ? N - 1 : travel > 0.6 ? i + 1 : i;
+    setActive((v) => (v === cur ? v : cur));
+    setSeen((v) => (cur > v ? cur : v));
 
-  const render = useCallback(
-    (p: number) => {
-      if (!stage.current || !plate.current) return;
-      const g = fit();
-      // which segment, hold first then travel
-      const raw = clamp(p / LAND) * (N - 1);
-      const i = Math.min(N - 2, Math.floor(raw));
-      const f = raw - i;
-      const travel = ease(clamp((f - 0.42) / 0.58));
-      const a = camFor(STOPS[i], i);
-      const b = camFor(STOPS[i + 1], i + 1);
-      const done = p >= LAND;
-      const cam: Cam = done
-        ? camFor(STOPS[N - 1], N - 1)
-        : { s: a.s + (b.s - a.s) * travel, tx: a.tx + (b.tx - a.tx) * travel, ty: a.ty + (b.ty - a.ty) * travel };
-      plate.current.style.transform = `translate(${cam.tx}px, ${cam.ty}px) scale(${cam.s})`;
-
-      // the chapter on screen = the stop we're holding at (or arriving at)
-      const cur = done ? N - 1 : travel > 0.6 ? i + 1 : i;
-      setActive((v) => (v === cur ? v : cur));
-      setSeen((v) => (cur > v ? cur : v));
-
-      // close-up inserts: cut in while holding, out before travelling
-      inserts.current.forEach((el, k) => {
-        if (!el) return;
-        let o = 0;
-        if (!done && k === i && STOPS[k].insert) o = 1 - clamp((f - 0.3) / 0.12);
-        if (!done && k === i + 1 && STOPS[k].insert) o = clamp((travel - 0.85) / 0.15);
-        el.style.opacity = String(o);
-        el.style.transform = `scale(${1.04 - 0.04 * o})`;
-      });
-
-      // spotlight on the object we're travelling to
-      if (spot.current) {
-        const tgt = STOPS[i + 1];
-        if (tgt.box && !done) {
-          const [x0, y0, x1, y1] = tgt.box;
-          const cx = (g.pl + ((x0 + x1) / 2) * g.pw) * cam.s + cam.tx;
-          const cy = (g.pt + ((y0 + y1) / 2) * g.ph) * cam.s + cam.ty;
-          spot.current.style.background = `radial-gradient(circle at ${cx}px ${cy}px, transparent 0, transparent 14vmin, rgba(10,8,6,0.62) 42vmin)`;
-          spot.current.style.opacity = String(Math.sin(travel * Math.PI) * 0.9);
-        } else spot.current.style.opacity = "0";
-      }
-
-      // project the three screens through the camera
-      (Object.keys(SCREENS) as (keyof typeof SCREENS)[]).forEach((k) => {
-        const el = screens.current[k];
-        if (!el) return;
-        if (k === "center" && done) {
-          el.style.transform = "none";
-          el.style.width = `${g.W}px`;
-          el.style.height = `${g.H}px`;
-          return;
-        }
-        const w = k === "center" ? OS_W : SIDE_W;
-        const h = k === "center" ? OS_H : SIDE_H;
-        el.style.width = `${w}px`;
-        el.style.height = `${h}px`;
-        const q = SCREENS[k].map(([x, y]) => [(g.pl + x * g.pw) * cam.s + cam.tx, (g.pt + y * g.ph) * cam.s + cam.ty] as [number, number]);
-        el.style.transform = quadMatrix(w, h, q);
-      });
-      setLanded((v) => (v === done ? v : done));
-      if (knob.current) knob.current.style.setProperty("--p", String(clamp(p / LAND)));
-    },
-    [camFor, fit],
-  );
+    // close-up inserts: cut in while holding, out before travelling
+    inserts.current.forEach((el, k) => {
+      if (!el) return;
+      let o = 0;
+      if (!done && k === i && STOPS[k].insert) o = 1 - clamp((f - 0.3) / 0.12);
+      if (!done && k === i + 1 && STOPS[k].insert) o = clamp((travel - 0.85) / 0.15);
+      el.style.opacity = String(o);
+      el.style.transform = `scale(${1.04 - 0.04 * o})`;
+    });
+    setLanded((v) => (v === done ? v : done));
+    if (knob.current) knob.current.style.setProperty("--p", String(clamp(p / LAND)));
+  }, []);
 
   useEffect(() => {
     let raf = 0;
@@ -195,13 +125,23 @@ function Tour() {
         render(clamp(-r.top / (r.height - window.innerHeight)));
       });
     };
+    const onPointer = (e: PointerEvent) => {
+      rig.current.px = (e.clientX / window.innerWidth) * 2 - 1;
+      rig.current.py = -((e.clientY / window.innerHeight) * 2 - 1);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+    window.addEventListener("pointermove", onPointer, { passive: true });
+    // the 3D desk only draws while the section is on screen
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting));
+    if (track.current) io.observe(track.current);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      window.removeEventListener("pointermove", onPointer);
+      io.disconnect();
     };
   }, [render]);
 
@@ -214,10 +154,11 @@ function Tour() {
     scrollToY(el.getBoundingClientRect().top + window.scrollY + len * p);
   };
 
+  const toggleLamp = (pt?: { x: number; y: number }) => setTheme(theme === "dark" ? "light" : "dark", pt);
   const run = (st: Stop, e?: React.MouseEvent) => {
     const a = st.action;
     if (!a) return;
-    if (a.kind === "theme") setTheme(theme === "dark" ? "light" : "dark", e ? { x: e.clientX, y: e.clientY } : undefined);
+    if (a.kind === "theme") toggleLamp(e ? { x: e.clientX, y: e.clientY } : undefined);
     else if (a.kind === "phone") setPhone(true);
     else if (a.kind === "desktop") goTo(N - 1);
     else if (a.kind === "scroll") {
@@ -229,34 +170,41 @@ function Tour() {
   // Esc or "Back to the desk": the camera pulls back out of the laptop
   const exitOS = () => goTo(N - 2);
   const closePhone = useCallback(() => setPhone(false), []);
+  const openPhone = useCallback(() => setPhone(true), []);
 
   const night = theme === "dark";
+  const stops = STOPS.map((st) => ({ id: st.id, side: st.copy }));
 
   return (
     <section ref={track} id="desk" className="relative" style={{ height: "560vh" }} aria-label="Aadam's workspace">
       <div ref={stage} className="sticky top-0 h-[100svh] w-full overflow-hidden bg-[#1a120b]" style={{ zIndex: landed ? 50 : undefined }}>
-        {/* the desk */}
-        <div ref={plate} className="absolute inset-0 origin-top-left will-change-transform">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={PLATE.src} alt="Aadam's desk: a laptop with two screen extenders, keyboard, lamp, books, notebook, phone, a bubble tea and a basketball" className="absolute inset-0 h-full w-full object-cover" />
-          {/* night relight: dim the room, warm lamp pool, screen glow */}
-          <div aria-hidden className="pointer-events-none absolute inset-0 transition-opacity duration-700" style={{ opacity: night ? 1 : 0 }}>
-            <div className="absolute inset-0" style={{ background: "rgba(8,10,22,0.62)", mixBlendMode: "multiply" }} />
-            <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 22% 34% at 15% 40%, rgba(255,190,120,0.55), transparent 70%)", mixBlendMode: "screen" }} />
-            <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 40% 26% at 50% 48%, rgba(150,170,255,0.22), transparent 72%)", mixBlendMode: "screen" }} />
-          </div>
-        </div>
+        {/* the photo shows until the 3D desk is ready (and stays for anyone without WebGL) */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={PLATE.src} alt="Aadam's desk: a laptop with two screen extenders, keyboard, lamp, books, notebook, phone, a bubble tea and a basketball" className="absolute inset-0 h-full w-full object-cover" />
+        <PhotoDesk
+          active={inView && !phone}
+          rig={rig}
+          stops={stops}
+          land={LAND}
+          landed={landed}
+          night={night}
+          spot={spot}
+          onPick={goTo}
+          onLamp={toggleLamp}
+          onPhone={openPhone}
+          screens={{
+            left: <CodeScreen />,
+            right: <video src="/desk/screen-primetijara.mp4" poster="/desk/screen-primetijara.webp" muted loop autoPlay playsInline preload="none" className="h-full w-full object-cover object-top" />,
+            center: <AadamOS mode="projected" windows={windows} setWindows={setW} />,
+          }}
+        />
 
-        {/* live screens, projected through the camera */}
-        <div ref={(el) => { screens.current.left = el; }} className="absolute left-0 top-0 origin-top-left overflow-hidden" style={{ width: SIDE_W, height: SIDE_H }} aria-hidden>
-          <CodeScreen />
-        </div>
-        <div ref={(el) => { screens.current.right = el; }} className="absolute left-0 top-0 origin-top-left overflow-hidden bg-black" style={{ width: SIDE_W, height: SIDE_H }} aria-hidden>
-          <video src="/desk/screen-primetijara.mp4" poster="/desk/screen-primetijara.webp" muted loop autoPlay playsInline preload="none" className="h-full w-full object-cover object-top" />
-        </div>
-        <div ref={(el) => { screens.current.center = el; }} className="absolute left-0 top-0 origin-top-left overflow-hidden" style={{ width: OS_W, height: OS_H, zIndex: 3, borderRadius: landed ? 0 : 4 }}>
-          <AadamOS mode={landed ? "flat" : "projected"} windows={windows} setWindows={setW} onExit={exitOS} />
-        </div>
+        {/* in the laptop: the OS full screen and usable */}
+        {landed && (
+          <div className="absolute inset-0 z-[3]">
+            <AadamOS mode="flat" windows={windows} setWindows={setW} onExit={exitOS} />
+          </div>
+        )}
 
         {/* spotlight + close-up inserts */}
         <div ref={spot} aria-hidden className="pointer-events-none absolute inset-0 z-[4] opacity-0" />
@@ -272,7 +220,7 @@ function Tour() {
           ) : null,
         )}
 
-        {/* hotspots on the establishing shot */}
+        {/* keyboard route to each object on the opening shot (the pointer uses the 3D desk itself) */}
         {!landed && active === 0 && <Hotspots fit={fit} onPick={goTo} />}
 
         {/* copy */}
@@ -322,7 +270,7 @@ function Hotspots({ fit, onPick }: { fit: () => { W: number; H: number; pw: numb
   }, [fit]);
   if (!g) return null;
   return (
-    <div className="absolute inset-0 z-[6]">
+    <div className="pointer-events-none absolute inset-0 z-[6]">
       {STOPS.map((st, k) => {
         if (!st.box) return null;
         const [x0, y0, x1, y1] = st.box;
