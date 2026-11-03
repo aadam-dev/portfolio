@@ -1,0 +1,8 @@
+#ff5b1f  Signal orange
+#e2480f  Deep orange
+#121110  Ink
+#ece8df  Paper
+#0b0a08  Charcoal
+#4ade80  Live green
+#b33a2b  Ember
+#1e3b2e  Forest

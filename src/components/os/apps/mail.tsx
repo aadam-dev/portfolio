@@ -4,7 +4,7 @@ import { useState } from "react";
 import { visitSession } from "@/components/site/Tracker";
 
 /** Mail: a real message to me, through the same route as the contact form. */
-export default function MailApp({ flat }: { flat: boolean }) {
+export default function MailApp({ flat, subject }: { flat: boolean; subject?: string }) {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const send = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,7 +39,15 @@ export default function MailApp({ flat }: { flat: boolean }) {
       </p>
       <input name="name" required placeholder="Your name" tabIndex={flat ? 0 : -1} className={field} />
       <input name="contact" required placeholder="Email or WhatsApp number" tabIndex={flat ? 0 : -1} className={field} />
-      <textarea name="message" required rows={5} placeholder="What are you building, who is it for, and when would you like it live?" tabIndex={flat ? 0 : -1} className={`${field} flex-1 resize-none`} />
+      <textarea
+        name="message"
+        required
+        rows={5}
+        defaultValue={subject ? `I'd like to start with the ${subject}. ` : undefined}
+        placeholder="What are you building, who is it for, and when would you like it live?"
+        tabIndex={flat ? 0 : -1}
+        className={`${field} flex-1 resize-none`}
+      />
       <div className="flex items-center gap-3">
         <button type="submit" disabled={state === "sending"} tabIndex={flat ? 0 : -1} className="rounded-md bg-[var(--accent)] px-4 py-2 font-semibold text-black disabled:opacity-60">
           {state === "sending" ? "Sending…" : "Send"}
