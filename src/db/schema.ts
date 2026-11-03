@@ -1,4 +1,4 @@
-import { bigint, boolean, date, doublePrecision, index, integer, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { bigint, boolean, customType, date, doublePrecision, index, integer, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 /**
  * Keep in step with ./sql.ts, which creates these tables on Supabase.
@@ -129,3 +129,29 @@ export type Item = typeof items.$inferSelect;
 export type ItemEvent = typeof itemEvents.$inferSelect;
 export type Session = typeof sessions.$inferSelect;
 export type Message = typeof messages.$inferSelect;
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({
+  dataType() {
+    return "bytea";
+  },
+});
+
+/** Visitors' notes and selfies; public only after approval in the Office. */
+export const guestPosts = pgTable(
+  "guest_posts",
+  {
+    id: serial("id").primaryKey(),
+    kind: text("kind").notNull(),
+    name: text("name").default("").notNull(),
+    body: text("body").default("").notNull(),
+    rating: integer("rating"),
+    image: bytea("image"),
+    mime: text("mime"),
+    status: text("status").default("pending").notNull(),
+    ip: text("ip"),
+    sessionId: text("session_id"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index("guest_posts_status_idx").on(t.kind, t.status, t.createdAt)],
+);
+export type GuestPost = typeof guestPosts.$inferSelect;

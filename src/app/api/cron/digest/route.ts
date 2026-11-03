@@ -1,3 +1,4 @@
+import { pendingGuests } from "@/lib/guests";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { today } from "@/lib/office/items";
@@ -32,6 +33,7 @@ export async function GET(request: Request) {
   const n = s.totals.sessions;
   // what the Office says needs me today
   const plan = await today(store).catch(() => null);
+  const guestsWaiting = await pendingGuests(store).catch(() => 0);
   const sent = await send(
     frame(
       "digest",
@@ -48,6 +50,7 @@ export async function GET(request: Request) {
         line("Played with", list(s.played, (k) => eventLabel(k))),
         quiet?.n ? `<i>${quiet.n} visit${quiet.n === 1 ? " was" : "s were"} only counted here, not announced (busy hours, or Telegram not set yet).</i>` : null,
         ...(s.inbox.length ? ["", "<b>Messages</b>", ...s.inbox.map((m) => `• ${esc(m.name)} (${esc(m.contact)}): ${esc(m.body.slice(0, 120))}`)] : []),
+        guestsWaiting ? `<b>${guestsWaiting} visitor note${guestsWaiting === 1 ? "" : "s"} or photo${guestsWaiting === 1 ? "" : "s"} waiting for approval</b> (Office → Guests)` : null,
         ...(plan && plan.due.length ? ["", `<b>Due today in the Office (${plan.due.length})</b>`, ...plan.due.slice(0, 10).map((d) => `• ${esc(d.title)}${d.due && d.due < plan.day ? " (late)" : ""}`)] : []),
       ],
       `📊 Daily digest`,

@@ -248,3 +248,20 @@ export async function pickChat(form: FormData) {
   redirect(`/office/settings?chat=${ok ? "saved" : "no_database"}`);
 }
 
+
+/* ---------- visitor notes and photos ---------- */
+
+export async function moderateGuest(id: number, status: "approved" | "rejected" | "pending") {
+  const store = await guard();
+  const { setGuestStatus } = await import("@/lib/guests");
+  await setGuestStatus(store, id, status);
+  refresh();
+  revalidatePath("/api/guest");
+}
+
+export async function removeGuest(id: number) {
+  const store = await guard();
+  const { deleteGuest } = await import("@/lib/guests");
+  await deleteGuest(store, id);
+  refresh();
+}

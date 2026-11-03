@@ -109,6 +109,22 @@ create table if not exists login_attempts (
 );
 create index if not exists login_attempts_at_idx on login_attempts (at);
 
+-- notes and selfies left by visitors in Aadam OS and on the phone; shown only once approved
+create table if not exists guest_posts (
+  id serial primary key,
+  kind text not null,
+  name text not null default '',
+  body text not null default '',
+  rating integer,
+  image bytea,
+  mime text,
+  status text not null default 'pending',
+  ip text,
+  session_id text,
+  created_at timestamptz not null default now()
+);
+create index if not exists guest_posts_status_idx on guest_posts (kind, status, created_at);
+
 alter table visitors enable row level security;
 alter table sessions enable row level security;
 alter table events enable row level security;
@@ -117,14 +133,15 @@ alter table settings enable row level security;
 alter table items enable row level security;
 alter table item_events enable row level security;
 alter table login_attempts enable row level security;
+alter table guest_posts enable row level security;
 
 do $$
 begin
   if exists (select 1 from pg_roles where rolname = 'anon') then
-    revoke all on visitors, sessions, events, messages, settings, items, item_events, login_attempts from anon;
+    revoke all on visitors, sessions, events, messages, settings, items, item_events, login_attempts, guest_posts from anon;
   end if;
   if exists (select 1 from pg_roles where rolname = 'authenticated') then
-    revoke all on visitors, sessions, events, messages, settings, items, item_events, login_attempts from authenticated;
+    revoke all on visitors, sessions, events, messages, settings, items, item_events, login_attempts, guest_posts from authenticated;
   end if;
 end $$;
 `;

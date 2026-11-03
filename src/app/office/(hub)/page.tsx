@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { today } from "@/lib/office/items";
 import { KINDS, type Kind } from "@/lib/office/kinds";
 import { stats } from "@/lib/office/stats";
+import { pendingGuests } from "@/lib/guests";
 import { Panel } from "../ui/parts";
 
 export const dynamic = "force-dynamic";
@@ -25,6 +26,7 @@ export default async function Today() {
   if (!store) return <Panel title="Today">The database is not connected yet. See Settings.</Panel>;
   const t = await today(store);
   const s = await stats(store, 24).catch(() => null);
+  const guestsWaiting = await pendingGuests(store).catch(() => 0);
   const open = t.pipeline.filter((p) => !["won", "lost"].includes(p.status));
   const openValue = open.reduce((a, p) => a + p.value, 0);
   const won = t.pipeline.find((p) => p.status === "won");
@@ -38,6 +40,16 @@ export default async function Today() {
           {t.due.length ? `${t.due.length} thing${t.due.length === 1 ? "" : "s"} need you today` : "Nothing is overdue"}
         </h1>
       </div>
+
+      {guestsWaiting > 0 && (
+        <Link href="/office/guests" className="card flex items-center gap-3 p-4 hover:border-[var(--line-strong)]">
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-[#fab219]/15 text-[#fab219]">★</span>
+          <span className="text-[14px]">
+            {guestsWaiting} visitor note{guestsWaiting === 1 ? "" : "s"} or photo{guestsWaiting === 1 ? "" : "s"} waiting for you
+          </span>
+          <ArrowUpRight className="ml-auto h-4 w-4 text-[var(--ink-3)]" />
+        </Link>
+      )}
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[

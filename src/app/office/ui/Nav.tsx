@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, BookOpen, FolderKanban, Home, Megaphone, Settings, UserRoundPlus } from "lucide-react";
+import { BarChart3, BookOpen, FolderKanban, Home, Megaphone, Settings, UserRoundPlus, MessageSquareHeart } from "lucide-react";
 
 const LINKS = [
   { href: "/office", label: "Today", Icon: Home },
   { href: "/office/projects", label: "Projects", Icon: FolderKanban },
   { href: "/office/leads", label: "Leads", Icon: UserRoundPlus },
   { href: "/office/outreach", label: "Outreach", Icon: Megaphone },
+  { href: "/office/guests", label: "Guests", Icon: MessageSquareHeart },
   { href: "/office/life", label: "Life", Icon: BookOpen },
   { href: "/office/site", label: "Site", Icon: BarChart3 },
   { href: "/office/settings", label: "Settings", Icon: Settings },
