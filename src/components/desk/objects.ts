@@ -82,7 +82,7 @@ export const STOPS: Stop[] = [
     eyebrow: "Forward deployed",
     title: "I sit in. I watch the work. I write it down.",
     body: "Before any code: shadowing the floor, mapping how money and stock really move, and documenting it so your team owns it after I leave.",
-    action: { kind: "scroll", target: "#studio", label: "Read the field notes" },
+    action: { kind: "link", href: "/about#research", label: "Read my research notes" },
   },
   {
     id: "books",
@@ -92,7 +92,7 @@ export const STOPS: Stop[] = [
     copy: "left",
     eyebrow: "How I think",
     title: "Read widely. Ship narrowly.",
-    body: "Product, systems, sport and history live on this shelf. The full reading list is landing here soon.",
+    body: "Product, systems, sport and history live on this shelf.",
   },
   {
     id: "device",

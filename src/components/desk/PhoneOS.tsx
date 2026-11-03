@@ -5,6 +5,7 @@ import Link from "next/link";
 import { findProject } from "@/lib/projects";
 import { SERVICES } from "@/lib/services";
 import { useDialog } from "@/lib/useDialog";
+import { scrollToElement } from "@/lib/scroll";
 
 type App = "home" | "bloom" | "safari" | "alboyut" | "court" | "notes";
 
@@ -145,6 +146,16 @@ export default function PhoneOS({ onClose }: { onClose: () => void }) {
                   <img key={k} src={`/previews/madinabasketball/${k}.webp`} alt="" className="mb-3 w-full rounded-xl" />
                 ))}
                 <p className="text-[13px] text-white/70">{court?.tagline}. Live scoring, court bookings and an open ledger of every cedi raised.</p>
+                <button
+                  onClick={() => {
+                    onClose();
+                    const el = document.getElementById("chapter-06");
+                    if (el) setTimeout(() => scrollToElement(el, -60), 60);
+                  }}
+                  className="mt-3 block rounded-full bg-[#ff6b35] px-4 py-2 text-[13px] font-semibold text-black"
+                >
+                  Score a game on the live scorer
+                </button>
                 <Link href="/work/madinabasketball" onClick={onClose} className="mt-3 inline-block text-[13px] text-[#ff8a5c]">
                   Open the project →
                 </Link>

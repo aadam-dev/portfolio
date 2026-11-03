@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type MutableRefObject, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type MutableRefObject, type ReactNode, type RefObject } from "react";
 import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
 import { Html, useTexture } from "@react-three/drei";
 import * as THREE from "three";
@@ -164,6 +164,17 @@ function frameOf(q: V3[]) {
 export const FRAMES = { left: frameOf(S.screens.left), center: frameOf(S.screens.center), right: frameOf(S.screens.right) };
 export const SCREEN_PX: Record<ScreenId, [number, number]> = { left: [1200, 780], center: [1600, 1000], right: [1200, 780] };
 
+// drei's Html rebuilds its React root when these props change identity, so they are constants
+const Z_SCREENS: [number, number] = [3, 0];
+const Z_LABEL: [number, number] = [20, 10];
+const LABEL_STYLE = { pointerEvents: "none" } as const;
+const OFFSTAGE: V3 = [0, -5, 0];
+const SCREEN_STYLE: Record<ScreenId, { width: number; height: number }> = {
+  left: { width: SCREEN_PX.left[0], height: SCREEN_PX.left[1] },
+  center: { width: SCREEN_PX.center[0], height: SCREEN_PX.center[1] },
+  right: { width: SCREEN_PX.right[0], height: SCREEN_PX.right[1] },
+};
+
 /* ------------------------------------------------------------------ camera rig */
 
 interface Pose {
@@ -230,6 +241,8 @@ interface SceneProps {
   onLamp: (e: { x: number; y: number }) => void;
   onPhone: () => void;
   onReady: () => void;
+  /** a fixed element for the live screens to mount in (stops them remounting when R3F's events connect) */
+  portal: MutableRefObject<HTMLDivElement | null>;
 }
 
 const LABELS: Record<string, string> = {
@@ -244,7 +257,7 @@ const LABELS: Record<string, string> = {
   screens: "Into the laptop",
 };
 
-function Scene({ rig, stops, land, landed, night, screens, spot, onPick, onLamp, onPhone, onReady }: SceneProps) {
+function Scene({ rig, stops, land, landed, night, screens, spot, onPick, onLamp, onPhone, onReady, portal }: SceneProps) {
   const [clean, original] = useTexture(["/workspace/wide-clean.webp", "/workspace/wide.webp"]);
   const { size } = useThree();
   const [hover, setHover] = useState<string | null>(null);
@@ -405,6 +418,11 @@ function Scene({ rig, stops, land, landed, night, screens, spot, onPick, onLamp,
   };
 
   const labelAt = hover ? items.find((x) => x.p.hotspot === hover) : null;
+  const labelPos = useMemo<V3>(() => {
+    if (!labelAt) return OFFSTAGE;
+    const q = labelAt.p.kind === "quad" ? labelCenter(labelAt.p) : labelAt.pos.clone().add(new THREE.Vector3(0, 0.08, 0));
+    return [q.x, q.y, q.z];
+  }, [labelAt]);
 
   return (
     <>
@@ -440,7 +458,7 @@ function Scene({ rig, stops, land, landed, night, screens, spot, onPick, onLamp,
         // stays mounted when the OS goes full screen (unmounting an Html root mid-render upsets React 19)
         return (
           <group key={id} position={f.c} quaternion={f.quat} visible={!(id === "center" && landed)}>
-            <Html transform distanceFactor={(400 * f.w) / W} zIndexRange={[3, 0]} style={{ width: W, height: H }} pointerEvents="none">
+            <Html transform portal={portal as RefObject<HTMLElement>} distanceFactor={(400 * f.w) / W} zIndexRange={Z_SCREENS} style={SCREEN_STYLE[id]} pointerEvents="none">
               <div ref={id === "center" ? osEl : undefined} className="theme-fixed relative overflow-hidden bg-black" style={{ width: W, height: H, visibility: id === "center" && landed ? "hidden" : undefined }}>
                 {screens[id]}
                 {id === "center" && (
@@ -457,7 +475,7 @@ function Scene({ rig, stops, land, landed, night, screens, spot, onPick, onLamp,
       })}
 
       {/* one label, always mounted, moved to whatever is under the pointer */}
-      <Html position={labelAt ? (labelAt.p.kind === "quad" ? labelCenter(labelAt.p) : labelAt.pos.clone().add(new THREE.Vector3(0, 0.08, 0))) : [0, -5, 0]} center zIndexRange={[20, 10]} style={{ pointerEvents: "none" }}>
+      <Html position={labelPos} portal={portal as RefObject<HTMLElement>} center zIndexRange={Z_LABEL} style={LABEL_STYLE}>
         <span className="theme-fixed whitespace-nowrap rounded-full bg-black/80 px-3 py-1 font-mono text-[10.5px] uppercase tracking-[0.14em] text-white transition-opacity" style={{ opacity: labelAt ? 1 : 0 }}>
           {labelAt ? LABELS[labelAt.p.hotspot!] ?? labelAt.p.id : ""}
         </span>
@@ -473,11 +491,12 @@ function labelCenter(p: Proxy) {
 
 /* ------------------------------------------------------------------ canvas */
 
-export default function PhotoDesk(props: Omit<SceneProps, "onReady"> & { active: boolean }) {
+export default function PhotoDesk(props: Omit<SceneProps, "onReady" | "portal"> & { active: boolean }) {
   const [ready, setReady] = useState(false);
   const { active, ...scene } = props;
+  const portal = useRef<HTMLDivElement>(null);
   return (
-    <div className="absolute inset-0 transition-opacity duration-500" style={{ opacity: ready ? 1 : 0 }}>
+    <div ref={portal} className="absolute inset-0 transition-opacity duration-500" style={{ opacity: ready ? 1 : 0 }}>
       <Canvas
         frameloop={active ? "always" : "never"}
         dpr={[1, 1.75]}
@@ -488,7 +507,7 @@ export default function PhotoDesk(props: Omit<SceneProps, "onReady"> & { active:
           gl.toneMapping = THREE.NoToneMapping;
         }}
       >
-        <Scene {...scene} onReady={() => setReady(true)} />
+        <Scene {...scene} portal={portal} onReady={() => setReady(true)} />
       </Canvas>
     </div>
   );

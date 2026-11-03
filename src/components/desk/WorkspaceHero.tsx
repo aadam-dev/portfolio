@@ -325,6 +325,7 @@ function ChapterCard({ st, k, on, onAction, night }: { st: Stop; k: number; on: 
           {st.title}
         </Heading>
         <p className="mt-4 text-[15.5px] leading-relaxed text-white/80 [text-shadow:0_1px_12px_rgba(0,0,0,.5)]">{st.body}</p>
+        {st.id === "books" && <ReadingList className="mt-3 text-white/80" />}
         {a &&
           (a.kind === "link" ? (
             <Link href={a.href} className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-[13px] font-semibold text-black">
@@ -338,6 +339,42 @@ function ChapterCard({ st, k, on, onAction, night }: { st: Stop; k: number; on: 
         {wide && <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">Scroll · or tap anything on the desk</p>}
       </div>
     </div>
+  );
+}
+
+type Book = { title: string; author: string };
+let readingCache: Promise<{ reading: Book[]; next: Book[] }> | null = null;
+
+/** What I'm reading now and next, live from the Office's reading board. */
+function ReadingList({ className = "" }: { className?: string }) {
+  const [list, setList] = useState<{ reading: Book[]; next: Book[] } | null>(null);
+  useEffect(() => {
+    readingCache ??= fetch("/api/reading")
+      .then((r) => r.json())
+      .catch(() => ({ reading: [], next: [] }));
+    let live = true;
+    readingCache.then((l) => live && setList(l));
+    return () => {
+      live = false;
+    };
+  }, []);
+  if (!list || (!list.reading.length && !list.next.length)) return null;
+  const line = (b: Book) => (b.author ? `${b.title}, ${b.author}` : b.title);
+  return (
+    <dl className={`grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[13.5px] leading-snug ${className}`}>
+      {list.reading.length > 0 && (
+        <>
+          <dt className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-[var(--accent-2)] pt-0.5">Reading</dt>
+          <dd>{list.reading.map(line).join(" · ")}</dd>
+        </>
+      )}
+      {list.next.length > 0 && (
+        <>
+          <dt className="font-mono text-[10.5px] uppercase tracking-[0.16em] opacity-60 pt-0.5">Next</dt>
+          <dd>{list.next.slice(0, 3).map(line).join(" · ")}</dd>
+        </>
+      )}
+    </dl>
   );
 }
 
@@ -428,6 +465,7 @@ function Stacked() {
                 {st.title}
               </h2>
               <p className="mt-2 text-[15px] leading-relaxed text-[var(--ink-2)]">{st.body}</p>
+              {st.id === "books" && <ReadingList className="mt-2 text-[var(--ink-2)]" />}
               {st.action &&
                 (st.action.kind === "link" ? (
                   <Link href={st.action.href} className="mt-4 inline-flex rounded-full bg-[var(--accent)] px-4 py-2.5 text-[13px] font-semibold text-black">

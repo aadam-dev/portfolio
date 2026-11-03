@@ -5,11 +5,15 @@ import Link from "next/link";
 import { projectSlug, visibleProjects, type Project } from "@/lib/projects";
 import ScaledIframe from "@/components/ui/ScaledIframe";
 import { SERVICES } from "@/lib/services";
+import ModeScreen from "@/components/fieldkit/ModeScreen";
+import { visitSession } from "@/components/site/Tracker";
+import { Fit } from "@/components/replicas";
+import type { ModeId } from "@/components/fieldkit/chapters";
 
 /* ------------------------------------------------------------------ types */
 
-type Kind = "project" | "notes" | "mail" | "about";
-type Tab = "overview" | "walkthrough" | "live";
+type Kind = "project" | "notes" | "mail" | "about" | "deploy" | "terminal";
+type Tab = "overview" | "walkthrough" | "live" | "builder";
 export interface Win {
   id: string;
   kind: Kind;
@@ -92,11 +96,14 @@ export default function AadamOS({ mode, windows, setWindows, onExit }: OSProps) 
       {/* desktop */}
       <div ref={desk} className="absolute inset-x-0 bottom-[86px] top-8">
         <WelcomeCard />
-        <div className="absolute right-5 top-5 hidden flex-col items-center gap-5 sm:flex">
+        {/* two columns, so six icons stay clear of the dock on short screens */}
+        <div className="absolute right-5 top-5 hidden grid-cols-2 justify-items-center gap-x-1 gap-y-3 sm:grid">
           <DesktopIcon label="Bloom Boba" img={thumb(apps[0] ?? ({} as Project))} onOpen={() => openWindow(setWindows, "project", "bloom-boba")} flat={flat} />
           <DesktopIcon label="About.txt" glyph="Aa" onOpen={() => openWindow(setWindows, "about")} flat={flat} />
           <DesktopIcon label="Services.notes" glyph="✎" onOpen={() => openWindow(setWindows, "notes")} flat={flat} />
           <DesktopIcon label="Mail" glyph="@" onOpen={() => openWindow(setWindows, "mail")} flat={flat} />
+          <DesktopIcon label="Deployments" glyph="▶" onOpen={() => openWindow(setWindows, "deploy")} flat={flat} />
+          <DesktopIcon label="Terminal" glyph=">_" onOpen={() => openWindow(setWindows, "terminal")} flat={flat} />
         </div>
 
         {windows.map((w) => (
@@ -245,7 +252,8 @@ function Window({ w, desk, setWindows, flat, focused }: { w: Win; desk: React.Re
   }, [desk]);
   const maxed = w.max || narrow;
   const p = w.slug ? visibleProjects().find((x) => projectSlug(x) === w.slug) : undefined;
-  const title = w.kind === "project" ? p?.name ?? "Project" : w.kind === "notes" ? "Services.notes" : w.kind === "mail" ? "Mail" : "About.txt";
+  const title =
+    w.kind === "project" ? p?.name ?? "Project" : w.kind === "notes" ? "Services.notes" : w.kind === "mail" ? "Mail" : w.kind === "deploy" ? "Deployments" : w.kind === "terminal" ? "Terminal" : "About.txt";
 
   return (
     <section
@@ -269,7 +277,9 @@ function Window({ w, desk, setWindows, flat, focused }: { w: Win; desk: React.Re
       <div className="min-h-0 flex-1 overflow-auto" data-lenis-prevent>
         {w.kind === "project" && p && <ProjectApp p={p} tab={w.tab} setTab={(t) => update({ tab: t })} flat={flat} />}
         {w.kind === "notes" && <NotesApp />}
-        {w.kind === "mail" && <MailApp />}
+        {w.kind === "mail" && <MailApp flat={flat} />}
+        {w.kind === "deploy" && <DeployApp flat={flat} />}
+        {w.kind === "terminal" && <TerminalApp setWindows={setWindows} />}
         {w.kind === "about" && <AboutApp />}
       </div>
     </section>
@@ -279,7 +289,13 @@ function Window({ w, desk, setWindows, flat, focused }: { w: Win; desk: React.Re
 function ProjectApp({ p, tab, setTab, flat }: { p: Project; tab: Tab; setTab: (t: Tab) => void; flat: boolean }) {
   const walk = p.walkthroughs?.[0];
   const canLive = !!p.liveBaseUrl && p.liveEmbeddable !== false;
-  const tabs: [Tab, string][] = [["overview", "Overview"], ...(walk ? ([["walkthrough", "Walkthrough"]] as [Tab, string][]) : []), ...(p.liveBaseUrl ? ([["live", "Live site"]] as [Tab, string][]) : [])];
+  const builder = p.id === "bloomboba" && p.liveBaseUrl ? `${p.liveBaseUrl.replace(/\/$/, "")}/#make` : null;
+  const tabs: [Tab, string][] = [
+    ["overview", "Overview"],
+    ...(walk ? ([["walkthrough", "Walkthrough"]] as [Tab, string][]) : []),
+    ...(builder ? ([["builder", "Build a drink"]] as [Tab, string][]) : []),
+    ...(p.liveBaseUrl ? ([["live", "Live site"]] as [Tab, string][]) : []),
+  ];
   return (
     <div className="flex h-full flex-col">
       <div className="flex shrink-0 gap-1 border-b border-white/10 px-3 py-2" role="tablist">
@@ -329,6 +345,10 @@ function ProjectApp({ p, tab, setTab, flat }: { p: Project; tab: Tab; setTab: (t
         </div>
       )}
 
+      {tab === "builder" && builder && (
+        <div className="h-full">{flat ? <ScaledIframe src={builder} title={`${p.name} drink builder`} /> : <p className="p-8 text-white/60">The builder opens when you are at the desk.</p>}</div>
+      )}
+
       {tab === "live" && p.liveBaseUrl && (
         <div className="h-full">
           {canLive && flat ? (
@@ -376,21 +396,141 @@ function AboutApp() {
   );
 }
 
-function MailApp() {
-  return (
-    <div className="flex h-full flex-col p-5 text-[13px]">
-      <div className="space-y-2 border-b border-white/10 pb-3 text-white/60">
-        <p>
-          To: <span className="text-white">Aadam</span>
-        </p>
-        <p>
-          Subject: <span className="text-white">A project I&apos;d like to build</span>
-        </p>
+function MailApp({ flat }: { flat: boolean }) {
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const send = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    setState("sending");
+    try {
+      // tie the message to this visit, like the contact form does
+      const r = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ name: f.get("name"), contact: f.get("contact"), message: f.get("message"), kind: "contact", sid: visitSession() }),
+      });
+      setState(r.ok ? "sent" : "error");
+    } catch {
+      setState("error");
+    }
+  };
+  if (state === "sent")
+    return (
+      <div className="grid h-full place-items-center p-8 text-center">
+        <div>
+          <p className="text-[18px] font-semibold">Sent. Thank you.</p>
+          <p className="mt-1 text-white/60">It went straight to me. I reply within a day.</p>
+        </div>
       </div>
-      <p className="mt-4 flex-1 text-white/55">Tell me what you&apos;re building, who it&apos;s for and when you&apos;d like it live. I reply within a day.</p>
-      <Link href="/#contact" className="mt-4 self-start rounded-md bg-[var(--accent)] px-4 py-2 font-semibold text-black">
-        Write to Aadam →
-      </Link>
+    );
+  const field = "w-full rounded-md border border-white/10 bg-white/[0.06] px-3 py-2 text-[13px] text-white placeholder:text-white/35 outline-none focus:border-white/30";
+  return (
+    <form onSubmit={send} className="flex h-full flex-col gap-2.5 p-5 text-[13px]">
+      <p className="text-white/60">
+        To: <span className="text-white">Aadam</span> · adam@aadambuilds.dev
+      </p>
+      <input name="name" required placeholder="Your name" tabIndex={flat ? 0 : -1} className={field} />
+      <input name="contact" required placeholder="Email or WhatsApp number" tabIndex={flat ? 0 : -1} className={field} />
+      <textarea name="message" required rows={5} placeholder="What are you building, who is it for, and when would you like it live?" tabIndex={flat ? 0 : -1} className={`${field} flex-1 resize-none`} />
+      <div className="flex items-center gap-3">
+        <button type="submit" disabled={state === "sending"} tabIndex={flat ? 0 : -1} className="rounded-md bg-[var(--accent)] px-4 py-2 font-semibold text-black disabled:opacity-60">
+          {state === "sending" ? "Sending…" : "Send"}
+        </button>
+        {state === "error" && <span className="text-[#ff9b8a]">That didn&apos;t send. Try again, or use WhatsApp.</span>}
+      </div>
+    </form>
+  );
+}
+
+const DEPLOYS: { mode: ModeId; label: string; sub: string }[] = [
+  { mode: "counter", label: "Al Boyut register", sub: "Point of sale" },
+  { mode: "laundry", label: "An-Nur counter", sub: "Laundry workflow" },
+  { mode: "atelier", label: "Fashion storefront", sub: "Two markets" },
+  { mode: "analyst", label: "Deal screen", sub: "Finance models" },
+  { mode: "ledger", label: "Delish on Odoo", sub: "Inventory" },
+  { mode: "court", label: "Madina court", sub: "Live scorer" },
+  { mode: "classroom", label: "Kōyi hub", sub: "Exam pathways" },
+];
+
+/** The playable systems from the Deployments section, one at a time. */
+function DeployApp({ flat }: { flat: boolean }) {
+  const [m, setM] = useState<ModeId>("counter");
+  return (
+    <div className="flex h-full">
+      <nav aria-label="Systems" className="w-[180px] shrink-0 space-y-1 border-r border-white/10 p-2">
+        {DEPLOYS.map((d) => (
+          <button key={d.mode} onClick={() => setM(d.mode)} tabIndex={flat ? 0 : -1} aria-current={m === d.mode} className={`block w-full rounded-md px-2.5 py-1.5 text-left ${m === d.mode ? "bg-white/15" : "hover:bg-white/[0.06]"}`}>
+            <span className="block text-[12.5px] text-white">{d.label}</span>
+            <span className="block text-[11px] text-white/50">{d.sub}</span>
+          </button>
+        ))}
+      </nav>
+      <div className="relative min-w-0 flex-1 bg-black">
+        {flat ? (
+          <Fit w={640} h={400}>
+            <ModeScreen mode={m} />
+          </Fit>
+        ) : (
+          <p className="p-6 text-white/60">These run once you are at the desk.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/** A small shell: who I am, what I've built, and a way in to each project. */
+function TerminalApp({ setWindows }: { setWindows: OSProps["setWindows"] }) {
+  const [lines, setLines] = useState<string[]>(["Aadam OS terminal. Type help."]);
+  const [cmd, setCmd] = useState("");
+  const box = useRef<HTMLDivElement>(null);
+  // keep the newest line in view, inside the terminal only (never scroll the page)
+  useEffect(() => {
+    const el = box.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [lines]);
+  const projects = useMemo(() => visibleProjects(), []);
+  const run = (raw: string) => {
+    const [c, ...rest] = raw.trim().split(/\s+/);
+    const arg = rest.join(" ").toLowerCase();
+    const out: string[] = [];
+    if (!c) return;
+    if (c === "help") out.push("whoami · ls projects · open <name> · services · contact · clear");
+    else if (c === "whoami") out.push("Aadam. Forward deployed engineer in Accra, GMT+0. I embed with your team and ship the system you run on.");
+    else if (c === "ls") out.push(...projects.map((p) => `${projectSlug(p).padEnd(22)} ${p.categoryLabel}`));
+    else if (c === "services") out.push(...SERVICES.map((s) => `${s.n} ${s.title}`));
+    else if (c === "contact") out.push("adam@aadambuilds.dev · WhatsApp +233 55 960 2056 · or open Mail on the desktop");
+    else if (c === "open") {
+      const p = projects.find((x) => projectSlug(x) === arg || x.name.toLowerCase().includes(arg));
+      if (p && arg) {
+        openWindow(setWindows, "project", projectSlug(p));
+        out.push(`opening ${p.name}`);
+      } else out.push(`no project called "${arg}". Try ls.`);
+    } else if (c === "clear") {
+      setLines([]);
+      return;
+    } else out.push(`${c}: not found. Try help.`);
+    setLines((l) => [...l, `$ ${raw}`, ...out].slice(-200));
+  };
+  return (
+    <div className="flex h-full flex-col bg-black/60 p-4 font-mono text-[12.5px] leading-relaxed text-[#d7e1cf]" onClick={(e) => (e.currentTarget.querySelector("input") as HTMLInputElement | null)?.focus()}>
+      <div ref={box} className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap" data-lenis-prevent>
+        {lines.map((l, i) => (
+          <div key={i} className={l.startsWith("$ ") ? "text-white" : ""}>
+            {l}
+          </div>
+        ))}
+      </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          run(cmd);
+          setCmd("");
+        }}
+        className="flex items-center gap-2"
+      >
+        <span className="text-[var(--accent-2)]">$</span>
+        <input value={cmd} onChange={(e) => setCmd(e.target.value)} aria-label="Command" autoComplete="off" spellCheck={false} className="flex-1 bg-transparent text-white outline-none" />
+      </form>
     </div>
   );
 }
