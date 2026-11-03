@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { findProject } from "@/lib/projects";
 import { useDialog } from "@/lib/useDialog";
 import { AppIcon, AppScreen, StatusBar, useClock } from "../kit/parts";
-import { useOsText, type OsText } from "../l10n";
+import { useOsText, useTextDir, type OsText } from "../l10n";
 import MusicApp, { music, useMusic } from "../apps/music";
 import MailApp from "../apps/mail";
 import KitsApp from "../apps/kits";
@@ -207,6 +207,7 @@ function AppBody({ open, launch, leave }: { open: Open; launch: (id: PhoneAppId,
 
 function Home({ t, headline, page, setPage, launch, hidden }: { t: OsText; headline?: { eyebrow: string; title: string }; page: number; setPage: (n: number) => void; launch: (id: PhoneAppId) => void; hidden: boolean }) {
   const wall = useWallpaper();
+  const dir = useTextDir();
   const pages = useRef<HTMLDivElement>(null);
   const alboyut = findProject("al-boyut");
   const icon = (id: PhoneAppId | "whatsapp", dock = false) => {
@@ -233,7 +234,7 @@ function Home({ t, headline, page, setPage, launch, hidden }: { t: OsText; headl
           if (n !== page) setPage(n);
         }}
       >
-        <section className="flex h-full w-full shrink-0 snap-start flex-col gap-3 overflow-hidden px-5 pt-1" aria-label={t.phone.page(1)}>
+        <section dir={dir} className="flex h-full w-full shrink-0 snap-start flex-col gap-3 overflow-hidden px-5 pt-1" aria-label={t.phone.page(1)}>
           {headline && (
             <div className="rounded-[22px] bg-black/35 p-4 backdrop-blur-xl">
               <p className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-[var(--accent-2)]">{headline.eyebrow}</p>
@@ -249,7 +250,7 @@ function Home({ t, headline, page, setPage, launch, hidden }: { t: OsText; headl
           <NowPlayingWidget t={t} onOpen={() => launch("music")} />
           <div className="mt-auto grid grid-cols-4 gap-x-4 pb-1 pt-1">{PAGE1.map((id) => icon(id))}</div>
         </section>
-        <section className="grid w-full shrink-0 snap-start auto-rows-min grid-cols-4 gap-x-4 gap-y-5 px-5 pt-3" aria-label={t.phone.page(2)}>
+        <section dir={dir} className="grid w-full shrink-0 snap-start auto-rows-min grid-cols-4 gap-x-4 gap-y-5 px-5 pt-3" aria-label={t.phone.page(2)}>
           {PAGE2.map((id) => icon(id))}
         </section>
       </div>
@@ -268,7 +269,7 @@ function Home({ t, headline, page, setPage, launch, hidden }: { t: OsText; headl
         <span className="sr-only">{t.phone.swipeMore}</span>
       </div>
       {/* dock */}
-      <div className="relative mx-3 mb-5 flex justify-around rounded-[30px] bg-white/20 px-3 py-3 backdrop-blur-2xl">{DOCK.map((id) => icon(id, true))}</div>
+      <div dir={dir} className="relative mx-3 mb-5 flex justify-around rounded-[30px] bg-white/20 px-3 py-3 backdrop-blur-2xl">{DOCK.map((id) => icon(id, true))}</div>
     </div>
   );
 }
@@ -330,6 +331,7 @@ function WeatherWidget({ t }: { t: OsText }) {
 
 function NowPlayingWidget({ t, onOpen }: { t: OsText; onOpen: () => void }) {
   const s = useMusic();
+  const title = (t.music.tracks[s.track.id] ?? [s.track.title])[0];
   return (
     <div className="flex items-center gap-3 rounded-[22px] bg-black/35 p-2.5 pr-3 backdrop-blur-xl">
       <button onClick={onOpen} className="grid h-11 w-11 shrink-0 place-items-center rounded-xl text-[18px]" style={{ background: s.track.tone }} aria-label={t.phone.apps.music}>
@@ -337,9 +339,9 @@ function NowPlayingWidget({ t, onOpen }: { t: OsText; onOpen: () => void }) {
       </button>
       <button onClick={onOpen} className="min-w-0 flex-1 text-left">
         <span className="block text-[10.5px] uppercase tracking-[0.12em] text-white/55">{s.playing ? t.phone.widget.nowPlaying : t.phone.widget.paused}</span>
-        <span className="block truncate text-[13.5px] font-medium">{s.playing ? s.track.title : t.phone.widget.tapRain}</span>
+        <span className="block truncate text-[13.5px] font-medium">{s.playing ? title : t.phone.widget.tapRain}</span>
       </button>
-      <button onClick={() => music.toggle()} aria-label={s.playing ? "Pause" : "Play"} className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white text-[13px] text-black">
+      <button onClick={() => music.toggle()} aria-label={s.playing ? t.music.pause : t.music.play} className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white text-[13px] text-black">
         {s.playing ? "❚❚" : "▶"}
       </button>
     </div>

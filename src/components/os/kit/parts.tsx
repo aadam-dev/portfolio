@@ -1,10 +1,13 @@
 "use client";
 
+import { useLocale } from "next-intl";
+import { intlLocale, useOsText, useTextDir } from "../l10n";
 import { useEffect, useState, type ReactNode } from "react";
 
 /* ------------------------------------------------------------------ macOS bits */
 
-export function MenuBar({ live, onExit, items, right, exitLabel = "Back to the desk" }: { live: boolean; onExit?: () => void; items: string[]; right?: ReactNode; exitLabel?: string }) {
+export function MenuBar({ live, onExit, items, right, exitLabel }: { live: boolean; onExit?: () => void; items: string[]; right?: ReactNode; exitLabel?: string }) {
+  const t = useOsText().os;
   const now = useClock({ weekday: "short", hour: "2-digit", minute: "2-digit" });
   return (
     <div dir="ltr" className="absolute inset-x-0 top-0 z-[500] flex h-8 items-center justify-between bg-black/35 px-4 text-[13px] backdrop-blur-xl">
@@ -21,7 +24,7 @@ export function MenuBar({ live, onExit, items, right, exitLabel = "Back to the d
         <span className="tabular-nums">Accra · {now}</span>
         {live && onExit && (
           <button onClick={onExit} className="rounded-md bg-white/10 px-2.5 py-0.5 text-[12px] hover:bg-white/20">
-            {exitLabel} <span aria-hidden>⎋</span>
+            {exitLabel ?? t.back} <span aria-hidden>⎋</span>
           </button>
         )}
       </div>
@@ -31,6 +34,7 @@ export function MenuBar({ live, onExit, items, right, exitLabel = "Back to the d
 
 /** A desktop icon: an app tile, or a file with its type badge, and a label underneath. */
 export function DesktopIcon({ label, img, glyph, badge, onOpen, live, tint }: { label: string; img?: string; glyph?: ReactNode; badge?: string; onOpen: () => void; live: boolean; tint?: string }) {
+  const t = useOsText().os;
   return (
     <button
       onDoubleClick={onOpen}
@@ -40,7 +44,7 @@ export function DesktopIcon({ label, img, glyph, badge, onOpen, live, tint }: { 
       }}
       tabIndex={live ? 0 : -1}
       className="group flex w-[84px] flex-col items-center gap-1 rounded-lg p-1.5 focus:bg-white/10 focus:outline-none"
-      aria-label={`Open ${label}`}
+      aria-label={t.open(label)}
     >
       <span
         className="relative grid h-[54px] w-[54px] place-items-center overflow-hidden rounded-[12px] text-[20px] shadow-[0_8px_22px_rgba(0,0,0,0.35)] ring-1 ring-white/15 transition-transform group-hover:scale-105"
@@ -89,18 +93,20 @@ export function StatusBar({ light = true }: { light?: boolean }) {
 }
 
 /** A full-screen iOS app: back to home, a title, and its content. */
-export function AppScreen({ title, onHome, children, light, action, homeLabel = "Home" }: { title: string; onHome: () => void; children: ReactNode; light?: boolean; action?: ReactNode; homeLabel?: string }) {
+export function AppScreen({ title, onHome, children, light, action, homeLabel }: { title: string; onHome: () => void; children: ReactNode; light?: boolean; action?: ReactNode; homeLabel?: string }) {
+  const t = useOsText().phone;
+  const dir = useTextDir();
   return (
     <div className={`absolute inset-0 z-10 flex flex-col ${light ? "bg-[#f6f5f2] text-[#1c1c1e]" : "bg-black text-white"} [animation:aos-pop_.3s_cubic-bezier(.22,1,.36,1)_both]`}>
       <StatusBar light={!light} />
       <div className={`flex h-10 shrink-0 items-center justify-between px-4 text-[15px] ${light ? "text-[#007aff]" : "text-[#5aa9ff]"}`}>
         <button onClick={onHome} className="min-w-16 text-left">
-          ‹ {homeLabel}
+          ‹ {homeLabel ?? t.home}
         </button>
         <span className={`max-w-[55%] truncate text-[15px] font-semibold ${light ? "text-black" : "text-white"}`}>{title}</span>
         <span className="min-w-16 text-right">{action}</span>
       </div>
-      <div className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain pb-5" data-lenis-prevent>
+      <div dir={dir} className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain pb-5" data-lenis-prevent>
         {children}
       </div>
     </div>
@@ -139,12 +145,13 @@ export function AppIcon({ name, label, icon, bg, glyph, onOpen, href, tabIndex }
 /** Accra time, refreshed every 20 seconds. */
 export function useClock(opts: Intl.DateTimeFormatOptions, timeZone = "Africa/Accra") {
   const [now, setNow] = useState("");
+  const loc = intlLocale(useLocale());
   useEffect(() => {
-    const fmt = () => setNow(new Intl.DateTimeFormat("en-GB", { ...opts, timeZone }).format(new Date()));
+    const fmt = () => setNow(new Intl.DateTimeFormat(loc, { ...opts, timeZone }).format(new Date()));
     fmt();
     const t = setInterval(fmt, 20000);
     return () => clearInterval(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeZone]);
+  }, [timeZone, loc]);
   return now;
 }

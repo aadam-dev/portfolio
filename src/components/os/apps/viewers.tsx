@@ -1,5 +1,6 @@
 "use client";
 
+import { useOsText } from "../l10n";
 import { useState } from "react";
 import { SHOTS, SNIPPETS, TEXTS, type Annotation } from "../content";
 
@@ -8,6 +9,7 @@ import { SHOTS, SNIPPETS, TEXTS, type Annotation } from "../content";
 export function PreviewApp({ file, live }: { file?: string; live: boolean }) {
   const [id, setId] = useState(file ?? SHOTS[0].id);
   const [markup, setMarkup] = useState(true);
+  const t = useOsText().preview;
   const shot = SHOTS.find((s) => s.id === id) ?? SHOTS[0];
   const tab = live ? 0 : -1;
   return (
@@ -24,7 +26,7 @@ export function PreviewApp({ file, live }: { file?: string; live: boolean }) {
         <div className="flex items-center gap-2 border-b border-white/10 px-3 py-1.5 text-[12px] text-white/70">
           <span className="truncate">{shot.name}</span>
           <button tabIndex={tab} onClick={() => setMarkup((m) => !m)} aria-pressed={markup} className={`ml-auto rounded-md px-2 py-0.5 ${markup ? "bg-[#ff5b1f]/25 text-[#ffb48f]" : "hover:bg-white/10"}`}>
-            ✎ Markup
+            ✎ {t.markup}
           </button>
         </div>
         <div className="relative grid min-h-0 flex-1 place-items-center p-3">

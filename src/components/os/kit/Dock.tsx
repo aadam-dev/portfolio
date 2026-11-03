@@ -1,5 +1,6 @@
 "use client";
 
+import { useOsText } from "../l10n";
 import { useRef, useState, type ReactNode } from "react";
 import { motion, useAnimationControls, useMotionValue, useReducedMotion, useSpring, useTransform, type MotionValue } from "framer-motion";
 
@@ -44,6 +45,7 @@ export function Dock({ items, live, label = "Dock" }: { items: DockItem[]; live:
 
 function DockIcon({ it, mouseX, live, reduce }: { it: DockItem; mouseX: MotionValue<number>; live: boolean; reduce: boolean }) {
   const ref = useRef<HTMLButtonElement>(null);
+  const t = useOsText().os;
   const [hover, setHover] = useState(false);
   const bounce = useAnimationControls();
   const dist = useTransform(mouseX, (x) => {
@@ -78,7 +80,7 @@ function DockIcon({ it, mouseX, live, reduce }: { it: DockItem; mouseX: MotionVa
           setHover(false);
           mouseX.set(Infinity);
         }}
-        aria-label={`Open ${it.label}`}
+        aria-label={t.open(it.label)}
         className="relative flex shrink-0 flex-col items-center focus:outline-none"
         style={{ width: reduce ? BASE : size }}
       >

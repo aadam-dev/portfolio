@@ -1,5 +1,6 @@
 "use client";
 
+import { useOsText } from "../l10n";
 import { useMemo, useState } from "react";
 import { BALANCE, CASHFLOW, DEFAULTS, INCOME, run, shown, toCsv, type Inputs, type Model } from "@/lib/model3";
 
@@ -56,6 +57,7 @@ export default function NumbersApp({ live }: { live: boolean }) {
   const [cell, setCell] = useState<{ ref: string; formula: string }>({ ref: "B2", formula: String(DEFAULTS.units) });
   const m = useMemo(() => run(inputs), [inputs]);
   const tab = live ? 0 : -1;
+  const t = useOsText().numbers;
 
   const head = (
     <tr>
@@ -74,10 +76,10 @@ export default function NumbersApp({ live }: { live: boolean }) {
       {/* toolbar + formula bar */}
       <div className="flex items-center gap-2 border-b border-black/10 bg-[#f6f5f1] px-3 py-1.5 text-[12px]">
         <span className="font-semibold text-[#0f7a3b]">harmattan-model.xlsx</span>
-        <span className="text-black/40">Harmattan Foods Ltd (illustrative) · GHS</span>
-        <span className={`ml-auto rounded px-2 py-0.5 text-[11px] ${m.balances ? "bg-[#e3f5e9] text-[#0f7a3b]" : "bg-[#fde8e8] text-[#b42318]"}`}>{m.balances ? "Balance sheet balances" : "Out of balance"}</span>
+        <span className="text-black/40">{t.company}</span>
+        <span className={`ml-auto rounded px-2 py-0.5 text-[11px] ${m.balances ? "bg-[#e3f5e9] text-[#0f7a3b]" : "bg-[#fde8e8] text-[#b42318]"}`}>{m.balances ? t.balances : t.out}</span>
         <button tabIndex={tab} onClick={() => download(m)} className="rounded-md bg-[#0f7a3b] px-2.5 py-1 font-semibold text-white">
-          Download .xlsx
+          {t.download}
         </button>
       </div>
       <div className="flex items-center gap-2 border-b border-black/10 px-3 py-1 font-mono text-[12px]">

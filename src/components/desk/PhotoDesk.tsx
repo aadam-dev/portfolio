@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState, type MutableRefObject, type ReactNode, type RefObject } from "react";
 import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
 import { Html, useTexture } from "@react-three/drei";
+import { NextIntlClientProvider, useLocale, useMessages, useTimeZone, type AbstractIntlMessages } from "next-intl";
+import { osText } from "@/components/os/l10n";
 import * as THREE from "three";
 import sceneData from "../../../public/workspace/scene.json";
 
@@ -243,21 +245,13 @@ interface SceneProps {
   onReady: () => void;
   /** a fixed element for the live screens to mount in (stops them remounting when R3F's events connect) */
   portal: MutableRefObject<HTMLDivElement | null>;
+  /** drei's Html renders in its own React root, so the language is handed in and provided again there */
+  intl: { locale: string; messages: AbstractIntlMessages; timeZone?: string };
+  labels: Record<string, string>;
 }
 
-const LABELS: Record<string, string> = {
-  lamp: "Switch the lamp",
-  phone: "Pick up the phone",
-  books: "On the shelf",
-  notebook: "Field notes",
-  device: "The field kit",
-  brand: "Studio work",
-  ball: "Bounce it",
-  mouse: "Drag the mouse",
-  screens: "Into the laptop",
-};
 
-function Scene({ rig, stops, land, landed, night, screens, spot, onPick, onLamp, onPhone, onReady, portal }: SceneProps) {
+function Scene({ rig, stops, land, landed, night, screens, spot, onPick, onLamp, onPhone, onReady, portal, intl, labels }: SceneProps) {
   const [clean, original] = useTexture(["/workspace/wide-clean.webp", "/workspace/wide.webp"]);
   const { size } = useThree();
   const [hover, setHover] = useState<string | null>(null);
@@ -460,7 +454,9 @@ function Scene({ rig, stops, land, landed, night, screens, spot, onPick, onLamp,
           <group key={id} position={f.c} quaternion={f.quat} visible={!(id === "center" && landed)}>
             <Html transform portal={portal as RefObject<HTMLElement>} distanceFactor={(400 * f.w) / W} zIndexRange={Z_SCREENS} style={SCREEN_STYLE[id]} pointerEvents="none">
               <div ref={id === "center" ? osEl : undefined} className="theme-fixed relative overflow-hidden bg-black" style={{ width: W, height: H, visibility: id === "center" && landed ? "hidden" : undefined }}>
-                {screens[id]}
+                <NextIntlClientProvider locale={intl.locale} messages={intl.messages} timeZone={intl.timeZone}>
+                  {screens[id]}
+                </NextIntlClientProvider>
                 {id === "center" && (
                   <div ref={cursor} aria-hidden className="pointer-events-none absolute left-0 top-0 z-[600]" style={{ transform: `translate(${W * 0.62}px, ${H * 0.55}px)` }}>
                     <svg width="26" height="36" viewBox="0 0 16 22">
@@ -477,7 +473,7 @@ function Scene({ rig, stops, land, landed, night, screens, spot, onPick, onLamp,
       {/* one label, always mounted, moved to whatever is under the pointer */}
       <Html position={labelPos} portal={portal as RefObject<HTMLElement>} center zIndexRange={Z_LABEL} style={LABEL_STYLE}>
         <span className="theme-fixed whitespace-nowrap rounded-full bg-black/80 px-3 py-1 font-mono text-[10.5px] uppercase tracking-[0.14em] text-white transition-opacity" style={{ opacity: labelAt ? 1 : 0 }}>
-          {labelAt ? LABELS[labelAt.p.hotspot!] ?? labelAt.p.id : ""}
+          {labelAt ? labels[labelAt.p.hotspot!] ?? labelAt.p.id : ""}
         </span>
       </Html>
     </>
@@ -491,8 +487,13 @@ function labelCenter(p: Proxy) {
 
 /* ------------------------------------------------------------------ canvas */
 
-export default function PhotoDesk(props: Omit<SceneProps, "onReady" | "portal"> & { active: boolean }) {
+export default function PhotoDesk(props: Omit<SceneProps, "onReady" | "portal" | "intl" | "labels"> & { active: boolean }) {
   const [ready, setReady] = useState(false);
+  const locale = useLocale();
+  const messages = useMessages();
+  const timeZone = useTimeZone();
+  const intl = useMemo(() => ({ locale, messages, timeZone }), [locale, messages, timeZone]);
+  const labels = osText(locale).deskLabels;
   const { active, ...scene } = props;
   const portal = useRef<HTMLDivElement>(null);
   return (
@@ -507,7 +508,7 @@ export default function PhotoDesk(props: Omit<SceneProps, "onReady" | "portal"> 
           gl.toneMapping = THREE.NoToneMapping;
         }}
       >
-        <Scene {...scene} portal={portal} onReady={() => setReady(true)} />
+        <Scene {...scene} portal={portal} intl={intl} labels={labels} onReady={() => setReady(true)} />
       </Canvas>
     </div>
   );

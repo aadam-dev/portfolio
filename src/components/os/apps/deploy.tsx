@@ -1,5 +1,6 @@
 "use client";
 
+import { useOsText } from "../l10n";
 import { useState } from "react";
 import ModeScreen from "@/components/fieldkit/ModeScreen";
 import { Fit } from "@/components/replicas";
@@ -18,13 +19,14 @@ export const DEPLOYS: { mode: ModeId; label: string; sub: string }[] = [
 /** The playable systems from the Deployments section, one at a time. */
 export default function DeployApp({ flat }: { flat: boolean }) {
   const [m, setM] = useState<ModeId>("counter");
+  const t = useOsText().deploy;
   return (
     <div className="flex h-full">
-      <nav aria-label="Systems" className="w-[180px] shrink-0 space-y-1 border-r border-white/10 p-2">
+      <nav aria-label={t.nav} className="w-[180px] shrink-0 space-y-1 border-r border-white/10 p-2">
         {DEPLOYS.map((d) => (
           <button key={d.mode} onClick={() => setM(d.mode)} tabIndex={flat ? 0 : -1} aria-current={m === d.mode} className={`block w-full rounded-md px-2.5 py-1.5 text-left ${m === d.mode ? "bg-white/15" : "hover:bg-white/[0.06]"}`}>
-            <span className="block text-[12.5px] text-white">{d.label}</span>
-            <span className="block text-[11px] text-white/50">{d.sub}</span>
+            <span className="block text-[12.5px] text-white">{(t.items[d.mode] ?? [d.label])[0]}</span>
+            <span className="block text-[11px] text-white/50">{(t.items[d.mode] ?? [d.label, d.sub])[1]}</span>
           </button>
         ))}
       </nav>
@@ -34,7 +36,7 @@ export default function DeployApp({ flat }: { flat: boolean }) {
             <ModeScreen mode={m} />
           </Fit>
         ) : (
-          <p className="p-6 text-white/60">These run once you are at the desk.</p>
+          <p className="p-6 text-white/60">{t.later}</p>
         )}
       </div>
     </div>

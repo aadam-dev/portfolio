@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useLocale } from "next-intl";
 import { visitSession } from "@/components/site/Tracker";
-import { useOsText } from "../l10n";
+import { useOsText, intlLocale } from "../l10n";
 
 // Accra is GMT+0 all year, so my working day is a fixed UTC window
 const DAY = 86_400_000;
@@ -60,8 +60,8 @@ export default function CalendarApp() {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [ics, setIcs] = useState<string | null>(null);
 
-  const fmtDay = (d: number, o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(locale, { ...o, timeZone: "UTC" }).format(d);
-  const fmtTime = (x: number, zone = tz) => new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit", timeZone: zone }).format(x);
+  const fmtDay = (d: number, o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(intlLocale(locale), { ...o, timeZone: "UTC" }).format(d);
+  const fmtTime = (x: number, zone = tz) => new Intl.DateTimeFormat(intlLocale(locale), { hour: "2-digit", minute: "2-digit", timeZone: zone }).format(x);
   const blocks = dayBlocks(day, now);
 
   const send = async (e: React.FormEvent<HTMLFormElement>) => {

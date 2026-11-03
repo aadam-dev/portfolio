@@ -1,7 +1,9 @@
 "use client";
 
+import { useLocale } from "next-intl";
+import { useOsText } from "../l10n";
 import Link from "next/link";
-import { projectSlug, visibleProjects, type Project } from "@/lib/projects";
+import { projectSlug, visibleProjects, type Project, localizedProject } from "@/lib/projects";
 import ScaledIframe from "@/components/ui/ScaledIframe";
 
 export type Tab = "overview" | "walkthrough" | "live" | "builder";
@@ -21,34 +23,36 @@ export default function ProjectApp({ p, tab, setTab, flat }: { p: Project; tab: 
   const walk = p.walkthroughs?.[0];
   const canLive = !!p.liveBaseUrl && p.liveEmbeddable !== false;
   const builder = p.id === "bloomboba" && p.liveBaseUrl ? `${p.liveBaseUrl.replace(/\/$/, "")}/#make` : null;
+  const t = useOsText().project;
+  const local = localizedProject(p, useLocale());
   const tabs: [Tab, string][] = [
-    ["overview", "Overview"],
-    ...(walk ? ([["walkthrough", "Walkthrough"]] as [Tab, string][]) : []),
-    ...(builder ? ([["builder", "Build a drink"]] as [Tab, string][]) : []),
-    ...(p.liveBaseUrl ? ([["live", "Live site"]] as [Tab, string][]) : []),
+    ["overview", t.overview],
+    ...(walk ? ([["walkthrough", t.walkthrough]] as [Tab, string][]) : []),
+    ...(builder ? ([["builder", t.builder]] as [Tab, string][]) : []),
+    ...(p.liveBaseUrl ? ([["live", t.live]] as [Tab, string][]) : []),
   ];
   return (
     <div className="flex h-full flex-col">
       <div className="flex shrink-0 gap-1 border-b border-white/10 px-3 py-2" role="tablist">
-        {tabs.map(([t, l]) => (
-          <button key={t} role="tab" aria-selected={tab === t} tabIndex={flat ? 0 : -1} onClick={() => setTab(t)} className={`rounded-md px-3 py-1 text-[12px] ${tab === t ? "bg-white/15 text-white" : "text-white/60 hover:text-white"}`}>
+        {tabs.map(([id, l]) => (
+          <button key={id} role="tab" aria-selected={tab === id} tabIndex={flat ? 0 : -1} onClick={() => setTab(id)} className={`rounded-md px-3 py-1 text-[12px] ${tab === id ? "bg-white/15 text-white" : "text-white/60 hover:text-white"}`}>
             {l}
           </button>
         ))}
         <Link href={`/work/${projectSlug(p)}`} tabIndex={flat ? 0 : -1} className="ml-auto rounded-md px-3 py-1 text-[12px] text-[var(--accent-2)] hover:underline">
-          Full case study →
+          {t.caseStudy} →
         </Link>
       </div>
 
       {tab === "overview" && (
         <div className="grid gap-5 p-5 md:grid-cols-[1.2fr_1fr]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={thumb(p)} alt={`${p.name} screen`} className="w-full rounded-lg ring-1 ring-white/10" />
+          <img src={thumb(p)} alt={t.screen(p.name)} className="w-full rounded-lg ring-1 ring-white/10" />
           <div>
             <p className="text-[11px] uppercase tracking-[0.16em] text-white/45">{p.categoryLabel}</p>
             <h3 className="mt-1 text-[20px] font-semibold leading-tight">{p.name}</h3>
-            <p className="mt-1 text-white/70">{p.tagline}</p>
-            <p className="mt-3 text-[12.5px] leading-relaxed text-white/60">{p.description}</p>
+            <p className="mt-1 text-white/70">{local.tagline}</p>
+            <p className="mt-3 text-[12.5px] leading-relaxed text-white/60">{local.description}</p>
             {p.outcomes && (
               <div className="mt-4 flex flex-wrap gap-2">
                 {p.outcomes.slice(0, 3).map((o) => (
@@ -77,7 +81,7 @@ export default function ProjectApp({ p, tab, setTab, flat }: { p: Project; tab: 
       )}
 
       {tab === "builder" && builder && (
-        <div className="h-full">{flat ? <ScaledIframe src={builder} title={`${p.name} drink builder`} /> : <p className="p-8 text-white/60">The builder opens when you are at the desk.</p>}</div>
+        <div className="h-full">{flat ? <ScaledIframe src={builder} title={`${p.name} drink builder`} /> : <p className="p-8 text-white/60">{t.builderLater}</p>}</div>
       )}
 
       {tab === "live" && p.liveBaseUrl && (
@@ -87,9 +91,9 @@ export default function ProjectApp({ p, tab, setTab, flat }: { p: Project; tab: 
           ) : (
             <div className="grid h-full place-items-center p-8 text-center">
               <div>
-                <p className="text-white/70">{canLive ? "The live site loads when you're at the desk." : "This site can't be embedded."}</p>
+                <p className="text-white/70">{canLive ? t.liveLater : t.noEmbed}</p>
                 <a href={p.liveBaseUrl} target="_blank" rel="noopener noreferrer" tabIndex={flat ? 0 : -1} className="mt-3 inline-block rounded-md bg-white/15 px-3 py-1.5 hover:bg-white/25">
-                  Open {new URL(p.liveBaseUrl).host} ↗
+                  {t.openHost(new URL(p.liveBaseUrl).host)} ↗
                 </a>
               </div>
             </div>

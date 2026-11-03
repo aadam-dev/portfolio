@@ -1,5 +1,6 @@
 "use client";
 
+import { useOsText, useTextDir } from "@/components/os/l10n";
 import { useCallback, useEffect, useMemo, useRef, type ReactNode } from "react";
 import { projectSlug, type Project } from "@/lib/projects";
 import { Window, nextZ, type WinFrame } from "@/components/os/kit/Window";
@@ -89,6 +90,10 @@ export function openWindow(setWindows: OSProps["setWindows"], kind: AppId, slug?
 
 export default function AadamOS({ mode, windows, setWindows, onExit }: OSProps) {
   const live = mode === "flat";
+  const all = useOsText();
+  const t = all.os;
+  // app names in the visitor's language; file names stay as they are on disk
+  const appTitle = (k: Exclude<AppId, "project">) => (k in t.apps ? t.apps[k as keyof typeof t.apps] : APPS[k].title);
   const projects = useMemo(() => dockProjects(), []);
   const desk = useRef<HTMLDivElement>(null);
   const top = windows.filter((w) => !w.min).reduce<Win | null>((a, w) => (!a || w.z > a.z ? w : a), null);
@@ -122,7 +127,7 @@ export default function AadamOS({ mode, windows, setWindows, onExit }: OSProps) 
     </span>
   );
   const dock: DockItem[] = [
-    { id: "files", label: "Files", icon: tile(APPS.files), open: isOpen("files"), onOpen: () => open("files") },
+    { id: "files", label: appTitle("files"), icon: tile(APPS.files), open: isOpen("files"), onOpen: () => open("files") },
     ...projects.map<DockItem>((p, i) => ({
       id: p.id,
       label: p.name,
@@ -132,7 +137,7 @@ export default function AadamOS({ mode, windows, setWindows, onExit }: OSProps) 
       onOpen: () => open("project", projectSlug(p)),
       divider: i === 0,
     })),
-    ...(["deploy", "numbers", "music", "kits", "terminal", "mail"] as const).map<DockItem>((k, i) => ({ id: k, label: APPS[k].title, icon: tile(APPS[k]), open: isOpen(k), onOpen: () => open(k), divider: i === 0 })),
+    ...(["deploy", "numbers", "music", "kits", "terminal", "mail"] as const).map<DockItem>((k, i) => ({ id: k, label: appTitle(k), icon: tile(APPS[k]), open: isOpen(k), onOpen: () => open(k), divider: i === 0 })),
   ];
 
   return (
@@ -140,7 +145,7 @@ export default function AadamOS({ mode, windows, setWindows, onExit }: OSProps) 
       className="aos theme-fixed relative h-full w-full select-none overflow-hidden text-[13px] text-white"
       style={{ fontFamily: "var(--font-sans)", pointerEvents: live ? "auto" : "none" }}
       role={live ? "region" : undefined}
-      aria-label={live ? "Aadam OS, an interactive desktop of projects" : undefined}
+      aria-label={live ? t.label : undefined}
       aria-hidden={live ? undefined : true}
       // rain starts softly on the first click (browsers only allow sound after one); pause it from the menu bar
       onPointerDown={live ? () => music.ambient() : undefined}
@@ -152,26 +157,26 @@ export default function AadamOS({ mode, windows, setWindows, onExit }: OSProps) 
       <MenuBar
         live={live}
         onExit={onExit}
-        items={["Work", "Studio", "Contact"]}
+        items={t.menu}
         right={
           <>
             <NowPlaying />
             <span className="hidden items-center gap-1.5 lg:flex">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" /> Available for work
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" /> {t.available}
             </span>
           </>
         }
       />
 
       <div ref={desk} className="absolute inset-x-0 bottom-[86px] top-8">
-        <WelcomeCard />
+        <WelcomeCard copy={t.welcome} />
         <Stickies live={live} />
 
         {/* the clutter: files left where they were last used */}
         <div className="absolute inset-0 hidden md:block">
           {SCATTER.map((f) => (
             <div key={f.id} className="absolute" style={{ left: `${f.x}%`, top: `${f.y}%` }}>
-              <DesktopIcon label={f.name} glyph={<FileGlyph kind={f.kind} src={f.src} size={40} />} tint="transparent" onOpen={() => open(f.app, undefined, undefined, f.file)} live={live} />
+              <DesktopIcon label={f.app === "files" ? t.folders.press : f.app === "kits" ? t.folders.kits : f.name} glyph={<FileGlyph kind={f.kind} src={f.src} size={40} />} tint="transparent" onOpen={() => open(f.app, undefined, undefined, f.file)} live={live} />
             </div>
           ))}
         </div>
@@ -180,7 +185,7 @@ export default function AadamOS({ mode, windows, setWindows, onExit }: OSProps) 
         <div className="absolute right-5 top-5 hidden grid-cols-2 justify-items-center gap-x-1 gap-y-2 sm:grid">
           <DesktopIcon label="Bloom Boba" img={thumb(projects[0] ?? ({} as Project))} onOpen={() => open("project", "bloom-boba")} live={live} />
           {(["files", "mail", "deploy", "music", "terminal"] as const).map((k) => (
-            <DesktopIcon key={k} label={APPS[k].title} glyph={APPS[k].glyph} tint={APPS[k].tint} onOpen={() => open(k)} live={live} />
+            <DesktopIcon key={k} label={appTitle(k)} glyph={APPS[k].glyph} tint={APPS[k].tint} onOpen={() => open(k)} live={live} />
           ))}
         </div>
 
@@ -189,7 +194,13 @@ export default function AadamOS({ mode, windows, setWindows, onExit }: OSProps) 
           const meta = w.kind === "project" ? null : APPS[w.kind];
           const update = (patch: Partial<Win>) => setWindows((ws) => ws.map((x) => (x.id === w.id ? { ...x, ...patch } : x)));
           const title =
-            w.kind === "preview" ? SHOTS.find((s) => s.id === w.file)?.name ?? "Preview" : w.kind === "code" ? SNIPPETS.find((s) => s.id === w.file)?.name ?? "Code" : w.kind === "text" ? TEXTS.find((t) => t.id === w.file)?.name ?? "TextEdit" : p?.name ?? meta?.title ?? "Window";
+            w.kind === "preview"
+              ? SHOTS.find((s) => s.id === w.file)?.name ?? t.apps.preview
+              : w.kind === "code"
+                ? SNIPPETS.find((s) => s.id === w.file)?.name ?? t.apps.code
+                : w.kind === "text"
+                  ? TEXTS.find((x) => x.id === w.file)?.name ?? t.apps.text
+                  : p?.name ?? (w.kind !== "project" ? appTitle(w.kind) : t.window);
           return (
             <Window key={w.id} w={w} title={title} desk={desk} live={live} focused={top?.id === w.id} update={update} close={() => setWindows((ws) => ws.filter((x) => x.id !== w.id))} tone={meta?.tone}>
               {w.kind === "project" && p && <ProjectApp p={p} tab={w.tab} setTab={(t) => update({ tab: t })} flat={live} />}
@@ -210,17 +221,17 @@ export default function AadamOS({ mode, windows, setWindows, onExit }: OSProps) 
         })}
       </div>
 
-      <Dock items={dock} live={live} label="Projects and apps" />
+      <Dock items={dock} live={live} label={t.dock} />
     </div>
   );
 }
 
-function WelcomeCard() {
+function WelcomeCard({ copy }: { copy: { eyebrow: string; title: string; body: string } }) {
   return (
-    <div className="absolute left-6 top-5 hidden max-w-[300px] rounded-2xl border border-white/10 bg-black/40 p-4 backdrop-blur-xl sm:block">
-      <p className="text-[11px] uppercase tracking-[0.18em] text-white/50">Welcome</p>
-      <p className="mt-1.5 text-[15px] font-semibold leading-snug">I build products that ship and work in the field.</p>
-      <p className="mt-1 text-[12px] leading-relaxed text-white/65">Open anything. Projects live in the dock; my notes, files and a spreadsheet are on the desk. Leave me a note on the sticky.</p>
+    <div dir={useTextDir()} className="absolute left-6 top-5 hidden max-w-[300px] rounded-2xl border border-white/10 bg-black/40 p-4 backdrop-blur-xl sm:block">
+      <p className="text-[11px] uppercase tracking-[0.18em] text-white/50">{copy.eyebrow}</p>
+      <p className="mt-1.5 text-[15px] font-semibold leading-snug">{copy.title}</p>
+      <p className="mt-1 text-[12px] leading-relaxed text-white/65">{copy.body}</p>
     </div>
   );
 }

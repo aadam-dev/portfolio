@@ -1,10 +1,12 @@
 "use client";
 
+import { useOsText } from "../l10n";
 import { useState } from "react";
 import { visitSession } from "@/components/site/Tracker";
 
 /** Mail: a real message to me, through the same route as the contact form. */
 export default function MailApp({ flat, subject }: { flat: boolean; subject?: string }) {
+  const t = useOsText().mail;
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const send = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,8 +28,8 @@ export default function MailApp({ flat, subject }: { flat: boolean; subject?: st
     return (
       <div className="grid h-full place-items-center p-8 text-center">
         <div>
-          <p className="text-[18px] font-semibold">Sent. Thank you.</p>
-          <p className="mt-1 text-white/60">It went straight to me. I reply within a day.</p>
+          <p className="text-[18px] font-semibold">{t.sent}</p>
+          <p className="mt-1 text-white/60">{t.sentBody}</p>
         </div>
       </div>
     );
@@ -35,24 +37,24 @@ export default function MailApp({ flat, subject }: { flat: boolean; subject?: st
   return (
     <form onSubmit={send} className="flex h-full flex-col gap-2.5 p-5 text-[13px]">
       <p className="text-white/60">
-        To: <span className="text-white">Aadam</span> · adam@aadambuilds.dev
+        {t.to}: <span className="text-white">Aadam</span> · <span dir="ltr">adam@aadambuilds.dev</span>
       </p>
-      <input name="name" required placeholder="Your name" tabIndex={flat ? 0 : -1} className={field} />
-      <input name="contact" required placeholder="Email or WhatsApp number" tabIndex={flat ? 0 : -1} className={field} />
+      <input name="name" required placeholder={t.name} tabIndex={flat ? 0 : -1} className={field} />
+      <input name="contact" required placeholder={t.contact} tabIndex={flat ? 0 : -1} className={field} />
       <textarea
         name="message"
         required
         rows={5}
-        defaultValue={subject ? `I'd like to start with the ${subject}. ` : undefined}
-        placeholder="What are you building, who is it for, and when would you like it live?"
+        defaultValue={subject ? t.prefill(subject) : undefined}
+        placeholder={t.placeholder}
         tabIndex={flat ? 0 : -1}
         className={`${field} flex-1 resize-none`}
       />
       <div className="flex items-center gap-3">
         <button type="submit" disabled={state === "sending"} tabIndex={flat ? 0 : -1} className="rounded-md bg-[var(--accent)] px-4 py-2 font-semibold text-black disabled:opacity-60">
-          {state === "sending" ? "Sending…" : "Send"}
+          {state === "sending" ? t.sending : t.send}
         </button>
-        {state === "error" && <span className="text-[#ff9b8a]">That didn&apos;t send. Try again, or use WhatsApp.</span>}
+        {state === "error" && <span className="text-[#ff9b8a]">{t.error}</span>}
       </div>
     </form>
   );

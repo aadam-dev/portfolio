@@ -6,8 +6,8 @@ import Link from "next/link";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { findProject, projectSlug, visibleProjects } from "@/lib/projects";
-import { SERVICES } from "@/lib/services";
-import { LEADERSHIP } from "@/lib/about";
+import { localServices } from "@/lib/services";
+import { aboutFor } from "@/lib/about";
 import { scrollToElement } from "@/lib/scroll";
 import ModeScreen from "@/components/fieldkit/ModeScreen";
 import { Fit } from "@/components/replicas";
@@ -21,7 +21,7 @@ import { FileGlyph } from "../apps/files";
 import { thumb } from "../apps/project";
 import { KITS, PRESS_FILES, SHOTS, SNIPPETS, TEXTS } from "../content";
 import { Sticky } from "../kit/parts";
-import { useOsText } from "../l10n";
+import { useOsText, intlLocale } from "../l10n";
 
 const MapCanvas = dynamic(() => import("@/components/map/MapCanvas"), { ssr: false });
 
@@ -66,6 +66,8 @@ export const WALLS: Record<Wall, { src: string; pos: string }> = {
 /* ------------------------------------------------------------------ Notes */
 
 export function NotesPhone() {
+  const t = useOsText().stickies;
+  const SERVICES = localServices(useLocale()).services;
   const [building, setBuilding] = useState<string[] | null>(null);
   useEffect(() => {
     let on = true;
@@ -81,18 +83,17 @@ export function NotesPhone() {
     <div className="space-y-4 p-4 text-[#1c1c1e]">
       <GuestSticky live className="w-full" />
       <div className="grid grid-cols-2 gap-3">
-        <Sticky color="#fff2a8" tilt={-1.5} title="Building now">
-          {building?.length ? building.map((b) => <p key={b}>· {b}</p>) : <p>Koflex Fitness, and this phone.</p>}
+        <Sticky color="#fff2a8" tilt={-1.5} title={t.building}>
+          {building?.length ? building.map((b) => <p key={b}>· {b}</p>) : <p>{t.phoneFallback}</p>}
         </Sticky>
-        <Sticky color="#ffc8d8" tilt={1.2} title="How I work">
-          <p>Sit in first.</p>
-          <p>Write it down.</p>
-          <p>Ship weekly.</p>
-          <p>Stay for the stock count.</p>
+        <Sticky color="#ffc8d8" tilt={1.2} title={t.howTitle}>
+          {t.how.map((x) => (
+            <p key={x}>{x}</p>
+          ))}
         </Sticky>
       </div>
       <div className="rounded-2xl bg-white p-4">
-        <p className="text-[20px] font-bold">What I do</p>
+        <p className="text-[20px] font-bold">{t.whatIDo}</p>
         {SERVICES.map((s) => (
           <div key={s.n} className="mt-3">
             <p className="text-[14px] font-semibold">
@@ -168,14 +169,17 @@ export function MapsPhone() {
 type Pass = { id: string; org: string; title: string; tone: string; ink?: string; fields: [string, string][]; body?: string };
 
 export function WalletPhone() {
-  const t = useOsText().wallet;
+  const all = useOsText();
+  const t = all.wallet;
+  const f = all.passes;
+  const LEADERSHIP = aboutFor(useLocale()).LEADERSHIP;
   const passes: Pass[] = [
-    { id: "card", org: "aadambuilds.dev", title: "Aadam", tone: "linear-gradient(150deg,#ff5b1f,#a8320b)", fields: [["Role", "Forward deployed engineer"], ["Email", EMAIL], ["Based in", "Accra, GMT+0"]] },
-    { id: "court", org: "Madina Basketball Court", title: "Co-lead", tone: "linear-gradient(150deg,#f97316,#7c2d12)", fields: [["Raised", "GHS 40,000+"], ["Donors", "11"]], body: LEADERSHIP[0] },
-    { id: "vc", org: "VCTF · Ministry of Finance · World Bank", title: "VC Analyst Program", tone: "linear-gradient(150deg,#1e3a8a,#0b1530)", fields: [["Cohort", "1 of 10 selected"]], body: LEADERSHIP[3] },
-    { id: "aspire", org: "Aspire Leadership Programme", title: "Cohort 4, 2025", tone: "linear-gradient(150deg,#0f766e,#042f2e)", fields: [["Faculty", "Harvard-led"]], body: LEADERSHIP[4] },
-    { id: "iou", org: "IOU Student Committee", title: "IT lead", tone: "linear-gradient(150deg,#6d28d9,#2e1065)", fields: [["Hours", "780 of 216 required"]], body: LEADERSHIP[1] },
-    { id: "certs", org: "Google · Goldman Sachs", title: "Certificates", tone: "linear-gradient(150deg,#e5e7eb,#9ca3af)", ink: "#111", fields: [["Year", "2026"]], body: LEADERSHIP[5] },
+    { id: "card", org: "aadambuilds.dev", title: "Aadam", tone: "linear-gradient(150deg,#ff5b1f,#a8320b)", fields: [[f.role, all.contacts.role], [f.email, EMAIL], [f.based, f.accra]] },
+    { id: "court", org: "Madina Basketball Court", title: f.colead, tone: "linear-gradient(150deg,#f97316,#7c2d12)", fields: [[f.raised, "GHS 40,000+"], [f.donors, "11"]], body: LEADERSHIP[0] },
+    { id: "vc", org: "VCTF · Ministry of Finance · World Bank", title: "VC Analyst Program", tone: "linear-gradient(150deg,#1e3a8a,#0b1530)", fields: [[f.cohort, f.selected]], body: LEADERSHIP[3] },
+    { id: "aspire", org: "Aspire Leadership Programme", title: f.cohort4, tone: "linear-gradient(150deg,#0f766e,#042f2e)", fields: [[f.faculty, f.harvard]], body: LEADERSHIP[4] },
+    { id: "iou", org: "IOU Student Committee", title: f.itLead, tone: "linear-gradient(150deg,#6d28d9,#2e1065)", fields: [[f.hours, f.hoursValue]], body: LEADERSHIP[1] },
+    { id: "certs", org: "Google · Goldman Sachs", title: f.certs, tone: "linear-gradient(150deg,#e5e7eb,#9ca3af)", ink: "#111", fields: [[f.year, "2026"]], body: LEADERSHIP[5] },
   ];
   const [open, setOpen] = useState<string | null>(null);
   return (
@@ -224,7 +228,8 @@ export function WalletPhone() {
 /* ------------------------------------------------------------------ Contacts */
 
 export function ContactsPhone() {
-  const t = useOsText().contacts;
+  const all = useOsText();
+  const t = all.contacts;
   const vcard = useMemo(() => {
     const body = ["BEGIN:VCARD", "VERSION:3.0", "FN:Aadam", "N:;Aadam;;;", `TITLE:${t.role}`, `EMAIL;TYPE=INTERNET:${EMAIL}`, "TEL;TYPE=CELL:+233559602056", "URL:https://aadambuilds.dev", "ADR;TYPE=WORK:;;;Accra;;;Ghana", "END:VCARD"].join("\r\n");
     return `data:text/vcard;charset=utf-8,${encodeURIComponent(body)}`;
@@ -232,8 +237,8 @@ export function ContactsPhone() {
   const rows: [string, string, string?][] = [
     [t.email, EMAIL, `mailto:${EMAIL}`],
     [t.whatsapp, "+233 55 960 2056", WHATSAPP],
-    [t.based, "Accra, Ghana (GMT+0)"],
-    [t.hours, "09:00 to 17:00, EU and US overlap"],
+    [t.based, all.contactRows.based],
+    [t.hours, all.contactRows.hours],
     [t.site, "aadambuilds.dev", "/"],
   ];
   return (
@@ -339,7 +344,7 @@ export function ClockPhone() {
                 <p className="truncate text-[17px]">{label}</p>
                 <p className="text-[12.5px] text-white/50">{i === 0 ? "GMT+0" : t.ahead(diff)}</p>
               </div>
-              <p className="text-[30px] font-light tabular-nums">{new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit", timeZone: z }).format(now)}</p>
+              <p className="text-[30px] font-light tabular-nums">{new Intl.DateTimeFormat(intlLocale(locale), { hour: "2-digit", minute: "2-digit", timeZone: z }).format(now)}</p>
             </li>
           );
         })}
@@ -471,7 +476,9 @@ export function SafariPhone() {
 /* ------------------------------------------------------------------ Systems (the playable deployments) */
 
 export function SystemsPhone() {
-  const t = useOsText().systems;
+  const all = useOsText();
+  const t = all.systems;
+  const name = (mode: string) => all.deploy.items[mode] ?? [mode, ""];
   const [m, setM] = useState<ModeId>("counter");
   const d = DEPLOYS.find((x) => x.mode === m)!;
   return (
@@ -479,12 +486,12 @@ export function SystemsPhone() {
       <div className="flex shrink-0 gap-1.5 overflow-x-auto px-3 py-2 [scrollbar-width:none]" data-lenis-prevent>
         {DEPLOYS.map((x) => (
           <button key={x.mode} onClick={() => setM(x.mode)} aria-pressed={m === x.mode} className={`shrink-0 rounded-full px-3 py-1.5 text-[12.5px] ${m === x.mode ? "bg-white text-black" : "bg-white/10"}`}>
-            {x.label}
+            {name(x.mode)[0]}
           </button>
         ))}
       </div>
       <p className="px-4 text-[12px] text-white/50">
-        {d.sub} · {t.hint}
+        {name(d.mode)[1] || d.sub} · {t.hint}
       </p>
       <div className="relative mx-3 my-3 aspect-[16/10] overflow-hidden rounded-xl bg-black">
         <Fit w={640} h={400}>
@@ -500,7 +507,8 @@ export function SystemsPhone() {
 type Opened = { app: "preview" | "code" | "text"; id: string } | null;
 
 export function FilesPhone({ onOpen, openKits }: { onOpen: (o: NonNullable<Opened>) => void; openKits: (id: string) => void }) {
-  const t = useOsText().files;
+  const all = useOsText();
+  const t = all.files;
   const row = "flex w-full items-center gap-3 px-3 py-2 text-left";
   const sec = (title: string, children: React.ReactNode, note?: string) => (
     <section className="mt-4">
@@ -513,12 +521,12 @@ export function FilesPhone({ onOpen, openKits }: { onOpen: (o: NonNullable<Opene
     <div className="p-3 pt-0">
       {sec(
         t.press,
-        PRESS_FILES.map((f) => (
+        PRESS_FILES.map((f, i) => (
           <a key={f.name} href={f.href} download className={row}>
             <FileGlyph kind={f.kind} size={30} src={f.name.endsWith(".png") ? f.href : undefined} />
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[14px]">{f.name}</span>
-              <span className="block truncate text-[12px] text-white/50">{f.note}</span>
+              <span className="block truncate text-[12px] text-white/50">{all.finder.pressFiles[i] ?? f.note}</span>
             </span>
             <span className="text-[12px] text-[#5aa9ff]">{t.download}</span>
           </a>
@@ -531,7 +539,7 @@ export function FilesPhone({ onOpen, openKits }: { onOpen: (o: NonNullable<Opene
             <span className="grid h-8 w-8 place-items-center rounded-lg text-white" style={{ background: k.tone }}>
               ◆
             </span>
-            <span className="flex-1 text-[14px]">{k.name}</span>
+            <span className="flex-1 text-[14px]">{all.kits.items[k.id]?.name ?? k.name}</span>
             <span className="text-white/35">›</span>
           </button>
         )),
@@ -590,13 +598,14 @@ export function AlBoyutPhone() {
 
 export function CourtPhone({ leave }: { leave: () => void }) {
   const p = findProject("madinabasketball");
+  const t = useOsText().court;
   return (
     <div className="bg-[#0d0d0d] p-4">
       {["court", "events", "landing"].map((k) => (
         // eslint-disable-next-line @next/next/no-img-element
         <img key={k} src={`/previews/madinabasketball/${k}.webp`} alt="" className="mb-3 w-full rounded-xl" loading="lazy" />
       ))}
-      <p className="text-[13px] text-white/70">{p?.tagline}. Live scoring, court bookings and an open ledger of every cedi raised.</p>
+      <p className="text-[13px] text-white/70">{t.blurb}</p>
       <button
         onClick={() => {
           leave();
@@ -605,11 +614,11 @@ export function CourtPhone({ leave }: { leave: () => void }) {
         }}
         className="mt-3 block rounded-full bg-[#ff6b35] px-4 py-2 text-[13px] font-semibold text-black"
       >
-        Score a game on the live scorer
+        {t.score}
       </button>
       {p && (
         <Link href={`/work/${projectSlug(p)}`} className="mt-3 inline-block text-[13px] text-[#ff8a5c]">
-          Open the project →
+          {t.open} →
         </Link>
       )}
     </div>

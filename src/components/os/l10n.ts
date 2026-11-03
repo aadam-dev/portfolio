@@ -2,6 +2,8 @@
 
 import { useMemo } from "react";
 import { useLocale } from "next-intl";
+import { fr } from "./l10n.fr";
+import { ar } from "./l10n.ar";
 
 /** Every string the phone and Aadam OS show, in one place per language. */
 const en = {
@@ -162,29 +164,169 @@ const en = {
     aboutPhone: "About this phone",
     aboutBody: "Everything here is real: the systems run, the mail reaches me, the photos and notes wait for my approval. Built with Next.js, by me.",
   },
+  os: {
+    label: "Aadam OS, an interactive desktop of projects",
+    menu: ["Work", "Studio", "Contact"],
+    available: "Available for work",
+    back: "Back to the desk",
+    dock: "Projects and apps",
+    open: (n: string) => `Open ${n}`,
+    close: (n: string) => `Close ${n}`,
+    minimise: (n: string) => `Minimise ${n}`,
+    maximise: (n: string) => `Maximise ${n}`,
+    restore: (n: string) => `Restore ${n}`,
+    window: "Window",
+    welcome: {
+      eyebrow: "Welcome",
+      title: "I build products that ship and work in the field.",
+      body: "Open anything. Projects live in the dock; my notes, files and a spreadsheet are on the desk. Leave me a note on the sticky.",
+    },
+    apps: { mail: "Mail", deploy: "Deployments", terminal: "Terminal", preview: "Preview", code: "Code", text: "TextEdit", music: "Music", files: "Files", kits: "Starter kits" },
+    folders: { press: "Press kit", kits: "Starter kits" },
+  },
+  project: {
+    overview: "Overview",
+    walkthrough: "Walkthrough",
+    builder: "Build a drink",
+    live: "Live site",
+    caseStudy: "Full case study",
+    builderLater: "The builder opens when you are at the desk.",
+    liveLater: "The live site loads when you're at the desk.",
+    noEmbed: "This site can't be embedded.",
+    openHost: (h: string) => `Open ${h}`,
+    screen: (n: string) => `${n} screen`,
+  },
+  stickies: {
+    building: "Building now",
+    buildingFallback: "Koflex Fitness, and this desktop.",
+    phoneFallback: "Koflex Fitness, and this phone.",
+    howTitle: "How I work",
+    how: ["Sit in first.", "Write it down.", "Ship weekly.", "Stay for the stock count."],
+    leave: "Leave a note",
+    first: "Be the first: a comment, a review, a hello. I read every one.",
+    write: "Write a note",
+    placeholder: "A comment, a review, an idea…",
+    name: "Your name (optional)",
+    rating: "Rating, optional",
+    stars: (n: number) => (n === 1 ? "1 star" : `${n} stars`),
+    pin: "Pin it",
+    shownAfter: "Shown here once I've read it.",
+    sent: "Pinned for me to read. Thank you. Once I've read it, it joins the board.",
+    failed: "That didn't send.",
+    retry: "Try again",
+    visitor: "A visitor",
+    whatIDo: "What I do",
+  },
+  mail: {
+    to: "To",
+    name: "Your name",
+    contact: "Email or WhatsApp number",
+    placeholder: "What are you building, who is it for, and when would you like it live?",
+    prefill: (s: string) => `I'd like to start with the ${s}. `,
+    send: "Send",
+    sending: "Sending…",
+    sent: "Sent. Thank you.",
+    sentBody: "It went straight to me. I reply within a day.",
+    error: "That didn't send. Try again, or use WhatsApp.",
+  },
+  kits: {
+    label: "Kits",
+    eyebrow: (w: string) => `Starter kit · ${w}`,
+    get: "What you get",
+    proof: "Built before for",
+    start: "Start with this kit",
+    noPrice: "No price list: every business is different, so the first step is a short call.",
+    items: {
+      pos: { name: "POS kit", line: "A register your staff learn in a morning, stock that matches the shelf.", weeks: "3 to 5 weeks", includes: ["Point of sale with a cashier queue", "Products, stock and counts", "Receipts printed and on WhatsApp", "Owner dashboard", "Staff training day"] },
+      storefront: { name: "Storefront kit", line: "A shop that sells in two markets and closes on WhatsApp.", weeks: "2 to 4 weeks", includes: ["Catalogue and product pages", "Prices per market, not converted", "Bag to WhatsApp order", "Google Business Profile", "Launch photography direction"] },
+      erp: { name: "Odoo / ERP kit", line: "Recipes, purchasing and stock that reconcile, with workings an auditor can follow.", weeks: "4 to 8 weeks", includes: ["Process mapping on site", "Odoo setup or a custom build", "Bills of materials and unit conversions", "Data migration", "Count sessions and reconciliation"] },
+      analyst: { name: "Analyst kit", line: "A model that shows the downside first, and a deck an investment committee reads.", weeks: "1 to 3 weeks", includes: ["Three-statement model", "Scenario and shock testing", "Covenant and DSCR checks", "Due diligence pack", "Board-ready summary"] },
+      brand: { name: "Brand launch kit", line: "A name, a look and a launch film people want to share.", weeks: "3 to 6 weeks", includes: ["Positioning and naming", "Identity and packaging", "Art-directed photography", "Scroll film and social cuts", "Launch copy"] },
+    } as Record<string, { name: string; line: string; weeks: string; includes: string[] }>,
+  },
+  music: {
+    playing: "Now playing",
+    paused: "Paused",
+    play: "Play",
+    pause: "Pause",
+    pauseTrack: (t: string) => `Pause ${t}`,
+    volume: "Volume",
+    note: "Recorded loops, made for working to. Plays quietly; pause any time from the menu bar.",
+    tracks: {
+      rain: ["Rain on the zinc roof", "Adenta, July"],
+      harmattan: ["Harmattan wind", "December, Accra"],
+      fan: ["Ceiling fan, 2 a.m.", "Deploy night"],
+    } as Record<string, [string, string]>,
+  },
+  finder: {
+    favourites: "Favourites",
+    folders: { desktop: "Desktop", screens: "Screenshots", code: "Code", notes: "Notes", music: "Music", press: "Press kit", kits: "Starter kits" },
+    pressNote: "For anyone writing about my work. Click a file to download it.",
+    pressFiles: ["Everything below in one file", "Bio, work, facts, colours", "Wordmark, vector", "Wordmark, transparent PNG", "One paragraph", "The full story", "Hex values"],
+  },
+  preview: { markup: "Markup" },
+  numbers: { company: "Harmattan Foods Ltd (illustrative) · GHS", balances: "Balance sheet balances", out: "Out of balance", download: "Download .xlsx" },
+  about: { role: "Forward deployed engineer · Accra", experience: "Experience", research: "Research", education: "Education", leadership: "Leadership and programmes", skills: "Skills" },
+  deploy: {
+    nav: "Systems",
+    later: "These run once you are at the desk.",
+    items: {
+      counter: ["Al Boyut register", "Point of sale"],
+      laundry: ["An-Nur counter", "Laundry workflow"],
+      atelier: ["Fashion storefront", "Two markets"],
+      analyst: ["Deal screen", "Finance models"],
+      ledger: ["Delish on Odoo", "Inventory"],
+      court: ["Madina court", "Live scorer"],
+      classroom: ["Kōyi hub", "Exam pathways"],
+    } as Record<string, [string, string]>,
+  },
+  passes: {
+    role: "Role",
+    email: "Email",
+    based: "Based in",
+    raised: "Raised",
+    donors: "Donors",
+    cohort: "Cohort",
+    selected: "1 of 10 selected",
+    faculty: "Faculty",
+    harvard: "Harvard-led",
+    hours: "Hours",
+    hoursValue: "780 of 216 required",
+    year: "Year",
+    colead: "Co-lead",
+    itLead: "IT lead",
+    certs: "Certificates",
+    cohort4: "Cohort 4, 2025",
+    accra: "Accra, GMT+0",
+  },
+  court: {
+    blurb: "Live scoring, court bookings and an open ledger of every cedi raised.",
+    score: "Score a game on the live scorer",
+    open: "Open the project",
+  },
+  deskLabels: { lamp: "Switch the lamp", phone: "Pick up the phone", books: "On the shelf", notebook: "Field notes", device: "The field kit", brand: "Studio work", ball: "Bounce it", mouse: "Drag the mouse", screens: "Into the laptop" } as Record<string, string>,
+  contactRows: { based: "Accra, Ghana (GMT+0)", hours: "09:00 to 17:00, EU and US overlap" },
 };
 
 export type OsText = typeof en;
-type Partial2<T> = { [K in keyof T]?: T[K] extends (...a: never[]) => unknown ? T[K] : T[K] extends object ? Partial2<T[K]> : T[K] };
 
-// French and Arabic are filled in with the translations pass; anything missing falls back to English
-const DICT: Record<string, Partial2<OsText>> = { fr: {}, ar: {} };
-
-function merge<T>(base: T, over?: Partial2<T>): T {
-  if (!over) return base;
-  const out = { ...base } as Record<string, unknown>;
-  for (const [k, v] of Object.entries(over)) {
-    const b = (base as Record<string, unknown>)[k];
-    out[k] = v && typeof v === "object" && b && typeof b === "object" ? merge(b, v as never) : v;
-  }
-  return out as T;
-}
+const DICT: Record<string, OsText> = { en, fr, ar };
 
 export function osText(locale: string): OsText {
-  return merge(en, DICT[locale]);
+  return DICT[locale] ?? en;
 }
 
 export function useOsText(): OsText {
   const locale = useLocale();
   return useMemo(() => osText(locale), [locale]);
+}
+
+/** Arabic reads right to left; the OS chrome stays left to right like a real Mac, the text follows its language. */
+export function useTextDir(): "rtl" | "ltr" {
+  return useLocale() === "ar" ? "rtl" : "ltr";
+}
+
+/** The locale for dates and times: a 24-hour clock everywhere, and Western digits in Arabic like the rest of the site. */
+export function intlLocale(locale: string) {
+  return locale === "ar" ? "ar-u-nu-latn-hc-h23" : locale === "fr" ? "fr-FR" : "en-GB";
 }

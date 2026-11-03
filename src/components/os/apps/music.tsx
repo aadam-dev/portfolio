@@ -1,5 +1,6 @@
 "use client";
 
+import { useOsText } from "../l10n";
 import { useSyncExternalStore } from "react";
 import { TRACKS, type Track } from "../content";
 
@@ -82,15 +83,17 @@ const mmss = (s: number) => (Number.isFinite(s) ? `${Math.floor(s / 60)}:${Strin
 /** In the menu bar: what's playing, and a one-click mute. */
 export function NowPlaying() {
   const s = useMusic();
+  const t = useOsText().music;
+  const [title] = t.tracks[s.track.id] ?? [s.track.title];
   if (!s.playing) return null;
   return (
-    <button onClick={() => music.stopAmbient()} className="hidden items-center gap-1.5 rounded-md px-1.5 text-white/85 hover:bg-white/10 sm:flex" aria-label={`Pause ${s.track.title}`}>
+    <button onClick={() => music.stopAmbient()} className="hidden items-center gap-1.5 rounded-md px-1.5 text-white/85 hover:bg-white/10 sm:flex" aria-label={t.pauseTrack(title)}>
       <span aria-hidden className="flex h-3 items-end gap-[2px]">
         {[0, 1, 2].map((i) => (
           <span key={i} className="w-[2px] animate-pulse rounded-sm bg-white" style={{ height: `${6 + i * 3}px`, animationDelay: `${i * 0.2}s` }} />
         ))}
       </span>
-      <span className="max-w-[140px] truncate">{s.track.title}</span>
+      <span className="max-w-[140px] truncate">{title}</span>
     </button>
   );
 }
@@ -98,6 +101,8 @@ export function NowPlaying() {
 /** Music: three field recordings from Accra, on a loop. */
 export default function MusicApp({ live }: { live: boolean }) {
   const s = useMusic();
+  const t = useOsText().music;
+  const name = (x: Track) => t.tracks[x.id] ?? [x.title, x.artist];
   const tab = live ? 0 : -1;
   return (
     <div className="flex h-full flex-col bg-gradient-to-b from-[#1d1a17] to-[#0e0c0a] p-5 text-white">
@@ -106,16 +111,16 @@ export default function MusicApp({ live }: { live: boolean }) {
           ♪
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] uppercase tracking-[0.16em] text-white/45">{s.playing ? "Now playing" : "Paused"}</p>
-          <p className="mt-1 truncate text-[18px] font-semibold">{s.track.title}</p>
-          <p className="text-[13px] text-white/60">{s.track.artist}</p>
+          <p className="text-[11px] uppercase tracking-[0.16em] text-white/45">{s.playing ? t.playing : t.paused}</p>
+          <p className="mt-1 truncate text-[18px] font-semibold">{name(s.track)[0]}</p>
+          <p className="text-[13px] text-white/60">{name(s.track)[1]}</p>
           <div className="mt-3 flex items-center gap-3">
-            <button tabIndex={tab} onClick={() => music.toggle()} aria-label={s.playing ? "Pause" : "Play"} className="grid h-11 w-11 place-items-center rounded-full bg-white text-[16px] text-black">
+            <button tabIndex={tab} onClick={() => music.toggle()} aria-label={s.playing ? t.pause : t.play} className="grid h-11 w-11 place-items-center rounded-full bg-white text-[16px] text-black">
               {s.playing ? "❚❚" : "▶"}
             </button>
             <label className="flex flex-1 items-center gap-2 text-[12px] text-white/60">
               <span aria-hidden>🔈</span>
-              <input tabIndex={tab} type="range" min={0} max={1} step={0.05} value={s.volume} onChange={(e) => music.volume(Number(e.target.value))} aria-label="Volume" className="w-full accent-white" />
+              <input tabIndex={tab} type="range" min={0} max={1} step={0.05} value={s.volume} onChange={(e) => music.volume(Number(e.target.value))} aria-label={t.volume} className="w-full accent-white" />
             </label>
           </div>
           <div className="mt-2 flex items-center gap-2 font-mono text-[10.5px] text-white/45">
@@ -128,17 +133,17 @@ export default function MusicApp({ live }: { live: boolean }) {
         </div>
       </div>
       <ol className="mt-5 divide-y divide-white/10 rounded-lg border border-white/10">
-        {TRACKS.map((t, i) => (
-          <li key={t.id}>
-            <button tabIndex={tab} onClick={() => music.play(t.id)} className={`flex w-full items-center gap-3 px-3 py-2.5 text-left hover:bg-white/[0.06] ${s.track.id === t.id ? "text-[var(--accent-2)]" : ""}`}>
-              <span className="w-4 font-mono text-[11px] text-white/40">{s.track.id === t.id && s.playing ? "♪" : i + 1}</span>
-              <span className="flex-1 text-[13px]">{t.title}</span>
-              <span className="text-[12px] text-white/45">{t.artist}</span>
+        {TRACKS.map((x, i) => (
+          <li key={x.id}>
+            <button tabIndex={tab} onClick={() => music.play(x.id)} className={`flex w-full items-center gap-3 px-3 py-2.5 text-start hover:bg-white/[0.06] ${s.track.id === x.id ? "text-[var(--accent-2)]" : ""}`}>
+              <span className="w-4 font-mono text-[11px] text-white/40">{s.track.id === x.id && s.playing ? "♪" : i + 1}</span>
+              <span className="flex-1 text-[13px]">{name(x)[0]}</span>
+              <span className="text-[12px] text-white/45">{name(x)[1]}</span>
             </button>
           </li>
         ))}
       </ol>
-      <p className="mt-auto pt-4 text-[11.5px] text-white/40">Recorded loops, made for working to. Plays quietly; pause any time from the menu bar.</p>
+      <p className="mt-auto pt-4 text-[11.5px] text-white/40">{t.note}</p>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useOsText } from "../l10n";
 import { useState, type ReactNode } from "react";
 import { KITS, PRESS_FILES, SHOTS, SNIPPETS, TEXTS, TRACKS, type FileKind } from "../content";
 
@@ -31,19 +32,13 @@ export function FileGlyph({ kind, src, size = 44 }: { kind: FileKind; src?: stri
 }
 
 type Folder = "desktop" | "screens" | "code" | "notes" | "music" | "press" | "kits";
-const FOLDERS: [Folder, string][] = [
-  ["desktop", "Desktop"],
-  ["screens", "Screenshots"],
-  ["code", "Code"],
-  ["notes", "Notes"],
-  ["music", "Music"],
-  ["press", "Press kit"],
-  ["kits", "Starter kits"],
-];
+const FOLDERS: Folder[] = ["desktop", "screens", "code", "notes", "music", "press", "kits"];
 
 /** Finder: every file on the desktop, by folder. Press kit files download. */
 export default function FilesApp({ open, live, start = "desktop" }: { open: OpenFile; live: boolean; start?: Folder }) {
   const [at, setAt] = useState<Folder>(start);
+  const all = useOsText();
+  const t = all.finder;
   const tab = live ? 0 : -1;
   const item = (key: string, name: string, glyph: ReactNode, onOpen?: () => void, href?: string) => {
     const body = (
@@ -66,9 +61,9 @@ export default function FilesApp({ open, live, start = "desktop" }: { open: Open
   const code = SNIPPETS.map((s) => item(s.id, s.name, <FileGlyph kind="code" />, () => open("code", s.id)));
   const notes = TEXTS.map((t) => item(t.id, t.name, <FileGlyph kind="text" />, () => open("text", t.id)));
   const docs = [item("doc", "About.rtf", <FileGlyph kind="doc" />, () => open("doc")), item("sheet", "harmattan-model.xlsx", <FileGlyph kind="sheet" />, () => open("numbers"))];
-  const tracks = TRACKS.map((t) => item(t.id, `${t.title}.mp3`, <span className="grid h-11 w-11 place-items-center rounded-lg text-white" style={{ background: t.tone }}>♪</span>, () => open("music", t.id)));
+  const tracks = TRACKS.map((x) => item(x.id, `${(all.music.tracks[x.id] ?? [x.title])[0]}.mp3`, <span className="grid h-11 w-11 place-items-center rounded-lg text-white" style={{ background: x.tone }}>♪</span>, () => open("music", x.id)));
   const press = PRESS_FILES.map((f) => item(f.name, f.name, <FileGlyph kind={f.kind} src={f.kind === "image" && f.name.endsWith(".png") ? f.href : undefined} />, undefined, f.href));
-  const kits = KITS.map((k) => item(k.id, `${k.name}.kit`, <span className="grid h-11 w-11 place-items-center rounded-xl text-[18px] text-white" style={{ background: k.tone }}>◆</span>, () => open("kits", k.id)));
+  const kits = KITS.map((k) => item(k.id, `${all.kits.items[k.id]?.name ?? k.name}.kit`, <span className="grid h-11 w-11 place-items-center rounded-xl text-[18px] text-white" style={{ background: k.tone }}>◆</span>, () => open("kits", k.id)));
   const view: Record<Folder, ReactNode[]> = {
     desktop: [...docs, ...shots.slice(0, 2), ...code.slice(0, 1), ...notes],
     screens: shots,
@@ -80,16 +75,16 @@ export default function FilesApp({ open, live, start = "desktop" }: { open: Open
   };
   return (
     <div className="flex h-full">
-      <nav aria-label="Folders" className="w-[150px] shrink-0 space-y-0.5 border-r border-white/10 bg-white/[0.03] p-2 text-[12.5px]">
-        <p className="px-2 pb-1 pt-1 text-[10.5px] uppercase tracking-[0.14em] text-white/40">Favourites</p>
-        {FOLDERS.map(([id, label]) => (
+      <nav aria-label={t.favourites} className="w-[150px] shrink-0 space-y-0.5 border-r border-white/10 bg-white/[0.03] p-2 text-[12.5px]">
+        <p className="px-2 pb-1 pt-1 text-[10.5px] uppercase tracking-[0.14em] text-white/40">{t.favourites}</p>
+        {FOLDERS.map((id) => (
           <button key={id} tabIndex={tab} onClick={() => setAt(id)} aria-current={at === id} className={`block w-full rounded-md px-2 py-1.5 text-left ${at === id ? "bg-white/15 text-white" : "text-white/70 hover:bg-white/[0.06]"}`}>
-            {label}
+            {t.folders[id]}
           </button>
         ))}
       </nav>
       <div className="min-w-0 flex-1 p-3">
-        {at === "press" && <p className="mb-2 px-1 text-[12px] text-white/55">For anyone writing about my work. Click a file to download it.</p>}
+        {at === "press" && <p className="mb-2 px-1 text-[12px] text-white/55">{t.pressNote}</p>}
         <div className="flex flex-wrap content-start gap-1">{view[at]}</div>
       </div>
     </div>

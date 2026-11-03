@@ -1,5 +1,6 @@
 "use client";
 
+import { useOsText, useTextDir } from "../l10n";
 import { useCallback, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 
 /** Window geometry and state, in % of the desktop so it survives resizes. */
@@ -49,6 +50,7 @@ export function Window<T extends WinFrame>({
   /** "light" for paper apps (TextEdit, Numbers, Stickies-like) */
   tone?: "dark" | "light";
 }) {
+  const dir = useTextDir();
   const drag = useRef<{ sx: number; sy: number; x: number; y: number } | null>(null);
   const focus = useCallback(() => update({ z: nextZ() } as Partial<T>), [update]);
   // a narrow desktop opens every window full size; the observer also catches resizes
@@ -113,7 +115,7 @@ export function Window<T extends WinFrame>({
         </span>
         {toolbar && <div className="ml-auto flex items-center gap-1">{toolbar}</div>}
       </header>
-      <div className="relative min-h-0 flex-1 overflow-auto" data-lenis-prevent>
+      <div dir={dir} className="relative min-h-0 flex-1 overflow-auto" data-lenis-prevent>
         {children}
       </div>
     </section>
@@ -121,17 +123,18 @@ export function Window<T extends WinFrame>({
 }
 
 export function TrafficLights({ title, tab, dim, onClose, onMin, onMax, max }: { title: string; tab: number; dim?: boolean; onClose: () => void; onMin: () => void; onMax: () => void; max: boolean }) {
+  const t = useOsText().os;
   const dot = "group/tl relative grid h-3 w-3 place-items-center rounded-full ring-1 ring-black/25";
   const glyph = "pointer-events-none text-[8px] font-bold leading-none text-black/60 opacity-0 group-hover/tls:opacity-100";
   return (
     <div className="group/tls flex items-center gap-2">
-      <button tabIndex={tab} onClick={onClose} aria-label={`Close ${title}`} className={`${dot} ${dim ? "bg-white/25" : "bg-[#ff5f57]"}`}>
+      <button tabIndex={tab} onClick={onClose} aria-label={t.close(title)} className={`${dot} ${dim ? "bg-white/25" : "bg-[#ff5f57]"}`}>
         <span className={glyph}>×</span>
       </button>
-      <button tabIndex={tab} onClick={onMin} aria-label={`Minimise ${title}`} className={`${dot} ${dim ? "bg-white/25" : "bg-[#febc2e]"}`}>
+      <button tabIndex={tab} onClick={onMin} aria-label={t.minimise(title)} className={`${dot} ${dim ? "bg-white/25" : "bg-[#febc2e]"}`}>
         <span className={glyph}>−</span>
       </button>
-      <button tabIndex={tab} onClick={onMax} aria-label={max ? `Restore ${title}` : `Maximise ${title}`} className={`${dot} ${dim ? "bg-white/25" : "bg-[#28c840]"}`}>
+      <button tabIndex={tab} onClick={onMax} aria-label={max ? t.restore(title) : t.maximise(title)} className={`${dot} ${dim ? "bg-white/25" : "bg-[#28c840]"}`}>
         <span className={glyph}>+</span>
       </button>
     </div>

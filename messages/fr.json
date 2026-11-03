@@ -40,7 +40,7 @@
     "headingAccent": "zéro template",
     "filterAll": "Tous",
     "title": "Travaux",
-    "sub": "{count} projects from 2022 to 2026: point of sale and back offices, storefronts, learning platforms and sites. Open one for the case study."
+    "sub": "{count} projets de 2022 à 2026 : caisses et back-offices, boutiques en ligne, plateformes d'apprentissage et sites. Ouvrez-en un pour l'étude de cas."
   },
   "flagship": {
     "eyebrow": "Projets phares · 01/0{count}",
@@ -60,7 +60,7 @@
     "eyebrow": "Impact · 2022 à 2026",
     "heading": "Des chiffres qui",
     "headingAccent": "parlent d'eux-mêmes.",
-    "fellowships": "Fellowships"
+    "fellowships": "Programmes"
   },
   "range": {
     "eyebrow": "Étendue"

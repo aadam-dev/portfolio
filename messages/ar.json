@@ -10,9 +10,9 @@
     "email": "البريد الإلكتروني",
     "openMenu": "فتح القائمة",
     "closeMenu": "إغلاق القائمة",
-    "deployments": "Deployments",
-    "build": "Build",
-    "buildWithMe": "Build with me",
+    "deployments": "عمليات النشر",
+    "build": "ابنِ",
+    "buildWithMe": "ابنِ معي",
     "lab": "المختبر",
     "about": "نبذة",
     "soundOn": "تشغيل الصوت",
@@ -40,7 +40,7 @@
     "headingAccent": "بدون قوالب جاهزة",
     "filterAll": "الكل",
     "title": "الأعمال",
-    "sub": "{count} projects from 2022 to 2026: point of sale and back offices, storefronts, learning platforms and sites. Open one for the case study."
+    "sub": "{count} مشروعًا من 2022 إلى 2026: أنظمة نقاط بيع وإدارة خلفية، ومتاجر إلكترونية، ومنصات تعليمية ومواقع. افتح أيًّا منها لدراسة الحالة."
   },
   "flagship": {
     "eyebrow": "أعمال مختارة · 01/0{count}",
@@ -101,7 +101,7 @@
   "cta": {
     "whatsapp": "واتساب",
     "startProject": "ابدأ مشروعًا",
-    "buildWithMe": "Build with me"
+    "buildWithMe": "ابدأ مشروعًا"
   },
   "form": {
     "title": "أو أرسل تفاصيل مشروعك الآن",

@@ -3,13 +3,12 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import Nav from "@/components/site/Nav";
 import Footer from "@/components/site/Footer";
-import { EDUCATION, EXPERIENCE, LEADERSHIP, RESEARCH, SKILLS } from "@/lib/about";
+import { getLocale } from "next-intl/server";
+import { aboutFor } from "@/lib/about";
 
-export const metadata: Metadata = {
-  title: "About Aadam",
-  description:
-    "Software engineer and analyst in Accra. Mathematics at UMaT, IT at IOU, three years of PE and VC analysis, now building operating systems for 17 businesses.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return aboutFor(await getLocale()).meta;
+}
 
 function H2({ children, id }: { children: React.ReactNode; id: string }) {
   return (
@@ -19,7 +18,8 @@ function H2({ children, id }: { children: React.ReactNode; id: string }) {
   );
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const { ui, ABOUT_INTRO, ABOUT_FACTS, EDUCATION, EXPERIENCE, LEADERSHIP, RESEARCH, SKILLS } = aboutFor(await getLocale());
   return (
     <>
       <Nav />
@@ -30,30 +30,25 @@ export default function AboutPage() {
           </h1>
           <div className="mt-8 grid grid-cols-1 md:grid-cols-12 gap-8">
             <div className="md:col-span-7 space-y-4 text-[17px] md:text-[18px] leading-[1.65] text-[var(--ink-2)] text-pretty">
-              <p>
-                I&apos;m a software engineer and analyst in Accra. I studied mathematics, spent three years evaluating businesses for investors, and now build the systems those businesses run on.
-              </p>
-              <p>
-                The studio is me. You work with one person who can read the books, map the stockroom, write the code and stay for the stock count.
-              </p>
+              {ABOUT_INTRO.map((p) => (
+                <p key={p.slice(0, 24)}>{p}</p>
+              ))}
             </div>
             <dl className="md:col-span-4 md:col-start-9 grid grid-cols-2 md:grid-cols-1 gap-4 text-[14px]">
+              {ABOUT_FACTS.slice(0, 2).map(([k, v]) => (
+                <div key={k}>
+                  <dt className="text-[var(--ink-3)]">{k}</dt>
+                  <dd className="text-white">{v}</dd>
+                </div>
+              ))}
               <div>
-                <dt className="text-[var(--ink-3)]">Based in</dt>
-                <dd className="text-white">Accra, GMT</dd>
-              </div>
-              <div>
-                <dt className="text-[var(--ink-3)]">Businesses on my systems</dt>
-                <dd className="text-white">17, seven end to end</dd>
-              </div>
-              <div>
-                <dt className="text-[var(--ink-3)]">Email</dt>
+                <dt className="text-[var(--ink-3)]">{ABOUT_FACTS[2][0]}</dt>
                 <dd>
                   <a href="mailto:adam@aadambuilds.dev" className="text-white underline underline-offset-4">adam@aadambuilds.dev</a>
                 </dd>
               </div>
               <div>
-                <dt className="text-[var(--ink-3)]">Elsewhere</dt>
+                <dt className="text-[var(--ink-3)]">{ui.elsewhere}</dt>
                 <dd className="flex gap-3">
                   <a href="https://linkedin.com/in/aadamsays" target="_blank" rel="noreferrer" className="hit text-white underline underline-offset-4">LinkedIn</a>
                   <a href="https://github.com/aadam-dev" target="_blank" rel="noreferrer" className="hit text-white underline underline-offset-4">GitHub</a>
@@ -62,14 +57,8 @@ export default function AboutPage() {
             </dl>
           </div>
 
-          <nav aria-label="On this page" className="mt-12 flex flex-wrap gap-2 text-[13px]">
-            {[
-              ["experience", "Experience"],
-              ["research", "Research"],
-              ["education", "Education"],
-              ["leadership", "Leadership"],
-              ["skills", "Skills"],
-            ].map(([id, label]) => (
+          <nav aria-label={ui.onThisPage} className="mt-12 flex flex-wrap gap-2 text-[13px]">
+            {(["experience", "research", "education", "leadership", "skills"] as const).map((id) => [id, ui.sections[id]]).map(([id, label]) => (
               <a key={id} href={`#${id}`} className="pill">
                 {label}
               </a>
@@ -77,7 +66,7 @@ export default function AboutPage() {
           </nav>
 
           <section aria-labelledby="experience" className="mt-16 scroll-mt-28">
-            <H2 id="experience">Experience</H2>
+            <H2 id="experience">{ui.sections.experience}</H2>
             <ol className="mt-6 border-l border-[var(--line-strong)]">
               {EXPERIENCE.map((x) => (
                 <li key={x.role + x.when} className="relative pl-6 pb-9 last:pb-0">
@@ -97,7 +86,7 @@ export default function AboutPage() {
           </section>
 
           <section aria-labelledby="research" className="mt-20 scroll-mt-28">
-            <H2 id="research">Research</H2>
+            <H2 id="research">{ui.sections.research}</H2>
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               {RESEARCH.map((r) => (
                 <article key={r.title} className="card card-pad">
@@ -115,7 +104,7 @@ export default function AboutPage() {
           </section>
 
           <section aria-labelledby="education" className="mt-20 scroll-mt-28">
-            <H2 id="education">Education</H2>
+            <H2 id="education">{ui.sections.education}</H2>
             <ul className="mt-6 divide-y divide-[var(--line)] border-y border-[var(--line)]">
               {EDUCATION.map((e) => (
                 <li key={e.title} className="grid grid-cols-1 md:grid-cols-[160px_minmax(0,1fr)] gap-2 py-5">
@@ -131,7 +120,7 @@ export default function AboutPage() {
           </section>
 
           <section aria-labelledby="leadership" className="mt-20 scroll-mt-28">
-            <H2 id="leadership">Leadership, volunteering and programmes</H2>
+            <H2 id="leadership">{ui.sections.leadershipLong}</H2>
             <ul className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4 text-[15px] leading-relaxed text-[var(--ink-2)]">
               {LEADERSHIP.map((l) => (
                 <li key={l} className="pl-4 border-l-2 border-[var(--line-strong)]">
@@ -142,7 +131,7 @@ export default function AboutPage() {
           </section>
 
           <section aria-labelledby="skills" className="mt-20 scroll-mt-28">
-            <H2 id="skills">Skills</H2>
+            <H2 id="skills">{ui.sections.skills}</H2>
             <dl className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
               {SKILLS.map((s) => (
                 <div key={s.group}>
@@ -155,15 +144,15 @@ export default function AboutPage() {
 
           <section className="card mt-20 p-6 md:p-8 md:!flex-row md:items-center justify-between gap-5">
             <div>
-              <p className="card-title">Hiring, or need the full CV?</p>
-              <p className="mt-1 text-[15px] text-[var(--ink-2)]">I send the CV on request, usually the same day.</p>
+              <p className="card-title">{ui.cvTitle}</p>
+              <p className="mt-1 text-[15px] text-[var(--ink-2)]">{ui.cvBody}</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <a href="mailto:adam@aadambuilds.dev?subject=CV%20request" className="btn btn-solid">
-                Ask for the CV
+                {ui.askCv}
               </a>
               <Link href="/#build" className="btn btn-line">
-                Hire Aadam
+                {ui.hire}
               </Link>
             </div>
           </section>

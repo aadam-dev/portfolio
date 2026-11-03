@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocale } from "next-intl";
 import { visitSession } from "@/components/site/Tracker";
-import { useOsText } from "../l10n";
+import { useOsText, intlLocale } from "../l10n";
 import { myPhotos, shrink } from "./store";
 
 type Stage = "intro" | "live" | "review" | "sending";
@@ -22,7 +22,7 @@ export default function CameraApp({ onSaved }: { onSaved: () => void }) {
   const video = useRef<HTMLVideoElement>(null);
   const stream = useRef<MediaStream | null>(null);
   const picker = useRef<HTMLInputElement>(null);
-  const stamp = () => t.stamp(new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric" }).format(new Date()));
+  const stamp = () => t.stamp(new Intl.DateTimeFormat(intlLocale(locale), { day: "numeric", month: "short", year: "numeric" }).format(new Date()));
 
   const stop = () => {
     stream.current?.getTracks().forEach((tr) => tr.stop());
