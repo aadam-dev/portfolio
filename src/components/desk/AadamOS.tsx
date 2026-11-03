@@ -19,6 +19,8 @@ export interface Win {
   z: number;
   tab: Tab;
   max?: boolean;
+  /** minimised to the dock: kept, but hidden until reopened */
+  min?: boolean;
 }
 
 export interface OSProps {
@@ -46,7 +48,7 @@ export function openWindow(setWindows: OSProps["setWindows"], kind: Kind, slug?:
     const id = kind === "project" ? `p:${slug}` : kind;
     const found = ws.find((w) => w.id === id);
     zTop += 1;
-    if (found) return ws.map((w) => (w.id === id ? { ...w, z: zTop, tab: kind === "project" ? tab : w.tab } : w));
+    if (found) return ws.map((w) => (w.id === id ? { ...w, z: zTop, min: false, tab: kind === "project" && tab !== "overview" ? tab : w.tab } : w));
     const n = ws.length;
     return [...ws, { id, kind, slug, tab, x: 14 + ((n * 5) % 24), y: 9 + ((n * 4) % 18), z: zTop }];
   });
@@ -58,9 +60,9 @@ export default function AadamOS({ mode, windows, setWindows, onExit }: OSProps) 
   const flat = mode === "flat";
   const apps = useMemo(() => dockProjects(), []);
   const desk = useRef<HTMLDivElement>(null);
-  const top = windows.reduce<Win | null>((a, w) => (!a || w.z > a.z ? w : a), null);
+  const top = windows.filter((w) => !w.min).reduce<Win | null>((a, w) => (!a || w.z > a.z ? w : a), null);
 
-  // Esc closes the front window, then leaves the OS
+  // Esc closes the front window, then goes back to the desk
   useEffect(() => {
     if (!flat) return;
     const onKey = (e: KeyboardEvent) => {
@@ -76,7 +78,7 @@ export default function AadamOS({ mode, windows, setWindows, onExit }: OSProps) 
     <div
       className="aos theme-fixed relative h-full w-full select-none overflow-hidden text-[13px] text-white"
       style={{ fontFamily: "var(--font-sans)", pointerEvents: flat ? "auto" : "none" }}
-      role={flat ? "application" : undefined}
+      role={flat ? "region" : undefined}
       aria-label={flat ? "Aadam OS, an interactive desktop of projects" : undefined}
       aria-hidden={flat ? undefined : true}
     >
@@ -134,8 +136,8 @@ function MenuBar({ flat, onExit }: { flat: boolean; onExit?: () => void }) {
         </span>
         <span className="tabular-nums">Accra · {now}</span>
         {flat && onExit && (
-          <button onClick={onExit} className="rounded-md bg-white/10 px-2.5 py-0.5 text-[12px] hover:bg-white/20" aria-label="Leave Aadam OS">
-            Exit ⎋
+          <button onClick={onExit} className="rounded-md bg-white/10 px-2.5 py-0.5 text-[12px] hover:bg-white/20">
+            Back to the desk <span aria-hidden>⎋</span>
           </button>
         )}
       </div>
@@ -247,6 +249,7 @@ function Window({ w, desk, setWindows, flat, focused }: { w: Win; desk: React.Re
 
   return (
     <section
+      hidden={w.min}
       onPointerDown={focus}
       className="absolute flex flex-col overflow-hidden rounded-xl border border-white/15 bg-[#14110e]/90 shadow-[0_30px_80px_rgba(0,0,0,0.55)] backdrop-blur-2xl [animation:aos-pop_.32s_cubic-bezier(.22,1,.36,1)_both]"
       style={
@@ -255,12 +258,11 @@ function Window({ w, desk, setWindows, flat, focused }: { w: Win; desk: React.Re
           : { left: `${w.x}%`, top: `${w.y}%`, width: "min(62%, 860px)", height: "min(82%, 600px)", zIndex: w.z }
       }
       aria-label={title}
-      role={flat ? "dialog" : undefined}
     >
       {/* title bar */}
       <header onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onDoubleClick={() => update({ max: !w.max })} className={`flex h-10 shrink-0 items-center gap-2 border-b border-white/10 px-3 ${flat && !w.max ? "cursor-grab active:cursor-grabbing" : ""} ${focused ? "bg-white/[0.06]" : ""}`}>
         <button tabIndex={flat ? 0 : -1} onClick={close} aria-label={`Close ${title}`} className="h-3 w-3 rounded-full bg-[#ff5f57] ring-1 ring-black/20" />
-        <button tabIndex={flat ? 0 : -1} onClick={close} aria-label="Minimise" className="h-3 w-3 rounded-full bg-[#febc2e] ring-1 ring-black/20" />
+        <button tabIndex={flat ? 0 : -1} onClick={() => update({ min: true })} aria-label={`Minimise ${title}`} className="h-3 w-3 rounded-full bg-[#febc2e] ring-1 ring-black/20" />
         <button tabIndex={flat ? 0 : -1} onClick={() => update({ max: !w.max })} aria-label={w.max ? "Restore" : "Maximise"} className="h-3 w-3 rounded-full bg-[#28c840] ring-1 ring-black/20" />
         <span className="ml-2 truncate text-[12px] font-medium text-white/80">{title}</span>
       </header>
@@ -317,7 +319,13 @@ function ProjectApp({ p, tab, setTab, flat }: { p: Project; tab: Tab; setTab: (t
 
       {tab === "walkthrough" && walk && (
         <div className="h-full bg-black">
-          <video data-os-video src={walk.src} poster={walk.poster} autoPlay muted loop playsInline controls={flat} className="h-full w-full object-contain" />
+          {flat ? (
+            <video data-os-video src={walk.src} poster={walk.poster} autoPlay muted loop playsInline controls preload="metadata" className="h-full w-full object-contain" />
+          ) : (
+            // on the laptop screen a still stands in; the film only loads once the OS is open
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={walk.poster ?? thumb(p)} alt="" className="h-full w-full object-contain" />
+          )}
         </div>
       )}
 

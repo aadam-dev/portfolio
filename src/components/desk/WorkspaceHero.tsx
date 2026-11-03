@@ -9,7 +9,8 @@ import PhoneOS from "./PhoneOS";
 import { quadMatrix, type Quad } from "./quad";
 import { PLATE, SCREENS, STOPS, type Stop } from "./objects";
 import { setTheme, useTheme } from "@/components/fieldkit/useTheme";
-import { scrollToElement } from "@/lib/scroll";
+import { scrollToElement, scrollToY } from "@/lib/scroll";
+import { useDialog } from "@/lib/useDialog";
 
 const OS_W = 1600;
 const OS_H = 1000;
@@ -32,8 +33,27 @@ export default function WorkspaceHero() {
   const reduced = useReducedMotion();
   const wide = useMediaQuery("(pointer: fine) and (min-width: 1024px)");
   const immersive = wide === null ? null : wide && !reduced;
-  if (immersive === null) return <section id="desk" className="h-[100svh]" aria-hidden />;
+  if (immersive === null) return <Poster />;
   return immersive ? <Tour /> : <Stacked />;
+}
+
+/** Server render and first paint: the desk and the headline, so the h1 exists before scripts run. */
+function Poster() {
+  return (
+    <section id="desk" aria-label="Aadam's workspace" className="relative h-[100svh] overflow-hidden bg-[#1a120b]">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={PLATE.src} alt="" className="absolute inset-0 h-full w-full object-cover object-[50%_40%]" fetchPriority="high" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent lg:bg-gradient-to-r lg:from-black/55 lg:via-black/10" />
+      <div className="theme-fixed absolute inset-x-0 bottom-0 mx-auto max-w-[1280px] px-5 pb-10 lg:inset-y-0 lg:flex lg:items-center lg:px-6 lg:pb-0">
+        <div className="max-w-[540px]">
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent-2)]">{STOPS[0].eyebrow}</p>
+          <h1 className="mt-3 font-display text-[clamp(30px,3.6vw,56px)] leading-[1.02] text-white text-balance" style={{ letterSpacing: "-0.03em" }}>
+            {STOPS[0].title}
+          </h1>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 /* ================================================================== tour */
@@ -47,10 +67,12 @@ function Tour() {
   const inserts = useRef<(HTMLDivElement | null)[]>([]);
   const knob = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  // furthest chapter reached, so a close-up stays loaded once fetched
+  const [seen, setSeen] = useState(0);
   const [landed, setLanded] = useState(false);
   const [phone, setPhone] = useState(false);
   const theme = useTheme();
-  const [windows, setWindows] = useState<Win[]>([{ id: "p:bloom-boba", kind: "project", slug: "bloom-boba", x: 22, y: 8, z: 10, tab: "walkthrough" }]);
+  const [windows, setWindows] = useState<Win[]>([{ id: "p:bloom-boba", kind: "project", slug: "bloom-boba", x: 22, y: 8, z: 10, tab: "overview" }]);
   const setW = useCallback((fn: (w: Win[]) => Win[]) => setWindows(fn), []);
 
   /** plate cover-fit inside the stage */
@@ -87,7 +109,8 @@ function Tour() {
       const bh = (y1 - y0) * g.ph;
       const cx = g.pl + ((x0 + x1) / 2) * g.pw;
       const cy = g.pt + ((y0 + y1) / 2) * g.ph;
-      const s = clamp(Math.min((g.H * 0.5) / bh, (g.W * 0.36) / bw), 1.2, 3.4);
+      // the plate is 1536 px wide: past about 2x it goes soft, so closer looks cut to the insert photos
+      const s = clamp(Math.min((g.H * 0.5) / bh, (g.W * 0.36) / bw), 1.2, 2.1);
       const targetX = st.copy === "left" ? g.W * 0.68 : g.W * 0.32;
       return { s, tx: targetX - cx * s, ty: g.H * 0.52 - cy * s };
     },
@@ -114,6 +137,7 @@ function Tour() {
       // the chapter on screen = the stop we're holding at (or arriving at)
       const cur = done ? N - 1 : travel > 0.6 ? i + 1 : i;
       setActive((v) => (v === cur ? v : cur));
+      setSeen((v) => (cur > v ? cur : v));
 
       // close-up inserts: cut in while holding, out before travelling
       inserts.current.forEach((el, k) => {
@@ -187,7 +211,7 @@ function Tour() {
     if (!el) return;
     const len = el.offsetHeight - window.innerHeight;
     const p = i === N - 1 ? LAND + 0.03 : stopAt(i) + (LAND / (N - 1)) * 0.15;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + len * p, behavior: "smooth" });
+    scrollToY(el.getBoundingClientRect().top + window.scrollY + len * p);
   };
 
   const run = (st: Stop, e?: React.MouseEvent) => {
@@ -202,10 +226,9 @@ function Tour() {
     }
   };
 
-  const exitOS = () => {
-    const next = track.current?.nextElementSibling as HTMLElement | null;
-    if (next) scrollToElement(next);
-  };
+  // Esc or "Back to the desk": the camera pulls back out of the laptop
+  const exitOS = () => goTo(N - 2);
+  const closePhone = useCallback(() => setPhone(false), []);
 
   const night = theme === "dark";
 
@@ -229,7 +252,7 @@ function Tour() {
           <CodeScreen />
         </div>
         <div ref={(el) => { screens.current.right = el; }} className="absolute left-0 top-0 origin-top-left overflow-hidden bg-black" style={{ width: SIDE_W, height: SIDE_H }} aria-hidden>
-          <video src="/walkthroughs/primetijara-ops.mp4" muted loop autoPlay playsInline className="h-full w-full object-cover" />
+          <video src="/desk/screen-primetijara.mp4" poster="/desk/screen-primetijara.webp" muted loop autoPlay playsInline preload="none" className="h-full w-full object-cover object-top" />
         </div>
         <div ref={(el) => { screens.current.center = el; }} className="absolute left-0 top-0 origin-top-left overflow-hidden" style={{ width: OS_W, height: OS_H, zIndex: 3, borderRadius: landed ? 0 : 4 }}>
           <AadamOS mode={landed ? "flat" : "projected"} windows={windows} setWindows={setW} onExit={exitOS} />
@@ -240,8 +263,9 @@ function Tour() {
         {STOPS.map((st, k) =>
           st.insert ? (
             <div key={st.id} ref={(el) => { inserts.current[k] = el; }} aria-hidden className="pointer-events-none absolute inset-0 z-[5] opacity-0 will-change-[opacity,transform]">
+              {/* each close-up loads once its chapter is next, not with the page */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={st.insert} alt="" className="h-full w-full object-cover" loading="lazy" />
+              {k <= seen + 1 && <img src={st.insert} alt="" className="h-full w-full object-cover" />}
               <div className="absolute inset-0 transition-opacity duration-700" style={{ background: "rgba(8,10,22,0.55)", mixBlendMode: "multiply", opacity: night ? 1 : 0 }} />
               <div className={`absolute inset-0 ${st.copy === "left" ? "bg-gradient-to-r" : "bg-gradient-to-l"} from-black/65 via-black/20 to-transparent`} />
             </div>
@@ -266,7 +290,7 @@ function Tour() {
             <ol className="flex justify-between gap-2">
               {STOPS.map((st, k) => (
                 <li key={st.id}>
-                  <button onClick={() => goTo(k)} className="font-mono text-[10.5px] uppercase tracking-[0.16em] transition-colors" style={{ color: active === k ? "#fff" : "rgba(255,255,255,.45)" }}>
+                  <button onClick={() => goTo(k)} aria-label={`${String(k).padStart(2, "0")} ${st.label}`} aria-current={active === k ? "step" : undefined} className="font-mono text-[10.5px] uppercase tracking-[0.16em] transition-colors" style={{ color: active === k ? "#fff" : "rgba(255,255,255,.45)" }}>
                     <span className="text-[var(--accent)]">{String(k).padStart(2, "0")}</span> <span className="hidden xl:inline">{st.label}</span>
                   </button>
                 </li>
@@ -275,7 +299,7 @@ function Tour() {
           </div>
         )}
       </div>
-      {phone && <PhoneOS onClose={() => setPhone(false)} />}
+      {phone && <PhoneOS onClose={closePhone} />}
     </section>
   );
 }
@@ -331,8 +355,9 @@ function ChapterCard({ st, k, on, onAction, night }: { st: Stop; k: number; on: 
   return (
     <div
       className={`theme-fixed absolute inset-y-0 z-[7] flex w-full max-w-[1280px] items-center px-6 ${right ? "justify-end" : "justify-start"} left-1/2 -translate-x-1/2`}
-      style={{ pointerEvents: on ? "none" : "none" }}
+      style={{ pointerEvents: "none" }}
       aria-hidden={!on}
+      inert={!on}
     >
       <div
         className={`max-w-[540px] rounded-2xl border border-white/10 bg-black/40 p-7 backdrop-blur-md transition-[opacity,transform,filter] duration-700`}
@@ -412,7 +437,9 @@ function Stacked() {
   const theme = useTheme();
   const [phone, setPhone] = useState(false);
   const [os, setOs] = useState(false);
-  const [windows, setWindows] = useState<Win[]>([{ id: "p:bloom-boba", kind: "project", slug: "bloom-boba", x: 22, y: 8, z: 10, tab: "walkthrough" }]);
+  const closePhone = useCallback(() => setPhone(false), []);
+  const closeOs = useCallback(() => setOs(false), []);
+  const [windows, setWindows] = useState<Win[]>([{ id: "p:bloom-boba", kind: "project", slug: "bloom-boba", x: 22, y: 8, z: 10, tab: "overview" }]);
   const setW = useCallback((fn: (w: Win[]) => Win[]) => setWindows(fn), []);
   const act = (st: Stop, e: React.MouseEvent) => {
     const a = st.action;
@@ -467,13 +494,21 @@ function Stacked() {
           </article>
         ))}
       </div>
-      {phone && <PhoneOS onClose={() => setPhone(false)} />}
-      {os && (
-        <div className="fixed inset-0 z-[95] bg-black" role="dialog" aria-modal="true" aria-label="Aadam OS">
-          <AadamOS mode="flat" windows={windows} setWindows={setW} onExit={() => setOs(false)} />
-        </div>
-      )}
+      {phone && <PhoneOS onClose={closePhone} />}
+      {os && <OSDialog windows={windows} setWindows={setW} onClose={closeOs} />}
     </section>
+  );
+}
+
+/** Aadam OS full screen, for touch and reduced motion. */
+function OSDialog({ windows, setWindows, onClose }: { windows: Win[]; setWindows: (fn: (w: Win[]) => Win[]) => void; onClose: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  // AadamOS handles Esc itself (front window first, then out), so the dialog only traps focus
+  useDialog(ref, () => {});
+  return (
+    <div ref={ref} className="fixed inset-0 z-[95] bg-black" role="dialog" aria-modal="true" aria-label="Aadam OS">
+      <AadamOS mode="flat" windows={windows} setWindows={setWindows} onExit={onClose} />
+    </div>
   );
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import InViewVideo from "@/components/ui/InViewVideo";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
@@ -40,7 +41,8 @@ const CARDS = [
     line: "Scroll films, product videos and walkthrough reels.",
     body: "Every build ships with motion: a recorded walkthrough, a scroll-scrubbed film or a short launch reel cut for socials. Silent by default, sharp at any size.",
     steps: ["Scroll films", "Product video", "Walkthrough reels", "Social cuts"],
-    video: "/walkthroughs/bloom-boba.mp4",
+    video: "/studio/bloom-film-loop.mp4",
+    poster: "/studio/bloom-film-loop.webp",
     media: [],
     links: [{ label: "Watch the boba film", href: "/work/bloom-boba#walkthrough" }],
     tone: "#1c1712",
@@ -136,7 +138,7 @@ export default function Studio() {
                 {/* media */}
                 <div className="relative min-h-[300px] overflow-hidden">
                   {"video" in c ? (
-                    <video src={c.video} muted loop autoPlay playsInline className="absolute inset-0 h-full w-full object-cover" />
+                    <InViewVideo src={c.video} poster={c.poster} className="absolute inset-0 h-full w-full object-cover" />
                   ) : c.media.length ? (
                     <div className={`absolute inset-0 grid gap-1 ${c.media.length === 3 ? "grid-cols-2 grid-rows-2" : "grid-cols-1 grid-rows-2"}`}>
                       {c.media.map((m, k) => (

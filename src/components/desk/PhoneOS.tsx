@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { findProject } from "@/lib/projects";
 import { SERVICES } from "@/lib/services";
+import { useDialog } from "@/lib/useDialog";
 
 type App = "home" | "bloom" | "safari" | "alboyut" | "court" | "notes";
 
@@ -14,6 +15,14 @@ type App = "home" | "bloom" | "safari" | "alboyut" | "court" | "notes";
 export default function PhoneOS({ onClose }: { onClose: () => void }) {
   const [app, setApp] = useState<App>("home");
   const [time, setTime] = useState("");
+  const root = useRef<HTMLDivElement>(null);
+  // Esc closes the open app first, then puts the phone down
+  const appRef = useRef(app);
+  useEffect(() => {
+    appRef.current = app;
+  }, [app]);
+  const onEscape = useCallback(() => (appRef.current === "home" ? onClose() : setApp("home")), [onClose]);
+  useDialog(root, onEscape);
   const alboyut = findProject("al-boyut");
   const court = findProject("madinabasketball");
 
@@ -21,17 +30,8 @@ export default function PhoneOS({ onClose }: { onClose: () => void }) {
     const fmt = () => setTime(new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Africa/Accra" }).format(new Date()));
     fmt();
     const t = setInterval(fmt, 20000);
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setApp((a) => (a === "home" ? (onClose(), a) : "home"));
-    };
-    window.addEventListener("keydown", onKey);
-    document.documentElement.style.overflow = "hidden";
-    return () => {
-      clearInterval(t);
-      window.removeEventListener("keydown", onKey);
-      document.documentElement.style.overflow = "";
-    };
-  }, [onClose]);
+    return () => clearInterval(t);
+  }, []);
 
   const apps: { id: App | "mail" | "whatsapp"; name: string; icon: string; bg?: string; href?: string }[] = [
     { id: "bloom", name: "Bloom Boba", icon: "/studio/bloom-builder-taro.webp" },
@@ -44,8 +44,8 @@ export default function PhoneOS({ onClose }: { onClose: () => void }) {
   ];
 
   return (
-    <div className="theme-fixed fixed inset-0 z-[95] flex items-center justify-center bg-black/70 backdrop-blur-md [animation:aos-pop_.4s_cubic-bezier(.22,1,.36,1)_both]" role="dialog" aria-modal="true" aria-label="Aadam's phone">
-      <button onClick={onClose} className="absolute right-5 top-5 rounded-full bg-white/10 px-4 py-2 text-[13px] text-white hover:bg-white/20">
+    <div ref={root} className="theme-fixed fixed inset-0 z-[95] flex items-center justify-center bg-black/70 backdrop-blur-md [animation:aos-pop_.4s_cubic-bezier(.22,1,.36,1)_both]" role="dialog" aria-modal="true" aria-label="Aadam's phone">
+      <button onClick={onClose} data-autofocus className="absolute right-5 top-5 rounded-full bg-white/10 px-4 py-2 text-[13px] text-white hover:bg-white/20">
         Put it down ✕
       </button>
 
@@ -112,12 +112,19 @@ export default function PhoneOS({ onClose }: { onClose: () => void }) {
 
           {app === "bloom" && (
             <Screen title="Bloom Boba" onHome={() => setApp("home")}>
-              <video src="/walkthroughs/bloom-boba-mobile.mp4" autoPlay muted loop playsInline className="h-full w-full object-cover" />
+              <video src="/walkthroughs/bloom-boba-mobile.mp4" autoPlay muted loop playsInline preload="metadata" className="h-full w-full object-cover" />
             </Screen>
           )}
           {app === "safari" && (
             <Screen title="bloom-boba.vercel.app" onHome={() => setApp("home")}>
-              <iframe src="https://bloom-boba.vercel.app" title="Bloom Boba, live" className="h-full w-full border-0 bg-black" />
+              <iframe
+                src="https://bloom-boba.vercel.app"
+                title="Bloom Boba, live"
+                sandbox="allow-scripts allow-same-origin allow-popups"
+                referrerPolicy="no-referrer"
+                loading="lazy"
+                className="h-full w-full border-0 bg-black"
+              />
             </Screen>
           )}
           {app === "alboyut" && (
@@ -137,7 +144,7 @@ export default function PhoneOS({ onClose }: { onClose: () => void }) {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img key={k} src={`/previews/madinabasketball/${k}.webp`} alt="" className="mb-3 w-full rounded-xl" />
                 ))}
-                <p className="text-[13px] text-white/70">{court?.tagline}. Game clips coming soon.</p>
+                <p className="text-[13px] text-white/70">{court?.tagline}. Live scoring, court bookings and an open ledger of every cedi raised.</p>
                 <Link href="/work/madinabasketball" onClick={onClose} className="mt-3 inline-block text-[13px] text-[#ff8a5c]">
                   Open the project →
                 </Link>
