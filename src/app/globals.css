@@ -1052,3 +1052,13 @@ html.pl-seen .preloader {
     height: 40px;
   }
 }
+
+/* Aadam OS and the phone: windows and apps open with a small pop */
+@keyframes aos-pop {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes phone-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}

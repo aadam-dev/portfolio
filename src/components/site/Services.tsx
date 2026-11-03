@@ -41,10 +41,11 @@ export default function Services() {
           {METHOD.map((m, i) => (
             <motion.li
               key={m.step}
-              initial={reduce ? false : { opacity: 0, y: 14 }}
+              // same first render on server and client; reduced motion just skips the travel
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.6 }}
-              transition={{ duration: 0.6, delay: i * 0.07, ease: EASE_OUT }}
+              transition={reduce ? { duration: 0 } : { duration: 0.6, delay: i * 0.07, ease: EASE_OUT }}
               className="bg-[var(--background)] p-5"
             >
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent)]">{String(i + 1).padStart(2, "0")}</p>

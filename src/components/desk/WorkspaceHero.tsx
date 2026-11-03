@@ -5,7 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
 import AadamOS, { type Win } from "./AadamOS";
-import PhoneOS from "./PhoneOS";
+import Phone, { PhoneFrame } from "@/components/os/phone/Phone";
+import { useOsText } from "@/components/os/l10n";
 import type { Quad } from "./quad";
 import { PLATE, STOPS, type Stop } from "./objects";
 import { deskUi, localStops } from "./objects.l10n";
@@ -257,7 +258,7 @@ function Tour() {
           </div>
         )}
       </div>
-      {phone && <PhoneOS onClose={closePhone} />}
+      {phone && <Phone variant="sheet" onClose={closePhone} />}
     </section>
   );
 }
@@ -432,10 +433,10 @@ function CodeScreen() {
 
 function Stacked() {
   const { stops, ui } = useStops();
+  const t = useOsText();
   const theme = useTheme();
-  const [phone, setPhone] = useState(false);
+  const roomy = useMediaQuery("(min-width: 768px)");
   const [os, setOs] = useState(false);
-  const closePhone = useCallback(() => setPhone(false), []);
   const closeOs = useCallback(() => setOs(false), []);
   const [windows, setWindows] = useState<Win[]>([{ id: "p:bloom-boba", kind: "project", slug: "bloom-boba", x: 22, y: 8, z: 10, tab: "overview" }]);
   const setW = useCallback((fn: (w: Win[]) => Win[]) => setWindows(fn), []);
@@ -443,57 +444,85 @@ function Stacked() {
     const a = st.action;
     if (!a) return;
     if (a.kind === "theme") setTheme(theme === "dark" ? "light" : "dark", { x: e.clientX, y: e.clientY });
-    else if (a.kind === "phone") setPhone(true);
     else if (a.kind === "desktop") setOs(true);
     else if (a.kind === "scroll") {
       const t = document.querySelector<HTMLElement>(a.target);
       if (t) scrollToElement(t, -70);
     }
   };
+  const headline = { eyebrow: stops[0].eyebrow, title: stops[0].title };
+  const next = () => {
+    const el = document.getElementById("desk-notes");
+    if (el) scrollToElement(el, -70);
+  };
   return (
     <section id="desk" aria-label="Aadam's workspace" className="pb-10">
-      <div className="relative aspect-[4/5] w-full overflow-hidden sm:aspect-[16/9]">
+      {/* the hero is my phone: on a phone it fills the screen, on a tablet it stands beside the headline */}
+      <div className="theme-fixed relative flex h-[100svh] min-h-[560px] flex-col overflow-hidden bg-[#0d0a07] px-2.5 pb-1 pt-[72px] md:flex-row md:items-center md:justify-center md:gap-12 md:px-10 md:pb-8 md:pt-24">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={PLATE.src} alt="Aadam's desk" className="absolute inset-0 h-full w-full object-cover object-[50%_40%]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        <div className="theme-fixed absolute inset-x-0 bottom-0 px-5 pb-7">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent-2)]">{stops[0].eyebrow}</p>
-          <h1 className="mt-3 font-display text-[clamp(30px,8vw,48px)] leading-[1.02] text-white" style={{ letterSpacing: "-0.03em" }}>
-            {stops[0].title}
-          </h1>
-        </div>
-      </div>
-      <div className="mx-auto max-w-[720px] space-y-10 px-5 pt-10">
-        {stops.slice(1).map((st, k) => (
-          <article key={st.id} className="overflow-hidden rounded-2xl border border-[var(--line)]">
-            {st.insert && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={st.insert} alt="" loading="lazy" className="aspect-[16/9] w-full object-cover" />
-            )}
-            <div className="p-5">
-              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent)]">
-                {String(k + 1).padStart(2, "0")} · {st.eyebrow}
-              </p>
-              <h2 className="mt-2 font-display text-[26px] leading-[1.08] text-white" style={{ letterSpacing: "-0.02em" }}>
-                {st.title}
-              </h2>
-              <p className="mt-2 text-[15px] leading-relaxed text-[var(--ink-2)]">{st.body}</p>
-              {st.id === "books" && <ReadingList className="mt-2 text-[var(--ink-2)]" labels={[ui.reading, ui.next]} />}
-              {st.action &&
-                (st.action.kind === "link" ? (
-                  <Link href={st.action.href} className="mt-4 inline-flex rounded-full bg-[var(--accent)] px-4 py-2.5 text-[13px] font-semibold text-black">
-                    {st.action.label} →
-                  </Link>
-                ) : (
-                  <button onClick={(e) => act(st, e)} className="mt-4 inline-flex rounded-full bg-[var(--accent)] px-4 py-2.5 text-[13px] font-semibold text-black">
-                    {st.action.kind === "theme" ? (theme === "dark" ? ui.lampOff : ui.lampOn) : st.action.kind === "phone" ? ui.phone : st.action.kind === "desktop" ? ui.openOS : st.action.label}
-                  </button>
-                ))}
+        <img src={PLATE.src} alt="" aria-hidden className="absolute inset-0 h-full w-full scale-110 object-cover opacity-35 blur-2xl" />
+        {roomy ? (
+          <>
+            <div className="relative max-w-[440px]">
+              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent-2)]">{headline.eyebrow}</p>
+              <h1 className="mt-3 font-display text-[clamp(32px,4.6vw,52px)] leading-[1.03] text-white text-balance" style={{ letterSpacing: "-0.03em" }}>
+                {headline.title}
+              </h1>
+              <p className="mt-4 text-[16px] leading-relaxed text-white/70">{t.phone.heroHint}</p>
+              <button onClick={next} className="mt-6 inline-flex items-center gap-2 text-[13px] text-white/60 hover:text-white">
+                {t.phone.scrollCue} <span aria-hidden>↓</span>
+              </button>
             </div>
-          </article>
-        ))}
+            <PhoneFrame className="relative h-[min(80svh,820px)] shrink-0 [animation:phone-in_.6s_cubic-bezier(.22,1,.36,1)_both]">
+              <Phone variant="hero" />
+            </PhoneFrame>
+          </>
+        ) : (
+          <>
+            <div className="relative min-h-0 flex-1 rounded-[42px] bg-[#1a1a1c] p-[6px] shadow-[0_30px_80px_rgba(0,0,0,0.6),inset_0_0_0_1.5px_#3a3a3c] [animation:phone-in_.6s_cubic-bezier(.22,1,.36,1)_both]">
+              <div className="h-full w-full rounded-[36px]">
+                <Phone variant="hero" headline={headline} />
+              </div>
+            </div>
+            <button onClick={next} className="relative flex h-9 shrink-0 items-center justify-center gap-2 text-[12.5px] text-white/60">
+              {t.phone.scrollCue} <span aria-hidden className="motion-safe:animate-bounce">↓</span>
+            </button>
+          </>
+        )}
       </div>
-      {phone && <PhoneOS onClose={closePhone} />}
+      <div id="desk-notes" className="mx-auto max-w-[720px] space-y-10 px-5 pt-10">
+        {stops
+          .slice(1)
+          .filter((st) => st.action?.kind !== "phone")
+          .map((st, k) => (
+            <article key={st.id} className="overflow-hidden rounded-2xl border border-[var(--line)]">
+              {st.insert && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={st.insert} alt="" loading="lazy" className="aspect-[16/9] w-full object-cover" />
+              )}
+              <div className="p-5">
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent)]">
+                  {String(k + 1).padStart(2, "0")} · {st.eyebrow}
+                </p>
+                <h2 className="mt-2 font-display text-[26px] leading-[1.08] text-white" style={{ letterSpacing: "-0.02em" }}>
+                  {st.title}
+                </h2>
+                <p className="mt-2 text-[15px] leading-relaxed text-[var(--ink-2)]">{st.body}</p>
+                {st.id === "books" && <ReadingList className="mt-2 text-[var(--ink-2)]" labels={[ui.reading, ui.next]} />}
+                {st.action &&
+                  (st.action.kind === "link" ? (
+                    <Link href={st.action.href} className="mt-4 inline-flex rounded-full bg-[var(--accent)] px-4 py-2.5 text-[13px] font-semibold text-black">
+                      {st.action.label} →
+                    </Link>
+                  ) : (
+                    <button onClick={(e) => act(st, e)} className="mt-4 inline-flex rounded-full bg-[var(--accent)] px-4 py-2.5 text-[13px] font-semibold text-black">
+                      {st.action.kind === "theme" ? (theme === "dark" ? ui.lampOff : ui.lampOn) : st.action.kind === "desktop" ? ui.openOS : "label" in st.action ? st.action.label : ""}
+                    </button>
+                  ))}
+              </div>
+            </article>
+          ))}
+      </div>
       {os && <OSDialog windows={windows} setWindows={setW} onClose={closeOs} />}
     </section>
   );

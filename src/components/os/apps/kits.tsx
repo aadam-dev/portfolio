@@ -5,15 +5,15 @@ import { useState } from "react";
 import { KITS } from "../content";
 
 /** Starter kits: packaged ways to start, each ending in a message to me. No prices; every business is scoped on a call. */
-export default function KitsApp({ file, live, onStart }: { file?: string; live: boolean; onStart: (kitName: string) => void }) {
+export default function KitsApp({ file, live, onStart, compact }: { file?: string; live: boolean; onStart: (kitName: string) => void; compact?: boolean }) {
   const [id, setId] = useState(file ?? KITS[0].id);
   const kit = KITS.find((k) => k.id === id) ?? KITS[0];
   const tab = live ? 0 : -1;
   return (
-    <div className="flex h-full">
-      <nav aria-label="Kits" className="w-[170px] shrink-0 space-y-1 border-r border-white/10 p-2">
+    <div className={compact ? "flex flex-col" : "flex h-full"}>
+      <nav aria-label="Kits" className={compact ? "flex shrink-0 gap-1 overflow-x-auto border-b border-white/10 p-2 [scrollbar-width:none]" : "w-[170px] shrink-0 space-y-1 border-r border-white/10 p-2"}>
         {KITS.map((k) => (
-          <button key={k.id} tabIndex={tab} onClick={() => setId(k.id)} aria-current={k.id === id} className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[12.5px] ${k.id === id ? "bg-white/15" : "hover:bg-white/[0.06]"}`}>
+          <button key={k.id} tabIndex={tab} onClick={() => setId(k.id)} aria-current={k.id === id} className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-left text-[12.5px] ${compact ? "shrink-0" : "w-full"} ${k.id === id ? "bg-white/15" : "hover:bg-white/[0.06]"}`}>
             <span className="grid h-6 w-6 place-items-center rounded-md text-[11px] text-white" style={{ background: k.tone }}>
               ◆
             </span>
@@ -21,7 +21,7 @@ export default function KitsApp({ file, live, onStart }: { file?: string; live: 
           </button>
         ))}
       </nav>
-      <div className="min-w-0 flex-1 overflow-y-auto p-5" data-lenis-prevent>
+      <div className={`min-w-0 flex-1 p-5 ${compact ? "" : "overflow-y-auto"}`} data-lenis-prevent>
         <div className="rounded-2xl p-5 text-white" style={{ background: kit.tone }}>
           <p className="text-[11px] uppercase tracking-[0.16em] text-white/70">Starter kit · {kit.weeks}</p>
           <h3 className="mt-1 text-[24px] font-semibold tracking-tight">{kit.name}</h3>

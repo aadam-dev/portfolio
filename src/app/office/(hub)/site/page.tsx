@@ -98,7 +98,7 @@ function Inbox({ d }: { d: Dashboard }) {
       {d.inbox.map((m) => {
         const email = m.contact.includes("@");
         const reply = email
-          ? `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(m.contact)}&su=${encodeURIComponent(`Re: your ${m.kind === "contact" ? "message" : `${m.kind} brief`}`)}`
+          ? `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(m.contact)}&su=${encodeURIComponent(`Re: your ${m.kind === "contact" ? "message" : m.kind === "call" ? "call request" : `${m.kind} brief`}`)}`
           : `https://wa.me/${m.contact.replace(/[^\d]/g, "")}`;
         const initials = m.name
           .split(/\s+/)
@@ -113,7 +113,7 @@ function Inbox({ d }: { d: Dashboard }) {
                 <div className="min-w-0 flex-1">
                   <p className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[13.5px]">
                     <span className="font-medium text-[var(--foreground)]">{m.name}</span>
-                    <span className="rounded-full border border-[var(--line)] px-2 py-px text-[11px] text-[var(--ink-3)]">{m.kind === "contact" ? "Message" : m.kind === "build" ? "Build brief" : "Hire brief"}</span>
+                    <span className="rounded-full border border-[var(--line)] px-2 py-px text-[11px] text-[var(--ink-3)]">{m.kind === "contact" ? "Message" : m.kind === "build" ? "Build brief" : m.kind === "call" ? "Call request" : "Hire brief"}</span>
                     {m.status === "new" && (
                       <span className="inline-flex items-center gap-1 text-[11.5px] text-[var(--foreground)]">
                         <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" /> New

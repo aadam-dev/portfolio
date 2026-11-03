@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   const budget = body.budget?.trim().slice(0, 80) || "unspecified";
   const message = body.message?.trim().slice(0, 5000);
   const brief = body.brief?.startsWith("http") ? body.brief.slice(0, 300) : undefined;
-  const kind = body.kind === "build" || body.kind === "hire" ? body.kind : "contact";
+  const kind = body.kind === "build" || body.kind === "hire" || body.kind === "call" ? body.kind : "contact";
   const sid = typeof body.sid === "string" && /^[\w-]{8,64}$/.test(body.sid) ? body.sid : undefined;
   if (!name || !contact || !message) {
     return NextResponse.json({ ok: false, error: "missing_fields" }, { status: 400 });
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
 
   const origin = new URL(request.url).origin;
   const story = store && sid ? await sessionStory(store, sid).catch(() => null) : null;
-  const label = kind === "build" ? "Build brief" : kind === "hire" ? "Hire brief" : "Message";
+  const label = kind === "build" ? "Build brief" : kind === "hire" ? "Hire brief" : kind === "call" ? "Call request" : "Message";
   const digits = contact.replace(/[^\d+]/g, "");
   const phone = !contact.includes("@") && digits.replace(/\D/g, "").length >= 8 ? digits.replace(/\D/g, "") : null;
   const visit = story
@@ -88,7 +88,7 @@ export async function POST(request: Request) {
             "",
             line("Visit", visit),
           ],
-          `📩 ${label}`,
+          kind === "call" ? `📅 ${label}` : `📩 ${label}`,
         ),
         {
           buttons: [

@@ -19,7 +19,7 @@ export default function AboutDoc() {
         <span>≡</span>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto p-4" data-lenis-prevent>
-        <article className="mx-auto max-w-[620px] bg-white px-10 py-9 text-[13.5px] leading-relaxed text-[#1f1e1c] shadow" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
+        <article className="mx-auto max-w-[620px] bg-white px-5 py-7 sm:px-10 sm:py-9 text-[13.5px] leading-relaxed text-[#1f1e1c] shadow" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
           <h1 className="text-[26px] font-bold tracking-tight">Aadam</h1>
           <p className="text-black/55">Forward deployed engineer · Accra</p>
           {ABOUT_INTRO.map((p) => (
@@ -27,7 +27,7 @@ export default function AboutDoc() {
               {p}
             </p>
           ))}
-          <dl className="mt-4 grid grid-cols-3 gap-3 text-[12px]">
+          <dl className="mt-4 grid grid-cols-2 gap-3 text-[12px] sm:grid-cols-3">
             {ABOUT_FACTS.map(([k, v]) => (
               <div key={k}>
                 <dt className="text-black/50">{k}</dt>

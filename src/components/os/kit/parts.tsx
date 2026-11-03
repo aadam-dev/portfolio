@@ -89,18 +89,18 @@ export function StatusBar({ light = true }: { light?: boolean }) {
 }
 
 /** A full-screen iOS app: back to home, a title, and its content. */
-export function AppScreen({ title, onHome, children, light, action }: { title: string; onHome: () => void; children: ReactNode; light?: boolean; action?: ReactNode }) {
+export function AppScreen({ title, onHome, children, light, action, homeLabel = "Home" }: { title: string; onHome: () => void; children: ReactNode; light?: boolean; action?: ReactNode; homeLabel?: string }) {
   return (
     <div className={`absolute inset-0 z-10 flex flex-col ${light ? "bg-[#f6f5f2] text-[#1c1c1e]" : "bg-black text-white"} [animation:aos-pop_.3s_cubic-bezier(.22,1,.36,1)_both]`}>
       <StatusBar light={!light} />
       <div className={`flex h-10 shrink-0 items-center justify-between px-4 text-[15px] ${light ? "text-[#007aff]" : "text-[#5aa9ff]"}`}>
         <button onClick={onHome} className="min-w-16 text-left">
-          ‹ Home
+          ‹ {homeLabel}
         </button>
         <span className={`max-w-[55%] truncate text-[15px] font-semibold ${light ? "text-black" : "text-white"}`}>{title}</span>
         <span className="min-w-16 text-right">{action}</span>
       </div>
-      <div className="relative min-h-0 flex-1 overflow-y-auto" data-lenis-prevent>
+      <div className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain pb-5" data-lenis-prevent>
         {children}
       </div>
     </div>
@@ -112,22 +112,23 @@ export function Widget({ children, className = "" }: { children: ReactNode; clas
 }
 
 /** An iOS home-screen icon. */
-export function AppIcon({ name, icon, bg, glyph, onOpen, href }: { name: string; icon?: string; bg?: string; glyph?: ReactNode; onOpen?: () => void; href?: string }) {
+export function AppIcon({ name, label, icon, bg, glyph, onOpen, href, tabIndex }: { name: string; label?: string; icon?: string; bg?: string; glyph?: ReactNode; onOpen?: () => void; href?: string; tabIndex?: number }) {
   const tile = (
     <>
-      <span className="grid aspect-square w-full place-items-center overflow-hidden rounded-[22%] text-[24px] shadow-[0_6px_18px_rgba(0,0,0,0.35)]" style={{ background: bg ?? "#222" }}>
+      <span className="grid aspect-square w-full place-items-center overflow-hidden rounded-[22%] text-[24px] shadow-[0_6px_18px_rgba(0,0,0,0.35)] transition-transform duration-150 active:scale-90" style={{ background: bg ?? "#222" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         {icon ? <img src={icon} alt="" className="h-full w-full object-cover" /> : glyph}
       </span>
-      <span className="mt-1.5 block truncate text-center text-[11px] text-white [text-shadow:0_1px_3px_rgba(0,0,0,.6)]">{name}</span>
+      {name && <span className="mt-1.5 block truncate text-center text-[11px] text-white [text-shadow:0_1px_3px_rgba(0,0,0,.6)]">{name}</span>}
     </>
   );
+  const aria = label ?? name;
   return href ? (
-    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="block" aria-label={name}>
+    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="block" aria-label={aria} tabIndex={tabIndex}>
       {tile}
     </a>
   ) : (
-    <button onClick={onOpen} className="block w-full text-left" aria-label={`Open ${name}`}>
+    <button onClick={onOpen} className="block w-full text-left" aria-label={aria} tabIndex={tabIndex}>
       {tile}
     </button>
   );

@@ -49,7 +49,7 @@ export default function Stickies({ live }: { live: boolean }) {
   );
 }
 
-function GuestSticky({ live }: { live: boolean }) {
+export function GuestSticky({ live, className = "mt-4 w-[290px]" }: { live: boolean; className?: string }) {
   const [notes, setNotes] = useState<Note[]>([]);
   const [i, setI] = useState(0);
   const [mode, setMode] = useState<"read" | "write" | "sent" | "error">("read");
@@ -87,7 +87,7 @@ function GuestSticky({ live }: { live: boolean }) {
 
   const n = notes[i];
   return (
-    <Sticky color="#fff7c2" tilt={-1} title="Leave a note" className="mt-4 w-[290px]">
+    <Sticky color="#fff7c2" tilt={-1} title="Leave a note" className={className}>
       {mode === "read" && (
         <>
           {n ? (
