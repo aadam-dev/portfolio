@@ -29,7 +29,7 @@ export default function Contact({ compact = false }: { compact?: boolean }) {
       if (timer.current) clearTimeout(timer.current);
       timer.current = setTimeout(() => setCopied(false), 1600);
     } catch {
-      // clipboard unavailable — mailto link still works
+      // clipboard unavailable; the mailto link still works
     }
   };
 

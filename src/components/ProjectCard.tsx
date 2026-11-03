@@ -26,7 +26,7 @@ export default function ProjectCard({ project, index, feature, priority }: Props
       className={`group relative ${feature ? "md:col-span-2" : ""}`}
       style={{ ["--card-accent" as string]: project.accentColor }}
     >
-      {/* Accent bloom — each project lights its own colour on hover */}
+      {/* Accent bloom: each project lights its own colour on hover */}
       <div
         aria-hidden="true"
         className="absolute -inset-4 -z-10 rounded-[32px] opacity-0 blur-2xl transition-opacity duration-700 ease-out group-hover:opacity-100"

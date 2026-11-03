@@ -28,7 +28,7 @@ interface Props {
   screen: string;
 }
 
-/** Real capture of the actual app — always preferred over coded mockups. */
+/** Real capture of the actual app, always preferred over coded mockups. */
 function RealShot({ src, alt }: { src: string; alt: string }) {
   return (
     <div

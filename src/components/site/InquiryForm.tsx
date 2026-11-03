@@ -45,7 +45,7 @@ export default function InquiryForm() {
         return;
       }
     } catch {
-      // network failure — fall through to WhatsApp
+      // network failure: fall through to WhatsApp
     }
     setStatus("fallback");
     window.open(whatsappUrl(), "_blank", "noopener,noreferrer");

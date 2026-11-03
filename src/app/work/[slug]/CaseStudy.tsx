@@ -40,7 +40,7 @@ export default function CaseStudy({ project, next }: Props) {
   const locale = useLocale();
   const { tagline, description } = localizedProject(project, locale);
   const [mode, setMode] = useState<Mode>("simulated");
-  /** Some deploys send X-Frame-Options: DENY — no live tab, outbound link only. */
+  /** Some deploys send X-Frame-Options: DENY, so no live tab, outbound link only. */
   const canEmbedLive = !!project.liveBaseUrl && project.liveEmbeddable !== false;
 
   return (
