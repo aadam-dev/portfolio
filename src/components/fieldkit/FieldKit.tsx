@@ -283,7 +283,16 @@ export default function FieldKit() {
     <section id="deployments" aria-label="Deployments" className="relative">
       <div className="max-w-[1280px] mx-auto px-4 md:px-6 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] xl:grid-cols-[minmax(0,1fr)_540px] lg:gap-12 xl:gap-16">
         <div>
-          <Hero onPlay={() => goTo(CHAPTERS[0].mode)} />
+          <header className="pt-24 lg:pt-32">
+            <p className="eyebrow">Deployments · Playable</p>
+            <h2 className="mt-5 font-display text-[clamp(36px,4.2vw,64px)] leading-[0.98] text-white text-balance">
+              Systems running in the field. <span className="font-serif-it text-[var(--accent)]">Try them.</span>
+            </h2>
+            <p className="mt-5 max-w-[46ch] text-[16px] leading-relaxed text-[var(--ink-2)]">
+              The device from the desk, switched on: a builders&apos; merchant counter, a laundry line and an analyst&apos;s desk, each
+              running the same kind of system real staff use every day.
+            </p>
+          </header>
           <div ref={listRef}>
             {CHAPTERS.map((c, i) => (
               <ChapterBlock key={c.mode} chapter={c} index={i} total={CHAPTERS.length} desktop={desktop} />

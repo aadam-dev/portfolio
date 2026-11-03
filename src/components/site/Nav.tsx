@@ -9,8 +9,9 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { NavThemeToggle } from "@/components/fieldkit/ThemeSwitch";
 
 const LINKS = [
-  { key: "deployments", href: "/#deployments" },
+  { key: "desk", href: "/#desk" },
   { key: "work", href: "/#work" },
+  { key: "studio", href: "/#studio" },
   { key: "services", href: "/#services" },
   { key: "contact", href: "/#contact" },
 ] as const;

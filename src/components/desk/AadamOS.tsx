@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { projectSlug, visibleProjects, type Project } from "@/lib/projects";
 import ScaledIframe from "@/components/ui/ScaledIframe";
+import { SERVICES } from "@/lib/services";
 
 /* ------------------------------------------------------------------ types */
 
@@ -337,20 +338,16 @@ function ProjectApp({ p, tab, setTab, flat }: { p: Project; tab: Tab; setTab: (t
 }
 
 function NotesApp() {
-  const items = [
-    ["Product & UX", "Discovery, flows and interfaces people actually finish."],
-    ["Motion & brand sites", "Scroll films, photoreal art direction, interactive 3D."],
-    ["Operations software", "POS, back offices, inventory, payroll, built around the floor."],
-    ["Forward-deployed", "I sit with your team, ship in weeks, and stay for the rollout."],
-  ];
   return (
     <div className="space-y-4 p-6 font-mono text-[12.5px] leading-relaxed text-white/80">
-      <p className="text-white/45"># services.notes</p>
-      {items.map(([h, b]) => (
-        <p key={h}>
-          <span className="text-[var(--accent-2)]">## {h}</span>
+      <p className="text-white/45"># services.notes · forward deployed</p>
+      {SERVICES.map((s) => (
+        <p key={s.n}>
+          <span className="text-[var(--accent-2)]">
+            ## {s.n} {s.title}
+          </span>
           <br />
-          {b}
+          {s.short}
         </p>
       ))}
     </div>

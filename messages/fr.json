@@ -1,5 +1,7 @@
 {
   "nav": {
+    "desk": "Bureau",
+    "studio": "Studio",
     "services": "Services",
     "work": "Projets",
     "process": "Méthode",
@@ -40,7 +42,7 @@
   "services": {
     "eyebrow": "Services · De bout en bout",
     "heading": "Une pratique,",
-    "headingAccent": "cinq disciplines."
+    "headingAccent": "six disciplines."
   },
   "process": {
     "eyebrow": "Méthode · 10 semaines en moyenne",
