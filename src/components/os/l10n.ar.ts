@@ -183,6 +183,7 @@ export const ar: OsText = {
     overview: "نظرة عامة",
     walkthrough: "جولة",
     builder: "ركّب مشروبًا",
+    explorer: "المستكشف ثلاثي الأبعاد",
     live: "الموقع المباشر",
     caseStudy: "دراسة الحالة كاملة",
     builderLater: "يُفتح المُركِّب عندما تكون على المكتب.",

@@ -189,6 +189,7 @@ const en = {
     overview: "Overview",
     walkthrough: "Walkthrough",
     builder: "Build a drink",
+    explorer: "3D explorer",
     live: "Live site",
     caseStudy: "Full case study",
     builderLater: "The builder opens when you are at the desk.",

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { projectSlug, visibleProjects, type Project, localizedProject } from "@/lib/projects";
 import ScaledIframe from "@/components/ui/ScaledIframe";
 
-export type Tab = "overview" | "walkthrough" | "live" | "builder";
+export type Tab = "overview" | "walkthrough" | "live" | "builder" | "explorer";
 
 /** Apps in the dock: flagship + featured projects that have real screenshots, Bloom Boba first. */
 export function dockProjects(): Project[] {
@@ -23,12 +23,14 @@ export default function ProjectApp({ p, tab, setTab, flat }: { p: Project; tab: 
   const walk = p.walkthroughs?.[0];
   const canLive = !!p.liveBaseUrl && p.liveEmbeddable !== false;
   const builder = p.id === "bloomboba" && p.liveBaseUrl ? `${p.liveBaseUrl.replace(/\/$/, "")}/#make` : null;
+  const explorer = p.id === "afroarab" ? "https://afroarab-properties.vercel.app/lands/titled-lands-green-valley/explorer?plot=17" : null;
   const t = useOsText().project;
   const local = localizedProject(p, useLocale());
   const tabs: [Tab, string][] = [
     ["overview", t.overview],
     ...(walk ? ([["walkthrough", t.walkthrough]] as [Tab, string][]) : []),
     ...(builder ? ([["builder", t.builder]] as [Tab, string][]) : []),
+    ...(explorer ? ([["explorer", t.explorer]] as [Tab, string][]) : []),
     ...(p.liveBaseUrl ? ([["live", t.live]] as [Tab, string][]) : []),
   ];
   return (
@@ -82,6 +84,17 @@ export default function ProjectApp({ p, tab, setTab, flat }: { p: Project; tab: 
 
       {tab === "builder" && builder && (
         <div className="h-full">{flat ? <ScaledIframe src={builder} title={`${p.name} drink builder`} /> : <p className="p-8 text-white/60">{t.builderLater}</p>}</div>
+      )}
+
+      {tab === "explorer" && explorer && (
+        <div className="relative h-full">
+          {flat ? (
+            <iframe title={`${p.name} 3D plot explorer`} src={explorer} sandbox="allow-scripts allow-same-origin allow-popups" referrerPolicy="no-referrer" className="absolute inset-0 h-full w-full border-0" />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={thumb(p)} alt="" className="h-full w-full object-cover" />
+          )}
+        </div>
       )}
 
       {tab === "live" && p.liveBaseUrl && (

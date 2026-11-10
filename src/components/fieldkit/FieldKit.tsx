@@ -97,7 +97,7 @@ function ChapterBlock({
       ref={ref}
       id={`chapter-${chapter.n}`}
       aria-labelledby={`chapter-${chapter.n}-title`}
-      className="relative py-20 lg:py-0 lg:min-h-[100vh] flex flex-col justify-center scroll-mt-24"
+      className={`relative ${isDesktop === false ? "pt-8 pb-4" : "py-20"} lg:py-0 lg:min-h-[100vh] flex flex-col justify-center scroll-mt-24`}
     >
       <div className="max-w-[560px]">
         <motion.div
@@ -179,6 +179,55 @@ function ChapterBlock({
   );
 }
 
+/**
+ * Phones: one device and a row of deployments to switch between, instead of seven stacked
+ * devices (which made the home page several screens longer than the work it shows).
+ */
+const NOOP = () => {};
+
+function MobileChapters() {
+  const t = useTranslations("fieldkit");
+  const [idx, setIdx] = useState(0);
+  const top = useRef<HTMLDivElement>(null);
+  const pick = (i: number) => {
+    setIdx(i);
+    const el = top.current;
+    // keep the switcher in view when a long chapter swaps for a short one
+    if (el && el.getBoundingClientRect().top < 0) scrollToEl(el, -72);
+  };
+  return (
+    <div ref={top} className="pt-8">
+      <div role="tablist" aria-label={t("header.eyebrow")} className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {CHAPTERS.map((c, i) => {
+          const meta = MODES[modeIndex(c.mode)];
+          const on = i === idx;
+          return (
+            <button
+              key={c.id}
+              role="tab"
+              aria-selected={on}
+              aria-controls={`chapter-${c.n}`}
+              onClick={() => pick(i)}
+              className={`shrink-0 snap-start rounded-full border px-4 min-h-11 text-[13px] transition-colors ${on ? "border-[var(--accent)] bg-[var(--accent)] text-black font-semibold" : "border-[var(--line-strong)] text-[var(--ink-2)]"}`}
+            >
+              <span className={on ? "text-black/60" : "text-[var(--accent)]"}>{c.n}</span> {t(`modes.${meta.id}.label`)}
+            </button>
+          );
+        })}
+      </div>
+      <div role="tabpanel">
+        <ChapterBlock key={CHAPTERS[idx].id} chapter={CHAPTERS[idx]} i={idx} isDesktop={false} onActive={NOOP} />
+      </div>
+      {idx < CHAPTERS.length - 1 && (
+        <button onClick={() => pick(idx + 1)} className="mt-6 inline-flex min-h-11 items-center gap-2 text-[14px] text-[var(--ink-2)]">
+          {t("next")} <span className="text-[var(--foreground)]">{t(`modes.${MODES[modeIndex(CHAPTERS[idx + 1].mode)].id}.label`)}</span>
+          <ArrowRight className="w-3.5 h-3.5 text-[var(--accent)]" />
+        </button>
+      )}
+    </div>
+  );
+}
+
 /* ---------- main ---------- */
 
 export default function FieldKit() {
@@ -228,9 +277,11 @@ export default function FieldKit() {
           </header>
           {/* Chapters 01-07 */}
           <div ref={chaptersRef}>
-            {CHAPTERS.map((c, i) => (
-              <ChapterBlock key={c.id} chapter={c} i={i} isDesktop={isDesktop} onActive={setActive} />
-            ))}
+            {isDesktop === false ? (
+              <MobileChapters />
+            ) : (
+              CHAPTERS.map((c, i) => <ChapterBlock key={c.id} chapter={c} i={i} isDesktop={isDesktop} onActive={setActive} />)
+            )}
           </div>
         </div>
 

@@ -38,8 +38,6 @@ export interface Stop {
   label: string;
   /** Object box on the wide plate; null = the wide establishing shot. */
   box: Box | null;
-  /** Close-up "insert" shot, cut in while the camera holds on the object. */
-  insert?: string;
   /** Which side the copy sits on (the object sits on the other). */
   copy: "left" | "right";
   eyebrow: string;
@@ -66,7 +64,6 @@ export const STOPS: Stop[] = [
     id: "lamp",
     label: "Remote",
     box: [0, 0.156, 0.19, 0.665],
-    insert: "/workspace/lamp.webp",
     copy: "left",
     eyebrow: "Remote · GMT+0",
     title: "Day in Accra, morning in New York.",
@@ -77,7 +74,6 @@ export const STOPS: Stop[] = [
     id: "notebook",
     label: "Field notes",
     box: [0, 0.708, 0.236, 0.897],
-    insert: "/workspace/notebook.webp",
     copy: "left",
     eyebrow: "On site first",
     title: "I sit in. I watch the work. I write it down.",
@@ -88,7 +84,6 @@ export const STOPS: Stop[] = [
     id: "books",
     label: "Books",
     box: [0.005, 0.451, 0.177, 0.631],
-    insert: "/workspace/books.webp",
     copy: "left",
     eyebrow: "How I think",
     title: "Read widely. Ship narrowly.",
@@ -98,7 +93,6 @@ export const STOPS: Stop[] = [
     id: "device",
     label: "Deployments",
     box: [0.203, 0.625, 0.281, 0.708],
-    insert: "/workspace/device.webp",
     copy: "right",
     eyebrow: "Deployments",
     title: "Running in the field: counters, laundries, analysts.",
@@ -109,7 +103,6 @@ export const STOPS: Stop[] = [
     id: "phone",
     label: "Mobile",
     box: [0.806, 0.752, 0.911, 0.882],
-    insert: "/workspace/phone.webp",
     copy: "right",
     eyebrow: "Mobile",
     title: "Built for the phone in your pocket.",
@@ -120,7 +113,6 @@ export const STOPS: Stop[] = [
     id: "brand",
     label: "Studio",
     box: [0.799, 0.431, 0.949, 0.752],
-    insert: "/workspace/brand.webp",
     copy: "right",
     eyebrow: "Studio · Brand, product & motion",
     title: "Brands people want to photograph.",
@@ -131,7 +123,6 @@ export const STOPS: Stop[] = [
     id: "ball",
     label: "Off the clock",
     box: [0.911, 0.44, 1, 0.631],
-    insert: "/workspace/ball.webp",
     copy: "right",
     eyebrow: "Off the clock",
     title: "Teamwork, learned on the court.",

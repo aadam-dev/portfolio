@@ -40,7 +40,8 @@
     "headingAccent": "zero templates",
     "filterAll": "All",
     "title": "Work",
-    "sub": "{count} projects from 2022 to 2026: point of sale and back offices, storefronts, learning platforms and sites. Open one for the case study."
+    "sub": "{count} projects from 2022 to 2026: point of sale and back offices, storefronts, learning platforms and sites. Open one for the case study.",
+    "seeAll": "All {count} projects"
   },
   "flagship": {
     "eyebrow": "Selected work · 01/0{count}",
@@ -131,6 +132,7 @@
       "note": "The device from the desk, switched on: a builders' merchant counter, a laundry line, a courtside scorer, an analyst's desk and more, each running the same kind of system real staff use every day."
     },
     "projectsIn": "Projects in this deployment",
+    "next": "Next:",
     "hero": {
       "hint": "Tap stock, send it to the cashier, then collect to print."
     },

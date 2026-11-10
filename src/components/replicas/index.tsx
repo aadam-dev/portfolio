@@ -52,6 +52,11 @@ export const REPLICAS: Record<string, Replica> = {
   munamuse: { label: "Try the shop", url: "temporarymunamusedomain.vercel.app/shop", Component: mode("atelier"), native: [640, 400] },
   ethika: { label: "Try the model", url: "ethika.vercel.app/en/tools", Component: mode("analyst"), native: [640, 400] },
   madinabasketball: { label: "Try the court", url: "madinabball.vercel.app/court", Component: mode("court"), native: [640, 400] },
+  afroarab: {
+    label: "Try the 3D explorer",
+    url: "afroarab-properties.vercel.app/lands/green-valley/explorer",
+    Component: dynamic(() => import("./AfroArabExplorer"), { ssr: false, loading: Loading }),
+  },
   koyi: { label: "Try the hub", url: "koyi-web.vercel.app/en/hub", Component: mode("classroom"), native: [640, 400] },
 };
 

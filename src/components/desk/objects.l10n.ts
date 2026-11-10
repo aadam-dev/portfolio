@@ -2,7 +2,7 @@ import type { Stop } from "./objects";
 
 /** French and Arabic copy for the desk tour. English lives in objects.ts. */
 type StopCopy = { label: string; eyebrow: string; title: string; body: string; action?: string };
-type Ui = { lampOn: string; lampOff: string; phone: string; desktop: string; openOS: string; scrollHint: string; reading: string; next: string; deskAlt: string };
+type Ui = { lampOn: string; lampOff: string; phone: string; desktop: string; openOS: string; scrollHint: string; reading: string; next: string; deskAlt: string; deskTitle: string; deskNote: string };
 
 const FR: Record<string, StopCopy> = {
   desk: { label: "Bureau", eyebrow: "Aadam · Ingénieur et analyste", title: "Je lis les chiffres, puis je construis le système sur lequel vous tournez.", body: "Informatique, solutions, gestion et finance depuis un bureau à Accra : plus de 20 systèmes en production, plus de 50 PME analysées. Faites défiler le bureau." },
@@ -29,9 +29,9 @@ const AR: Record<string, StopCopy> = {
 };
 
 const UI: Record<string, Ui> = {
-  en: { lampOn: "Switch the lamp on", lampOff: "Switch the lamp off", phone: "Pick up the phone", desktop: "Jump into the desktop", openOS: "Open Aadam OS", scrollHint: "Scroll · or tap anything on the desk", reading: "Reading", next: "Next", deskAlt: "Aadam's desk: a laptop with two screen extenders, keyboard, lamp, books, notebook, phone, a bubble tea and a basketball" },
-  fr: { lampOn: "Allumer la lampe", lampOff: "Éteindre la lampe", phone: "Prendre le téléphone", desktop: "Entrer dans le bureau", openOS: "Ouvrir Aadam OS", scrollHint: "Faites défiler · ou touchez un objet du bureau", reading: "En cours", next: "Ensuite", deskAlt: "Le bureau d'Aadam : un ordinateur portable avec deux écrans d'extension, un clavier, une lampe, des livres, un carnet, un téléphone, un bubble tea et un ballon de basket" },
-  ar: { lampOn: "أشعل المصباح", lampOff: "أطفئ المصباح", phone: "التقط الهاتف", desktop: "ادخل إلى سطح المكتب", openOS: "افتح Aadam OS", scrollHint: "مرّر · أو المس أي شيء على المكتب", reading: "أقرأ الآن", next: "التالي", deskAlt: "مكتب آدم: حاسوب محمول مع شاشتين إضافيتين، ولوحة مفاتيح، ومصباح، وكتب، ودفتر، وهاتف، وكوب شاي بالفقاعات، وكرة سلة" },
+  en: { lampOn: "Switch the lamp on", lampOff: "Switch the lamp off", phone: "Pick up the phone", desktop: "Jump into the desktop", openOS: "Open Aadam OS", scrollHint: "Scroll · or tap anything on the desk", reading: "Reading", next: "Next", deskAlt: "Aadam's desk: a laptop with two screen extenders, keyboard, lamp, books, notebook, phone, a bubble tea and a basketball", deskTitle: "Around the desk", deskNote: "Swipe through what sits on it, and what each thing says about how I work." },
+  fr: { lampOn: "Allumer la lampe", lampOff: "Éteindre la lampe", phone: "Prendre le téléphone", desktop: "Entrer dans le bureau", openOS: "Ouvrir Aadam OS", scrollHint: "Faites défiler · ou touchez un objet du bureau", reading: "En cours", next: "Ensuite", deskAlt: "Le bureau d'Aadam : un ordinateur portable avec deux écrans d'extension, un clavier, une lampe, des livres, un carnet, un téléphone, un bubble tea et un ballon de basket", deskTitle: "Autour du bureau", deskNote: "Faites défiler ce qui s'y trouve, et ce que chaque objet dit de ma façon de travailler." },
+  ar: { lampOn: "أشعل المصباح", lampOff: "أطفئ المصباح", phone: "التقط الهاتف", desktop: "ادخل إلى سطح المكتب", openOS: "افتح Aadam OS", scrollHint: "مرّر · أو المس أي شيء على المكتب", reading: "أقرأ الآن", next: "التالي", deskAlt: "مكتب آدم: حاسوب محمول مع شاشتين إضافيتين، ولوحة مفاتيح، ومصباح، وكتب، ودفتر، وهاتف، وكوب شاي بالفقاعات، وكرة سلة", deskTitle: "حول المكتب", deskNote: "مرّر لترى ما عليه، وما يقوله كل شيء عن طريقة عملي." },
 };
 
 /** The tour's stops in the visitor's language (English as written in objects.ts otherwise). */

@@ -16,7 +16,7 @@ import PreviewRouter from "@/components/previews/PreviewRouter";
 import { useTranslations, useLocale } from "next-intl";
 import { drawLine, maskRise } from "@/lib/motion";
 
-const FLAGSHIP_IDS = ["primehub", "alboyut", "jireh", "rockmotion"];
+const FLAGSHIP_IDS = ["primehub", "alboyut", "afroarab", "jireh", "rockmotion"];
 
 function FlagshipCard({
   project,
@@ -148,7 +148,7 @@ export default function FlagshipWork({ compact = false }: { compact?: boolean })
             </motion.h2>
           </div>
           <p className="mt-4 max-w-[560px] text-[15px] md:text-[16px] leading-relaxed text-[var(--ink-2)]">
-            Four systems I shipped. The screens step through on their own, and Try it opens a working copy where there is one.
+            Four systems I shipped and one working pitch. The screens step through on their own, and Try it opens a working copy where there is one.
           </p>
           <motion.div
             variants={drawLine}

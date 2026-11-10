@@ -12,6 +12,15 @@ import { useOsText } from "../l10n";
 import { myPhotos, type MyPhoto } from "./store";
 
 type Album = "yours" | "visitors" | "desk" | "work";
+/** What sits on the shelf: the studio work in the desk photo (Bloom Boba, Yeskoko). */
+const DESK_SHOTS = [
+  { src: "/studio/bloom-film-milk.webp", caption: "Bloom Boba" },
+  { src: "/studio/bloom-builder-taro.webp", caption: "Bloom Boba" },
+  { src: "/studio/bloom-pearls.webp", caption: "Bloom Boba" },
+  { src: "/studio/yeskoko-pack.webp", caption: "Yeskoko" },
+  { src: "/studio/yeskoko-mango.webp", caption: "Yeskoko" },
+];
+
 type Item = { key: string; src: string; caption?: string; href?: string; mine?: MyPhoto };
 type Visitor = { id: number; name: string; at: string; image: string };
 
@@ -61,7 +70,7 @@ export default function PhotosApp({ start, openCamera }: { start?: Album; openCa
     return {
       yours: mine.map((m) => ({ key: `m${m.id}`, src: m.src, mine: m })),
       visitors: visitors.map((v) => ({ key: `v${v.id}`, src: v.image, caption: v.name || t.visitor })),
-      desk: [{ key: "plate", src: PLATE.src, caption: stops[0].eyebrow }, ...stops.filter((s) => s.insert).map((s) => ({ key: s.id, src: s.insert!, caption: s.title }))],
+      desk: [{ key: "plate", src: PLATE.src, caption: stops[0].eyebrow }, ...DESK_SHOTS.map((d) => ({ key: d.src, src: d.src, caption: d.caption }))],
       work: visibleProjects()
         .filter((p) => thumb(p))
         .map((p) => ({ key: p.id, src: thumb(p), caption: p.name, href: `/work/${projectSlug(p)}` })),

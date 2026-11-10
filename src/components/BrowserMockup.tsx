@@ -30,6 +30,14 @@ interface BrowserMockupProps {
 }
 
 const urlMap: Record<string, Record<string, string>> = {
+  afroarab: {
+    explorer: "afroarab-properties.vercel.app/lands/green-valley/explorer",
+    plot: "afroarab-properties.vercel.app/lands/green-valley/explorer?plot=17",
+    landing: "afroarab-properties.vercel.app",
+    story: "afroarab-properties.vercel.app",
+    estates: "afroarab-properties.vercel.app/projects",
+    payment: "afroarab-properties.vercel.app/payment-plans",
+  },
   "enterprise-erp": {
     site: "delish-rho.vercel.app",
     menu: "delish-rho.vercel.app/menu",

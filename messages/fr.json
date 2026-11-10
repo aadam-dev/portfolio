@@ -40,7 +40,8 @@
     "headingAccent": "zéro template",
     "filterAll": "Tous",
     "title": "Travaux",
-    "sub": "{count} projets de 2022 à 2026 : caisses et back-offices, boutiques en ligne, plateformes d'apprentissage et sites. Ouvrez-en un pour l'étude de cas."
+    "sub": "{count} projets de 2022 à 2026 : caisses et back-offices, boutiques en ligne, plateformes d'apprentissage et sites. Ouvrez-en un pour l'étude de cas.",
+    "seeAll": "Les {count} projets"
   },
   "flagship": {
     "eyebrow": "Projets phares · 01/0{count}",
@@ -131,6 +132,7 @@
       "note": "L'appareil du bureau, allumé : le comptoir d'un négociant en matériaux, une chaîne de blanchisserie, une table de marque au bord du terrain, un bureau d'analyste et plus encore, chacun avec le même type de système que le personnel utilise chaque jour."
     },
     "projectsIn": "Projets dans ce déploiement",
+    "next": "Suivant :",
     "hero": {
       "hint": "Touchez le stock, envoyez à la caisse, puis encaissez pour imprimer."
     },

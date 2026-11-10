@@ -58,6 +58,8 @@ function usePointerFine() {
 let lastScroll = 0;
 const isScrolling = () => performance.now() - lastScroll < 150;
 
+const PHONE_ROWS = 6;
+
 export default function WorkIndex({ asPage = false }: { asPage?: boolean }) {
   const t = useTranslations("work");
   const [active, setActive] = useState<ProjectCategory | "all">("all");
@@ -175,10 +177,20 @@ export default function WorkIndex({ asPage = false }: { asPage?: boolean }) {
                 index={i}
                 onHover={setHovered}
                 pointerFine={pointerFine}
+                phoneHidden={!asPage && i >= PHONE_ROWS}
               />
             ))}
           </AnimatePresence>
         </div>
+        {/* phones see the first few on the home page; the full index lives on /work */}
+        {!asPage && filtered.length > PHONE_ROWS && (
+          <Link
+            href="/work"
+            className="md:hidden mt-8 inline-flex min-h-12 items-center gap-2 rounded-full border border-[var(--line-strong)] px-6 text-[14.5px] text-white"
+          >
+            {t("seeAll", { count: visible.length })} <span aria-hidden>↗</span>
+          </Link>
+        )}
       </div>
 
       {/* Floating preview panel */}
@@ -222,14 +234,17 @@ const IndexRow = memo(function IndexRow({
   index,
   onHover,
   pointerFine,
+  phoneHidden = false,
 }: {
   project: Project;
   index: number;
   onHover: (id: string | null) => void;
   pointerFine: boolean;
+  phoneHidden?: boolean;
 }) {
   return (
     <motion.div
+      className={phoneHidden ? "max-md:hidden" : undefined}
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -12 }}

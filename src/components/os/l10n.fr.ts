@@ -183,6 +183,7 @@ export const fr: OsText = {
     overview: "Aperçu",
     walkthrough: "Démo",
     builder: "Composer une boisson",
+    explorer: "Explorateur 3D",
     live: "Site en ligne",
     caseStudy: "Étude de cas complète",
     builderLater: "Le configurateur s'ouvre quand vous êtes au bureau.",

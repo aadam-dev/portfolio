@@ -8,7 +8,7 @@ import AadamOS, { type Win } from "./AadamOS";
 import Phone, { PhoneFrame } from "@/components/os/phone/Phone";
 import { useOsText } from "@/components/os/l10n";
 import type { Quad } from "./quad";
-import { PLATE, STOPS, type Stop } from "./objects";
+import { PLATE, SCREENS, STOPS, type Stop } from "./objects";
 import { deskUi, localStops } from "./objects.l10n";
 import { useLocale } from "next-intl";
 import type { DeskRig } from "./PhotoDesk";
@@ -26,9 +26,10 @@ const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 
 const stopAt = (i: number) => (i / (N - 1)) * LAND;
 
 /**
- * Aadam's workspace: the portfolio hero. A pinned, photographed dev desk; scrolling tours each
- * object (cutting to a close-up insert while the copy makes its case), then dollies into the laptop
- * where Aadam OS takes over. Touch and reduced motion get a stacked, unpinned version.
+ * Aadam's workspace: the portfolio hero. A pinned, photographed dev desk; scrolling dollies the
+ * camera to each object (the photo projected onto 3D shapes, so it stays one consistent room) while
+ * the copy makes its case, then into the laptop where Aadam OS takes over. Touch and reduced motion
+ * get the phone hero and a swipeable row of the same desk, cropped from the one photo.
  */
 export default function WorkspaceHero() {
   const reduced = useReducedMotion();
@@ -71,13 +72,10 @@ function Tour() {
   const track = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const spot = useRef<HTMLDivElement>(null);
-  const inserts = useRef<(HTMLDivElement | null)[]>([]);
   const knob = useRef<HTMLDivElement>(null);
   // the 3D desk reads the scroll and pointer from here every frame, without re-rendering React
   const rig = useRef<DeskRig>({ p: 0, px: 0, py: 0 });
   const [active, setActive] = useState(0);
-  // furthest chapter reached, so a close-up stays loaded once fetched
-  const [seen, setSeen] = useState(0);
   const [landed, setLanded] = useState(false);
   const [phone, setPhone] = useState(false);
   const [inView, setInView] = useState(true);
@@ -110,17 +108,6 @@ function Tour() {
     // the chapter on screen = the stop we're holding at (or arriving at)
     const cur = done ? N - 1 : travel > 0.6 ? i + 1 : i;
     setActive((v) => (v === cur ? v : cur));
-    setSeen((v) => (cur > v ? cur : v));
-
-    // close-up inserts: cut in while holding, out before travelling
-    inserts.current.forEach((el, k) => {
-      if (!el) return;
-      let o = 0;
-      if (!done && k === i && STOPS[k].insert) o = 1 - clamp((f - 0.3) / 0.12);
-      if (!done && k === i + 1 && STOPS[k].insert) o = clamp((travel - 0.85) / 0.15);
-      el.style.opacity = String(o);
-      el.style.transform = `scale(${1.04 - 0.04 * o})`;
-    });
     setLanded((v) => (v === done ? v : done));
     if (knob.current) knob.current.style.setProperty("--p", String(clamp(p / LAND)));
   }, []);
@@ -217,18 +204,14 @@ function Tour() {
           </div>
         )}
 
-        {/* spotlight + close-up inserts */}
+        {/* spotlight on the object the camera is travelling to */}
         <div ref={spot} aria-hidden className="pointer-events-none absolute inset-0 z-[4] opacity-0" />
-        {stops.map((st, k) =>
-          st.insert ? (
-            <div key={st.id} ref={(el) => { inserts.current[k] = el; }} aria-hidden className="pointer-events-none absolute inset-0 z-[5] opacity-0 will-change-[opacity,transform]">
-              {/* each close-up loads once its chapter is next, not with the page */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              {k <= seen + 1 && <img src={st.insert} alt="" className="h-full w-full object-cover" />}
-              <div className="absolute inset-0 transition-opacity duration-700" style={{ background: "rgba(8,10,22,0.55)", mixBlendMode: "multiply", opacity: night ? 1 : 0 }} />
-              <div className={`absolute inset-0 ${st.copy === "left" ? "bg-gradient-to-r" : "bg-gradient-to-l"} from-black/65 via-black/20 to-transparent`} />
-            </div>
-          ) : null,
+        {/* a soft side shade behind whichever card is up, so copy reads over any part of the photo */}
+        {!landed && active > 0 && (
+          <div
+            aria-hidden
+            className={`pointer-events-none absolute inset-0 z-[5] transition-opacity duration-700 ${stops[active]?.copy === "right" ? "bg-gradient-to-l" : "bg-gradient-to-r"} from-black/45 via-black/10 to-transparent`}
+          />
         )}
 
         {/* keyboard route to each object on the opening shot (the pointer uses the 3D desk itself) */}
@@ -314,14 +297,14 @@ function ChapterCard({ st, k, on, onAction, night, ui }: { st: Stop; k: number; 
   const Heading = wide ? "h1" : "h2";
   return (
     <div
-      className={`theme-fixed absolute inset-y-0 z-[7] flex w-full max-w-[1280px] items-center px-6 ${right ? "justify-end" : "justify-start"} left-1/2 -translate-x-1/2`}
+      className={`theme-fixed absolute inset-y-0 z-[7] flex w-full max-w-[1280px] px-6 ${wide ? "items-end pb-[12vh]" : "items-center"} ${right ? "justify-end" : "justify-start"} left-1/2 -translate-x-1/2`}
       style={{ pointerEvents: "none" }}
       aria-hidden={!on}
       inert={!on}
     >
       <div
         dir="auto"
-        className={`max-w-[540px] rounded-2xl border border-white/10 bg-black/40 p-7 backdrop-blur-md transition-[opacity,transform,filter] duration-700`}
+        className={`${wide ? "max-w-[460px] p-6" : "max-w-[540px] p-7"} rounded-2xl border border-white/10 bg-black/45 backdrop-blur-md transition-[opacity,transform,filter] duration-700`}
         style={{
           opacity: on ? 1 : 0,
           transform: `translateY(${on ? 0 : 18}px)`,
@@ -334,7 +317,7 @@ function ChapterCard({ st, k, on, onAction, night, ui }: { st: Stop; k: number; 
           {k > 0 && <span className="mr-2 text-white/50">{String(k).padStart(2, "0")} / {String(STOPS.length - 1).padStart(2, "0")}</span>}
           {st.eyebrow}
         </p>
-        <Heading className={`mt-4 font-display text-white text-balance ${wide ? "text-[clamp(34px,3.6vw,56px)]" : "text-[clamp(30px,3vw,46px)]"} leading-[1.02] [text-shadow:0_2px_30px_rgba(0,0,0,.45)]`} style={{ letterSpacing: "-0.03em" }}>
+        <Heading className={`mt-4 font-display text-white text-balance text-[clamp(30px,3vw,46px)] leading-[1.02] [text-shadow:0_2px_30px_rgba(0,0,0,.45)]`} style={{ letterSpacing: "-0.03em" }}>
           {st.title}
         </Heading>
         <p className="mt-4 text-[15.5px] leading-relaxed text-white/80 [text-shadow:0_1px_12px_rgba(0,0,0,.5)]">{st.body}</p>
@@ -491,41 +474,113 @@ function Stacked() {
           </>
         )}
       </div>
-      <div id="desk-notes" className="mx-auto max-w-[720px] space-y-10 px-5 pt-10">
-        {stops
-          .slice(1)
-          .filter((st) => st.action?.kind !== "phone")
-          .map((st, k) => (
-            <article key={st.id} className="overflow-hidden rounded-2xl border border-[var(--line)]">
-              {st.insert && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={st.insert} alt="" loading="lazy" className="aspect-[16/9] w-full object-cover" />
-              )}
-              <div className="p-5">
-                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent)]">
-                  {String(k + 1).padStart(2, "0")} · {st.eyebrow}
-                </p>
-                <h2 className="mt-2 font-display text-[26px] leading-[1.08] text-white" style={{ letterSpacing: "-0.02em" }}>
-                  {st.title}
-                </h2>
-                <p className="mt-2 text-[15px] leading-relaxed text-[var(--ink-2)]">{st.body}</p>
-                {st.id === "books" && <ReadingList className="mt-2 text-[var(--ink-2)]" labels={[ui.reading, ui.next]} />}
-                {st.action &&
-                  (st.action.kind === "link" ? (
-                    <Link href={st.action.href} className="mt-4 inline-flex rounded-full bg-[var(--accent)] px-4 py-2.5 text-[13px] font-semibold text-black">
-                      {st.action.label} →
-                    </Link>
-                  ) : (
-                    <button onClick={(e) => act(st, e)} className="mt-4 inline-flex rounded-full bg-[var(--accent)] px-4 py-2.5 text-[13px] font-semibold text-black">
-                      {st.action.kind === "theme" ? (theme === "dark" ? ui.lampOff : ui.lampOn) : st.action.kind === "desktop" ? ui.openOS : "label" in st.action ? st.action.label : ""}
-                    </button>
-                  ))}
-              </div>
-            </article>
-          ))}
+      {/* the rest of the desk: one card per object, each a crop of the same photo */}
+      <div id="desk-notes" className="pt-10">
+        <div className="mx-auto max-w-[1100px] px-5">
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent)]">{ui.deskTitle}</p>
+          <p className="mt-2 max-w-[42ch] text-[15px] leading-relaxed text-[var(--ink-2)]">{ui.deskNote}</p>
+        </div>
+        <ol className="mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-4 [scrollbar-width:none] md:mx-auto md:grid md:max-w-[1100px] md:grid-cols-2 md:gap-5 md:overflow-visible lg:grid-cols-3 [&::-webkit-scrollbar]:hidden">
+          {stops
+            .slice(1)
+            .filter((st) => st.action?.kind !== "phone")
+            .map((st, k) => (
+              <li key={st.id} className="flex w-[82vw] max-w-[360px] shrink-0 snap-center flex-col overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface,transparent)] md:w-auto md:max-w-none">
+                <PlateCrop box={st.box ?? CENTER_BOX} night={theme === "dark"} />
+                <div className="flex flex-1 flex-col p-5">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent)]">
+                    {String(k + 1).padStart(2, "0")} · {st.eyebrow}
+                  </p>
+                  <h2 className="mt-2 font-display text-[23px] leading-[1.1] text-white" style={{ letterSpacing: "-0.02em" }}>
+                    {st.title}
+                  </h2>
+                  <p className="mt-2 text-[14.5px] leading-relaxed text-[var(--ink-2)]">{st.body}</p>
+                  {st.id === "books" && <ReadingList className="mt-2 text-[var(--ink-2)]" labels={[ui.reading, ui.next]} />}
+                  {st.action && (
+                    <div className="mt-auto pt-4">
+                      {st.action.kind === "link" ? (
+                        <Link href={st.action.href} className="inline-flex min-h-11 items-center rounded-full bg-[var(--accent)] px-4 text-[13px] font-semibold text-black">
+                          {st.action.label} →
+                        </Link>
+                      ) : (
+                        <button onClick={(e) => act(st, e)} className="inline-flex min-h-11 items-center rounded-full bg-[var(--accent)] px-4 text-[13px] font-semibold text-black">
+                          {st.action.kind === "theme" ? (theme === "dark" ? ui.lampOff : ui.lampOn) : st.action.kind === "desktop" ? ui.openOS : "label" in st.action ? st.action.label : ""}
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))}
+        </ol>
       </div>
       {os && <OSDialog windows={windows} setWindows={setW} onClose={closeOs} />}
     </section>
+  );
+}
+
+/** The laptop screen's bounds, for the "desktop" card. */
+const CENTER_BOX: [number, number, number, number] = [0.37, 0.24, 0.63, 0.62];
+const CROP_AR = 16 / 10;
+/** What the three screens show in the cropped stills (the desktop tour runs them live). */
+const CROP_SCREENS: Record<keyof typeof SCREENS, string> = {
+  left: "/previews/alboyut/inventory.webp",
+  center: "/os/wallpaper-bloom.webp",
+  right: "/desk/screen-primetijara.webp",
+};
+
+/**
+ * A close-up of one object, cut from the same wide desk photo with background-size/position, so
+ * every card matches the room (same light, same objects) and costs no extra download.
+ */
+function PlateCrop({ box, night }: { box: [number, number, number, number]; night: boolean }) {
+  const [x0, y0, x1, y1] = box;
+  const PW = PLATE.ar; // plate width in units of its height
+  // pad the object, then grow to the card's aspect, never smaller than a quarter of the desk
+  let w = Math.max((x1 - x0) * PW * 1.5, 0.26 * PW);
+  let h = Math.max((y1 - y0) * 1.5, w / CROP_AR);
+  w = h * CROP_AR;
+  if (w > PW) { w = PW; h = w / CROP_AR; }
+  if (h > 1) { h = 1; w = h * CROP_AR; }
+  const cx = ((x0 + x1) / 2) * PW;
+  const cy = (y0 + y1) / 2;
+  const left = clamp(cx - w / 2, 0, PW - w) / PW;
+  const top = clamp(cy - h / 2, 0, 1 - h);
+  const fw = w / PW;
+  return (
+    <div
+      aria-hidden
+      className="relative aspect-[16/10] w-full bg-[#1a120b]"
+      style={{
+        backgroundImage: `url(${PLATE.src})`,
+        backgroundSize: `${100 / fw}% ${100 / h}%`,
+        backgroundPosition: `${fw < 1 ? (left / (1 - fw)) * 100 : 0}% ${h < 1 ? (top / (1 - h)) * 100 : 0}%`,
+      }}
+    >
+      {/* the photo's screens are black; light them with real captures, placed on the screen bounds */}
+      {(Object.keys(SCREENS) as (keyof typeof SCREENS)[]).map((k) => {
+        const q = SCREENS[k];
+        const sx0 = Math.min(q[0][0], q[3][0]);
+        const sx1 = Math.max(q[1][0], q[2][0]);
+        const sy0 = Math.min(q[0][1], q[1][1]);
+        const sy1 = Math.max(q[2][1], q[3][1]);
+        const L = (sx0 - left) / fw;
+        const R = (sx1 - left) / fw;
+        if (R < 0 || L > 1 || (sy1 - top) / h < 0 || (sy0 - top) / h > 1) return null;
+        return (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={k}
+            src={CROP_SCREENS[k]}
+            alt=""
+            loading="lazy"
+            className="absolute object-cover object-top"
+            style={{ left: `${L * 100}%`, top: `${((sy0 - top) / h) * 100}%`, width: `${(R - L) * 100}%`, height: `${((sy1 - sy0) / h) * 100}%`, opacity: 0.92 }}
+          />
+        );
+      })}
+      <div className="absolute inset-0 transition-opacity duration-700" style={{ background: "rgba(8,10,22,0.5)", mixBlendMode: "multiply", opacity: night ? 1 : 0 }} />
+    </div>
   );
 }
 
